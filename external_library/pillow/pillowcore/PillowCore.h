@@ -1,0 +1,18 @@
+#ifndef PILLOW_PILLOWCORE_H
+#define PILLOW_PILLOWCORE_H
+
+#ifndef QGLOBAL_H
+#include <QtCore/qglobal.h>
+#endif // QGLOBAL_H
+
+#ifdef PILLOWCORE_BUILD_STATIC
+	#define PILLOWCORE_EXPORT
+#else
+	#ifdef PILLOWCORE_BUILD
+		#define PILLOWCORE_EXPORT Q_DECL_EXPORT
+	#else
+		#define PILLOWCORE_EXPORT Q_DECL_IMPORT
+	#endif
+#endif // !PILLOWCORE_BUILD_STATIC
+
+#endif // PILLOW_PILLOWCORE_H
