@@ -9,10 +9,10 @@ macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
     LIBS += -framework Foundation
 } else:win32 {
-    LIBS += -L$$OUT_PWD/../lib
+    LIBS += -L$$OUT_PWD/../bin
 } else {
-    QMAKE_LIBDIR = $$OUT_PWD/../lib $$QMAKE_LIBDIR
-    LIBS += -L$$OUT_PWD/../lib
+    QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    LIBS += -L$$OUT_PWD/../bin
 }
 
 win32 {

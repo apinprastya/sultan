@@ -2,10 +2,11 @@ TEMPLATE  = subdirs
 CONFIG   += ordered
 
 SUBDIRS = \
-            libglobal \
-            libdb \
-            libserver \
-            libsocket \
-            libgui \
-            libturbin \
-            turbin
+        external_library/easyloggingpp/easyloggingpp \
+        libglobal \
+        libdb \
+        libserver \
+        libsocket \
+        libgui \
+        libturbin \
+        turbin

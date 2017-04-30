@@ -21,7 +21,7 @@ macx {
     QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
 } else {
-    DESTDIR = ../lib
+    DESTDIR = ../bin
 }
 DLLDESTDIR = ../
 
@@ -29,12 +29,13 @@ macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
     LIBS += -framework Foundation
 } else:win32 {
-    LIBS += -L$$OUT_PWD/../lib
+    LIBS += -L$$OUT_PWD/../bin
 } else {
-    QMAKE_LIBDIR = $$OUT_PWD/../lib $$QMAKE_LIBDIR
+    QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
 }
 
 
-SOURCES += \ 
+SOURCES +=
+
 HEADERS += \ 
     turbin_global.h
