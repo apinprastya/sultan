@@ -63,13 +63,20 @@ Db::~Db()
 Db *Db::createInstance()
 {
     Db* db = new Db();
-    db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName);
-    return db;
+    if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName))
+        return db;
+    LOG(ERROR) << TAG << "Error openning database connection :" << db->lastError().text();
+    delete db;
+    return nullptr;
 }
 
-void Db::setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+bool Db::setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
     DBSETTING.set(host, port, username, password, dbname);
+    auto db = createInstance();
+    bool ret = db != nullptr;
+    if(db) delete db;
+    return ret;
 }
 
 Db *Db::reset()
@@ -382,7 +389,7 @@ bool Db::roolback()
     return QSqlDatabase::database(mConnectionName).rollback();
 }
 
-void Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
     auto database = QSqlDatabase::addDatabase(QStringLiteral("QMYSQL"), mConnectionName);
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
@@ -391,8 +398,10 @@ void Db::init(const QString &host, int port, const QString &username, const QStr
     database.setHostName(host);
     database.setUserName(username);
     database.setPassword(password);
-    database.open();
+    bool ret = database.open();
+    if(!ret) mLastError = database.lastError();
     reset();
+    return ret;
 }
 
 void Db::postQuery(QSqlQuery *query)

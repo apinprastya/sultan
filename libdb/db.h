@@ -57,7 +57,7 @@ private:
 public:
     ~Db();
     static Db *createInstance();
-    static void setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
+    static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     Db *reset();
     Db *select(const QString &value);
     Db *table(const QString &value);
@@ -110,7 +110,7 @@ private:
     QVariant mInsertedId;
     QSqlError mLastError;
 
-    void init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
+    bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     void postQuery(QSqlQuery *query);
     QString dataToString(const QVariantMap &map);
 
