@@ -45,12 +45,14 @@ HEADERS += \
     dbresult.h \
     dbutil.h \
     querydb.h \
-    queryhelper.h
+    queryhelper.h \
+    migration.h
 
 SOURCES += \
     db.cpp \
     dbresult.cpp \
     dbutil.cpp \
     querydb.cpp \
-    queryhelper.cpp
+    queryhelper.cpp \
+    migration.cpp
 

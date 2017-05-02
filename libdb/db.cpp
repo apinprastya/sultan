@@ -29,6 +29,7 @@
 using namespace LibDB;
 
 static std::string TAG = "DB";
+static DBSetting DBSETTING;
 QStringList Db::mCreated = QStringList();
 QStringList Db::mUpdate = QStringList();
 QStringList Db::mSoftDelete = QStringList();
@@ -59,11 +60,16 @@ Db::~Db()
     }
 }
 
-Db *Db::createInstance(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+Db *Db::createInstance()
 {
     Db* db = new Db();
-    db->init(host, port, username, password, dbname);
+    db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName);
     return db;
+}
+
+void Db::setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+{
+    DBSETTING.set(host, port, username, password, dbname);
 }
 
 Db *Db::reset()
@@ -82,7 +88,7 @@ Db *Db::reset()
 Db *Db::select(const QString &value)
 {
     if(!mSelect.isEmpty())
-        mSelect.append(QLatin1String(","));
+        mSelect.append(QStringLiteral(","));
     mSelect.append(value);
     return this;
 }
@@ -96,13 +102,13 @@ Db *Db::table(const QString &value)
 Db *Db::where(const QString &value, const QVariant &val)
 {
     if (!mWhere.isEmpty())
-        mWhere.append(QLatin1String(" AND "));
+        mWhere.append(QStringLiteral(" AND "));
     if(!val.isValid())
         mWhere.append(value);
     else {
         mWhere.append(value);
         if(val.type() == QVariant::String)
-            mWhere.append(QLatin1String("'") + val.toString() + QLatin1String("'"));
+            mWhere.append(QStringLiteral("'") + val.toString() + QStringLiteral("'"));
         else
             mWhere.append(QString::number(val.toInt()));
     }
@@ -112,16 +118,16 @@ Db *Db::where(const QString &value, const QVariant &val)
 Db *Db::like(const QString &value, const QString &val)
 {
     if (!mWhere.isEmpty())
-        mWhere.append(QLatin1String(" AND "));
+        mWhere.append(QStringLiteral(" AND "));
     mWhere.append(value);
-    if(val.startsWith(QLatin1String("%")) || val.endsWith(QLatin1String("%"))) {
-        mWhere.append(QLatin1String(" LIKE '"));
+    if(val.startsWith(QStringLiteral("%")) || val.endsWith(QStringLiteral("%"))) {
+        mWhere.append(QStringLiteral(" LIKE '"));
         mWhere.append(val);
-        mWhere.append(QLatin1String("'"));
+        mWhere.append(QStringLiteral("'"));
     } else {
-        mWhere.append(QLatin1String(" LIKE '%"));
+        mWhere.append(QStringLiteral(" LIKE '%"));
         mWhere.append(val);
-        mWhere.append(QLatin1String("%'"));
+        mWhere.append(QStringLiteral("%'"));
     }
     return this;
 }
@@ -129,29 +135,29 @@ Db *Db::like(const QString &value, const QString &val)
 Db *Db::likePost(const QString &value, const QString &val)
 {
     if (!mWhere.isEmpty())
-        mWhere.append(QLatin1String(" AND "));
+        mWhere.append(QStringLiteral(" AND "));
     mWhere.append(value);
-    mWhere.append(QLatin1String(" LIKE '"));
+    mWhere.append(QStringLiteral(" LIKE '"));
     mWhere.append(val);
-    mWhere.append(QLatin1String("%'"));
+    mWhere.append(QStringLiteral("%'"));
     return this;
 }
 
 Db *Db::likeNative(const QString &value, const QString &val)
 {
     if (!mWhere.isEmpty())
-        mWhere.append(QLatin1String(" AND "));
+        mWhere.append(QStringLiteral(" AND "));
     mWhere.append(value);
-    mWhere.append(QLatin1String(" LIKE '"));
+    mWhere.append(QStringLiteral(" LIKE '"));
     mWhere.append(val);
-    mWhere.append(QLatin1String("'"));
+    mWhere.append(QStringLiteral("'"));
     return this;
 }
 
 Db *Db::whereOr(const QString &value)
 {
     if (!mWhere.isEmpty())
-        mWhere.append(QLatin1String(" OR "));
+        mWhere.append(QStringLiteral(" OR "));
     mWhere.append(value);
     return this;
 }
@@ -159,7 +165,7 @@ Db *Db::whereOr(const QString &value)
 Db *Db::join(const QString &value)
 {
     if(!mJoin.isEmpty())
-        mJoin.append(QLatin1String(" "));
+        mJoin.append(QStringLiteral(" "));
     mJoin.append(value);
     return this;
 }
@@ -179,7 +185,7 @@ Db *Db::start(int start)
 Db *Db::sort(const QString &sort)
 {
     if(!mSort.isEmpty())
-        mSort.append(QLatin1String(", "));
+        mSort.append(QStringLiteral(", "));
     mSort.append(sort);
     return this;
 }
@@ -192,28 +198,28 @@ Db *Db::group(const QString &group)
 
 QString Db::getSelectQuery(const QString &select)
 {
-    QString sql = QString(QLatin1String("SELECT "));
+    QString sql = QString(QStringLiteral("SELECT "));
     /*if(mSoftDelete.contains(mTable))
-        where(QLatin1String("deleted = 0"));*/
+        where(QStringLiteral("deleted = 0"));*/
     if(mSelect.isEmpty())
-        mSelect.append(QLatin1String("*"));
+        mSelect.append(QStringLiteral("*"));
     if(!select.isEmpty())
         sql.append(select);
     else
         sql.append(mSelect);
-    sql.append(QLatin1String(" FROM ")).append(mTable).append(QLatin1String(" "));
+    sql.append(QStringLiteral(" FROM ")).append(mTable).append(QStringLiteral(" "));
     if(!mJoin.isEmpty())
         sql.append(mJoin);
     if(!mWhere.isEmpty())
-        sql.append(QLatin1String(" WHERE ")).append(mWhere);
+        sql.append(QStringLiteral(" WHERE ")).append(mWhere);
     if(!mGroup.isEmpty())
-        sql.append(QLatin1String(" GROUP BY ")).append(mGroup);
+        sql.append(QStringLiteral(" GROUP BY ")).append(mGroup);
     if(!mSort.isEmpty())
-        sql.append(QLatin1String(" ORDER BY ")).append(mSort);
+        sql.append(QStringLiteral(" ORDER BY ")).append(mSort);
     if(!mLimit.isEmpty())
-        sql.append(QLatin1String(" LIMIT ")).append(mLimit);
+        sql.append(QStringLiteral(" LIMIT ")).append(mLimit);
     if(!mStart.isEmpty())
-        sql.append(QLatin1String(" OFFSET ")).append(mStart);
+        sql.append(QStringLiteral(" OFFSET ")).append(mStart);
     if(mDebug)
         qDebug() << sql;
     return sql;
@@ -261,19 +267,19 @@ bool Db::exec(const QString &sqlcommand)
 bool Db::insert(const QString &table, const QVariantMap &data)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    QString sql = QString(QLatin1String("INSERT INTO "));
-    QString values = QString(QLatin1String("VALUES ("));
-    sql.append(table).append(QLatin1String(" ("));
+    QString sql = QString(QStringLiteral("INSERT INTO "));
+    QString values = QString(QStringLiteral("VALUES ("));
+    sql.append(table).append(QStringLiteral(" ("));
     const QList<QString> &keys = data.keys();
     for(int i = 0; i < keys.size(); i++) {
         sql.append(keys.at(i));
-        values.append(QLatin1String("?"));
+        values.append(QStringLiteral("?"));
         if(i != keys.size() - 1) {
-            sql.append(QLatin1String(","));
-            values.append(QLatin1String(","));
+            sql.append(QStringLiteral(","));
+            values.append(QStringLiteral(","));
         }
     }
-    sql.append(QLatin1String(") ")).append(values).append(QLatin1String(")"));
+    sql.append(QStringLiteral(") ")).append(values).append(QStringLiteral(")"));
     query.prepare(sql);
     for(int i = 0; i < keys.size(); i++)
         query.bindValue(i, data[keys.at(i)]);
@@ -290,21 +296,21 @@ bool Db::insert(const QString &table, const QVariantMap &data)
 bool Db::update(const QString &table, const QVariantMap &data)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
-    QString sql = QString(QLatin1String("UPDATE "));
-    sql.append(table).append(QLatin1String(" SET "));
+    QString sql = QString(QStringLiteral("UPDATE "));
+    sql.append(table).append(QStringLiteral(" SET "));
     if(mUpdate.contains(table)) {
-        sql.append(QLatin1String("updated_at = NOW() "));
+        sql.append(QStringLiteral("updated_at = NOW() "));
     }
     const QList<QString> &keys = data.keys();
     for(int i = 0; i < keys.size(); i++) {
         sql.append(keys.at(i));
         if(!data.value(keys.at(i)).isNull()) {
-            sql.append(QLatin1String(" = ?"));
+            sql.append(QStringLiteral(" = ?"));
         }
         if(i != keys.size() - 1)
-            sql.append(QLatin1String(","));
+            sql.append(QStringLiteral(","));
     }
-    sql.append(QLatin1String(" WHERE ")).append(mWhere);
+    sql.append(QStringLiteral(" WHERE ")).append(mWhere);
     query.prepare(sql);
     for(int i = 0; i < keys.size(); i++)
         query.bindValue(i, data[keys.at(i)]);
@@ -322,12 +328,12 @@ bool Db::del(const QString &table)
 {
     if(mSoftDelete.contains(table)) {
         QVariantMap map;
-        map.insert(QLatin1String("deleted"), 1);
+        map.insert(QStringLiteral("deleted"), 1);
         return update(table, map);
     } else {
         QSqlQuery query(QSqlDatabase::database(mConnectionName));
-        QString sql = QString(QLatin1String("DELETE FROM "));
-        sql.append(table).append(QLatin1String(" WHERE ")).append(mWhere);
+        QString sql = QString(QStringLiteral("DELETE FROM "));
+        sql.append(table).append(QStringLiteral(" WHERE ")).append(mWhere);
         reset();
         bool res = query.exec(sql);
         LOG(INFO) << TAG << query.lastQuery();
@@ -343,7 +349,7 @@ int Db::count()
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));
     Db *db = clone();
-    QString sql = db->getSelectQuery(QLatin1String("count(*)"));
+    QString sql = db->getSelectQuery(QStringLiteral("count(*)"));
     query.exec(sql);
     postQuery(&query);
     if(query.next()) {
@@ -378,7 +384,7 @@ bool Db::roolback()
 
 void Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
-    auto database = QSqlDatabase::addDatabase(QLatin1String("QMYSQL"), mConnectionName);
+    auto database = QSqlDatabase::addDatabase(QStringLiteral("QMYSQL"), mConnectionName);
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
     database.setPort(port);
     database.setDatabaseName(dbname);
@@ -399,13 +405,13 @@ void Db::postQuery(QSqlQuery *query)
 QString Db::dataToString(const QVariantMap &map)
 {
     QString str;
-    str.append(QLatin1String("{"));
+    str.append(QStringLiteral("{"));
     QMapIterator<QString, QVariant> i(map);
     while (i.hasNext()) {
         i.next();
-        str.append(i.key()).append(QLatin1String(": ")).append(i.value().toString()).append(QLatin1String(","));
+        str.append(i.key()).append(QStringLiteral(": ")).append(i.value().toString()).append(QStringLiteral(","));
     }
-    str.append(QLatin1String("}"));
+    str.append(QStringLiteral("}"));
     return str;
 }
 

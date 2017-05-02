@@ -32,13 +32,32 @@
 
 namespace LibDB {
 
+struct DBSetting {
+    DBSetting(){}
+    DBSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname):
+        port(port), host(host), username(username), password(password), dbName(dbname){}
+    void set(const QString &host, int port, const QString &username, const QString &password, const QString &dbname) {
+        this->port = port;
+        this->host = host;
+        this->username = username;
+        this->password = password;
+        this->dbName = dbname;
+    }
+    int port;
+    QString host;
+    QString username;
+    QString password;
+    QString dbName;
+};
+
 class DBSHARED_EXPORT Db
 {
 private:
     Db();
 public:
     ~Db();
-    static Db *createInstance(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
+    static Db *createInstance();
+    static void setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     Db *reset();
     Db *select(const QString &value);
     Db *table(const QString &value);
