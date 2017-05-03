@@ -34,7 +34,10 @@ macx {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
 }
 
-SOURCES +=
+SOURCES += \
+    preference.cpp
 
 HEADERS += \ 
-    global_global.h
+    global_global.h \
+    preference.h \
+    global_setting_const.h
