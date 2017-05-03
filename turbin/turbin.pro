@@ -1,9 +1,13 @@
-include(../libturbin/libturbin.pri)
+include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
+include(../libglobal/libglobal.pri)
+include(../libdb/libdb.pri)
 
-QT       += core gui widgets
+QT       += core gui widgets sql
 
 TARGET = Turbin
 TEMPLATE = app
+
+CONFIG += c++11
 
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
@@ -21,6 +25,8 @@ win32 {
     DESTDIR = ../bin
 }
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    core.cpp
 
-HEADERS  +=
+HEADERS  += \
+    core.h
