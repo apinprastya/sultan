@@ -6,7 +6,5 @@ SUBDIRS = \
         libglobal \
         libdb \
         libserver \
-        libsocket \
         libgui \
-        libturbin \
         turbin
