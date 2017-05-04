@@ -42,6 +42,7 @@ Core::Core(QObject *parent) :
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this))
 {
+    Preference::createInstance();
 }
 
 Core::~Core()
@@ -82,11 +83,10 @@ void Core::init()
 {
     initLogger();
     LOG(INFO) << TAG << "Initialize application";
-    Preference::createInstance();
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting
         mSplashUi->hide();
-        mSettingDialog->show();
+        mSettingDialog->showDialog();
         //show setting ui
     } else {
         /*LibDB::Db::setDbSetting(

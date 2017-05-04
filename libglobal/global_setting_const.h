@@ -32,6 +32,10 @@ namespace SETTING {
     const QString MYSQL_PASSWORD                = QStringLiteral("global/mysql_password");
     const QString MYSQL_PORT                    = QStringLiteral("global/mysql_port");
     const QString MYSQL_DB                      = QStringLiteral("global/mysql_dbname");
+    const QString MYSQL_OK                      = QStringLiteral("global/mysql_ok");
+    const QString APP_PORT                      = QStringLiteral("global/app_port");
+    const QString SERVER_ADDRESS                = QStringLiteral("global/server_address");
+    const QString SERVER_PORT                   = QStringLiteral("global/server_port");
 }
 
 }
