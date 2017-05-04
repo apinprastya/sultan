@@ -1,8 +1,10 @@
 TARGET = easyloggingpp
 TEMPLATE = lib
 macx {
+    DEFINES += AUTO_INITIALIZE_EASYLOGGINGPP
+    DEFINES += ELPP_AS_DLL
     DESTDIR = ../../../bin/Turbin.app/Contents/Frameworks
-    QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../../../Frameworks/
+    QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
     QMAKE_LIBDIR += $$OUT_PWD/../../../bin/Turbin.app/Contents/Frameworks
 } else {
     DESTDIR = ../../../bin
