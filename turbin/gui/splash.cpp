@@ -1,5 +1,5 @@
 /*
- * core.h
+ * splash.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,30 +17,22 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "splash.h"
+#include "ui_splash.h"
 
-#ifndef CORE_H
-#define CORE_H
-
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-
-class Core : public QObject
+Splash::Splash(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Splash)
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    ui->setupUi(this);
+}
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
+Splash::~Splash()
+{
+    delete ui;
+}
 
-private slots:
-    void init();
-};
-
-#endif // CORE_H
+void Splash::setMessage(const QString &msg)
+{
+    ui->labelLoading->setText(msg);
+}

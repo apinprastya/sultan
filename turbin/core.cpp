@@ -23,33 +23,35 @@
 #include "global_setting_const.h"
 #include "easylogging++.h"
 #include "db.h"
+#include "gui/splash.h"
+#include "gui/settingdialog.h"
 #include <QApplication>
+#include <QTimer>
 #include <QDebug>
 
 using namespace LibG;
 
 static std::string TAG = "CORE";
 
-Core::Core(QObject *parent) : QObject(parent)
+Core::Core(QObject *parent) :
+    QObject(parent),
+    mSplashUi(new Splash()),
+    mSettingDialog(new SettingDialog())
 {
-    connect(qApp, SIGNAL(aboutToQuit()), SLOT(appExited()));
 }
 
-void Core::init()
+Core::~Core()
 {
-    LOG(INFO) << TAG << "Initialize application";
-    Preference::createInstance();
-    if(LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
-        /*LibDB::Db::setDbSetting(
-                    Preference::getString(SETTING::MYSQL_HOST),
-                    Preference::getInt(SETTING::MYSQL_PORT),
-                    Preference::getString(SETTING::MYSQL_USERNAME),
-                    Preference::getString(SETTING::MYSQL_PASSWORD),
-                    Preference::getString(SETTING::MYSQL_DB));*/
-    } else {
-        //the setting is not OK, so open the setting
-    }
-    qDebug() << LibG::Preference::getBool(SETTING::SETTING_OK, false);
+    LOG(INFO) << TAG << "Application Exited";
+    Preference::destroy();
+    if(mSplashUi) delete mSplashUi;
+    if(mSettingDialog) delete mSettingDialog;
+}
+
+void Core::setup()
+{
+    mSplashUi->show();
+    QTimer::singleShot(1, this, SLOT(init()));
 }
 
 void Core::initLogger()
@@ -72,8 +74,23 @@ void Core::initLogger()
     });
 }
 
-void Core::appExited()
+void Core::init()
 {
-    LOG(INFO) << TAG << "Application Exited";
-    Preference::destroy();
+    initLogger();
+    LOG(INFO) << TAG << "Initialize application";
+    Preference::createInstance();
+    if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
+        //the setting is not OK, so open the setting
+        mSplashUi->hide();
+        mSettingDialog->show();
+        //show setting ui
+    } else {
+        /*LibDB::Db::setDbSetting(
+                    Preference::getString(SETTING::MYSQL_HOST),
+                    Preference::getInt(SETTING::MYSQL_PORT),
+                    Preference::getString(SETTING::MYSQL_USERNAME),
+                    Preference::getString(SETTING::MYSQL_PASSWORD),
+                    Preference::getString(SETTING::MYSQL_DB));*/
+    }
+    qDebug() << LibG::Preference::getBool(SETTING::SETTING_OK, false);
 }

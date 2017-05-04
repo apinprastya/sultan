@@ -40,4 +40,5 @@ SOURCES += \
 HEADERS += \ 
     global_global.h \
     preference.h \
-    global_setting_const.h
+    global_setting_const.h \
+    global_constant.h

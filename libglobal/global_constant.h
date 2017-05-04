@@ -1,5 +1,5 @@
 /*
- * core.h
+ * global_constant
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,30 +17,16 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef GLOBAL_CONSTANT_H
+#define GLOBAL_CONSTANT_H
 
-#ifndef CORE_H
-#define CORE_H
+namespace LibG {
 
-#include <QObject>
+namespace APPLICATION_TYPE {
+    const int SERVER    = 0;
+    const int CLIENT    = 1;
+}
 
-class Splash;
-class SettingDialog;
+}
 
-class Core : public QObject
-{
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
-
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-
-private slots:
-    void init();
-};
-
-#endif // CORE_H
+#endif // GLOBAL_CONSTANT_H

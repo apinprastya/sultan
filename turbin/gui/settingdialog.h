@@ -1,5 +1,5 @@
 /*
- * core.h
+ * settingdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,30 +17,32 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef SETTINGDIALOG_H
+#define SETTINGDIALOG_H
 
-#ifndef CORE_H
-#define CORE_H
+#include <QDialog>
 
-#include <QObject>
-
-class Splash;
+namespace Ui {
 class SettingDialog;
+}
 
-class Core : public QObject
+class SettingDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    explicit SettingDialog(QWidget *parent = 0);
+    ~SettingDialog();
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
+    Ui::SettingDialog *ui;
 
 private slots:
-    void init();
+    void checkType();
+    void checkMysql();
+    void checkConnection();
+    void cancel();
+    void save();
 };
 
-#endif // CORE_H
+#endif // SETTINGDIALOG_H

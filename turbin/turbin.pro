@@ -25,8 +25,18 @@ win32 {
     DESTDIR = ../bin
 }
 
+RESOURCES += turbin.qrc
+
 SOURCES += main.cpp \
-    core.cpp
+    core.cpp \
+    gui/splash.cpp \
+    gui/settingdialog.cpp
 
 HEADERS  += \
-    core.h
+    core.h \
+    gui/splash.h \
+    gui/settingdialog.h
+
+FORMS += \
+    gui/splash.ui \
+    gui/settingdialog.ui

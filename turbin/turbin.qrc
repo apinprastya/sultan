@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/icon_512.png</file>
+		<file>images/icon_256.png</file>
+		<file>images/icon_128.png</file>
+		<file>images/16x16/tick.png</file>
+		<file>images/16x16/cross.png</file>
+		<file>images/16x16/plus.png</file>
+		<file>images/16x16/blue-document-search-result.png</file>
+		<file>images/16x16/pencil.png</file>
+		<file>images/16x16/refresh.png</file>
+		<file>images/16x16/printer.png</file>
+		<file>images/16x16/lock.png</file>
+		<file>images/16x16/unlock.png</file>
+		<file>images/16x16/key.png</file>
+		<file>images/16x16/barcode.png</file>
+		<file>images/16x16/tick-white.png</file>
+		<file>images/16x16/hand-shake.png</file>
+    </qresource>
+</RCC>
