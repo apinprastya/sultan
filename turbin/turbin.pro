@@ -2,7 +2,7 @@ include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
 include(../libglobal/libglobal.pri)
 include(../libdb/libdb.pri)
 
-QT       += core gui widgets sql
+QT       += core gui widgets sql websockets
 
 TARGET = Turbin
 TEMPLATE = app
@@ -30,12 +30,18 @@ RESOURCES += turbin.qrc
 SOURCES += main.cpp \
     core.cpp \
     gui/splash.cpp \
-    gui/settingdialog.cpp
+    gui/settingdialog.cpp \
+    socket/socketmanager.cpp \
+    socket/socketclient.cpp \
+    socket/sockethandler.cpp
 
 HEADERS  += \
     core.h \
     gui/splash.h \
-    gui/settingdialog.h
+    gui/settingdialog.h \
+    socket/socketmanager.h \
+    socket/socketclient.h \
+    socket/sockethandler.h
 
 FORMS += \
     gui/splash.ui \

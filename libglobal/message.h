@@ -1,5 +1,5 @@
 /*
- * core.h
+ * message.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,35 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
-#ifndef CORE_H
-#define CORE_H
+#include <QVariantMap>
 
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class SocketManager;
-class SocketClient;
-
-class Core : public QObject
+class Message
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
-
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
+    /*
+     * Flag are use to store type, status, and request/answer
+     * type : 16bit
+     * status : 4bit    -> Code = 0: success; 1: error; ...
+     * */
+    int mFlag;
+    /*
+     * To store the type when answer the message
+     * */
+    int mFlagReply;
+    /*
+     * Store the websocketclient id if it message is for websocket
+     * */
+    int mSocketId;
 
-private slots:
-    void init();
+    QVariantMap mData;
+
+public:
+    Message(int type, int status = 0);
+    inline int type() { return (mFlag & 0xFFFF); }
+    inline int status() { return ((mFlag >> 16) & 0xF); }
 };
 
-#endif // CORE_H
+#endif // MESSAGE_H

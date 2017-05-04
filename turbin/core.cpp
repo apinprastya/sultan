@@ -25,6 +25,8 @@
 #include "db.h"
 #include "gui/splash.h"
 #include "gui/settingdialog.h"
+#include "socket/socketmanager.h"
+#include "socket/socketclient.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
@@ -36,7 +38,9 @@ static std::string TAG = "CORE";
 Core::Core(QObject *parent) :
     QObject(parent),
     mSplashUi(new Splash()),
-    mSettingDialog(new SettingDialog())
+    mSettingDialog(new SettingDialog()),
+    mSocketManager(nullptr),
+    mSocketClient(new SocketClient(this))
 {
 }
 

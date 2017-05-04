@@ -1,5 +1,5 @@
 /*
- * core.h
+ * socketmanager.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,25 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "socketmanager.h"
+#include "easylogging++.h"
+#include "sockethandler.h"
+#include <QWebSocket>
+#include <QWebSocketServer>
 
-#ifndef CORE_H
-#define CORE_H
+static std::string TAG = "[SOCKETMANAGER]";
 
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class SocketManager;
-class SocketClient;
-
-class Core : public QObject
+SocketManager::SocketManager(QObject *parent):
+    QWebSocketServer("Turbin", QWebSocketServer::NonSecureMode, parent),
+    mLastId(0)
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    connect(this, SIGNAL(newConnection()), SLOT(newConnection()));
+}
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-
-private slots:
-    void init();
-};
-
-#endif // CORE_H
+void SocketManager::newConnection()
+{
+    while(hasPendingConnections()) {
+        auto socket = nextPendingConnection();
+        auto handler = new SocketHandler(mLastId++, socket, this);
+    }
+}

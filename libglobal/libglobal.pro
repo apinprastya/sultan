@@ -35,10 +35,12 @@ macx {
 }
 
 SOURCES += \
-    preference.cpp
+    preference.cpp \
+    message.cpp
 
 HEADERS += \ 
     global_global.h \
     preference.h \
     global_setting_const.h \
-    global_constant.h
+    global_constant.h \
+    message.h

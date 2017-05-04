@@ -1,5 +1,5 @@
 /*
- * core.h
+ * sockethandler.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef CORE_H
-#define CORE_H
+#ifndef SOCKETHANDLER_H
+#define SOCKETHANDLER_H
 
 #include <QObject>
 
-class Splash;
-class SettingDialog;
-class SocketManager;
-class SocketClient;
+namespace LibG {
+class Message;
+}
 
-class Core : public QObject
+class QWebSocket;
+
+class SocketHandler : public QObject
 {
     Q_OBJECT
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    SocketHandler(int id, QWebSocket *socket, QObject *parent = nullptr);
+    void sendMessage(LibG::Message *msg);
+
+signals:
+    void newMessage(LibG::Message *msg);
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-
-private slots:
-    void init();
+    int mId;
+    QWebSocket *mSocket;
 };
 
-#endif // CORE_H
+#endif // SOCKETHANDLER_H

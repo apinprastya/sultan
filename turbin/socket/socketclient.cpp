@@ -1,5 +1,5 @@
 /*
- * core.h
+ * socketclient.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,10 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "socketclient.h"
 
-#ifndef CORE_H
-#define CORE_H
-
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class SocketManager;
-class SocketClient;
-
-class Core : public QObject
+SocketClient::SocketClient(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-
-private slots:
-    void init();
-};
-
-#endif // CORE_H
+}

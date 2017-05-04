@@ -1,5 +1,5 @@
 /*
- * core.h
+ * socketmanager.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef SOCKETMANAGER_H
+#define SOCKETMANAGER_H
 
-#ifndef CORE_H
-#define CORE_H
+#include <QWebSocketServer>
+#include <QList>
 
-#include <QObject>
+class SocketHandler;
 
-class Splash;
-class SettingDialog;
-class SocketManager;
-class SocketClient;
-
-class Core : public QObject
+class SocketManager : public QWebSocketServer
 {
     Q_OBJECT
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    SocketManager(QObject *parent = nullptr);
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
+    int mLastId;
+    QList<SocketHandler*> mHandler;
 
 private slots:
-    void init();
+    void newConnection();
 };
 
-#endif // CORE_H
+#endif // SOCKETMANAGER_H
