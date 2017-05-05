@@ -3,6 +3,8 @@ TARGET = global
 target.path = $${LIBDIR}
 INSTALLS += target
 
+QT += concurrent
+
 CONFIG(static) {
     CONFIG += staticlib
 }
@@ -36,11 +38,13 @@ macx {
 
 SOURCES += \
     preference.cpp \
-    message.cpp
+    message.cpp \
+    futurewatcher.cpp
 
 HEADERS += \ 
     global_global.h \
     preference.h \
     global_setting_const.h \
     global_constant.h \
-    message.h
+    message.h \
+    futurewatcher.h
