@@ -18,9 +18,61 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "socketclient.h"
+#include "easylogging++.h"
+#include "message.h"
+#include <QWebSocket>
+#include <QTimer>
+
+#define TIMEOUT 30000 //in mili second
+static std::string TAG = "[SOCKETCLIENT]";
 
 SocketClient::SocketClient(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    mSocket(new QWebSocket(QStringLiteral("Turbin Client"), QWebSocketProtocol::VersionLatest, this))
 {
+    connect(mSocket, SIGNAL(connected()), SIGNAL(socketConnected()));
+    connect(mSocket, SIGNAL(disconnected()), SIGNAL(socketDisconnected()));
+    connect(mSocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(errorOccure()));
+    connect(mSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(stateChanged(QAbstractSocket::SocketState)));
+    connect(mSocket, SIGNAL(binaryMessageReceived(QByteArray)), SLOT(binaryMessageReceived(QByteArray)));
+}
 
+void SocketClient::connectToServer(const QString &address, int port)
+{
+    mSocket->open(QUrl(QString("ws://%1:%2/").arg(address).arg(port)));
+    QTimer::singleShot(TIMEOUT, this, SLOT(checkConnection()));
+}
+
+QString SocketClient::lastError()
+{
+    return mSocket->errorString();
+}
+
+void SocketClient::sendMessage(LibG::Message *msg)
+{
+    mSocket->sendBinaryMessage(msg->toByteArray());
+}
+
+void SocketClient::checkConnection()
+{
+    if(mSocket->state() != QAbstractSocket::ConnectedState) {
+        LOG(ERROR) << TAG << "Connection to server timeout";
+        mSocket->close();
+    }
+}
+
+void SocketClient::errorOccure()
+{
+    LOG(ERROR) << TAG << "Connection error :" << mSocket->errorString();
+}
+
+void SocketClient::stateChanged(QAbstractSocket::SocketState state)
+{
+    LOG(INFO) << TAG << "State change :" << state;
+}
+
+void SocketClient::binaryMessageReceived(const QByteArray &data)
+{
+    LibG::Message msg(data);
+    emit messageReceived(&msg);
 }

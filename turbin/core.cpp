@@ -19,6 +19,7 @@
  */
 
 #include "core.h"
+#include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
 #include "easylogging++.h"
@@ -43,6 +44,8 @@ Core::Core(QObject *parent) :
     mSocketClient(new SocketClient(this))
 {
     Preference::createInstance();
+    connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
+    connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
 }
 
 Core::~Core()
@@ -89,12 +92,52 @@ void Core::init()
         mSettingDialog->showDialog();
         //show setting ui
     } else {
-        /*LibDB::Db::setDbSetting(
+        if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
+            mSplashUi->setMessage("Setting Mysql connection ...");
+            qApp->processEvents();
+            LibDB::Db::setDbSetting(
                     Preference::getString(SETTING::MYSQL_HOST),
                     Preference::getInt(SETTING::MYSQL_PORT),
                     Preference::getString(SETTING::MYSQL_USERNAME),
                     Preference::getString(SETTING::MYSQL_PASSWORD),
-                    Preference::getString(SETTING::MYSQL_DB));*/
+                    Preference::getString(SETTING::MYSQL_DB));
+            QString error;
+            if(!LibDB::Db::checkConnection(error)) {
+                return;
+            }
+            mSplashUi->setMessage("Start socket server ...");
+            qApp->processEvents();
+            mSocketManager = new SocketManager(this);
+            if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
+                return;
+            }
+            mSplashUi->setMessage("Connecting to server ...");
+            qApp->processEvents();
+            QTimer::singleShot(10, this, SLOT(connectToServer()));
+        } else {
+            mSplashUi->setMessage("Connecting to server ...");
+            qApp->processEvents();
+            QTimer::singleShot(10, this, SLOT(connectToServer()));
+        }
     }
-    qDebug() << LibG::Preference::getBool(SETTING::SETTING_OK, false);
+}
+
+void Core::connectToServer()
+{
+    if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
+        mSocketClient->connectToServer(QStringLiteral("localhost"), Preference::getInt(SETTING::APP_PORT));
+    } else {
+        mSocketClient->connectToServer(Preference::getString(SETTING::SERVER_ADDRESS),
+                                       Preference::getInt(SETTING::SERVER_PORT));
+    }
+}
+
+void Core::clientConnected()
+{
+    //TODO : start the login dialog
+}
+
+void Core::clientDisconnected()
+{
+
 }

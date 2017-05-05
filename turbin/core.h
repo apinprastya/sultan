@@ -45,6 +45,9 @@ private:
 
 private slots:
     void init();
+    void connectToServer();
+    void clientConnected();
+    void clientDisconnected();
 };
 
 #endif // CORE_H

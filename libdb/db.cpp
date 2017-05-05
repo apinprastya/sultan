@@ -79,6 +79,17 @@ bool Db::setDbSetting(const QString &host, int port, const QString &username, co
     return ret;
 }
 
+bool Db::checkConnection(QString &error)
+{
+    auto db = createInstance();
+    if(db == nullptr) {
+        error = db->lastError().text();
+        return false;
+    }
+    delete db;
+    return true;
+}
+
 Db *Db::reset()
 {
     mWhere = QString();

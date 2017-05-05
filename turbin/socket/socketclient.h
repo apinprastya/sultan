@@ -21,12 +21,37 @@
 #define SOCKETCLIENT_H
 
 #include <QObject>
+#include <QAbstractSocket>
+
+namespace LibG {
+class Message;
+}
+
+class QWebSocket;
 
 class SocketClient : public QObject
 {
     Q_OBJECT
 public:
     SocketClient(QObject *parent = nullptr);
+    void connectToServer(const QString &address, int port);
+    QString lastError();
+    void sendMessage(LibG::Message *msg);
+
+private:
+    QWebSocket *mSocket;
+
+signals:
+    void socketConnected();
+    void socketError();
+    void socketDisconnected();
+    void messageReceived(LibG::Message *msg);
+
+private slots:
+    void checkConnection();
+    void errorOccure();
+    void stateChanged(QAbstractSocket::SocketState state);
+    void binaryMessageReceived(const QByteArray &data);
 };
 
 #endif // SOCKETCLIENT_H

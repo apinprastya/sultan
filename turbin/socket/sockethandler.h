@@ -34,9 +34,12 @@ class SocketHandler : public QObject
 public:
     SocketHandler(int id, QWebSocket *socket, QObject *parent = nullptr);
     void sendMessage(LibG::Message *msg);
+    inline int getId() { return mId; }
+    inline QWebSocket* getSocket() { return mSocket; }
 
 signals:
     void newMessage(LibG::Message *msg);
+    void disconnect();
 
 private:
     int mId;

@@ -20,23 +20,27 @@
 #ifndef SOCKETMANAGER_H
 #define SOCKETMANAGER_H
 
-#include <QWebSocketServer>
-#include <QList>
+#include <QObject>
+#include <QMap>
 
+class QWebSocketServer;
 class SocketHandler;
 
-class SocketManager : public QWebSocketServer
+class SocketManager : public QObject
 {
     Q_OBJECT
 public:
     SocketManager(QObject *parent = nullptr);
+    bool listen(int port);
 
 private:
     int mLastId;
-    QList<SocketHandler*> mHandler;
+    QWebSocketServer *mServer;
+    QMap<int, SocketHandler*> mHandlers;
 
 private slots:
     void newConnection();
+    void clientDisconnect();
 };
 
 #endif // SOCKETMANAGER_H

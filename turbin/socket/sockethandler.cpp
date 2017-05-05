@@ -18,15 +18,18 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "sockethandler.h"
+#include "message.h"
+#include <QWebSocket>
 
 SocketHandler::SocketHandler(int id, QWebSocket *socket, QObject *parent) :
     QObject(parent),
     mId(id),
     mSocket(socket)
 {
+    connect(mSocket, SIGNAL(disconnected()), SIGNAL(disconnect()));
 }
 
 void SocketHandler::sendMessage(LibG::Message *msg)
 {
-
+    mSocket->sendBinaryMessage(msg->toByteArray());
 }
