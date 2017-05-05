@@ -20,9 +20,12 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include "global_global.h"
 #include <QVariantMap>
 
-class Message
+namespace LibG {
+
+class GLOBALSHARED_EXPORT Message
 {
 private:
     /*
@@ -42,10 +45,23 @@ private:
 
     QVariantMap mData;
 
+    int mUniqueId;
+
 public:
     Message(int type, int status = 0);
+    Message(const QByteArray &ba);
+
+    void setType(int type);
+    void setStatus(int status);
     inline int type() { return (mFlag & 0xFFFF); }
     inline int status() { return ((mFlag >> 16) & 0xF); }
+
+    QJsonObject toJsonObject();
+    QString toJsonString();
+    QByteArray toByteArray();
+    void fromByteArray(const QByteArray &ba);
+    void fromJsonDoc(const QJsonDocument &doc);
 };
 
+}
 #endif // MESSAGE_H
