@@ -21,15 +21,24 @@
 #include "migration.h"
 #include "db.h"
 #include "easylogging++.h"
+#include <QDebug>
 
 using namespace LibDB;
 
 static std::string TAG = "MIGRATION";
 
+bool Migration::migrateAll(const QString &folder)
+{
+    auto db = Db::createInstance();
+    Migration mg(db, folder);
+    return mg.migrate();
+}
+
 Migration::Migration(Db *db, const QString &folder):
     mDb(db),
     mDir(QDir(folder))
 {
+    init();
 }
 
 bool Migration::migrate()
@@ -41,10 +50,17 @@ bool Migration::migrate()
     }
     bool started = false;
     bool errorOccure = false;
-    const QString &oldLastFile = mLastFile;
+    const QString oldLastFile = mLastFile;
     for(const QString &file : files) {
-        if(!started)
-            if(mLastFile.isEmpty() || mLastFile.compare(file) == 0) started = true;
+        if(!file.compare(".") || !file.compare("..")) continue;
+        if(!started) {
+            if(mLastFile.isEmpty()) {
+                started = true;
+            } else if(mLastFile.compare(file) == 0) {
+                started = true;
+                continue;
+            }
+        }
         if(started) {
             if(executeFile(file)) {
                 mLastFile = file;
@@ -54,6 +70,8 @@ bool Migration::migrate()
             }
         }
     }
+    qDebug() << mLastFile;
+    qDebug() << oldLastFile;
     if(mLastFile.compare(oldLastFile)) {
         QVariantMap data;
         data.insert("name", mLastFile);

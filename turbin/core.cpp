@@ -31,9 +31,12 @@
 #include "socket/socketclient.h"
 #include "mainserver.h"
 #include "messagebus.h"
+#include "migration.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
+
+#define STRINGIFY(x) #x
 
 using namespace LibG;
 
@@ -113,6 +116,12 @@ void Core::init()
                     Preference::getString(SETTING::MYSQL_DB));
             QString error;
             if(!LibDB::Db::checkConnection(error)) {
+                return;
+            }
+            mSplashUi->setMessage("Migrate database ...");
+            qApp->processEvents();
+            if(!LibDB::Migration::migrateAll("/media/data/Project/Qt/turbin/migrations")) {
+                LOG(ERROR) << TAG << "Error migration";
                 return;
             }
             mSplashUi->setMessage("Start action server ...");

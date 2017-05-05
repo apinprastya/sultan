@@ -31,6 +31,7 @@ class Db;
 class DBSHARED_EXPORT Migration
 {
 public:
+    static bool migrateAll(const QString &folder);
     Migration(Db *db, const QString &folder);
     bool migrate();
 

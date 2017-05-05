@@ -64,6 +64,7 @@ void LoginDialog::loginClicked()
     const QString &username = ui->lineUsername->text();
     const QString &password = ui->linePassword->text();
     if(username.isEmpty() || password.isEmpty()) {
+        ui->labelError->show();
         ui->labelError->setText(tr("fill all field"));
         return;
     }
