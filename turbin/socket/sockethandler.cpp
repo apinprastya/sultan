@@ -27,9 +27,17 @@ SocketHandler::SocketHandler(int id, QWebSocket *socket, QObject *parent) :
     mSocket(socket)
 {
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(disconnect()));
+    connect(mSocket, SIGNAL(binaryMessageReceived(QByteArray)), SLOT(binaryMessageRecieved(QByteArray)));
 }
 
 void SocketHandler::sendMessage(LibG::Message *msg)
 {
     mSocket->sendBinaryMessage(msg->toByteArray());
+}
+
+void SocketHandler::binaryMessageRecieved(const QByteArray &data)
+{
+    LibG::Message msg(data);
+    msg.setSocketId(mId);
+    emit newMessage(&msg);
 }

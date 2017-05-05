@@ -32,7 +32,8 @@ private:
      * Flag are use to store type, status, and request/answer
      * type : 8bit
      * command : 8bit
-     * status : 4bit    -> Code = 0: success; 1: error; ...
+     * status : 4bit    -> Code = 0: success; 1: error;
+     * flag : 8bit
      * */
     int mFlag;
     /*
@@ -46,15 +47,27 @@ private:
 
 public:
     Message();
-    Message(int type, int status = 0);
+    Message(int type, int command, int status = 0);
     Message(const QByteArray &ba);
 
     void setType(int type);
     void setCommand(int command);
     void setStatus(int status);
+    void setFlag(int flag);
     inline int type() { return (mFlag & 0xFF); }
     inline int command() { return ((mFlag >> 8) & 0xFF); }
     inline int status() { return ((mFlag >> 16) & 0xF); }
+    inline int flag() { return ((mFlag >> 20) & 0xFF); }
+    inline int getUniqueId() { return mUniqueId; }
+    inline void setUniqueId(int id) { mUniqueId = id; }
+    inline int getSocketId() { return mSocketId; }
+    inline void setSocketId(int id) { mSocketId = id; }
+
+    void addData(const QString &key, const QVariant &data);
+    void clearData();
+    void setData(const QVariantMap &data);
+    QVariantMap getData();
+    QVariant getData(const QString &key);
 
     QJsonObject toJsonObject();
     QString toJsonString();

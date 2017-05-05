@@ -20,12 +20,9 @@
 #ifndef SOCKETCLIENT_H
 #define SOCKETCLIENT_H
 
+#include "message.h"
 #include <QObject>
 #include <QAbstractSocket>
-
-namespace LibG {
-class Message;
-}
 
 class QWebSocket;
 
@@ -36,6 +33,8 @@ public:
     SocketClient(QObject *parent = nullptr);
     void connectToServer(const QString &address, int port);
     QString lastError();
+
+public slots:
     void sendMessage(LibG::Message *msg);
 
 private:

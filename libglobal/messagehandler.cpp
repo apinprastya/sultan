@@ -1,5 +1,5 @@
 /*
- * router.cpp
+ * messagehandler.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,45 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "router.h"
+#include "messagehandler.h"
 #include "message.h"
-#include "serveraction.h"
-#include "global_constant.h"
-#include "action/useraction.h"
+#include "messagebus.h"
 
-using namespace LibServer;
 using namespace LibG;
 
-Router::Router()
+static int UNIQUE_ID = 0;
+
+MessageHandler::MessageHandler():
+    mMessageBus(nullptr)
 {
+
 }
 
-LibG::Message Router::handler(LibG::Message msg)
+MessageHandler::~MessageHandler()
 {
-    auto action = getServerAction(msg.type());
-    if(action != nullptr)
-        return action->exec(&msg);
-    msg.setStatus(STATUS::ERROR);
-    return msg;
+    mMessageBus->removeHandler(this);
 }
 
-ServerAction *Router::getServerAction(int type)
+void MessageHandler::setMessageBus(MessageBus *bus)
 {
-    switch(type) {
-        case MSG_TYPE::USER:
-        return new UserAction();
+    mMessageBus = bus;
+    bus->registerHandler(this);
+}
+
+bool MessageHandler::consumeMessage(Message *msg)
+{
+    if(mInterests.contains(msg->getUniqueId())) {
+        mInterests.removeOne(msg->getUniqueId());
+        messageReceived(msg);
+        return true;
     }
-    return nullptr;
+    return false;
 }
 
+void MessageHandler::sendMessage(Message *msg)
+{
+    int unique = UNIQUE_ID++;
+    msg->setUniqueId(unique);
+    mInterests.append(unique);
+    mMessageBus->sendMessage(msg);
+}

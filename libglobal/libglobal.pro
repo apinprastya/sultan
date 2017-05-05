@@ -39,7 +39,9 @@ macx {
 SOURCES += \
     preference.cpp \
     message.cpp \
-    futurewatcher.cpp
+    futurewatcher.cpp \
+    messagehandler.cpp \
+    messagebus.cpp
 
 HEADERS += \ 
     global_global.h \
@@ -47,4 +49,6 @@ HEADERS += \
     global_setting_const.h \
     global_constant.h \
     message.h \
-    futurewatcher.h
+    futurewatcher.h \
+    messagehandler.h \
+    messagebus.h

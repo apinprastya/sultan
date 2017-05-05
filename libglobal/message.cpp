@@ -28,9 +28,10 @@ Message::Message()
 {
 }
 
-Message::Message(int type, int status)
+Message::Message(int type, int command, int status)
 {
     setType(type);
+    setCommand(command);
     setStatus(status);
 }
 
@@ -48,13 +49,44 @@ void Message::setType(int type)
 void Message::setCommand(int command)
 {
     mFlag &= ~0xFF00;
-    mFlag |= (command & 0xFF00);
+    mFlag |= ((command << 8) & 0xFF00);
 }
 
 void Message::setStatus(int status)
 {
-    mFlag &= ~0xF00000;
+    mFlag &= ~0xF0000;
     mFlag |= ((status << 16) & 0xF);
+}
+
+void Message::setFlag(int flag)
+{
+    mFlag &= ~0xFF00000;
+    mFlag |= ((flag << 22) & 0xFF);
+}
+
+void Message::addData(const QString &key, const QVariant &data)
+{
+    mData.insert(key, data);
+}
+
+void Message::clearData()
+{
+    mData.clear();
+}
+
+void Message::setData(const QVariantMap &data)
+{
+    mData = data;
+}
+
+QVariantMap Message::getData()
+{
+    return mData;
+}
+
+QVariant Message::getData(const QString &key)
+{
+    return mData[key];
 }
 
 QJsonObject Message::toJsonObject()

@@ -44,6 +44,9 @@ signals:
 private:
     int mId;
     QWebSocket *mSocket;
+
+private slots:
+    void binaryMessageRecieved(const QByteArray &data);
 };
 
 #endif // SOCKETHANDLER_H

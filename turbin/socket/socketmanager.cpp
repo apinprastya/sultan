@@ -20,6 +20,7 @@
 #include "socketmanager.h"
 #include "easylogging++.h"
 #include "sockethandler.h"
+#include "message.h"
 #include <QWebSocket>
 #include <QWebSocketServer>
 
@@ -51,6 +52,7 @@ void SocketManager::newConnection()
         LOG(INFO) << TAG << "New socket connection" << socket->peerAddress().toString() << socket->peerPort();
         mHandlers.insert(handler->getId(), handler);
         connect(handler, SIGNAL(disconnect()), SLOT(clientDisconnect()));
+        connect(handler, SIGNAL(newMessage(LibG::Message*)), SIGNAL(receivedMessage(LibG::Message*)));
     }
 }
 
@@ -59,4 +61,10 @@ void SocketManager::clientDisconnect()
     auto handler = static_cast<SocketHandler*>(QObject::sender());
     mHandlers.remove(handler->getId());
     LOG(INFO) << "Client disconnect" << handler->getSocket()->peerAddress().toString();
+}
+
+void SocketManager::sendToClient(LibG::Message *msg)
+{
+    if(mHandlers.contains(msg->getSocketId()))
+        mHandlers[msg->getSocketId()]->sendMessage(msg);
 }

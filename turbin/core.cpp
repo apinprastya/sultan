@@ -30,6 +30,7 @@
 #include "socket/socketmanager.h"
 #include "socket/socketclient.h"
 #include "mainserver.h"
+#include "messagebus.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
@@ -45,11 +46,15 @@ Core::Core(QObject *parent) :
     mLoginDialog(new LoginDialog()),
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this)),
-    mMainServer(nullptr)
+    mMainServer(nullptr),
+    mMessageBus(new MessageBus(this))
 {
     Preference::createInstance();
+    mLoginDialog->setMessageBus(mMessageBus);
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
+    connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
+    connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
 }
 
 Core::~Core()
@@ -119,6 +124,8 @@ void Core::init()
             if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
                 return;
             }
+            connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));
+            connect(mMainServer, SIGNAL(messageReady(LibG::Message*)), mSocketManager, SLOT(sendToClient(LibG::Message*)));
             mSplashUi->setMessage("Connecting to server ...");
             qApp->processEvents();
             QTimer::singleShot(10, this, SLOT(connectToServer()));

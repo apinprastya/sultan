@@ -41,6 +41,6 @@ MainServer::~MainServer()
 void MainServer::messageReceived(LibG::Message *msg)
 {
     auto watcher = new FutureWatcher();
-    //connect(watcher, SIGNAL(messageReceived(Message*)), SIGNAL(messageReady(Message*)));
+    connect(watcher, SIGNAL(messageReceived(LibG::Message*)), SIGNAL(messageReady(LibG::Message*)));
     watcher->setFuture(QtConcurrent::run(mRouter, &Router::handler, *msg));
 }

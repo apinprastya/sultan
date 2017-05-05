@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * useraction.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,20 +17,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#include "useraction.h"
+#include "global_constant.h"
+#include <QDebug>
 
-#include "server_global.h"
-#include "serveraction.h"
+using namespace LibServer;
+using namespace LibG;
 
-namespace LibServer {
-
-class UserAction : public ServerAction
+UserAction::UserAction():
+    ServerAction()
 {
-public:
-    UserAction();
-    LibG::Message insert(LibG::Message *msg) override;
-};
-
+    mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
 }
-#endif // USERACTION_H
+
+
+LibG::Message UserAction::insert(LibG::Message *msg)
+{
+    LibG::Message message;
+    qDebug() << "OH YEAH";
+    return message;
+}
+
+Message UserAction::login(Message *msg)
+{
+    LibG::Message message = *msg;
+    qDebug() << msg->getData();
+    return message;
+}

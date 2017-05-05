@@ -23,6 +23,10 @@
 #include <QObject>
 #include <QMap>
 
+namespace LibG {
+class Message;
+}
+
 class QWebSocketServer;
 class SocketHandler;
 
@@ -41,6 +45,12 @@ private:
 private slots:
     void newConnection();
     void clientDisconnect();
+
+public slots:
+    void sendToClient(LibG::Message *msg);
+
+signals:
+    void receivedMessage(LibG::Message *msg);
 };
 
 #endif // SOCKETMANAGER_H

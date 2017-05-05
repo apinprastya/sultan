@@ -43,12 +43,12 @@ macx {
 SOURCES += \
     serveraction.cpp \
     router.cpp \
-    useraction.cpp \
+    action/useraction.cpp \
     mainserver.cpp
 
 HEADERS += \ 
     server_global.h \
     serveraction.h \
     router.h \
-    useraction.h \
+    action/useraction.h \
     mainserver.h

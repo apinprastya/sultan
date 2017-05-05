@@ -1,5 +1,5 @@
 /*
- * router.cpp
+ * useraction.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,21 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "router.h"
-#include "message.h"
+#ifndef USERACTION_H
+#define USERACTION_H
+
+#include "server_global.h"
 #include "serveraction.h"
-#include "global_constant.h"
-#include "action/useraction.h"
 
-using namespace LibServer;
-using namespace LibG;
+namespace LibServer {
 
-Router::Router()
+class UserAction : public ServerAction
 {
-}
+public:
+    UserAction();
+    LibG::Message insert(LibG::Message *msg) override;
+    LibG::Message login(LibG::Message *msg);
+};
 
-LibG::Message Router::handler(LibG::Message msg)
-{
-    auto action = getServerAction(msg.type());
-    if(action != nullptr)
-        return action->exec(&msg);
-    msg.setStatus(STATUS::ERROR);
-    return msg;
 }
-
-ServerAction *Router::getServerAction(int type)
-{
-    switch(type) {
-        case MSG_TYPE::USER:
-        return new UserAction();
-    }
-    return nullptr;
-}
-
+#endif // USERACTION_H

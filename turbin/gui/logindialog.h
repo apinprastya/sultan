@@ -21,12 +21,13 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
+#include "messagehandler.h"
 
 namespace Ui {
 class LoginDialog;
 }
 
-class LoginDialog : public QDialog
+class LoginDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
 
@@ -38,6 +39,12 @@ public:
 
 private:
     Ui::LoginDialog *ui;
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+
+private slots:
+    void loginClicked();
 };
 
 #endif // LOGINDIALOG_H

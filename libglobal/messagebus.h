@@ -1,5 +1,5 @@
 /*
- * useraction.cpp
+ * messagebus.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,21 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "useraction.h"
-#include <QDebug>
+#ifndef MESSAGEBUS_H
+#define MESSAGEBUS_H
 
-using namespace LibServer;
+#include "global_global.h"
+#include <QObject>
+#include <QList>
 
-UserAction::UserAction():
-    ServerAction()
+namespace LibG {
+
+class Message;
+class MessageHandler;
+
+class GLOBALSHARED_EXPORT MessageBus : public QObject
 {
-    qDebug() << "created";
-}
+    Q_OBJECT
+public:
+    MessageBus(QObject *parent = nullptr);
+    void sendMessage(Message *msg);
+    void registerHandler(MessageHandler *handler);
+    void removeHandler(MessageHandler *handler);
 
+public slots:
+    void messageRecieved(LibG::Message *msg);
 
-LibG::Message UserAction::insert(LibG::Message *msg)
-{
-    LibG::Message message;
-    qDebug() << "OH YEAH";
-    return message;
+signals:
+    void newMessageToSend(LibG::Message *msg);
+
+private:
+    QList<MessageHandler*> mMessageHandler;
+};
+
 }
+#endif // MESSAGEBUS_H

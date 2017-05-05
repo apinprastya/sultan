@@ -41,7 +41,7 @@ private slots:
     void finished();
 
 signals:
-    void messageReceived(Message *msg);
+    void messageReceived(LibG::Message *msg);
 };
 
 }

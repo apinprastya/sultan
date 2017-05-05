@@ -19,7 +19,6 @@
  */
 #include "socketclient.h"
 #include "easylogging++.h"
-#include "message.h"
 #include <QWebSocket>
 #include <QTimer>
 

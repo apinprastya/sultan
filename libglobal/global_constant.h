@@ -51,7 +51,8 @@ namespace MSG_COMMAND {
     const int DELETE        = 2;
     const int GET           = 3;
     const int QUERY         = 4;
-    //this is custom
+    //custom command
+    const int LOGIN         = 5;
 }
 
 }

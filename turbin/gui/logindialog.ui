@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>146</height>
+    <height>155</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,10 +69,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QPushButton" name="pushLogin">
          <property name="text">
           <string>Login</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="labelError">
+         <property name="styleSheet">
+          <string notr="true">font-size: 12px; color: red;</string>
+         </property>
+         <property name="text">
+          <string>Sample</string>
          </property>
         </widget>
        </item>

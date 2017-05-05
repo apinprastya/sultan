@@ -20,7 +20,9 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
 #include "global_constant.h"
+#include "message.h"
 #include <QStringBuilder>
+#include <QDebug>
 
 using namespace LibG;
 
@@ -30,6 +32,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
+    connect(ui->pushLogin, SIGNAL(clicked(bool)), SLOT(loginClicked()));
 }
 
 LoginDialog::~LoginDialog()
@@ -42,10 +45,30 @@ void LoginDialog::reset()
     ui->lineUsername->clear();
     ui->linePassword->clear();
     ui->lineUsername->setFocus(Qt::TabFocusReason);
+    ui->labelError->hide();
 }
 
 void LoginDialog::showDialog()
 {
     reset();
     show();
+}
+
+void LoginDialog::messageReceived(Message *msg)
+{
+    qDebug() << "ITS COMMING";
+}
+
+void LoginDialog::loginClicked()
+{
+    const QString &username = ui->lineUsername->text();
+    const QString &password = ui->linePassword->text();
+    if(username.isEmpty() || password.isEmpty()) {
+        ui->labelError->setText(tr("fill all field"));
+        return;
+    }
+    LibG::Message msg(MSG_TYPE::USER, MSG_COMMAND::LOGIN);
+    msg.addData("username", username);
+    msg.addData("password", password);
+    sendMessage(&msg);
 }

@@ -1,5 +1,5 @@
 /*
- * router.cpp
+ * messagehandler.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,33 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "router.h"
-#include "message.h"
-#include "serveraction.h"
-#include "global_constant.h"
-#include "action/useraction.h"
+#ifndef MESSAGEHANDLER_H
+#define MESSAGEHANDLER_H
 
-using namespace LibServer;
-using namespace LibG;
+#include "global_global.h"
+#include <QList>
 
-Router::Router()
+namespace LibG {
+
+class Message;
+class MessageBus;
+
+class GLOBALSHARED_EXPORT MessageHandler
 {
-}
+public:
+    MessageHandler();
+    virtual ~MessageHandler();
+    void setMessageBus(MessageBus *bus);
+    bool consumeMessage(Message *msg);
+    void clearInterested();
+    void sendMessage(Message *msg);
 
-LibG::Message Router::handler(LibG::Message msg)
-{
-    auto action = getServerAction(msg.type());
-    if(action != nullptr)
-        return action->exec(&msg);
-    msg.setStatus(STATUS::ERROR);
-    return msg;
-}
+protected:
+    MessageBus *mMessageBus;
+    QList<int> mInterests;
 
-ServerAction *Router::getServerAction(int type)
-{
-    switch(type) {
-        case MSG_TYPE::USER:
-        return new UserAction();
-    }
-    return nullptr;
-}
+    virtual void messageReceived(Message *msg) = 0;
+};
 
+}
+#endif // MESSAGEHANDLER_H

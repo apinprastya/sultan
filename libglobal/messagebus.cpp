@@ -1,5 +1,5 @@
 /*
- * router.cpp
+ * messagebus.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,34 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "router.h"
+#include "messagebus.h"
 #include "message.h"
-#include "serveraction.h"
-#include "global_constant.h"
-#include "action/useraction.h"
+#include "messagehandler.h"
 
-using namespace LibServer;
 using namespace LibG;
 
-Router::Router()
+MessageBus::MessageBus(QObject *parent) : QObject(parent)
 {
+
 }
 
-LibG::Message Router::handler(LibG::Message msg)
+void MessageBus::sendMessage(Message *msg)
 {
-    auto action = getServerAction(msg.type());
-    if(action != nullptr)
-        return action->exec(&msg);
-    msg.setStatus(STATUS::ERROR);
-    return msg;
+    emit newMessageToSend(msg);
 }
 
-ServerAction *Router::getServerAction(int type)
+void MessageBus::registerHandler(MessageHandler *handler)
 {
-    switch(type) {
-        case MSG_TYPE::USER:
-        return new UserAction();
+    if(!mMessageHandler.contains(handler))
+        mMessageHandler.append(handler);
+}
+
+void MessageBus::removeHandler(MessageHandler *handler)
+{
+    if(mMessageHandler.contains(handler))
+        mMessageHandler.removeOne(handler);
+}
+
+void MessageBus::messageRecieved(LibG::Message *msg)
+{
+    for(auto handler : mMessageHandler) {
+        if(handler->consumeMessage(msg))
+            break;
     }
-    return nullptr;
 }
-

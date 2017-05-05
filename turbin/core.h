@@ -29,6 +29,10 @@ class LoginDialog;
 class SocketManager;
 class SocketClient;
 
+namespace LibG {
+class MessageBus;
+}
+
 namespace LibServer {
 class MainServer;
 }
@@ -49,6 +53,7 @@ private:
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
     LibServer::MainServer *mMainServer;
+    LibG::MessageBus *mMessageBus;
 
 private slots:
     void init();
