@@ -1,5 +1,5 @@
 /*
- * global_constant
+ * logindialog.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,23 +17,35 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GLOBAL_CONSTANT_H
-#define GLOBAL_CONSTANT_H
+#include "logindialog.h"
+#include "ui_logindialog.h"
+#include "global_constant.h"
+#include <QStringBuilder>
 
-#include <QString>
+using namespace LibG;
 
-namespace LibG {
-
-namespace CONSTANT {
-    const QString APP_NAME          = QStringLiteral("Turbin");
-    const QString WINDOW_TITLE      = QStringLiteral("Turbin - %1");
+LoginDialog::LoginDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::LoginDialog)
+{
+    ui->setupUi(this);
+    setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
 }
 
-namespace APPLICATION_TYPE {
-    const int SERVER    = 0;
-    const int CLIENT    = 1;
+LoginDialog::~LoginDialog()
+{
+    delete ui;
 }
 
+void LoginDialog::reset()
+{
+    ui->lineUsername->clear();
+    ui->linePassword->clear();
+    ui->lineUsername->setFocus(Qt::TabFocusReason);
 }
 
-#endif // GLOBAL_CONSTANT_H
+void LoginDialog::showDialog()
+{
+    reset();
+    show();
+}

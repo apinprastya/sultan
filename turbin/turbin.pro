@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     gui/settingdialog.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
-    socket/sockethandler.cpp
+    socket/sockethandler.cpp \
+    gui/logindialog.cpp
 
 HEADERS  += \
     core.h \
@@ -41,8 +42,10 @@ HEADERS  += \
     gui/settingdialog.h \
     socket/socketmanager.h \
     socket/socketclient.h \
-    socket/sockethandler.h
+    socket/sockethandler.h \
+    gui/logindialog.h
 
 FORMS += \
     gui/splash.ui \
-    gui/settingdialog.ui
+    gui/settingdialog.ui \
+    gui/logindialog.ui

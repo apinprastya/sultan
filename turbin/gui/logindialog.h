@@ -1,5 +1,5 @@
 /*
- * global_constant
+ * logindialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,23 +17,27 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GLOBAL_CONSTANT_H
-#define GLOBAL_CONSTANT_H
+#ifndef LOGINDIALOG_H
+#define LOGINDIALOG_H
 
-#include <QString>
+#include <QDialog>
 
-namespace LibG {
-
-namespace CONSTANT {
-    const QString APP_NAME          = QStringLiteral("Turbin");
-    const QString WINDOW_TITLE      = QStringLiteral("Turbin - %1");
+namespace Ui {
+class LoginDialog;
 }
 
-namespace APPLICATION_TYPE {
-    const int SERVER    = 0;
-    const int CLIENT    = 1;
-}
+class LoginDialog : public QDialog
+{
+    Q_OBJECT
 
-}
+public:
+    LoginDialog(QWidget *parent = 0);
+    ~LoginDialog();
+    void reset();
+    void showDialog();
 
-#endif // GLOBAL_CONSTANT_H
+private:
+    Ui::LoginDialog *ui;
+};
+
+#endif // LOGINDIALOG_H

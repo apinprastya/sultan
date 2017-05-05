@@ -26,6 +26,7 @@
 #include "db.h"
 #include "gui/splash.h"
 #include "gui/settingdialog.h"
+#include "gui/logindialog.h"
 #include "socket/socketmanager.h"
 #include "socket/socketclient.h"
 #include <QApplication>
@@ -40,6 +41,7 @@ Core::Core(QObject *parent) :
     QObject(parent),
     mSplashUi(new Splash()),
     mSettingDialog(new SettingDialog()),
+    mLoginDialog(new LoginDialog()),
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this))
 {
@@ -54,6 +56,7 @@ Core::~Core()
     Preference::destroy();
     if(mSplashUi) delete mSplashUi;
     if(mSettingDialog) delete mSettingDialog;
+    if(mLoginDialog) delete mLoginDialog;
 }
 
 void Core::setup()
@@ -134,7 +137,8 @@ void Core::connectToServer()
 
 void Core::clientConnected()
 {
-    //TODO : start the login dialog
+    mSplashUi->hide();
+    mLoginDialog->showDialog();
 }
 
 void Core::clientDisconnected()
