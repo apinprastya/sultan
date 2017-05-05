@@ -1,5 +1,5 @@
 /*
- * core.h
+ * serveraction.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef SERVERACTION_H
+#define SERVERACTION_H
 
-#ifndef CORE_H
-#define CORE_H
+#include "server_global.h"
+#include "message.h"
+#include <QMap>
+#include <functional>
 
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
-
-namespace LibServer {
-class MainServer;
+namespace LibDB {
+class Db;
 }
 
-class Core : public QObject
+namespace LibServer {
+
+class SERVERSHARED_EXPORT ServerAction
 {
-    Q_OBJECT
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    ServerAction();
+    ~ServerAction();
+    LibG::Message exec(LibG::Message *msg);
+    virtual LibG::Message insert(LibG::Message *msg);
+    virtual LibG::Message update(LibG::Message *msg);
+    virtual LibG::Message del(LibG::Message *msg);
+    virtual LibG::Message get(LibG::Message *msg);
+    virtual LibG::Message query(LibG::Message *msg);
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
-
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
+protected:
+    LibDB::Db *mDb;
+    QMap<int, std::function<LibG::Message(LibG::Message*)> > mFunctionMap;
 };
 
-#endif // CORE_H
+}
+#endif // SERVERACTION_H

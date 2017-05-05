@@ -1,5 +1,5 @@
 /*
- * core.h
+ * libserver.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "mainserver.h"
+#include "futurewatcher.h"
+#include "router.h"
+#include "message.h"
+#include <QtConcurrent>
 
-#ifndef CORE_H
-#define CORE_H
+using namespace LibG;
+using namespace LibServer;
 
-#include <QObject>
+MainServer::MainServer(QObject *parent) :
+    QObject(parent),
+    mRouter(new Router)
+{
 
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
-
-namespace LibServer {
-class MainServer;
 }
 
-class Core : public QObject
+MainServer::~MainServer()
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    if(mRouter) delete mRouter;
+}
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
-
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
-};
-
-#endif // CORE_H
+void MainServer::messageReceived(LibG::Message *msg)
+{
+    auto watcher = new FutureWatcher();
+    //connect(watcher, SIGNAL(messageReceived(Message*)), SIGNAL(messageReady(Message*)));
+    watcher->setFuture(QtConcurrent::run(mRouter, &Router::handler, *msg));
+}

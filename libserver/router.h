@@ -1,5 +1,5 @@
 /*
- * core.h
+ * router.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,25 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef ROUTER_H
+#define ROUTER_H
 
-#ifndef CORE_H
-#define CORE_H
-
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
+#include "server_global.h"
+#include "message.h"
 
 namespace LibServer {
-class MainServer;
-}
 
-class Core : public QObject
+class ServerAction;
+
+class SERVERSHARED_EXPORT Router
 {
-    Q_OBJECT
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    Router();
+    LibG::Message handler(LibG::Message msg);
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
-
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
+    ServerAction *getServerAction(int type);
 };
 
-#endif // CORE_H
+}
+#endif // ROUTER_H

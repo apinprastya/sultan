@@ -30,14 +30,11 @@ class GLOBALSHARED_EXPORT Message
 private:
     /*
      * Flag are use to store type, status, and request/answer
-     * type : 16bit
+     * type : 8bit
+     * command : 8bit
      * status : 4bit    -> Code = 0: success; 1: error; ...
      * */
     int mFlag;
-    /*
-     * To store the type when answer the message
-     * */
-    int mFlagReply;
     /*
      * Store the websocketclient id if it message is for websocket
      * */
@@ -48,12 +45,15 @@ private:
     int mUniqueId;
 
 public:
+    Message();
     Message(int type, int status = 0);
     Message(const QByteArray &ba);
 
     void setType(int type);
+    void setCommand(int command);
     void setStatus(int status);
-    inline int type() { return (mFlag & 0xFFFF); }
+    inline int type() { return (mFlag & 0xFF); }
+    inline int command() { return ((mFlag >> 8) & 0xFF); }
     inline int status() { return ((mFlag >> 16) & 0xF); }
 
     QJsonObject toJsonObject();

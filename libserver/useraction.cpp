@@ -1,5 +1,5 @@
 /*
- * core.h
+ * useraction.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,21 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "useraction.h"
+#include <QDebug>
 
-#ifndef CORE_H
-#define CORE_H
+using namespace LibServer;
 
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
-
-namespace LibServer {
-class MainServer;
+UserAction::UserAction():
+    ServerAction()
+{
+    qDebug() << "created";
 }
 
-class Core : public QObject
+
+LibG::Message UserAction::insert(LibG::Message *msg)
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
-
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
-
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
-};
-
-#endif // CORE_H
+    LibG::Message message;
+    qDebug() << "OH YEAH";
+    return message;
+}

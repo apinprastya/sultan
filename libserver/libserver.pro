@@ -1,7 +1,12 @@
+include(../libglobal/libglobal.pri)
+include(../libdb/libdb.pri)
+
 TEMPLATE = lib
 TARGET = server
 target.path = $${LIBDIR}
 INSTALLS += target
+
+QT += concurrent sql
 
 CONFIG(static) {
     CONFIG += staticlib
@@ -35,7 +40,15 @@ macx {
 }
 
 
-SOURCES +=
+SOURCES += \
+    serveraction.cpp \
+    router.cpp \
+    useraction.cpp \
+    mainserver.cpp
 
 HEADERS += \ 
-    server_global.h
+    server_global.h \
+    serveraction.h \
+    router.h \
+    useraction.h \
+    mainserver.h

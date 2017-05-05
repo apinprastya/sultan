@@ -24,6 +24,10 @@
 
 using namespace LibG;
 
+Message::Message()
+{
+}
+
 Message::Message(int type, int status)
 {
     setType(type);
@@ -37,8 +41,14 @@ Message::Message(const QByteArray &ba)
 
 void Message::setType(int type)
 {
-    mFlag &= ~0xFFFF;
-    mFlag |= (type & 0xFFFF);
+    mFlag &= ~0xFF;
+    mFlag |= (type & 0xFF);
+}
+
+void Message::setCommand(int command)
+{
+    mFlag &= ~0xFF00;
+    mFlag |= (command & 0xFF00);
 }
 
 void Message::setStatus(int status)
@@ -52,7 +62,6 @@ QJsonObject Message::toJsonObject()
     QJsonObject root;
     root.insert(QLatin1String("_u"), QJsonValue(mUniqueId));
     root.insert(QLatin1String("_f"), QJsonValue(mFlag));
-    root.insert(QLatin1String("_fr"), QJsonValue(mFlagReply));
     root.insert(QLatin1String("_d"), QJsonValue(QJsonObject::fromVariantMap(mData)));
     return root;
 }
@@ -81,7 +90,6 @@ void Message::fromJsonDoc(const QJsonDocument &jsonDoc)
 {
     QJsonObject obj = jsonDoc.object();
     mFlag = obj.value(QLatin1String("_f")).toInt();
-    mFlagReply = obj.value(QLatin1String("_fr")).toInt();
     mData = obj.value(QLatin1String("_d")).toObject().toVariantMap();
     mUniqueId = obj.value(QLatin1String("_u")).toInt();
 }

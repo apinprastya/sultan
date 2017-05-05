@@ -1,5 +1,5 @@
 /*
- * core.h
+ * libserver.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef LIBSERVER_H
+#define LIBSERVER_H
 
-#ifndef CORE_H
-#define CORE_H
-
+#include "server_global.h"
 #include <QObject>
 
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
-
-namespace LibServer {
-class MainServer;
+namespace LibG {
+class Message;
 }
 
-class Core : public QObject
+namespace LibServer {
+
+class Router;
+
+class SERVERSHARED_EXPORT MainServer : public QObject
 {
     Q_OBJECT
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    MainServer(QObject *parent = nullptr);
+    ~MainServer();
+
+public slots:
+    void messageReceived(LibG::Message *msg);
+
+signals:
+    void messageReady(LibG::Message *msg);
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
-
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
+    Router *mRouter;
 };
 
-#endif // CORE_H
+}
+#endif // LIBSERVER_H

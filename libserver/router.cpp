@@ -1,5 +1,5 @@
 /*
- * core.h
+ * router.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,44 +17,35 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "router.h"
+#include "message.h"
+#include "serveraction.h"
+#include "global_constant.h"
+#include "useraction.h"
 
-#ifndef CORE_H
-#define CORE_H
+using namespace LibServer;
+using namespace LibG;
 
-#include <QObject>
+Router::Router()
+{
 
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
-
-namespace LibServer {
-class MainServer;
 }
 
-class Core : public QObject
+LibG::Message Router::handler(LibG::Message msg)
 {
-    Q_OBJECT
-public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    auto action = getServerAction(msg.command());
+    if(action != nullptr)
+        return action->exec(&msg);
+    msg.setStatus(STATUS::ERROR);
+    return msg;
+}
 
-private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
+ServerAction *Router::getServerAction(int type)
+{
+    switch(type) {
+        case MSG_TYPE::USER:
+        return new UserAction();
+    }
+    return nullptr;
+}
 
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
-};
-
-#endif // CORE_H

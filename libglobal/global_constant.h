@@ -34,6 +34,26 @@ namespace APPLICATION_TYPE {
     const int CLIENT    = 1;
 }
 
+namespace STATUS {
+    const int OK = 0;
+    const int ERROR = 1;
+}
+
+namespace MSG_TYPE {
+    const int INTERNAL      = 0;
+    const int USER          = 1;
+    const int SUPLIER       = 2;
+}
+
+namespace MSG_COMMAND {
+    const int INSERT        = 0;
+    const int UPDATE        = 1;
+    const int DELETE        = 2;
+    const int GET           = 3;
+    const int QUERY         = 4;
+    //this is custom
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H

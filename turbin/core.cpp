@@ -29,6 +29,7 @@
 #include "gui/logindialog.h"
 #include "socket/socketmanager.h"
 #include "socket/socketclient.h"
+#include "mainserver.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
@@ -43,7 +44,8 @@ Core::Core(QObject *parent) :
     mSettingDialog(new SettingDialog()),
     mLoginDialog(new LoginDialog()),
     mSocketManager(nullptr),
-    mSocketClient(new SocketClient(this))
+    mSocketClient(new SocketClient(this)),
+    mMainServer(nullptr)
 {
     Preference::createInstance();
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
@@ -108,6 +110,9 @@ void Core::init()
             if(!LibDB::Db::checkConnection(error)) {
                 return;
             }
+            mSplashUi->setMessage("Start action server ...");
+            qApp->processEvents();
+            mMainServer = new LibServer::MainServer(this);
             mSplashUi->setMessage("Start socket server ...");
             qApp->processEvents();
             mSocketManager = new SocketManager(this);
