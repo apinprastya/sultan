@@ -1,0 +1,19 @@
+CREATE TABLE users (
+	`id` INT NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` TIMESTAMP NULL,
+    `username` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL DEFAULT '',
+    `name` VARCHAR(255) NULL,
+    `address` VARCHAR(255) NULL,
+    `phone` VARCHAR(255) NULL,
+    `photo` VARCHAR(255) NOT NULL DEFAULT '',
+    `permission` VARCHAR(255) NOT NULL DEFAULT '',
+    `type` TINYINT NOT NULL DEFAULT 0,
+    `bengkel_id` INT NOT NULL,
+    UNIQUE INDEX `USERNAME` (`username` ASC),
+    INDEX `BENGKEL` (`bengkel_id` ASC),
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
