@@ -25,6 +25,8 @@ Splash::Splash(QWidget *parent) :
     ui(new Ui::Splash)
 {
     ui->setupUi(this);
+    setWindowTitle("");
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::Dialog);
 }
 
 Splash::~Splash()
