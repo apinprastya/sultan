@@ -53,6 +53,10 @@ void LoginDialog::reset()
 void LoginDialog::showDialog()
 {
     reset();
+#ifdef QT_DEBUG
+    ui->lineUsername->setText("turbin");
+    ui->linePassword->setText("turbin");
+#endif
     show();
 }
 

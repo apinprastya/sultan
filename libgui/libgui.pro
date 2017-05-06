@@ -1,7 +1,12 @@
+include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
+include(../libglobal/libglobal.pri)
+
 TEMPLATE = lib
 TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
+
+QT += core gui widgets
 
 CONFIG(static) {
     CONFIG += staticlib
@@ -35,7 +40,14 @@ macx {
 }
 
 
-SOURCES +=
+SOURCES += \
+    mainwindow.cpp \
+    tabwidget.cpp
 
 HEADERS += \ 
-    gui_global.h
+    gui_global.h \
+    mainwindow.h \
+    tabwidget.h
+
+FORMS += \
+    mainwindow.ui

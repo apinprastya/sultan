@@ -1,5 +1,5 @@
 /*
- * core.h
+ * mainwindow.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,56 +17,39 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#ifndef CORE_H
-#define CORE_H
+#include "gui_global.h"
+#include <QMainWindow>
 
-#include <QObject>
-
-class Splash;
-class SettingDialog;
-class LoginDialog;
-class SocketManager;
-class SocketClient;
+namespace Ui {
+class MainWindow;
+}
 
 namespace LibG {
 class MessageBus;
 }
 
-namespace LibServer {
-class MainServer;
-}
-
 namespace LibGUI {
-class MainWindow;
-}
 
-class Core : public QObject
+class GUISHARED_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 public:
-    Core(QObject *parent = 0);
-    ~Core();
-    void setup();
-    void initLogger();
+    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~MainWindow();
+
+signals:
+    void logout();
 
 private:
-    Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
-    LoginDialog *mLoginDialog;
-    SocketManager *mSocketManager;
-    SocketClient *mSocketClient;
-    LibServer::MainServer *mMainServer;
+    Ui::MainWindow *ui;
     LibG::MessageBus *mMessageBus;
-    LibGUI::MainWindow *mMainWindow;
 
-private slots:
-    void init();
-    void connectToServer();
-    void clientConnected();
-    void clientDisconnected();
-    void loginSuccess();
-    void logout();
+    void setupConnection();
 };
 
-#endif // CORE_H
+}
+#endif // MAINWINDOW_H

@@ -33,6 +33,7 @@
 #include "messagebus.h"
 #include "migration.h"
 #include "usersession.h"
+#include "mainwindow.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
@@ -51,7 +52,8 @@ Core::Core(QObject *parent) :
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this)),
     mMainServer(nullptr),
-    mMessageBus(new MessageBus(this))
+    mMessageBus(new MessageBus(this)),
+    mMainWindow(new LibGUI::MainWindow(mMessageBus))
 {
     Preference::createInstance();
     mLoginDialog->setMessageBus(mMessageBus);
@@ -60,6 +62,7 @@ Core::Core(QObject *parent) :
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
     connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
+    connect(mMainWindow, SIGNAL(logout()), SLOT(logout()));
 }
 
 Core::~Core()
@@ -69,6 +72,7 @@ Core::~Core()
     if(mSplashUi) delete mSplashUi;
     if(mSettingDialog) delete mSettingDialog;
     if(mLoginDialog) delete mLoginDialog;
+    if(mMainWindow) delete mMainWindow;
     UserSession::destroy();
 }
 
@@ -172,5 +176,11 @@ void Core::clientDisconnected()
 
 void Core::loginSuccess()
 {
+    mMainWindow->show();
+}
 
+void Core::logout()
+{
+    mMainWindow->hide();
+    mLoginDialog->showDialog();
 }
