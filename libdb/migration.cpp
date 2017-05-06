@@ -70,8 +70,6 @@ bool Migration::migrate()
             }
         }
     }
-    qDebug() << mLastFile;
-    qDebug() << oldLastFile;
     if(mLastFile.compare(oldLastFile)) {
         QVariantMap data;
         data.insert("name", mLastFile);

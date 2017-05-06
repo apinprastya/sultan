@@ -44,14 +44,18 @@ SOURCES += \
     mainwindow.cpp \
     tabwidget.cpp \
     ui/settingwidget.cpp \
-    ui/userwidget.cpp
+    ui/userwidget.cpp \
+    horizontalheader.cpp \
+    headerwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
     mainwindow.h \
     tabwidget.h \
     ui/settingwidget.h \
-    ui/userwidget.h
+    ui/userwidget.h \
+    horizontalheader.h \
+    headerwidget.h
 
 FORMS += \
     mainwindow.ui \
