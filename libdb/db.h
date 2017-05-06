@@ -77,6 +77,7 @@ public:
     QVariant lastInsertedId();
     QString lastQuery();
     DbResult exec();
+    DbResult get(const QString &tableName);
     bool exec(const QString &sqlcommand);
     bool insert(const QString &table, const QVariantMap &data);
     bool update(const QString &table, const QVariantMap &data);

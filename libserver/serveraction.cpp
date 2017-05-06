@@ -20,6 +20,7 @@
 #include "serveraction.h"
 #include "global_constant.h"
 #include "db.h"
+#include "queryhelper.h"
 #include "easylogging++.h"
 
 using namespace LibServer;
@@ -59,6 +60,9 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
     LibG::Message message(msg);
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
+    } else {
+        DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
+        message.setData(res.first());
     }
     return message;
 }
@@ -66,31 +70,59 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
 LibG::Message ServerAction::update(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    mDb->where("id = ", msg->data("id"));
+    if(!mDb->update(mTableName, msg->data("data").toMap())) {
+        message.setError(mDb->lastError().text());
+    } else {
+        DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);
+        message.setData(res.first());
+    }
     return message;
 }
 
 LibG::Message ServerAction::del(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    mDb->where("id = ", msg->data("id"));
+    if(!mDb->del(mTableName)) {
+        message.setError(mDb->lastError().text());
+    }
     return message;
 }
 
 Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
+    DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
+    if(res.isEmpty()) {
+        message.setError("Data not found");
+    } else {
+        message.setData(res.first());
+    }
     return message;
 }
 
 LibG::Message ServerAction::query(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
+        message.addData(QStringLiteral("total"), mDb->count());
+    setStart(&message, msg);
+    mDb = QueryHelper::limitOffset(mDb, msg->data());
+    mDb = QueryHelper::sort(mDb, msg->data());
+    message.addData(QStringLiteral("data"), mDb->exec().data());
     return message;
 }
 
-void ServerAction::where(const QVariantMap &data)
+void ServerAction::setStart(Message *msg, Message *src)
 {
-    QMapIterator<QString, QVariant> i(data);
-    while (i.hasNext()) {
-        i.next();
+    if(src->data().contains(QStringLiteral("start"))) {
+        msg->addData(QStringLiteral("start"), src->data(QStringLiteral("start")).toInt());
     }
+}
+
+QMap<QString, QString> ServerAction::fieldMap() const
+{
+    return QMap<QString, QString>();
 }

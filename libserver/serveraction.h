@@ -48,7 +48,8 @@ protected:
     QString mTableName;
     QMap<int, std::function<LibG::Message(LibG::Message*)> > mFunctionMap;
 
-    void where(const QVariantMap &data);
+    void setStart(LibG::Message *msg, LibG::Message *src);
+    virtual QMap<QString, QString> fieldMap() const;
 };
 
 }

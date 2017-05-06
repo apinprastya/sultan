@@ -267,6 +267,11 @@ DbResult Db::exec()
     return DbResult(result);
 }
 
+DbResult Db::get(const QString &tableName)
+{
+    return table(tableName)->exec();
+}
+
 bool Db::exec(const QString &sqlcommand)
 {
     QSqlQuery query(QSqlDatabase::database(mConnectionName));

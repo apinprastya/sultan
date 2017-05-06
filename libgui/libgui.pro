@@ -42,12 +42,18 @@ macx {
 
 SOURCES += \
     mainwindow.cpp \
-    tabwidget.cpp
+    tabwidget.cpp \
+    ui/settingwidget.cpp \
+    ui/userwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
     mainwindow.h \
-    tabwidget.h
+    tabwidget.h \
+    ui/settingwidget.h \
+    ui/userwidget.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    ui/settingwidget.ui \
+    ui/userwidget.ui

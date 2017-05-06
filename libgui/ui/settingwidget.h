@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * settingwidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,45 +17,25 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SETTINGWIDGET_H
+#define SETTINGWIDGET_H
 
-#include "gui_global.h"
-#include <QMainWindow>
+#include <QWidget>
 
 namespace Ui {
-class MainWindow;
+class SettingWidget;
 }
 
-namespace LibG {
-class MessageBus;
-}
-
-namespace LibGUI {
-
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+class SettingWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
+    explicit SettingWidget(QWidget *parent = 0);
+    ~SettingWidget();
 
 private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-
-    void setupConnection();
-
-private slots:
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
+    Ui::SettingWidget *ui;
 };
 
-}
-#endif // MAINWINDOW_H
+#endif // SETTINGWIDGET_H

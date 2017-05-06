@@ -20,6 +20,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "messagebus.h"
+#include "ui/settingwidget.h"
+#include "ui/userwidget.h"
+#include <QShortcut>
 
 using namespace LibGUI;
 
@@ -40,6 +43,47 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupConnection()
 {
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
+    connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->actionLogout, SIGNAL(triggered(bool)), SIGNAL(logout()));
+    connect(ui->action_User, SIGNAL(triggered(bool)), SLOT(openUser()));
+}
+
+void MainWindow::closeTab(int index)
+{
+    auto widget = ui->tabWidget->widget(index);
+    ui->tabWidget->tbnRemoveTab(index);
+    widget->deleteLater();
+}
+
+void MainWindow::closeCurrentTab()
+{
+    if(ui->tabWidget->count() > 0)
+        closeTab(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::openSetting()
+{
+    for(int i = 0; i < ui->tabWidget->count(); i++) {
+        auto widget = dynamic_cast<SettingWidget*>(ui->tabWidget->widget(i));
+        if(widget != nullptr) {
+            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(widget));
+            return;
+        }
+    }
+    ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"));
+}
+
+void MainWindow::openUser()
+{
+    for(int i = 0; i < ui->tabWidget->count(); i++) {
+        auto widget = dynamic_cast<UserWidget*>(ui->tabWidget->widget(i));
+        if(widget != nullptr) {
+            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(widget));
+            return;
+        }
+    }
+    ui->tabWidget->tbnAddTab(new UserWidget(this), tr("User"));
 }

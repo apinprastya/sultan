@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * userwidget.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,45 +17,17 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "userwidget.h"
+#include "ui_userwidget.h"
 
-#include "gui_global.h"
-#include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
-}
-
-namespace LibG {
-class MessageBus;
-}
-
-namespace LibGUI {
-
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+UserWidget::UserWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::UserWidget)
 {
-    Q_OBJECT
-
-public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
-
-private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-
-    void setupConnection();
-
-private slots:
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-};
-
+    ui->setupUi(this);
 }
-#endif // MAINWINDOW_H
+
+UserWidget::~UserWidget()
+{
+    delete ui;
+}

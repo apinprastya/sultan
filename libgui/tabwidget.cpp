@@ -41,6 +41,7 @@ void TabWidget::tbnAddTab(QWidget *widget, const QString &name)
     if(mLabel->isVisible())
         mLabel->setVisible(false);
     addTab(widget, name);
+    setCurrentIndex(indexOf(widget));
 }
 
 void TabWidget::tbnRemoveTab(int index)
