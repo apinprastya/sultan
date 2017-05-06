@@ -49,6 +49,7 @@ public:
     Message();
     Message(int type, int command, int status = 0);
     Message(const QByteArray &ba);
+    Message(Message *other);
 
     void setType(int type);
     void setCommand(int command);
@@ -66,8 +67,10 @@ public:
     void addData(const QString &key, const QVariant &data);
     void clearData();
     void setData(const QVariantMap &data);
-    QVariantMap getData();
-    QVariant getData(const QString &key);
+    QVariantMap data();
+    QVariant data(const QString &key);
+
+    void setError(const QString &error);
 
     QJsonObject toJsonObject();
     QString toJsonString();

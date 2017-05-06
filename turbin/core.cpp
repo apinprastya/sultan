@@ -32,6 +32,7 @@
 #include "mainserver.h"
 #include "messagebus.h"
 #include "migration.h"
+#include "usersession.h"
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
@@ -58,6 +59,7 @@ Core::Core(QObject *parent) :
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
+    connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
 }
 
 Core::~Core()
@@ -67,6 +69,7 @@ Core::~Core()
     if(mSplashUi) delete mSplashUi;
     if(mSettingDialog) delete mSettingDialog;
     if(mLoginDialog) delete mLoginDialog;
+    UserSession::destroy();
 }
 
 void Core::setup()
@@ -163,6 +166,11 @@ void Core::clientConnected()
 }
 
 void Core::clientDisconnected()
+{
+
+}
+
+void Core::loginSuccess()
 {
 
 }

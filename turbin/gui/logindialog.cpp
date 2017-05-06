@@ -21,7 +21,9 @@
 #include "ui_logindialog.h"
 #include "global_constant.h"
 #include "message.h"
+#include "usersession.h"
 #include <QStringBuilder>
+#include <QCryptographicHash>
 #include <QDebug>
 
 using namespace LibG;
@@ -56,7 +58,15 @@ void LoginDialog::showDialog()
 
 void LoginDialog::messageReceived(Message *msg)
 {
-    qDebug() << "ITS COMMING";
+    if(msg->status() == STATUS::ERROR) {
+        ui->labelError->show();
+        ui->labelError->setText(msg->data("error").toString());
+    } else {
+        UserSession::init(msg->data());
+        reset();
+        hide();
+        emit loginSuccess();
+    }
 }
 
 void LoginDialog::loginClicked()
@@ -70,6 +80,6 @@ void LoginDialog::loginClicked()
     }
     LibG::Message msg(MSG_TYPE::USER, MSG_COMMAND::LOGIN);
     msg.addData("username", username);
-    msg.addData("password", password);
+    msg.addData("password", QString(QCryptographicHash::hash(password.toUtf8(),QCryptographicHash::Md5).toHex()));
     sendMessage(&msg);
 }

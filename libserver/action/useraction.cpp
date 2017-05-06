@@ -19,28 +19,37 @@
  */
 #include "useraction.h"
 #include "global_constant.h"
+#include "db.h"
 #include <QDebug>
 
 using namespace LibServer;
 using namespace LibG;
+using namespace LibDB;
 
 UserAction::UserAction():
-    ServerAction()
+    ServerAction("users")
 {
     mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
 }
 
-
-LibG::Message UserAction::insert(LibG::Message *msg)
-{
-    LibG::Message message;
-    qDebug() << "OH YEAH";
-    return message;
-}
-
 Message UserAction::login(Message *msg)
 {
-    LibG::Message message = *msg;
-    qDebug() << msg->getData();
+    LibG::Message message(msg);
+    const QString &username = msg->data("username").toString();
+    const QString &password = msg->data("password").toString();
+    mDb->table(mTableName)->where("username = ", username);
+    DbResult res = mDb->exec();
+    if(res.isEmpty()) {
+        message.setError("Username and password not match");
+    } else {
+        const QVariantMap &data = res.first();
+        if(password.compare(data["password"].toString())) {
+            message.setError("Username and password not match");
+        } else {
+            message.addData("username", data["username"].toString());
+            message.addData("name", data["name"].toString());
+            message.addData("permission", data["permission"].toString());
+        }
+    }
     return message;
 }

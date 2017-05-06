@@ -60,6 +60,7 @@ private slots:
     void connectToServer();
     void clientConnected();
     void clientDisconnected();
+    void loginSuccess();
 };
 
 #endif // CORE_H

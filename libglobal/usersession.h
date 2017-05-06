@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * usersession.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,20 +17,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#ifndef USERSESSION_H
+#define USERSESSION_H
 
-#include "server_global.h"
-#include "serveraction.h"
+#include "global_global.h"
+#include <QVariantMap>
 
-namespace LibServer {
+namespace LibG {
 
-class UserAction : public ServerAction
+class GLOBALSHARED_EXPORT UserSession
 {
 public:
-    UserAction();
-    LibG::Message login(LibG::Message *msg);
+    static UserSession *init(const QVariantMap &data);
+    static QString username();
+    static QString name();
+    static bool hasPermission(int permission);
+    static void destroy();
+
+private:
+    UserSession();
+
+    QString mUsername;
+    QString mName;
+    QList<int> mPermission;
 };
 
 }
-#endif // USERACTION_H
+#endif // USERSESSION_H

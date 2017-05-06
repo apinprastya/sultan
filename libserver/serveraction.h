@@ -34,7 +34,7 @@ namespace LibServer {
 class SERVERSHARED_EXPORT ServerAction
 {
 public:
-    ServerAction();
+    ServerAction(const QString &tableName);
     ~ServerAction();
     LibG::Message exec(LibG::Message *msg);
     virtual LibG::Message insert(LibG::Message *msg);
@@ -45,7 +45,10 @@ public:
 
 protected:
     LibDB::Db *mDb;
+    QString mTableName;
     QMap<int, std::function<LibG::Message(LibG::Message*)> > mFunctionMap;
+
+    void where(const QVariantMap &data);
 };
 
 }

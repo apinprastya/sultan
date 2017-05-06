@@ -20,13 +20,17 @@
 #include "serveraction.h"
 #include "global_constant.h"
 #include "db.h"
+#include "easylogging++.h"
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-ServerAction::ServerAction():
-    mDb(Db::createInstance())
+static std::string TAG = "[SERVERACTION]";
+
+ServerAction::ServerAction(const QString &tableName):
+    mDb(Db::createInstance()),
+    mTableName(tableName)
 {
     mFunctionMap.insert(MSG_COMMAND::INSERT, std::bind(&ServerAction::insert, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::UPDATE, std::bind(&ServerAction::update, this, std::placeholders::_1));
@@ -44,30 +48,49 @@ Message ServerAction::exec(Message *msg)
 {
     if(mFunctionMap.contains(msg->command()))
         return mFunctionMap[msg->command()](msg);
+    LOG(ERROR) << TAG << "Command not available : " << msg->command() << " with type : " << msg->type();
+    Message message = *msg;
+    message.setError("Command not available");
+    return message;
 }
 
 LibG::Message ServerAction::insert(LibG::Message *msg)
 {
-    LibG::Message message;
+    LibG::Message message(msg);
+    if(!mDb->insert(mTableName, msg->data())) {
+        message.setError(mDb->lastError().text());
+    }
     return message;
 }
 
 LibG::Message ServerAction::update(LibG::Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }
 
 LibG::Message ServerAction::del(LibG::Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }
 
 Message ServerAction::get(Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }
 
 LibG::Message ServerAction::query(LibG::Message *msg)
 {
+    LibG::Message message(msg);
+    return message;
+}
 
+void ServerAction::where(const QVariantMap &data)
+{
+    QMapIterator<QString, QVariant> i(data);
+    while (i.hasNext()) {
+        i.next();
+    }
 }

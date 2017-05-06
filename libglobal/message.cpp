@@ -18,6 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "message.h"
+#include "global_constant.h"
 #include <QByteArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -40,6 +41,13 @@ Message::Message(const QByteArray &ba)
     fromByteArray(ba);
 }
 
+Message::Message(Message *other)
+{
+    this->mFlag = other->mFlag;
+    this->mSocketId = other->mSocketId;
+    this->mUniqueId = other->mUniqueId;
+}
+
 void Message::setType(int type)
 {
     mFlag &= ~0xFF;
@@ -55,13 +63,13 @@ void Message::setCommand(int command)
 void Message::setStatus(int status)
 {
     mFlag &= ~0xF0000;
-    mFlag |= ((status << 16) & 0xF);
+    mFlag |= ((status << 16) & 0xF0000);
 }
 
 void Message::setFlag(int flag)
 {
     mFlag &= ~0xFF00000;
-    mFlag |= ((flag << 22) & 0xFF);
+    mFlag |= ((flag << 20) & 0xFF00000);
 }
 
 void Message::addData(const QString &key, const QVariant &data)
@@ -79,14 +87,21 @@ void Message::setData(const QVariantMap &data)
     mData = data;
 }
 
-QVariantMap Message::getData()
+QVariantMap Message::data()
 {
     return mData;
 }
 
-QVariant Message::getData(const QString &key)
+QVariant Message::data(const QString &key)
 {
     return mData[key];
+}
+
+void Message::setError(const QString &error)
+{
+    setStatus(STATUS::ERROR);
+    mData.clear();
+    mData.insert("error", error);
 }
 
 QJsonObject Message::toJsonObject()

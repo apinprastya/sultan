@@ -43,6 +43,9 @@ private:
 protected:
     void messageReceived(LibG::Message *msg) override;
 
+signals:
+    void loginSuccess();
+
 private slots:
     void loginClicked();
 };

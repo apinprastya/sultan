@@ -41,7 +41,8 @@ SOURCES += \
     message.cpp \
     futurewatcher.cpp \
     messagehandler.cpp \
-    messagebus.cpp
+    messagebus.cpp \
+    usersession.cpp
 
 HEADERS += \ 
     global_global.h \
@@ -51,4 +52,5 @@ HEADERS += \
     message.h \
     futurewatcher.h \
     messagehandler.h \
-    messagebus.h
+    messagebus.h \
+    usersession.h
