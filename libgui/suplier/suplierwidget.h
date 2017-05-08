@@ -26,6 +26,10 @@ namespace Ui {
 class NormalWidget;
 }
 
+namespace LibG {
+class MessageBus;
+}
+
 namespace LibGUI {
 
 class TableWidget;
@@ -34,7 +38,7 @@ class SuplierWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SuplierWidget(QWidget *parent = 0);
+    SuplierWidget(LibG::MessageBus *bus, QWidget *parent = 0);
 
 private:
     Ui::NormalWidget *ui;

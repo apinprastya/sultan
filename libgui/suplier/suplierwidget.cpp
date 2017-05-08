@@ -21,10 +21,12 @@
 #include "ui_normalwidget.h"
 #include "tablewidget.h"
 #include "tablemodel.h"
+#include "global_constant.h"
 
 using namespace LibGUI;
+using namespace LibG;
 
-SuplierWidget::SuplierWidget(QWidget *parent) :
+SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
     mTableWidget(new TableWidget(this))
@@ -34,9 +36,12 @@ SuplierWidget::SuplierWidget(QWidget *parent) :
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
+    model->setMessageBus(bus);
     model->addColumn("name", tr("Name"));
     model->addColumn("code", tr("Code"));
     model->addColumn("address", tr("Address"));
     model->addColumn("phone", tr("Phone"));
+    model->setTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
+    model->refresh();
 }

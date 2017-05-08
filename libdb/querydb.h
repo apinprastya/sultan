@@ -58,6 +58,7 @@ public:
     void setLimit(int val);
     void setStart(int val);
     inline int getLimit() { return mLimit; }
+    void bind(LibG::Message *msg);
 
 private:
     QMap<QString, FilterData> mFilter;

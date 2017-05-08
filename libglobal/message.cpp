@@ -107,9 +107,9 @@ void Message::setError(const QString &error)
 QJsonObject Message::toJsonObject()
 {
     QJsonObject root;
-    root.insert(QLatin1String("_u"), QJsonValue(mUniqueId));
-    root.insert(QLatin1String("_f"), QJsonValue(mFlag));
-    root.insert(QLatin1String("_d"), QJsonValue(QJsonObject::fromVariantMap(mData)));
+    root.insert(QStringLiteral("_u"), QJsonValue(mUniqueId));
+    root.insert(QStringLiteral("_f"), QJsonValue(mFlag));
+    root.insert(QStringLiteral("_d"), QJsonValue(QJsonObject::fromVariantMap(mData)));
     return root;
 }
 
@@ -136,7 +136,43 @@ void Message::fromByteArray(const QByteArray &ba)
 void Message::fromJsonDoc(const QJsonDocument &jsonDoc)
 {
     QJsonObject obj = jsonDoc.object();
-    mFlag = obj.value(QLatin1String("_f")).toInt();
-    mData = obj.value(QLatin1String("_d")).toObject().toVariantMap();
-    mUniqueId = obj.value(QLatin1String("_u")).toInt();
+    mFlag = obj.value(QStringLiteral("_f")).toInt();
+    mData = obj.value(QStringLiteral("_d")).toObject().toVariantMap();
+    mUniqueId = obj.value(QStringLiteral("_u")).toInt();
+}
+
+void Message::resetQuery()
+{
+    mData.remove(QStringLiteral("filter"));
+    mData.remove(QStringLiteral("sort"));
+    mData.remove(QStringLiteral("limit"));
+    mData.remove(QStringLiteral("start"));
+}
+
+void Message::setSort(const QString &sort)
+{
+    mData.insert(QStringLiteral("sort"), sort);
+}
+
+void Message::setStart(const int &start)
+{
+    mData.insert(QStringLiteral("start"), start);
+}
+
+void Message::setLimit(const int &limit)
+{
+    mData.insert(QStringLiteral("limit"), limit);
+}
+
+void Message::addFilter(const QString &key, int type, const QVariant &data)
+{
+    QVariantMap m;
+    m.insert(QStringLiteral("type"), type);
+    m.insert(QStringLiteral("value"), data);
+    QVariantMap filter;
+    if(mData.contains(QStringLiteral("filter"))) {
+        filter = mData[QStringLiteral("filter")].toMap();
+    }
+    filter.insert(key, m);
+    mData[QStringLiteral("filter")] = filter;
 }

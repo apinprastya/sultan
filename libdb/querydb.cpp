@@ -19,6 +19,7 @@
  */
 
 #include "querydb.h"
+#include "message.h"
 
 using namespace LibDB;
 
@@ -76,5 +77,26 @@ void QueryDB::setLimit(int val)
 void QueryDB::setStart(int val)
 {
     mStart = val;
+}
+
+void QueryDB::bind(LibG::Message *msg)
+{
+    msg->resetQuery();
+    msg->setSort(mSort);
+    if(mLimit > 0)
+        msg->setLimit(mLimit);
+    if(mStart > 0)
+        msg->setStart(mStart);
+    QMapIterator<QString, FilterData> i(mFilter);
+    while (i.hasNext()) {
+        i.next();
+        const FilterData &d = i.value();
+        msg->addFilter(i.key(), d.type, d.data);
+    }
+    QMapIterator<QString, QVariant> d(mData);
+    while (d.hasNext()) {
+        d.next();
+        msg->addData(d.key(), d.value());
+    }
 }
 

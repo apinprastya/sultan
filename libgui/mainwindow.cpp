@@ -100,5 +100,5 @@ void MainWindow::openSuplier()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<SuplierWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new SuplierWidget(this), tr("Suplier"));
+        ui->tabWidget->tbnAddTab(new SuplierWidget(mMessageBus, this), tr("Suplier"));
 }

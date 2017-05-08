@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QHeaderView>
 
 using namespace LibGUI;
 
@@ -45,6 +46,9 @@ TableWidget::TableWidget(QWidget *parent) :
     mainLayout->addLayout(mActionLayout);
     setLayout(mainLayout);
     mTableView->setModel(mModel);
+    mTableView->verticalHeader()->hide();
+    mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 TableWidget::~TableWidget()
@@ -98,6 +102,7 @@ void TableWidget::actionClicked()
     int type = mActionButton.key(button);
     switch(type) {
     case Refresh:
+        mModel->refresh();
         emit tableRefreshed();
         break;
     case Add:

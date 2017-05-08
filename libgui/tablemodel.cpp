@@ -21,6 +21,8 @@
 #include "global_constant.h"
 #include "tableitem.h"
 #include "rowdata.h"
+#include "message.h"
+#include <QDebug>
 
 using namespace LibGUI;
 
@@ -28,7 +30,10 @@ TableModel::TableModel(QObject *parent):
     QAbstractTableModel(parent),
     mNumRow(0)
 {
-
+    mIsLoaded = false;
+    mQuery.setLimit(LibG::CONFIG::ITEMS_PER_LOAD);
+    mQuery.setSort("name ASC");
+    connect(this, SIGNAL(loadMore(int)), SLOT(loadPage(int)));
 }
 
 int TableModel::rowCount(const QModelIndex &/*parent*/) const
@@ -65,22 +70,77 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    if(role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         return mHeaders[section];
+    }
     return QVariant();
 }
 
 void TableModel::reset()
 {
     beginResetModel();
+    mIsLoaded = false;
     mData.clearAndRelease();
     mNumRow = 0;
+    mPageStatus.clear();
     endResetModel();
 }
 
-void TableModel::addColumn(const QString &key, const QString &title, int align)
+void TableModel::addColumn(const QString &key, const QString &title, const int &align)
 {
     mColumns.push_back(key);
     mHeaders.push_back(title);
-    mAlignments.push_back(align);
+    mAlignments.push_back(align | Qt::AlignVCenter);
+}
+
+void TableModel::refresh()
+{
+    reset();
+    loadPage();
+}
+
+void TableModel::messageReceived(LibG::Message *msg)
+{
+    if(msg->status() == LibG::STATUS::OK) {
+        if(msg->command() == std::get<1>(mTypeCommand))
+            readData(msg);
+    }
+}
+
+void TableModel::loadPage(int page)
+{
+    if(page != 0 && mQuery.getLimit() <= 0) return;
+    if(mPageStatus.value(page) != None) return;
+    mPageStatus[page] = Loading;
+    LibG::Message msg(std::get<0>(mTypeCommand), std::get<1>(mTypeCommand));
+    mQuery.setStart(page * LibG::CONFIG::ITEMS_PER_LOAD);
+    mQuery.bind(&msg);
+    sendMessage(&msg);
+}
+
+void TableModel::readData(LibG::Message *msg)
+{
+    int num = msg->data(QStringLiteral("total")).toInt();
+    int start = msg->data(QStringLiteral("start")).toInt();
+    if(!mIsLoaded) {
+        beginResetModel();
+        mData.clearAndRelease();
+    }
+
+    const QVariantList &l = msg->data(QStringLiteral("data")).toList();
+    QList<TableItem*> items;
+    for(int i = 0; i < l.size(); i++) {
+        auto item = new TableItem();
+        item->fill(l.at(i).toMap());
+        items.append(item);
+    }
+    mData.insert(start, items);
+    if(!mIsLoaded) {
+        mNumRow = num;
+        endResetModel();
+        emit firstDataLoaded();
+    }
+    if(mIsLoaded)
+        emit dataChanged(createIndex(start, 0), createIndex(start + l.size(), mHeaders.size()));
+    mIsLoaded = true;
 }

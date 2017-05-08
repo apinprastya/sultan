@@ -1,4 +1,5 @@
 include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
+include(../libglobal/libglobal.pri)
 
 QT += sql
 

@@ -77,6 +77,11 @@ public:
     QByteArray toByteArray();
     void fromByteArray(const QByteArray &ba);
     void fromJsonDoc(const QJsonDocument &doc);
+    void resetQuery();
+    void setSort(const QString &sort);
+    void setStart(const int &start);
+    void setLimit(const int &limit);
+    void addFilter(const QString &key, int type, const QVariant &data);
 };
 
 }
