@@ -26,6 +26,8 @@ namespace Ui {
 class UserWidget;
 }
 
+namespace LibGUI {
+
 class UserWidget : public QWidget
 {
     Q_OBJECT
@@ -38,4 +40,5 @@ private:
     Ui::UserWidget *ui;
 };
 
+}
 #endif // USERWIDGET_H

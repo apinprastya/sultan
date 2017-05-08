@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * tablemodel.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,50 +17,37 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TABLEMODEL_H
+#define TABLEMODEL_H
 
 #include "gui_global.h"
-#include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
-}
-
-class QLabel;
-
-namespace LibG {
-class MessageBus;
-}
+#include "rowdata.h"
+#include <QAbstractTableModel>
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+class GUISHARED_EXPORT TableModel: public QAbstractTableModel
 {
     Q_OBJECT
-
 public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
+    TableModel(QObject *parent = nullptr);
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    void reset();
+    void addColumn(const QString &key, const QString &title, int align = Qt::AlignLeft);
 
 private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
+    int mNumRow;
+    RowData mData;
+    QList<QString> mHeaders;
+    QList<QString> mColumns;
+    QList<int> mAlignments;
 
-    void setupConnection();
-
-private slots:
-    void updateClock();
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-    void openSuplier();
+signals:
+    void loadMore(int page) const;
 };
 
 }
-#endif // MAINWINDOW_H
+#endif // TABLEMODEL_H

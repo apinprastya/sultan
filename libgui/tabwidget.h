@@ -22,6 +22,7 @@
 
 #include "gui_global.h"
 #include <QTabWidget>
+#include <functional>
 
 class QLabel;
 
@@ -34,6 +35,7 @@ class GUISHARED_EXPORT TabWidget : public QTabWidget
         TabWidget(QWidget *parent = nullptr);
         void tbnAddTab(QWidget *widget, const QString &name);
         void tbnRemoveTab(int index);
+        bool isTabAvailable(std::function<bool(QWidget *)> func);
 
     private:
         QLabel *mLabel;

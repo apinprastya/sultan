@@ -24,9 +24,13 @@
 
 namespace LibG {
 
+namespace CONFIG {
+    const int ITEMS_PER_LOAD        = 50;
+}
+
 namespace CONSTANT {
     const QString APP_NAME          = QStringLiteral("Turbin");
-    const QString WINDOW_TITLE      = QStringLiteral("Turbin - %1");
+    const QString WINDOW_TITLE      = QStringLiteral("%1 - Turbin");
 }
 
 namespace APPLICATION_TYPE {

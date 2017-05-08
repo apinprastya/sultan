@@ -19,12 +19,18 @@
  */
 #include "userwidget.h"
 #include "ui_userwidget.h"
+#include "horizontalheader.h"
+#include "headerwidget.h"
+
+using namespace LibGUI;
 
 UserWidget::UserWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserWidget)
 {
     ui->setupUi(this);
+    ui->tableWidget->setHorizontalHeader(new HorizontalHeader(ui->tableWidget));
+    ui->verticalLayout->addWidget(new HeaderWidget(this));
 }
 
 UserWidget::~UserWidget()

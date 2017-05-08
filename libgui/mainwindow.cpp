@@ -22,18 +22,25 @@
 #include "messagebus.h"
 #include "ui/settingwidget.h"
 #include "ui/userwidget.h"
+#include "suplier/suplierwidget.h"
 #include <QShortcut>
+#include <QDateTime>
+#include <QLabel>
+#include <QTimer>
 
 using namespace LibGUI;
 
 MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mMessageBus(bus)
+    mMessageBus(bus),
+    mLabelTime(new QLabel(this))
 {
     ui->setupUi(this);
+    statusBar()->addWidget(mLabelTime);
     ui->tabWidget->clear();
     setupConnection();
+    updateClock();
 }
 
 MainWindow::~MainWindow()
@@ -49,6 +56,14 @@ void MainWindow::setupConnection()
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->actionLogout, SIGNAL(triggered(bool)), SIGNAL(logout()));
     connect(ui->action_User, SIGNAL(triggered(bool)), SLOT(openUser()));
+    connect(ui->action_Suplier, SIGNAL(triggered(bool)), SLOT(openSuplier()));
+}
+
+void MainWindow::updateClock()
+{
+    /*auto dt = QDateTime::currentDateTime();
+    mLabelTime->setText(dt.toString("dd-MMM-yyyy hh:mm:ss"));
+    QTimer::singleShot(1000, this, SLOT(updateClock()));*/
 }
 
 void MainWindow::closeTab(int index)
@@ -66,24 +81,24 @@ void MainWindow::closeCurrentTab()
 
 void MainWindow::openSetting()
 {
-    for(int i = 0; i < ui->tabWidget->count(); i++) {
-        auto widget = dynamic_cast<SettingWidget*>(ui->tabWidget->widget(i));
-        if(widget != nullptr) {
-            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(widget));
-            return;
-        }
-    }
-    ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"));
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<SettingWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"));
 }
 
 void MainWindow::openUser()
 {
-    for(int i = 0; i < ui->tabWidget->count(); i++) {
-        auto widget = dynamic_cast<UserWidget*>(ui->tabWidget->widget(i));
-        if(widget != nullptr) {
-            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(widget));
-            return;
-        }
-    }
-    ui->tabWidget->tbnAddTab(new UserWidget(this), tr("User"));
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<UserWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new UserWidget(this), tr("User"));
+}
+
+void MainWindow::openSuplier()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<SuplierWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new SuplierWidget(this), tr("Suplier"));
 }

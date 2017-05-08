@@ -46,7 +46,13 @@ SOURCES += \
     ui/settingwidget.cpp \
     ui/userwidget.cpp \
     horizontalheader.cpp \
-    headerwidget.cpp
+    headerwidget.cpp \
+    tableview.cpp \
+    tablewidget.cpp \
+    tablemodel.cpp \
+    tableitem.cpp \
+    suplier/suplierwidget.cpp \
+    rowdata.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -55,9 +61,16 @@ HEADERS += \
     ui/settingwidget.h \
     ui/userwidget.h \
     horizontalheader.h \
-    headerwidget.h
+    headerwidget.h \
+    tableview.h \
+    tablewidget.h \
+    tablemodel.h \
+    tableitem.h \
+    suplier/suplierwidget.h \
+    rowdata.h
 
 FORMS += \
     mainwindow.ui \
     ui/settingwidget.ui \
-    ui/userwidget.ui
+    ui/userwidget.ui \
+    normalwidget.ui

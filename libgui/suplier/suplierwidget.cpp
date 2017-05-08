@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * suplierwidget.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,50 +17,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "suplierwidget.h"
+#include "ui_normalwidget.h"
+#include "tablewidget.h"
+#include "tablemodel.h"
 
-#include "gui_global.h"
-#include <QMainWindow>
+using namespace LibGUI;
 
-namespace Ui {
-class MainWindow;
-}
-
-class QLabel;
-
-namespace LibG {
-class MessageBus;
-}
-
-namespace LibGUI {
-
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+SuplierWidget::SuplierWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::NormalWidget),
+    mTableWidget(new TableWidget(this))
 {
-    Q_OBJECT
-
-public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
-
-private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
-
-    void setupConnection();
-
-private slots:
-    void updateClock();
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-    void openSuplier();
-};
-
+    ui->setupUi(this);
+    ui->labelTitle->setText(tr("Suplier"));
+    ui->verticalLayout->addWidget(mTableWidget);
+    mTableWidget->initCrudButton();
+    auto model = mTableWidget->getModel();
+    model->addColumn("name", tr("Name"));
+    model->addColumn("code", tr("Code"));
+    model->addColumn("address", tr("Address"));
+    model->addColumn("phone", tr("Phone"));
+    mTableWidget->setupTable();
 }
-#endif // MAINWINDOW_H

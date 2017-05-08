@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * suplieraction.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,50 +17,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "suplieraction.h"
 
-#include "gui_global.h"
-#include <QMainWindow>
+using namespace LibServer;
 
-namespace Ui {
-class MainWindow;
-}
-
-class QLabel;
-
-namespace LibG {
-class MessageBus;
-}
-
-namespace LibGUI {
-
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+SuplierAction::SuplierAction():
+    ServerAction("supliers")
 {
-    Q_OBJECT
-
-public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
-
-private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
-
-    void setupConnection();
-
-private slots:
-    void updateClock();
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-    void openSuplier();
-};
-
 }
-#endif // MAINWINDOW_H

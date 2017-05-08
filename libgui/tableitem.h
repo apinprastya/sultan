@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * tableitem.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,50 +17,25 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TABLEITEM_H
+#define TABLEITEM_H
 
 #include "gui_global.h"
-#include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
-}
-
-class QLabel;
-
-namespace LibG {
-class MessageBus;
-}
+#include <QVariantMap>
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+class GUISHARED_EXPORT TableItem
 {
-    Q_OBJECT
-
 public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
+    int id;
+    TableItem();
+    virtual void fill(const QVariantMap &data);
+    virtual QVariant data(const QString &key);
 
 private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
-
-    void setupConnection();
-
-private slots:
-    void updateClock();
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-    void openSuplier();
+    QVariantMap mData;
 };
 
 }
-#endif // MAINWINDOW_H
+#endif // TABLEITEM_H

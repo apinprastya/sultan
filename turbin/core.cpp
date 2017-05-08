@@ -79,7 +79,7 @@ Core::~Core()
 void Core::setup()
 {
     mSplashUi->show();
-    QTimer::singleShot(1, this, SLOT(init()));
+    QTimer::singleShot(1000, this, SLOT(init()));
 }
 
 void Core::initLogger()

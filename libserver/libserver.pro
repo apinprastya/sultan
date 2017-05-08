@@ -45,11 +45,13 @@ SOURCES += \
     serveraction.cpp \
     router.cpp \
     action/useraction.cpp \
-    mainserver.cpp
+    mainserver.cpp \
+    action/suplieraction.cpp
 
 HEADERS += \ 
     server_global.h \
     serveraction.h \
     router.h \
     action/useraction.h \
-    mainserver.h
+    mainserver.h \
+    action/suplieraction.h

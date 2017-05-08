@@ -51,3 +51,15 @@ void TabWidget::tbnRemoveTab(int index)
         mLabel->setVisible(true);
 }
 
+bool TabWidget::isTabAvailable(std::function<bool(QWidget*)> func)
+{
+    for(int i = 0; i < count(); i++) {
+        bool ok = func(widget(i));
+        if(ok) {
+            setCurrentIndex(indexOf(widget(i)));
+            return true;
+        }
+    }
+    return false;
+}
+

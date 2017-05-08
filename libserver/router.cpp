@@ -22,6 +22,7 @@
 #include "serveraction.h"
 #include "global_constant.h"
 #include "action/useraction.h"
+#include "action/suplieraction.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -42,8 +43,10 @@ LibG::Message Router::handler(LibG::Message msg)
 ServerAction *Router::getServerAction(int type)
 {
     switch(type) {
-        case MSG_TYPE::USER:
+    case MSG_TYPE::USER:
         return new UserAction();
+    case MSG_TYPE::SUPLIER:
+        return new SuplierAction();
     }
     return nullptr;
 }

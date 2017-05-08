@@ -1,5 +1,5 @@
 /*
- * mainwindow.h
+ * suplierwidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,50 +17,29 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SUPLIERWIDGET_H
+#define SUPLIERWIDGET_H
 
-#include "gui_global.h"
-#include <QMainWindow>
+#include <QWidget>
 
 namespace Ui {
-class MainWindow;
-}
-
-class QLabel;
-
-namespace LibG {
-class MessageBus;
+class NormalWidget;
 }
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+class TableWidget;
+
+class SuplierWidget : public QWidget
 {
     Q_OBJECT
-
 public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~MainWindow();
-
-signals:
-    void logout();
+    SuplierWidget(QWidget *parent = 0);
 
 private:
-    Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
-
-    void setupConnection();
-
-private slots:
-    void updateClock();
-    void closeTab(int index);
-    void closeCurrentTab();
-    void openSetting();
-    void openUser();
-    void openSuplier();
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
 };
 
 }
-#endif // MAINWINDOW_H
+#endif // SUPLIERWIDGET_H
