@@ -44,8 +44,8 @@ macx {
 SOURCES += \
     mainwindow.cpp \
     tabwidget.cpp \
-    ui/settingwidget.cpp \
-    ui/userwidget.cpp \
+    setting/settingwidget.cpp \
+    user/userwidget.cpp \
     horizontalheader.cpp \
     headerwidget.cpp \
     tableview.cpp \
@@ -61,8 +61,8 @@ HEADERS += \
     gui_global.h \
     mainwindow.h \
     tabwidget.h \
-    ui/settingwidget.h \
-    ui/userwidget.h \
+    setting/settingwidget.h \
+    user/userwidget.h \
     horizontalheader.h \
     headerwidget.h \
     tableview.h \
@@ -76,7 +76,6 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui \
-    ui/settingwidget.ui \
-    ui/userwidget.ui \
+    setting/settingwidget.ui \
     normalwidget.ui \
     suplier/suplieradddialog.ui
