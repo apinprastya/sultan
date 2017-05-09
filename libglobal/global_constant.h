@@ -33,6 +33,13 @@ namespace CONSTANT {
     const QString WINDOW_TITLE      = QStringLiteral("%1 - Turbin");
 }
 
+namespace PERMISSION {
+    const int ADMINISTRATOR     = 9876;
+    const int USER_RW           = 1;
+    const int SUPLIER_RW        = 2;
+    const int ITEM_RW           = 3;
+}
+
 namespace APPLICATION_TYPE {
     const int SERVER    = 0;
     const int CLIENT    = 1;
