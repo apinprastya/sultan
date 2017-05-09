@@ -20,8 +20,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "messagebus.h"
-#include "ui/settingwidget.h"
-#include "ui/userwidget.h"
+#include "setting//settingwidget.h"
+#include "user/userwidget.h"
 #include "suplier/suplierwidget.h"
 #include <QShortcut>
 #include <QDateTime>
@@ -112,7 +112,7 @@ void MainWindow::openUser()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<UserWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new UserWidget(this), tr("User"));
+        ui->tabWidget->tbnAddTab(new UserWidget(mMessageBus, this), tr("User"));
 }
 
 void MainWindow::openSuplier()

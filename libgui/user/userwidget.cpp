@@ -18,22 +18,42 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "userwidget.h"
-#include "ui_userwidget.h"
+#include "ui_normalwidget.h"
 #include "horizontalheader.h"
-#include "headerwidget.h"
+#include "tablewidget.h"
+#include "tablemodel.h"
+#include "global_constant.h"
 
 using namespace LibGUI;
+using namespace LibG;
 
-UserWidget::UserWidget(QWidget *parent) :
+UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::UserWidget)
+    ui(new Ui::NormalWidget),
+    mTableWidget(new TableWidget(this))
 {
+    setMessageBus(bus);
     ui->setupUi(this);
-    ui->tableWidget->setHorizontalHeader(new HorizontalHeader(ui->tableWidget));
-    ui->verticalLayout->addWidget(new HeaderWidget(this));
+    ui->labelTitle->setText(tr("User"));
+    ui->verticalLayout->addWidget(mTableWidget);
+    mTableWidget->initCrudButton();
+    auto model = mTableWidget->getModel();
+    model->setMessageBus(bus);
+    model->addColumn("username", tr("Username"));
+    model->addColumn("name", tr("Name"));
+    model->addColumn("address", tr("Address"));
+    model->addColumn("phone", tr("Phone"));
+    model->setTypeCommand(MSG_TYPE::USER, MSG_COMMAND::QUERY);
+    mTableWidget->setupTable();
+    model->refresh();
 }
 
 UserWidget::~UserWidget()
 {
     delete ui;
+}
+
+void UserWidget::messageReceived(Message *msg)
+{
+
 }

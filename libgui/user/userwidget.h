@@ -20,24 +20,31 @@
 #ifndef USERWIDGET_H
 #define USERWIDGET_H
 
+#include "messagehandler.h"
 #include <QWidget>
 
 namespace Ui {
-class UserWidget;
+class NormalWidget;
 }
 
 namespace LibGUI {
 
-class UserWidget : public QWidget
+class TableWidget;
+
+class UserWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 
 public:
-    explicit UserWidget(QWidget *parent = 0);
+    UserWidget(LibG::MessageBus *bus, QWidget *parent = 0);
     ~UserWidget();
 
+protected:
+    void messageReceived(LibG::Message *msg);
+
 private:
-    Ui::UserWidget *ui;
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
 };
 
 }
