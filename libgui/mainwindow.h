@@ -57,6 +57,8 @@ private slots:
     void updateClock();
     void closeTab(int index);
     void closeCurrentTab();
+    void nextTab();
+    void prevTab();
     void openSetting();
     void openUser();
     void openSuplier();

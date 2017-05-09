@@ -51,6 +51,8 @@ MainWindow::~MainWindow()
 void MainWindow::setupConnection()
 {
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab), this, SLOT(nextTab()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab), this, SLOT(prevTab()));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
     connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
@@ -77,6 +79,24 @@ void MainWindow::closeCurrentTab()
 {
     if(ui->tabWidget->count() > 0)
         closeTab(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::nextTab()
+{
+    if(ui->tabWidget->count() > 0) {
+        int curIndex = ui->tabWidget->currentIndex() + 1;
+        if(curIndex >= ui->tabWidget->count()) curIndex = 0;
+        ui->tabWidget->setCurrentIndex(curIndex);
+    }
+}
+
+void MainWindow::prevTab()
+{
+    if(ui->tabWidget->count() > 0) {
+        int curIndex = ui->tabWidget->currentIndex() - 1;
+        if(curIndex < 0) curIndex = ui->tabWidget->count() - 1;
+        ui->tabWidget->setCurrentIndex(curIndex);
+    }
 }
 
 void MainWindow::openSetting()
