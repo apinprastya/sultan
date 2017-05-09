@@ -55,7 +55,8 @@ SOURCES += \
     suplier/suplierwidget.cpp \
     rowdata.cpp \
     suplier/suplieradddialog.cpp \
-    guiutil.cpp
+    guiutil.cpp \
+    user/useradddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -72,10 +73,12 @@ HEADERS += \
     suplier/suplierwidget.h \
     rowdata.h \
     suplier/suplieradddialog.h \
-    guiutil.h
+    guiutil.h \
+    user/useradddialog.h
 
 FORMS += \
     mainwindow.ui \
     setting/settingwidget.ui \
     normalwidget.ui \
-    suplier/suplieradddialog.ui
+    suplier/suplieradddialog.ui \
+    user/useradddialog.ui

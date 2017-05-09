@@ -68,7 +68,7 @@ void SuplierAddDialog::enableSave()
 
 void SuplierAddDialog::saveClicked()
 {
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineName << ui->lineCode << ui->textAddress << ui->linePhone)) {
+    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineName << ui->lineCode)) {
         QMessageBox::warning(this, tr("Error"), tr("Please fill all form"));
         return;
     }

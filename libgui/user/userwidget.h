@@ -30,6 +30,7 @@ class NormalWidget;
 namespace LibGUI {
 
 class TableWidget;
+class UserAddDialog;
 
 class UserWidget : public QWidget, public LibG::MessageHandler
 {
@@ -45,6 +46,13 @@ protected:
 private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
+    UserAddDialog *mAddDialog;
+
+private slots:
+    void addClicked();
+    void updateClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndex &index);
+    void saveRequested(const QVariantMap &data, int id);
 };
 
 }

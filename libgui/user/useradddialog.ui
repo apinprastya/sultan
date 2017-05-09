@@ -1,84 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SuplierAddDialog</class>
- <widget class="QDialog" name="SuplierAddDialog">
-  <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
-  </property>
+ <class>UserAddDialog</class>
+ <widget class="QDialog" name="UserAddDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>250</height>
+    <width>437</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Add new suplier</string>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
+   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <property name="horizontalSpacing">
-      <number>-1</number>
-     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Name</string>
+        <string>Username</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Code</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Address</string>
+        <string>Password</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Phone</string>
        </property>
       </widget>
      </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Address</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="lineName">
+      <widget class="QLineEdit" name="lineUsername">
        <property name="placeholderText">
-        <string>Fullname</string>
+        <string>Username</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineCode">
+      <widget class="QLineEdit" name="linePassword">
        <property name="placeholderText">
-        <string>Suplier code</string>
+        <string>Password</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
+      <widget class="QLineEdit" name="lineName">
+       <property name="placeholderText">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineRepassword">
+       <property name="placeholderText">
+        <string>Re-password</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
       <widget class="QLineEdit" name="linePhone">
        <property name="placeholderText">
         <string>Phone</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="5" column="1">
       <widget class="QPlainTextEdit" name="textAddress">
-       <property name="tabChangesFocus">
-        <bool>true</bool>
-       </property>
        <property name="placeholderText">
         <string>Address</string>
        </property>
@@ -138,31 +147,6 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>lineName</tabstop>
-  <tabstop>lineCode</tabstop>
-  <tabstop>textAddress</tabstop>
-  <tabstop>linePhone</tabstop>
-  <tabstop>pushSave</tabstop>
-  <tabstop>pushCancel</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>SuplierAddDialog</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>325</x>
-     <y>213</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
