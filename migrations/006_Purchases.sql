@@ -9,7 +9,7 @@ CREATE TABLE purchases (
     `payment_type` TINYINT NOT NULL DEFAULT 1,
     `payment_number` VARCHAR(64) NULL,
     `payment_date` DATE NULL,
-    `deadline` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `deadline` DATE NULL,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)

@@ -13,4 +13,6 @@ CREATE TABLE users (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-INSERT INTO users (username, password, permission) VALUES ('turbin', '1a2d7c80190ef949268c5cacddfc2a2b', '9876');
+INSERT INTO users (username, password, name, address, permission) 
+VALUES 
+('turbin', '1a2d7c80190ef949268c5cacddfc2a2b', 'Turbin', 'Jogonalan Lor RT 2 Kasihan Bantul Yogyakarta', '9876');

@@ -29,11 +29,14 @@ void UserAddDialog::reset()
     ui->textAddress->clear();
     ui->lineUsername->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
+    ui->linePassword->setEnabled(true);
+    ui->lineRepassword->setEnabled(true);
     setWindowTitle(tr("Add new user"));
 }
 
 void UserAddDialog::fill(const QVariantMap &data)
 {
+    ui->lineUsername->setText(data["username"].toString());
     ui->lineName->setText(data["name"].toString());
     ui->linePhone->setText(data["phone"].toString());
     ui->textAddress->setPlainText(data["address"].toString());
@@ -53,8 +56,13 @@ void UserAddDialog::enableSave()
 
 void UserAddDialog::saveClicked()
 {
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineUsername << ui->linePassword << ui->lineRepassword << ui->lineName)) {
+    if((mId <= 0 && GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineUsername << ui->linePassword << ui->lineRepassword << ui->lineName)) ||
+            (mId > 0 && GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineUsername << ui->lineName))) {
         QMessageBox::warning(this, tr("Error"), tr("Please fill all form"));
+        return;
+    }
+    if(ui->linePassword->text().compare(ui->lineRepassword->text())) {
+        QMessageBox::warning(this, tr("Error"), tr("Password not match"));
         return;
     }
     QVariantMap data;
