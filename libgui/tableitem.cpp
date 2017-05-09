@@ -35,3 +35,8 @@ QVariant TableItem::data(const QString &key)
 {
     return mData[key];
 }
+
+QVariantMap TableItem::data()
+{
+    return mData;
+}

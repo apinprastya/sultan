@@ -109,10 +109,12 @@ void TableWidget::actionClicked()
         emit addClicked();
         break;
     case Update:
-        emit updateClicked(mTableView->currentIndex());
+        if(mTableView->currentIndex().isValid())
+            emit updateClicked(mTableView->currentIndex());
         break;
     case Delete:
-        emit deleteClicked(mTableView->currentIndex());
+        if(mTableView->currentIndex().isValid())
+            emit deleteClicked(mTableView->currentIndex());
         break;
     }
 }

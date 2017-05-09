@@ -72,6 +72,26 @@ void Message::setFlag(int flag)
     mFlag |= ((flag << 20) & 0xFF00000);
 }
 
+bool Message::isCommand(int command)
+{
+    return this->command() == command;
+}
+
+bool Message::isType(int type)
+{
+    return this->type() == type;
+}
+
+bool Message::isTypeCommand(int type, int command)
+{
+    return (this->type() == type && this->command() == command);
+}
+
+bool Message::isSuccess()
+{
+    return this->status() == STATUS::OK;
+}
+
 void Message::addData(const QString &key, const QVariant &data)
 {
     mData.insert(key, data);

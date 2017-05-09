@@ -1,5 +1,5 @@
 /*
- * tableitem.h
+ * guiutil.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,26 +17,20 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TABLEITEM_H
-#define TABLEITEM_H
+#ifndef GUIUTIL_H
+#define GUIUTIL_H
 
 #include "gui_global.h"
 #include <QVariantMap>
+#include <QWidget>
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT TableItem
+class GuiUtil
 {
 public:
-    int id;
-    TableItem();
-    virtual void fill(const QVariantMap &data);
-    virtual QVariant data(const QString &key);
-    QVariantMap data();
-
-private:
-    QVariantMap mData;
+    static bool anyEmpty(const QList<QWidget*> &lists);
 };
 
 }
-#endif // TABLEITEM_H
+#endif // GUIUTIL_H

@@ -76,6 +76,14 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 }
 
+QModelIndex TableModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+    auto item = mData[row];
+    return createIndex(row, column, item);
+}
+
 void TableModel::reset()
 {
     beginResetModel();

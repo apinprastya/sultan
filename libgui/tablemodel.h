@@ -38,6 +38,8 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const override;
     void reset();
     void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }

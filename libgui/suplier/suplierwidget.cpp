@@ -22,6 +22,11 @@
 #include "tablewidget.h"
 #include "tablemodel.h"
 #include "global_constant.h"
+#include "suplieradddialog.h"
+#include "tableitem.h"
+#include "message.h"
+#include <QDebug>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -29,9 +34,11 @@ using namespace LibG;
 SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this))
+    mTableWidget(new TableWidget(this)),
+    mAddDialog(new SuplierAddDialog(this))
 {
     ui->setupUi(this);
+    setMessageBus(bus);
     ui->labelTitle->setText(tr("Suplier"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
@@ -44,4 +51,70 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     model->setTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     model->refresh();
+    connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
+    connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+}
+
+void SuplierWidget::messageReceived(Message *msg)
+{
+    if(msg->isCommand(MSG_COMMAND::INSERT)) {
+        if(msg->isSuccess()) {
+            mAddDialog->hide();
+            mTableWidget->getModel()->refresh();
+        } else {
+            QMessageBox::critical(mAddDialog, tr("Error"), msg->data("error").toString());
+            mAddDialog->enableSave();
+            return;
+        }
+    } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+        if(msg->isSuccess()) {
+            mAddDialog->hide();
+            mTableWidget->getModel()->refresh();
+        } else {
+            QMessageBox::critical(mAddDialog, tr("Error"), msg->data("error").toString());
+            mAddDialog->enableSave();
+            return;
+        }
+    } else if(msg->isCommand(MSG_COMMAND::DELETE) && msg->isSuccess()) {
+        mTableWidget->getModel()->refresh();
+    }
+}
+
+void SuplierWidget::addClicked()
+{
+    mAddDialog->reset();
+    mAddDialog->show();
+}
+
+void SuplierWidget::editClicked(const QModelIndex &index)
+{
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    mAddDialog->fill(item->data());
+    mAddDialog->show();
+}
+
+void SuplierWidget::deleteClicked(const QModelIndex &index)
+{
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove suplier?"));
+    if(ret == QMessageBox::Yes) {
+        Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::DELETE);
+        msg.addData("id", item->id);
+        sendMessage(&msg);
+    }
+}
+
+void SuplierWidget::saveRequested(const QVariantMap &data, int id)
+{
+    Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::INSERT);
+    if(id <= 0) {
+        msg.setData(data);
+    } else {
+        msg.setCommand(MSG_COMMAND::UPDATE);
+        msg.addData("id", id);
+        msg.addData("data", data);
+    }
+    sendMessage(&msg);
 }

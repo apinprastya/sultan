@@ -63,6 +63,10 @@ public:
     inline void setUniqueId(int id) { mUniqueId = id; }
     inline int getSocketId() { return mSocketId; }
     inline void setSocketId(int id) { mSocketId = id; }
+    bool isCommand(int command);
+    bool isType(int type);
+    bool isTypeCommand(int type, int command);
+    bool isSuccess();
 
     void addData(const QString &key, const QVariant &data);
     void clearData();

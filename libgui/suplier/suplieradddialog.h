@@ -1,5 +1,5 @@
 /*
- * tableitem.h
+ * suplieradddialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,26 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TABLEITEM_H
-#define TABLEITEM_H
+#ifndef SUPLIERADDDIALOG_H
+#define SUPLIERADDDIALOG_H
 
-#include "gui_global.h"
-#include <QVariantMap>
+#include <QDialog>
+
+namespace Ui {
+class SuplierAddDialog;
+}
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT TableItem
+class SuplierAddDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
-    int id;
-    TableItem();
-    virtual void fill(const QVariantMap &data);
-    virtual QVariant data(const QString &key);
-    QVariantMap data();
+    SuplierAddDialog(QWidget *parent = 0);
+    ~SuplierAddDialog();
+    void reset();
+    void fill(const QVariantMap &data);
+    void enableSave();
 
 private:
-    QVariantMap mData;
+    Ui::SuplierAddDialog *ui;
+    int mId = -1;
+
+private slots:
+    void saveClicked();
+
+signals:
+    void saveData(const QVariantMap &data, int id);
 };
 
 }
-#endif // TABLEITEM_H
+#endif // SUPLIERADDDIALOG_H

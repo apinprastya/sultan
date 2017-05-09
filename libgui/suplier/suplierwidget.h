@@ -20,29 +20,37 @@
 #ifndef SUPLIERWIDGET_H
 #define SUPLIERWIDGET_H
 
+#include "messagehandler.h"
 #include <QWidget>
 
 namespace Ui {
 class NormalWidget;
 }
 
-namespace LibG {
-class MessageBus;
-}
-
 namespace LibGUI {
 
 class TableWidget;
+class SuplierAddDialog;
 
-class SuplierWidget : public QWidget
+class SuplierWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
     SuplierWidget(LibG::MessageBus *bus, QWidget *parent = 0);
 
+protected:
+    void messageReceived(LibG::Message *msg) override;
+
 private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
+    SuplierAddDialog *mAddDialog;
+
+private slots:
+    void addClicked();
+    void editClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndex &index);
+    void saveRequested(const QVariantMap &data, int id);
 };
 
 }

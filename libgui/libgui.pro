@@ -53,7 +53,9 @@ SOURCES += \
     tablemodel.cpp \
     tableitem.cpp \
     suplier/suplierwidget.cpp \
-    rowdata.cpp
+    rowdata.cpp \
+    suplier/suplieradddialog.cpp \
+    guiutil.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -68,10 +70,13 @@ HEADERS += \
     tablemodel.h \
     tableitem.h \
     suplier/suplierwidget.h \
-    rowdata.h
+    rowdata.h \
+    suplier/suplieradddialog.h \
+    guiutil.h
 
 FORMS += \
     mainwindow.ui \
     ui/settingwidget.ui \
     ui/userwidget.ui \
-    normalwidget.ui
+    normalwidget.ui \
+    suplier/suplieradddialog.ui

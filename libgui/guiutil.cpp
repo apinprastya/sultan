@@ -1,5 +1,5 @@
 /*
- * tableitem.h
+ * guiutil.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,26 +17,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TABLEITEM_H
-#define TABLEITEM_H
+#include "guiutil.h"
+#include <QLineEdit>
+#include <QPlainTextEdit>
+#include <QComboBox>
 
-#include "gui_global.h"
-#include <QVariantMap>
+using namespace LibGUI;
 
-namespace LibGUI {
 
-class GUISHARED_EXPORT TableItem
+bool GuiUtil::anyEmpty(const QList<QWidget *> &lists)
 {
-public:
-    int id;
-    TableItem();
-    virtual void fill(const QVariantMap &data);
-    virtual QVariant data(const QString &key);
-    QVariantMap data();
-
-private:
-    QVariantMap mData;
-};
-
+    for(auto w : lists) {
+        auto line = qobject_cast<QLineEdit*>(w);
+        if(line != nullptr && line->text().isEmpty())
+            return true;
+        auto combo = qobject_cast<QComboBox*>(w);
+        if(combo != nullptr && combo->currentData().toInt() <= 0)
+            return true;
+        auto plain = qobject_cast<QPlainTextEdit*>(w);
+        if(plain != nullptr && plain->toPlainText().isEmpty())
+            return true;
+    }
+    return false;
 }
-#endif // TABLEITEM_H
