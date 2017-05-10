@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
+    a.setApplicationVersion("0.1");
     Core core;
     core.setup();
 

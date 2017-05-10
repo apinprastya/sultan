@@ -62,6 +62,7 @@ private slots:
     void openSetting();
     void openUser();
     void openSuplier();
+    void openAbout();
 };
 
 }

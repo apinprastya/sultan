@@ -23,6 +23,7 @@
 #include "setting//settingwidget.h"
 #include "user/userwidget.h"
 #include "suplier/suplierwidget.h"
+#include "about/aboutdialog.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -56,6 +57,7 @@ void MainWindow::setupConnection()
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
     connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    connect(ui->action_About, SIGNAL(triggered(bool)), SLOT(openAbout()));
     connect(ui->actionLogout, SIGNAL(triggered(bool)), SIGNAL(logout()));
     connect(ui->action_User, SIGNAL(triggered(bool)), SLOT(openUser()));
     connect(ui->action_Suplier, SIGNAL(triggered(bool)), SLOT(openSuplier()));
@@ -121,4 +123,10 @@ void MainWindow::openSuplier()
         return (dynamic_cast<SuplierWidget*>(widget) != nullptr);
     }))
         ui->tabWidget->tbnAddTab(new SuplierWidget(mMessageBus, this), tr("Suplier"));
+}
+
+void MainWindow::openAbout()
+{
+    AboutDialog about(this);
+    about.exec();
 }

@@ -11,6 +11,13 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+#Sorry for doing this
+macx {
+    DEFINES += "MIGRATION_FOLDER=\\\"/Users/apinprastya/Projects/qt/Turbin/migrations\\\""
+} else {
+    DEFINES += "MIGRATION_FOLDER=\\\"/media/data/Project/Qt/turbin/migrations\\\""
+}
+
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
     LIBS += -framework Foundation

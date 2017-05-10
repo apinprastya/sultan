@@ -31,6 +31,7 @@ namespace CONFIG {
 namespace CONSTANT {
     const QString APP_NAME          = QStringLiteral("Turbin");
     const QString WINDOW_TITLE      = QStringLiteral("%1 - Turbin");
+    const QString ABOUT_APP_NAME    = QStringLiteral("Turbin %1");
 }
 
 namespace PERMISSION {

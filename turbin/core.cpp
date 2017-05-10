@@ -38,8 +38,6 @@
 #include <QTimer>
 #include <QDebug>
 
-#define STRINGIFY(x) #x
-
 using namespace LibG;
 
 static std::string TAG = "CORE";
@@ -127,7 +125,8 @@ void Core::init()
             }
             mSplashUi->setMessage("Migrate database ...");
             qApp->processEvents();
-            if(!LibDB::Migration::migrateAll("/media/data/Project/Qt/turbin/migrations")) {
+            qDebug() << MIGRATION_FOLDER;
+            if(!LibDB::Migration::migrateAll(MIGRATION_FOLDER)) {
                 LOG(ERROR) << TAG << "Error migration";
                 return;
             }
