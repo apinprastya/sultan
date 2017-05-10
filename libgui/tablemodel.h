@@ -25,6 +25,7 @@
 #include "messagehandler.h"
 #include "querydb.h"
 #include <QAbstractTableModel>
+#include <functional>
 
 namespace LibGUI {
 
@@ -41,7 +42,7 @@ public:
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const override;
     void reset();
-    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft);
+    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*)> formater = nullptr);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
 
 public slots:
@@ -55,6 +56,7 @@ protected:
     RowData mData;
     QList<QString> mHeaders;
     QList<QString> mColumns;
+    QMap<QString, std::function<QVariant(TableItem*)>> mFormater;
     QList<int> mAlignments;
     std::tuple<int, int> mTypeCommand;
     QMap<int, int> mPageStatus;

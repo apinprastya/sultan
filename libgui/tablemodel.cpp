@@ -61,6 +61,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             return QVariant(QLatin1String("loading..."));
         }
         auto item = mData[row];
+        if(mFormater.contains(mColumns[index.column()]))
+            return mFormater[mColumns[index.column()]](item);
         return item->data(mColumns[index.column()]);
     } else if(role == Qt::TextAlignmentRole) {
         return mAlignments[index.column()];
@@ -94,11 +96,12 @@ void TableModel::reset()
     endResetModel();
 }
 
-void TableModel::addColumn(const QString &key, const QString &title, const int &align)
+void TableModel::addColumn(const QString &key, const QString &title, const int &align, std::function<QVariant(TableItem*)> formater)
 {
     mColumns.push_back(key);
     mHeaders.push_back(title);
     mAlignments.push_back(align | Qt::AlignVCenter);
+    if(formater != nullptr) mFormater.insert(key, formater);
 }
 
 void TableModel::refresh()
