@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * cashieritem.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,19 +17,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#ifndef CASHIERITEM_H
+#define CASHIERITEM_H
 
-#include "serveraction.h"
+#include <QVariantMap>
+#include <QString>
 
-namespace LibServer {
+namespace LibGUI {
 
-class UserAction : public ServerAction
+class CashierItem
 {
 public:
-    UserAction();
-    LibG::Message login(LibG::Message *msg);
+    int id = 0;
+    float count = 0;
+    double price = 0;
+    double total = 0;
+    QString barcode;
+    CashierItem();
+    CashierItem(const QString &barcode, float count, double price, double total);
+    void fill(const QVariantMap &data);
 };
 
 }
-#endif // USERACTION_H
+#endif // CASHIERITEM_H

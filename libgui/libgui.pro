@@ -58,7 +58,9 @@ SOURCES += \
     guiutil.cpp \
     user/useradddialog.cpp \
     about/aboutdialog.cpp \
-    cashier/cashierwidget.cpp
+    cashier/cashierwidget.cpp \
+    cashier/cashieritem.cpp \
+    cashier/cashiertablemodel.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -78,7 +80,9 @@ HEADERS += \
     guiutil.h \
     user/useradddialog.h \
     about/aboutdialog.h \
-    cashier/cashierwidget.h
+    cashier/cashierwidget.h \
+    cashier/cashieritem.h \
+    cashier/cashiertablemodel.h
 
 FORMS += \
     mainwindow.ui \

@@ -46,7 +46,9 @@ SOURCES += \
     router.cpp \
     action/useraction.cpp \
     mainserver.cpp \
-    action/suplieraction.cpp
+    action/suplieraction.cpp \
+    action/itemaction.cpp \
+    action/sellpriceactions.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -54,4 +56,6 @@ HEADERS += \
     router.h \
     action/useraction.h \
     mainserver.h \
-    action/suplieraction.h
+    action/suplieraction.h \
+    action/itemaction.h \
+    action/sellpriceactions.h

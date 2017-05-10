@@ -55,6 +55,8 @@ namespace MSG_TYPE {
     const int INTERNAL      = 0;
     const int USER          = 1;
     const int SUPLIER       = 2;
+    const int ITEM          = 3;
+    const int SELLPRICE     = 4;
 }
 
 namespace MSG_COMMAND {
@@ -65,6 +67,7 @@ namespace MSG_COMMAND {
     const int QUERY         = 4;
     //custom command
     const int LOGIN         = 5;
+    const int CASHIER_PRICE = 6;
 }
 
 }

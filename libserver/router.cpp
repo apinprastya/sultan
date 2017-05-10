@@ -23,6 +23,8 @@
 #include "global_constant.h"
 #include "action/useraction.h"
 #include "action/suplieraction.h"
+#include "action/itemaction.h"
+#include "action/sellpriceactions.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -47,6 +49,10 @@ ServerAction *Router::getServerAction(int type)
         return new UserAction();
     case MSG_TYPE::SUPLIER:
         return new SuplierAction();
+    case MSG_TYPE::ITEM:
+        return new ItemAction();
+    case MSG_TYPE::SELLPRICE:
+        return new SellPriceActions();
     }
     return nullptr;
 }

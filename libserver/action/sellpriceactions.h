@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * sellpriceactions.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,19 +17,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#ifndef SELLPRICEACTIONS_H
+#define SELLPRICEACTIONS_H
 
 #include "serveraction.h"
 
 namespace LibServer {
 
-class UserAction : public ServerAction
+class SellPriceActions : public ServerAction
 {
 public:
-    UserAction();
-    LibG::Message login(LibG::Message *msg);
+    SellPriceActions();
 };
 
 }
-#endif // USERACTION_H
+#endif // SELLPRICEACTIONS_H

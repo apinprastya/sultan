@@ -25,5 +25,6 @@ CREATE TABLE purchasedatas (
     `count` FLOAT NOT NULL DEFAUL 0,
     `single_price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    INDEX `BARCODE` (`barcode` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

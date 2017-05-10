@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * cashiertablemodel.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,19 +17,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#ifndef CASHIERTABLEMODEL_H
+#define CASHIERTABLEMODEL_H
 
-#include "serveraction.h"
+#include <QAbstractTableModel>
 
-namespace LibServer {
+namespace LibGUI {
 
-class UserAction : public ServerAction
+class CashierItem;
+
+class CashierTableModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
-    UserAction();
-    LibG::Message login(LibG::Message *msg);
+    CashierTableModel(QObject *parent = nullptr);
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+
+private:
+    QList<CashierItem*> mData;
+    QStringList mHeader;
 };
 
 }
-#endif // USERACTION_H
+#endif // CASHIERTABLEMODEL_H
