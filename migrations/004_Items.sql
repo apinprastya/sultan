@@ -16,6 +16,7 @@ CREATE TABLE sellprices (
 	`barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT '1',
     `price` INT NOT NULL DEFAULT 0,
+    INDEX `BARCODE` (`barcode` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
