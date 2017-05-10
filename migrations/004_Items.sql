@@ -6,7 +6,8 @@ CREATE TABLE items (
     `name` VARCHAR(255) NOT NULL DEFAULT '',
     `category_id` INT NOT NULL DEFAULT 0,
     `suplier_id` INT NOT NULL DEFAULT 0,
-    `buy_price` BIGINT NOT NULL DEFAULT 0,
+    `buy_price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `stock` FLOAT NOT NULL DEFAULT 0,
     PRIMARY KEY (`barcode`)
 ) ENGINE = InnoDB;
 
