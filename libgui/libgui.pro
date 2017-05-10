@@ -57,7 +57,8 @@ SOURCES += \
     suplier/suplieradddialog.cpp \
     guiutil.cpp \
     user/useradddialog.cpp \
-    about/aboutdialog.cpp
+    about/aboutdialog.cpp \
+    cashier/cashierwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -76,7 +77,8 @@ HEADERS += \
     suplier/suplieradddialog.h \
     guiutil.h \
     user/useradddialog.h \
-    about/aboutdialog.h
+    about/aboutdialog.h \
+    cashier/cashierwidget.h
 
 FORMS += \
     mainwindow.ui \
@@ -84,4 +86,5 @@ FORMS += \
     normalwidget.ui \
     suplier/suplieradddialog.ui \
     user/useradddialog.ui \
-    about/aboutdialog.ui
+    about/aboutdialog.ui \
+    cashier/cashierwidget.ui
