@@ -78,22 +78,30 @@ void TableWidget::setupTable()
     mModel->reset();
 }
 
-void TableWidget::addActionButton(const QString &path, int type)
+QPushButton *TableWidget::addActionButton(const QIcon &icon)
 {
-    addActionButton(QIcon(path), type);
+    return addActionButton(icon, Unknown);
 }
 
-void TableWidget::addActionButton(const QIcon &icon, int type)
+QPushButton *TableWidget::addActionButton(const QString &path, int type)
 {
-    if(mActionButton.contains(type)) return;
+    return addActionButton(QIcon(path), type);
+}
+
+QPushButton *TableWidget::addActionButton(const QIcon &icon, int type)
+{
+    if(type != Unknown && mActionButton.contains(type)) return mActionButton[type];
     auto push = new QPushButton(this);
     push->setIcon(icon);
     push->setFlat(true);
     push->setAutoDefault(false);
     push->setDefault(false);
-    connect(push, SIGNAL(clicked(bool)), SLOT(actionClicked()));
-    mActionButton.insert(type, push);
+    if(type != Unknown) {
+        connect(push, SIGNAL(clicked(bool)), SLOT(actionClicked()));
+        mActionButton.insert(type, push);
+    }
     mActionLayout->addWidget(push);
+    return push;
 }
 
 void TableWidget::actionClicked()

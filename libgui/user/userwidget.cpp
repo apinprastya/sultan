@@ -26,7 +26,11 @@
 #include "global_constant.h"
 #include "message.h"
 #include "useradddialog.h"
+#include "tableview.h"
+#include "userpermissiondialog.h"
+#include "usersession.h"
 #include <QMessageBox>
+#include <QPushButton>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -51,6 +55,8 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setTypeCommand(MSG_TYPE::USER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     model->refresh();
+    auto button = mTableWidget->addActionButton(QIcon(":/images/16x16/key.png"));
+    connect(button, SIGNAL(clicked(bool)), SLOT(permissionClicked()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
@@ -122,4 +128,18 @@ void UserWidget::saveRequested(const QVariantMap &data, int id)
         msg.addData("data", data);
     }
     sendMessage(&msg);
+}
+
+void UserWidget::permissionClicked()
+{
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->id == UserSession::id()) {
+        QMessageBox::critical(this, tr("Error"), tr("You can't change your own"));
+        return;
+    }
+    UserPermissionDialog dialog(item->data());
+    connect(&dialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+    dialog.exec();
 }

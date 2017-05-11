@@ -53,6 +53,7 @@ private slots:
     void updateClicked(const QModelIndex &index);
     void deleteClicked(const QModelIndex &index);
     void saveRequested(const QVariantMap &data, int id);
+    void permissionClicked();
 };
 
 }

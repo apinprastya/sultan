@@ -1,8 +1,8 @@
 /*
- * usersession.h
+ * permissionhelper.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,32 +17,29 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERSESSION_H
-#define USERSESSION_H
+#ifndef PERMISSIONHELPER_H
+#define PERMISSIONHELPER_H
 
 #include "global_global.h"
-#include <QVariantMap>
+#include <QList>
+#include <QString>
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT UserSession
+class GLOBALSHARED_EXPORT PermissionHelper
 {
 public:
-    static UserSession *init(const QVariantMap &data);
-    static QString username();
-    static QString name();
-    static int id();
-    static bool hasPermission(int permission);
-    static void destroy();
+    PermissionHelper() = default;
+    PermissionHelper(const QString &data);
+    void fromString(const QString &data);
+    QString toString();
+    bool has(int val);
+    void add(int val);
+    void rem(int val);
 
 private:
-    UserSession();
-
-    int mId;
-    QString mUsername;
-    QString mName;
-    QList<int> mPermission;
+    QList<int> mPermissionInt;
 };
 
 }
-#endif // USERSESSION_H
+#endif // PERMISSIONHELPER_H

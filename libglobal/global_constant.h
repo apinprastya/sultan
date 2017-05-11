@@ -39,6 +39,7 @@ namespace PERMISSION {
     const int USER_RW           = 1;
     const int SUPLIER_RW        = 2;
     const int ITEM_RW           = 3;
+    const int CASHIER           = 4;
 }
 
 namespace APPLICATION_TYPE {

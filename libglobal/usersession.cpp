@@ -33,6 +33,7 @@ LibG::UserSession *LibG::UserSession::init(const QVariantMap &data)
         sInstance = new UserSession();
     sInstance->mName = data["name"].toString();
     sInstance->mUsername = data["username"].toString();
+    sInstance->mId = data["id"].toInt();
     QStringList per = data["permission"].toString().split(",");
     for(const QString &str : per) {
         const QString &s = str.trimmed();
@@ -50,6 +51,11 @@ QString LibG::UserSession::username()
 QString LibG::UserSession::name()
 {
     return sInstance->mName;
+}
+
+int UserSession::id()
+{
+    return sInstance->mId;
 }
 
 bool LibG::UserSession::hasPermission(int permission)

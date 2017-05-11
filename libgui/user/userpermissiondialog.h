@@ -1,8 +1,8 @@
 /*
- * usersession.h
+ * userpermissiondialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,32 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERSESSION_H
-#define USERSESSION_H
+#ifndef USERPERMISSIONDIALOG_H
+#define USERPERMISSIONDIALOG_H
 
-#include "global_global.h"
-#include <QVariantMap>
+#include <QDialog>
+#include "permissionhelper.h"
 
-namespace LibG {
+namespace Ui {
+class UserPermissionDialog;
+}
 
-class GLOBALSHARED_EXPORT UserSession
+class UserPermissionDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
-    static UserSession *init(const QVariantMap &data);
-    static QString username();
-    static QString name();
-    static int id();
-    static bool hasPermission(int permission);
-    static void destroy();
+    UserPermissionDialog(const QVariantMap &data, QWidget *parent = 0);
+    ~UserPermissionDialog();
 
 private:
-    UserSession();
-
+    Ui::UserPermissionDialog *ui;
+    LibG::PermissionHelper mPermission;
     int mId;
-    QString mUsername;
-    QString mName;
-    QList<int> mPermission;
+
+signals:
+    void saveData(const QVariantMap &data, int id);
+
+private slots:
+    void listAvailableDoubleClicked(const QModelIndex &index);
+    void listSelectedDoubleClicked(const QModelIndex &index);
+    void saveClicked();
 };
 
-}
-#endif // USERSESSION_H
+#endif // USERPERMISSIONDIALOG_H

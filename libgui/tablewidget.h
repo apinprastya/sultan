@@ -37,7 +37,7 @@ class TableWidget : public QWidget
     Q_OBJECT
 public:
     enum ButtonType {
-        Refresh, Add, Delete, Update
+        Refresh, Add, Delete, Update, Unknown
     };
 
     TableWidget(QWidget *parent = 0);
@@ -47,6 +47,8 @@ public:
     void addActionButton(QPushButton *button);
     void setupTable();
     inline TableModel *getModel() { return mModel; }
+    inline TableView *getTableView() { return mTableView; }
+    QPushButton *addActionButton(const QIcon &icon);
 
 private:
     TableView *mTableView;
@@ -54,8 +56,8 @@ private:
     QHBoxLayout *mActionLayout;
     QMap<int, QPushButton*> mActionButton;
 
-    void addActionButton(const QString &path, int type);
-    void addActionButton(const QIcon &icon, int type);
+    QPushButton *addActionButton(const QString &path, int type);
+    QPushButton *addActionButton(const QIcon &icon, int type);
 
 signals:
     void tableRefreshed();

@@ -46,9 +46,10 @@ Message UserAction::login(Message *msg)
         if(password.compare(data["password"].toString())) {
             message.setError("Username and password not match");
         } else {
-            message.addData("username", data["username"].toString());
-            message.addData("name", data["name"].toString());
-            message.addData("permission", data["permission"].toString());
+            message.addData("id", data["id"]);
+            message.addData("username", data["username"]);
+            message.addData("name", data["name"]);
+            message.addData("permission", data["permission"]);
         }
     }
     return message;
