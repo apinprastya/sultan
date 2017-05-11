@@ -1,5 +1,5 @@
 /*
- * cashieritem.h
+ * keyevent.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,31 +17,34 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CASHIERITEM_H
-#define CASHIERITEM_H
+#ifndef KEYEVENT_H
+#define KEYEVENT_H
 
-#include <QVariantMap>
-#include <QString>
+#include "gui_global.h"
+#include <QObject>
+
+class QKeyEvent;
 
 namespace LibGUI {
 
-class CashierItem
+class GUISHARED_EXPORT KeyEvent : public QObject
 {
+    Q_OBJECT
 public:
-    enum Type { Item, Discount };
-    int id = 0;
-    int parent = 0;
-    int type = Item;
-    float count = 0;
-    double price = 0;
-    double total = 0;
-    QString barcode;
-    QString name;
-    CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
-    void fill(const QVariantMap &data);
+    KeyEvent(QObject *parent = 0);
+    void discardKey(Qt::Key key);
+    void addConsumeKey(Qt::Key key);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
+private:
+    QList<Qt::Key> mDiscardKey;
+    QList<Qt::Key> mConsumeKey;
+
+signals:
+    void keyPressed(QObject *sender, QKeyEvent *keyEvent);
 };
 
 }
-#endif // CASHIERITEM_H
+#endif // KEYEVENT_H

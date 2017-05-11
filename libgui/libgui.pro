@@ -60,7 +60,8 @@ SOURCES += \
     about/aboutdialog.cpp \
     cashier/cashierwidget.cpp \
     cashier/cashieritem.cpp \
-    cashier/cashiertablemodel.cpp
+    cashier/cashiertablemodel.cpp \
+    keyevent.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -82,7 +83,8 @@ HEADERS += \
     about/aboutdialog.h \
     cashier/cashierwidget.h \
     cashier/cashieritem.h \
-    cashier/cashiertablemodel.h
+    cashier/cashiertablemodel.h \
+    keyevent.h
 
 FORMS += \
     mainwindow.ui \

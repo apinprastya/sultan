@@ -192,7 +192,23 @@ border: 1px solid #ababab;</string>
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QTableView" name="tableView">
+       <property name="tabKeyNavigation">
+        <bool>false</bool>
+       </property>
+       <property name="showDropIndicator" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="dragDropOverwriteMode">
+        <bool>false</bool>
+       </property>
+       <property name="horizontalScrollMode">
+        <enum>QAbstractItemView::ScrollPerPixel</enum>
+       </property>
+       <property name="gridStyle">
+        <enum>Qt::DashLine</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="Line" name="line_2">
@@ -238,6 +254,10 @@ border: 1px solid #ababab;</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineBarcode</tabstop>
+  <tabstop>tableView</tabstop>
+ </tabstops>
  <resources>
   <include location="../../turbin/turbin.qrc"/>
  </resources>

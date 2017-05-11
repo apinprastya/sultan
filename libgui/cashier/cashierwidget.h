@@ -31,6 +31,9 @@ private:
 
 private slots:
     void barcodeEntered();
+    void totalChanged(double value);
+    void selectRow(const QModelIndex &index);
+    void tableKeyPressed(QObject *sender, QKeyEvent *event);
 };
 
 }

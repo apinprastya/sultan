@@ -21,13 +21,27 @@
 
 using namespace LibGUI;
 
-CashierItem::CashierItem()
+static int ID = 1;
+
+CashierItem::CashierItem():
+    id(ID++)
 {
 }
 
-CashierItem::CashierItem(const QString &barcode, float count, double price, double total):
-    count(count), price(price), total(total), barcode(barcode)
+CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double total, int type):
+    id(ID++)
 {
+    set(name, barcode, count, price, total, type);
+}
+
+void CashierItem::set(const QString &name, const QString &barcode, float count, double price, double total, int type)
+{
+    this->name = name;
+    this->barcode = barcode;
+    this->count = count;
+    this->price = price;
+    this->total = total;
+    this->type = type;
 }
 
 void CashierItem::fill(const QVariantMap &data)

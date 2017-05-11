@@ -21,9 +21,9 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QComboBox>
+#include <QTableView>
 
 using namespace LibGUI;
-
 
 bool GuiUtil::anyEmpty(const QList<QWidget *> &lists)
 {
@@ -39,4 +39,10 @@ bool GuiUtil::anyEmpty(const QList<QWidget *> &lists)
             return true;
     }
     return false;
+}
+
+void GuiUtil::setColumnWidth(QTableView *table, const QList<int> &widths)
+{
+    for(int i = 0; i < widths.size(); i++)
+        table->setColumnWidth(i, widths[i]);
 }
