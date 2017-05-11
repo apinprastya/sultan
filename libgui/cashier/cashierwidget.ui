@@ -22,7 +22,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../turbin/turbin.qrc">:/images/icon_128.png</pixmap>
+        <pixmap resource="../../sultan/sultan.qrc">:/images/icon_128.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -35,7 +35,7 @@
         <string notr="true">font-size: 16px;</string>
        </property>
        <property name="text">
-        <string>Turbin %1</string>
+        <string>Title</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -178,7 +178,7 @@ border: 1px solid #ababab;</string>
            </sizepolicy>
           </property>
           <property name="styleSheet">
-           <string notr="true">font-size: 50px; border: none;</string>
+           <string notr="true">font-size: 50px; border: none; font: arial;</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -259,7 +259,7 @@ border: 1px solid #ababab;</string>
   <tabstop>tableView</tabstop>
  </tabstops>
  <resources>
-  <include location="../../turbin/turbin.qrc"/>
+  <include location="../../sultan/sultan.qrc"/>
  </resources>
  <connections/>
 </ui>

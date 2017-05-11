@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Application Setting</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -135,7 +135,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>turbin</string>
+             <string>sultan</string>
             </property>
             <property name="placeholderText">
              <string>Mysql database</string>

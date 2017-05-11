@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>155</height>
+    <height>162</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../turbin.qrc">:/images/icon_128.png</pixmap>
+      <pixmap resource="../sultan.qrc">:/images/icon_128.png</pixmap>
      </property>
     </widget>
    </item>
@@ -123,7 +123,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../turbin.qrc"/>
+  <include location="../sultan.qrc"/>
  </resources>
  <connections/>
 </ui>
