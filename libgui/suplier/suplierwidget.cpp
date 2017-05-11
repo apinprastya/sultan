@@ -25,6 +25,8 @@
 #include "suplieradddialog.h"
 #include "tableitem.h"
 #include "message.h"
+#include "guiutil.h"
+#include "tableview.h"
 #include <QDebug>
 #include <QMessageBox>
 
@@ -46,10 +48,12 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     model->setMessageBus(bus);
     model->addColumn("name", tr("Name"));
     model->addColumn("code", tr("Code"));
-    model->addColumn("address", tr("Address"));
     model->addColumn("phone", tr("Phone"));
+    model->addColumn("address", tr("Address"));
     model->setTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
+    mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));

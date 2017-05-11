@@ -29,6 +29,7 @@
 #include "tableview.h"
 #include "userpermissiondialog.h"
 #include "usersession.h"
+#include "guiutil.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -50,10 +51,12 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setMessageBus(bus);
     model->addColumn("username", tr("Username"));
     model->addColumn("name", tr("Name"));
-    model->addColumn("address", tr("Address"));
     model->addColumn("phone", tr("Phone"));
+    model->addColumn("address", tr("Address"));
     model->setTypeCommand(MSG_TYPE::USER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
+    mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
     auto button = mTableWidget->addActionButton(QIcon(":/images/16x16/key.png"));
     connect(button, SIGNAL(clicked(bool)), SLOT(permissionClicked()));
