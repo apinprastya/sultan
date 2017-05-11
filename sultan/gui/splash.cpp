@@ -1,8 +1,8 @@
 /*
- * splash.h
+ * splash.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,26 +17,24 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SPLASH_H
-#define SPLASH_H
+#include "splash.h"
+#include "ui_splash.h"
 
-#include <QDialog>
-
-namespace Ui {
-class Splash;
+Splash::Splash(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Splash)
+{
+    ui->setupUi(this);
+    setWindowTitle("");
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::Dialog);
 }
 
-class Splash : public QDialog
+Splash::~Splash()
 {
-    Q_OBJECT
+    delete ui;
+}
 
-public:
-    Splash(QWidget *parent = 0);
-    ~Splash();
-    void setMessage(const QString &msg);
-
-private:
-    Ui::Splash *ui;
-};
-
-#endif // SPLASH_H
+void Splash::setMessage(const QString &msg)
+{
+    ui->labelLoading->setText(msg);
+}

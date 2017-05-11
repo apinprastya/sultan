@@ -11,4 +11,4 @@ CREATE TABLE supliers (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-INSERT INTO supliers (name, code, address, phone) VALUES ('CV. Turbin Food', 'TF', 'Jogonalan Lor RT 2', '08123456789,085235419949');
+INSERT INTO supliers (name, code, address, phone) VALUES ('CV. Sultan Food', 'TF', 'Jogonalan Lor RT 2', '08123456789,085235419949');

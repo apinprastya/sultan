@@ -1,8 +1,8 @@
 /*
- * socketclient.h
+ * logindialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,40 +17,37 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOCKETCLIENT_H
-#define SOCKETCLIENT_H
+#ifndef LOGINDIALOG_H
+#define LOGINDIALOG_H
 
-#include "message.h"
-#include <QObject>
-#include <QAbstractSocket>
+#include <QDialog>
+#include "messagehandler.h"
 
-class QWebSocket;
+namespace Ui {
+class LoginDialog;
+}
 
-class SocketClient : public QObject
+class LoginDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
-public:
-    SocketClient(QObject *parent = nullptr);
-    void connectToServer(const QString &address, int port);
-    QString lastError();
 
-public slots:
-    void sendMessage(LibG::Message *msg);
+public:
+    LoginDialog(QWidget *parent = 0);
+    ~LoginDialog();
+    void reset();
+    void showDialog();
 
 private:
-    QWebSocket *mSocket;
+    Ui::LoginDialog *ui;
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 signals:
-    void socketConnected();
-    void socketError();
-    void socketDisconnected();
-    void messageReceived(LibG::Message *msg);
+    void loginSuccess();
 
 private slots:
-    void checkConnection();
-    void errorOccure();
-    void stateChanged(QAbstractSocket::SocketState state);
-    void binaryMessageReceived(const QByteArray &data);
+    void loginClicked();
 };
 
-#endif // SOCKETCLIENT_H
+#endif // LOGINDIALOG_H

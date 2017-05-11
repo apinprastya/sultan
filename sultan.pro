@@ -7,4 +7,4 @@ SUBDIRS = \
         libdb \
         libserver \
         libgui \
-        turbin
+        sultan

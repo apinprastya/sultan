@@ -6,7 +6,7 @@ include(../libgui/libgui.pri)
 
 QT       += core gui widgets sql websockets
 
-TARGET = Turbin
+TARGET = Sultan
 TEMPLATE = app
 
 CONFIG += c++11
@@ -19,7 +19,7 @@ macx {
 }
 
 macx {
-    QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
+    QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
@@ -34,7 +34,7 @@ win32 {
     DESTDIR = ../bin
 }
 
-RESOURCES += turbin.qrc
+RESOURCES += sultan.qrc
 
 SOURCES += main.cpp \
     core.cpp \

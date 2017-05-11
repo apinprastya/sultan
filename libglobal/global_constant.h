@@ -2,7 +2,7 @@
  * global_constant
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -29,9 +29,9 @@ namespace CONFIG {
 }
 
 namespace CONSTANT {
-    const QString APP_NAME          = QStringLiteral("Turbin");
-    const QString WINDOW_TITLE      = QStringLiteral("%1 - Turbin");
-    const QString ABOUT_APP_NAME    = QStringLiteral("Turbin %1");
+    const QString APP_NAME          = QStringLiteral("Sultan");
+    const QString WINDOW_TITLE      = QStringLiteral("%1 - Sultan");
+    const QString ABOUT_APP_NAME    = QStringLiteral("Sultan %1");
 }
 
 namespace PERMISSION {

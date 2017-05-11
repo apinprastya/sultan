@@ -2,7 +2,7 @@
  * socketclient.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,7 +27,7 @@ static std::string TAG = "[SOCKETCLIENT]";
 
 SocketClient::SocketClient(QObject *parent) :
     QObject(parent),
-    mSocket(new QWebSocket(QStringLiteral("Turbin Client"), QWebSocketProtocol::VersionLatest, this))
+    mSocket(new QWebSocket(QStringLiteral("Sultan Client"), QWebSocketProtocol::VersionLatest, this))
 {
     connect(mSocket, SIGNAL(connected()), SIGNAL(socketConnected()));
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(socketDisconnected()));

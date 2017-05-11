@@ -15,4 +15,4 @@ CREATE TABLE users (
 
 INSERT INTO users (username, password, name, address, permission) 
 VALUES 
-('turbin', '1a2d7c80190ef949268c5cacddfc2a2b', 'Turbin', 'Jogonalan Lor RT 2 Kasihan Bantul Yogyakarta', '9876');
+('sultan', '9af82031d374b97c9e73132a413cbdf5', 'Turbin', 'Jogonalan Lor RT 2 Kasihan Bantul Yogyakarta', '9876');

@@ -2,7 +2,7 @@
  * logindialog.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -54,8 +54,8 @@ void LoginDialog::showDialog()
 {
     reset();
 #ifdef QT_DEBUG
-    ui->lineUsername->setText("turbin");
-    ui->linePassword->setText("turbin");
+    ui->lineUsername->setText("sultan");
+    ui->linePassword->setText("sultan");
 #endif
     show();
 }

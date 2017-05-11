@@ -2,7 +2,7 @@
  * socketmanager.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -28,7 +28,7 @@ static std::string TAG = "[SOCKETMANAGER]";
 
 SocketManager::SocketManager(QObject *parent):
     QObject(parent),
-    mServer(new QWebSocketServer(QStringLiteral("Turbin"), QWebSocketServer::NonSecureMode, this)),
+    mServer(new QWebSocketServer(QStringLiteral("Sultan"), QWebSocketServer::NonSecureMode, this)),
     mLastId(0)
 {
     connect(mServer, SIGNAL(newConnection()), SLOT(newConnection()));

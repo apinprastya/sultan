@@ -1,8 +1,8 @@
 /*
- * settingdialog.h
+ * sockethandler.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,38 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SETTINGDIALOG_H
-#define SETTINGDIALOG_H
+#ifndef SOCKETHANDLER_H
+#define SOCKETHANDLER_H
 
-#include <QDialog>
+#include <QObject>
 
-namespace Ui {
-class SettingDialog;
+namespace LibG {
+class Message;
 }
 
-class SettingDialog : public QDialog
+class QWebSocket;
+
+class SocketHandler : public QObject
 {
     Q_OBJECT
-
 public:
-    SettingDialog(QWidget *parent = 0);
-    ~SettingDialog();
-    void showDialog();
+    SocketHandler(int id, QWebSocket *socket, QObject *parent = nullptr);
+    void sendMessage(LibG::Message *msg);
+    inline int getId() { return mId; }
+    inline QWebSocket* getSocket() { return mSocket; }
+
+signals:
+    void newMessage(LibG::Message *msg);
+    void disconnect();
 
 private:
-    Ui::SettingDialog *ui;
-    bool mMysqlOk;
-    bool mConOk;
-
-    void saveMysqlSetting();
+    int mId;
+    QWebSocket *mSocket;
 
 private slots:
-    void checkSetting();
-    void checkType();
-    void checkMysql();
-    void checkConnection();
-    void cancel();
-    void save();
+    void binaryMessageRecieved(const QByteArray &data);
 };
 
-#endif // SETTINGDIALOG_H
+#endif // SOCKETHANDLER_H

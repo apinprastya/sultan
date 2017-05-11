@@ -1,5 +1,5 @@
 /*
- * settingwidget.h
+ * socketclient.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
@@ -17,25 +17,40 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SETTINGWIDGET_H
-#define SETTINGWIDGET_H
+#ifndef SOCKETCLIENT_H
+#define SOCKETCLIENT_H
 
-#include <QWidget>
+#include "message.h"
+#include <QObject>
+#include <QAbstractSocket>
 
-namespace Ui {
-class SettingWidget;
-}
+class QWebSocket;
 
-class SettingWidget : public QWidget
+class SocketClient : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit SettingWidget(QWidget *parent = 0);
-    ~SettingWidget();
+    SocketClient(QObject *parent = nullptr);
+    void connectToServer(const QString &address, int port);
+    QString lastError();
+
+public slots:
+    void sendMessage(LibG::Message *msg);
 
 private:
-    Ui::SettingWidget *ui;
+    QWebSocket *mSocket;
+
+signals:
+    void socketConnected();
+    void socketError();
+    void socketDisconnected();
+    void messageReceived(LibG::Message *msg);
+
+private slots:
+    void checkConnection();
+    void errorOccure();
+    void stateChanged(QAbstractSocket::SocketState state);
+    void binaryMessageReceived(const QByteArray &data);
 };
 
-#endif // SETTINGWIDGET_H
+#endif // SOCKETCLIENT_H

@@ -19,16 +19,16 @@ CONFIG(staticlib) {
 contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
 
 macx {
-    DESTDIR = ../bin/Turbin.app/Contents/Frameworks
+    DESTDIR = ../bin/Sultan.app/Contents/Frameworks
     QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
-    QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
+    QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
 } else {
     DESTDIR = ../bin
 }
 DLLDESTDIR = ../
 
 macx {
-    QMAKE_LIBDIR += $$OUT_PWD/../bin/Turbin.app/Contents/Frameworks
+    QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin

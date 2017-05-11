@@ -2,7 +2,7 @@
  * preference.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -24,7 +24,7 @@ using namespace LibG;
 static Preference *sInstance = nullptr;
 
 Preference::Preference():
-    mSetting(new QSettings(QLatin1String("apin"), QLatin1String("Turbin")))
+    mSetting(new QSettings(QLatin1String("apin"), QLatin1String("Sultan")))
 {
 }
 
