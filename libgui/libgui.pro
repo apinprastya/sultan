@@ -63,7 +63,9 @@ SOURCES += \
     cashier/cashiertablemodel.cpp \
     keyevent.cpp \
     user/userpermissiondialog.cpp \
-    cashier/paycashdialog.cpp
+    cashier/paycashdialog.cpp \
+    category/categorywidget.cpp \
+    purchase/purchasewidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -88,7 +90,9 @@ HEADERS += \
     cashier/cashiertablemodel.h \
     keyevent.h \
     user/userpermissiondialog.h \
-    cashier/paycashdialog.h
+    cashier/paycashdialog.h \
+    category/categorywidget.h \
+    purchase/purchasewidget.h
 
 FORMS += \
     mainwindow.ui \

@@ -64,6 +64,9 @@ private slots:
     void openSuplier();
     void openCashier();
     void openAbout();
+    void openCategory();
+    void openItem();
+    void openPurchase();
 };
 
 }

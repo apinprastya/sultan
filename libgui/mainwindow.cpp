@@ -25,6 +25,8 @@
 #include "suplier/suplierwidget.h"
 #include "about/aboutdialog.h"
 #include "cashier/cashierwidget.h"
+#include "category/categorywidget.h"
+#include "purchase/purchasewidget.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -64,6 +66,9 @@ void MainWindow::setupConnection()
     connect(ui->action_User, SIGNAL(triggered(bool)), SLOT(openUser()));
     connect(ui->action_Suplier, SIGNAL(triggered(bool)), SLOT(openSuplier()));
     connect(ui->action_Cashier, SIGNAL(triggered(bool)), SLOT(openCashier()));
+    connect(ui->action_Items, SIGNAL(triggered(bool)), SLOT(openItem()));
+    connect(ui->action_Category, SIGNAL(triggered(bool)), SLOT(openCategory()));
+    connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
 }
 
 void MainWindow::updateClock()
@@ -140,4 +145,25 @@ void MainWindow::openAbout()
 {
     AboutDialog about(this);
     about.exec();
+}
+
+void MainWindow::openCategory()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<CategoryWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new CategoryWidget(mMessageBus, this), tr("Category"));
+}
+
+void MainWindow::openItem()
+{
+
+}
+
+void MainWindow::openPurchase()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<PurchaseWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new PurchaseWidget(mMessageBus, this), tr("Purcase"));
 }
