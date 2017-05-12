@@ -36,6 +36,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QTimer>
+#include <QMessageBox>
+#include <QStringBuilder>
 #include <QDebug>
 
 using namespace LibG;
@@ -61,6 +63,9 @@ Core::Core(QObject *parent) :
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
     connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
     connect(mMainWindow, SIGNAL(logout()), SLOT(logout()));
+#ifdef Q_OS_LINUX
+    qApp->setWindowIcon(QIcon(":/images/icon_64.png"));
+#endif
 }
 
 Core::~Core()
@@ -125,9 +130,10 @@ void Core::init()
             }
             mSplashUi->setMessage("Migrate database ...");
             qApp->processEvents();
-            qDebug() << MIGRATION_FOLDER;
-            if(!LibDB::Migration::migrateAll(MIGRATION_FOLDER)) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/migrations")) {
                 LOG(ERROR) << TAG << "Error migration";
+                mSplashUi->setMessage("Migrate database failed");
+                qApp->processEvents();
                 return;
             }
             mSplashUi->setMessage("Start action server ...");

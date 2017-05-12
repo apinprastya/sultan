@@ -11,28 +11,28 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-#Sorry for doing this
-macx {
-    DEFINES += "MIGRATION_FOLDER=\\\"/Users/apinprastya/Projects/qt/Turbin/migrations\\\""
-} else {
-    DEFINES += "MIGRATION_FOLDER=\\\"/media/data/Project/Qt/turbin/migrations\\\""
-}
-
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
+    DESTDIR = ../bin
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
+    RC_FILE = sultan.rc
+    DESTDIR = ../bin/
+    PWD_WIN = $${PWD}
+    DESTDIR_WIN = $$OUT_PWD/../bin/
+    PWD_WIN ~= s,/,\\,g
+    DESTDIR_WIN ~= s,/,\\,g
+    copymigration.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\migrations $${DESTDIR_WIN}\migrations)
 } else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
+    DESTDIR = ../bin
+    copymigration.commands = $$quote(cp -R $${PWD}/../migrations $${OUT_PWD}/../bin/)
 }
 
-win32 {
-    DESTDIR = ../
-} else {
-    DESTDIR = ../bin
-}
+QMAKE_EXTRA_TARGETS += copymigration
+POST_TARGETDEPS += copymigration
 
 RESOURCES += sultan.qrc
 
