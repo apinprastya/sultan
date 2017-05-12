@@ -62,7 +62,8 @@ SOURCES += \
     cashier/cashieritem.cpp \
     cashier/cashiertablemodel.cpp \
     keyevent.cpp \
-    user/userpermissiondialog.cpp
+    user/userpermissiondialog.cpp \
+    cashier/paycashdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -86,7 +87,8 @@ HEADERS += \
     cashier/cashieritem.h \
     cashier/cashiertablemodel.h \
     keyevent.h \
-    user/userpermissiondialog.h
+    user/userpermissiondialog.h \
+    cashier/paycashdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -96,4 +98,5 @@ FORMS += \
     user/useradddialog.ui \
     about/aboutdialog.ui \
     cashier/cashierwidget.ui \
-    user/userpermissiondialog.ui
+    user/userpermissiondialog.ui \
+    cashier/paycashdialog.ui

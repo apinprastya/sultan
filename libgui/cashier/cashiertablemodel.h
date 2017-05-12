@@ -39,11 +39,14 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     void addItem(float count, const QString &name, const QString &barcode, const QVariantList &prices = QVariantList());
     void reset();
+    inline double getTotal() { return mTotal; }
+    inline bool isEmpty() { return mData.isEmpty(); }
 
 private:
     QList<CashierItem*> mData;
     QStringList mHeaders;
     QMap<QString, QVariantList> mPrices;
+    double mTotal = 0;
 
     float getTotalCount(const QString &barcode);
     void calculateTotal();

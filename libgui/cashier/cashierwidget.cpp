@@ -7,9 +7,11 @@
 #include "cashieritem.h"
 #include "guiutil.h"
 #include "keyevent.h"
+#include "paycashdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
+#include <QShortcut>
 #include <QDebug>
 
 using namespace LibG;
@@ -37,6 +39,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mModel, SIGNAL(totalChanged(double)), SLOT(totalChanged(double)));
     connect(mModel, SIGNAL(selectRow(QModelIndex)), SLOT(selectRow(QModelIndex)));
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
+    new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
+    new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
 }
 
 CashierWidget::~CashierWidget()
@@ -78,6 +82,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
 void CashierWidget::barcodeEntered()
 {
     QString barcode = ui->lineBarcode->text();
+    if(barcode.isEmpty()) return;
     if(barcode.contains("*")) {
         const QStringList ls = barcode.split("*");
         if(ls.size() > 1) {
@@ -116,5 +121,19 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
     } else if(event->key() == Qt::Key_Delete){
         mModel->addItem(-item->count, item->name, item->barcode);
     }
+}
+
+void CashierWidget::payCash()
+{
+    if(mModel->isEmpty()) return;
+    PayCashDialog dialog(mModel->getTotal(), this);
+    dialog.exec();
+    if(dialog.isPayed()) {
+        //send the items to server
+    }
+}
+
+void CashierWidget::payCashless()
+{
 }
 

@@ -133,10 +133,10 @@ float CashierTableModel::getTotalCount(const QString &barcode)
 
 void CashierTableModel::calculateTotal()
 {
-    double total = 0;
+    mTotal = 0;
     for(auto item : mData)
-        total += item->total;
-    emit totalChanged(total);
+        mTotal += item->total;
+    emit totalChanged(mTotal);
 }
 
 int CashierTableModel::rowOfBarcode(const QString &barcode)
