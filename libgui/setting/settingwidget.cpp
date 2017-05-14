@@ -25,9 +25,26 @@ SettingWidget::SettingWidget(QWidget *parent) :
     ui(new Ui::SettingWidget)
 {
     ui->setupUi(this);
+    setupLocale();
+    setupPrinter();
 }
 
 SettingWidget::~SettingWidget()
 {
     delete ui;
+}
+
+void SettingWidget::setupLocale()
+{
+    ui->comboApplicationLanguage->addItem("English", "EN");
+    ui->comboApplicationLanguage->addItem("Bahasa Indonesia", "ID");
+    //TODO : init this with QLocale::Language and QLocale::Country
+    ui->comboLocale->addItem("English", QLocale::English);
+    ui->comboLocale->addItem("Indonesian", QLocale::Indonesian);
+    ui->comboLocaleCounty->addItem("Indonesia", QLocale::Indonesia);
+}
+
+void SettingWidget::setupPrinter()
+{
+
 }

@@ -20,7 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "messagebus.h"
-#include "setting//settingwidget.h"
+#include "setting/settingwidget.h"
 #include "user/userwidget.h"
 #include "suplier/suplierwidget.h"
 #include "about/aboutdialog.h"

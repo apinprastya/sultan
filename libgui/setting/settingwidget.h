@@ -36,6 +36,8 @@ public:
 
 private:
     Ui::SettingWidget *ui;
+    void setupLocale();
+    void setupPrinter();
 };
 
 #endif // SETTINGWIDGET_H

@@ -36,6 +36,20 @@ namespace SETTING {
     const QString APP_PORT                      = QStringLiteral("global/app_port");
     const QString SERVER_ADDRESS                = QStringLiteral("global/server_address");
     const QString SERVER_PORT                   = QStringLiteral("global/server_port");
+
+    const QString APPLICATION_LANGUAGE          = QStringLiteral("application/language");
+    const QString LOCALE_LANGUAGE               = QStringLiteral("application/locale_language");
+    const QString LOCALE_COUNTRY                = QStringLiteral("application/locale_country");
+    const QString LOCALE_USE_SIGN               = QStringLiteral("application/locale_use_sign");
+    const QString LOCALE_SIGN                   = QStringLiteral("application/locale_sign");
+    const QString LOCALE_DECIMAL                = QStringLiteral("application/locale_decimal");
+
+    const QString PRINTER_CASHIER_TYPE          = QStringLiteral("printer/cashier_type");
+    const QString PRINTER_CASHIER_NAME          = QStringLiteral("printer/cashier_name");
+    const QString PRINTER_CASHIER_DEVICE        = QStringLiteral("printer/cashier_device");
+    const QString PRINTER_CASHIER_TITLE         = QStringLiteral("printer/cashier_title");
+    const QString PRINTER_CASHIER_SUBTITLE      = QStringLiteral("printer/cashier_subtitle");
+    const QString PRINTER_CASHIER_FOOTER        = QStringLiteral("printer/cashier_footer");
 }
 
 }
