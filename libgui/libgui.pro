@@ -48,6 +48,7 @@ SOURCES += \
     user/userwidget.cpp \
     horizontalheader.cpp \
     headerwidget.cpp \
+    tableview.cpp \
     tablewidget.cpp \
     tablemodel.cpp \
     tableitem.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     user/userwidget.h \
     horizontalheader.h \
     headerwidget.h \
+    tableview.h \
     tablewidget.h \
     tablemodel.h \
     tableitem.h \
