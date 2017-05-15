@@ -40,8 +40,9 @@ public:
     CategoryTreeWidget(QWidget *parent = nullptr);
     ~CategoryTreeWidget();
     void load(const QVariantList &data);
-    void addItem(const QVariantMap &data);
+    QTreeWidgetItem *addItem(const QVariantMap &data);
     void updateItem(const QVariantMap &data);
+    void deleteItem(int id);
     QList<CategoryData> getData();
 
 private:

@@ -73,9 +73,14 @@ void CategoryWidget::messageReceived(LibG::Message *msg)
     } else if(msg->isType(MSG_TYPE::CATEGORY)) {
         if(msg->isSuccess()) {
             mAddDialog->hide();
-              if(msg->isCommand(MSG_COMMAND::INSERT)) {
-                  mTreeWidget->addItem(msg->data());
-              }
+            if(msg->isCommand(MSG_COMMAND::INSERT)) {
+                auto item = mTreeWidget->addItem(msg->data());
+                mTreeWidget->setCurrentItem(item);
+            } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+                mTreeWidget->updateItem(msg->data());
+            } else if(msg->isCommand(MSG_COMMAND::DELETE)) {
+                mTreeWidget->deleteItem(mDeletedId);
+            }
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             mAddDialog->enableSaveButton(true);
@@ -129,14 +134,24 @@ void CategoryWidget::updateClicked()
         if(p != nullptr) {
             parent = p->data(0, Qt::UserRole).toInt();
         }
-        mAddDialog->fill(id, parent, name, code);
         pupulateComboBox();
+        mAddDialog->fill(id, parent, name, code);
         mAddDialog->show();
     }
 }
 
 void CategoryWidget::deleteClicked()
 {
+    auto item = mTreeWidget->currentItem();
+    if(item != nullptr) {
+        int ret = QMessageBox::question(this, tr("Delete confirmation"), tr("Sure to delete category?"));
+        if(ret == QMessageBox::Yes) {
+            mDeletedId = item->data(0, Qt::UserRole).toInt();
+            Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::DELETE);
+            msg.addData("id", item->data(0, Qt::UserRole));
+            sendMessage(&msg);
+        }
+    }
 }
 
 void CategoryWidget::saveRequested(const QVariantMap &data, int id)

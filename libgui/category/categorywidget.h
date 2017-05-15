@@ -49,6 +49,7 @@ private:
     Ui::NormalWidget *ui;
     CategoryTreeWidget *mTreeWidget;
     CategoryAddDialog *mAddDialog;
+    int mDeletedId;
     QPushButton *addButtonAction(QHBoxLayout *layout, const QString &iconName);
     void pupulateComboBox();
 

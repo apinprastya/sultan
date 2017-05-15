@@ -2,6 +2,7 @@
 #include "ui_categoryadddialog.h"
 #include "guiutil.h"
 #include <QMessageBox>
+#include <QDebug>
 
 using namespace LibGUI;
 

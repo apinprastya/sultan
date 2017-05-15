@@ -44,9 +44,10 @@ void CategoryTreeWidget::load(const QVariantList &data)
         item->setData(0, Qt::UserRole, m["id"].toInt());
         if(parent > 0) {
             auto p = getItemWithId(parent);
-            if(p != nullptr) {
+            if(p != nullptr)
                 p->addChild(item);
-            }
+            else
+                continue;
         }
         mItems.append(item);
     }
@@ -58,7 +59,7 @@ void CategoryTreeWidget::load(const QVariantList &data)
     expandAll();
 }
 
-void CategoryTreeWidget::addItem(const QVariantMap &data)
+QTreeWidgetItem *CategoryTreeWidget::addItem(const QVariantMap &data)
 {
     int parent = data["parent_id"].toInt();
     auto p = getItemWithId(parent);
@@ -68,6 +69,7 @@ void CategoryTreeWidget::addItem(const QVariantMap &data)
     else
         addTopLevelItem(item);
     mItems.append(item);
+    return item;
 }
 
 void CategoryTreeWidget::updateItem(const QVariantMap &data)
@@ -77,6 +79,17 @@ void CategoryTreeWidget::updateItem(const QVariantMap &data)
     if(item != nullptr) {
         item->setData(0, Qt::DisplayRole, data["name"]);
         item->setData(1, Qt::DisplayRole, data["code"]);
+    }
+}
+
+void CategoryTreeWidget::deleteItem(int id)
+{
+    auto item = getItemWithId(id);
+    if(item != nullptr) {
+        if(item->parent() != nullptr) {
+            item->parent()->removeChild(item);
+        }
+        delete item;
     }
 }
 
@@ -101,7 +114,8 @@ QTreeWidgetItem *CategoryTreeWidget::getItemWithId(int id)
 
 void CategoryTreeWidget::populateData(QTreeWidgetItem *item, QList<CategoryData> &data, int pos)
 {
-    const QString &name = item->data(0, Qt::DisplayRole).toString().leftJustified(pos * 2, ' ');
+    const QString &origName = item->data(0, Qt::DisplayRole).toString();
+    const QString &name = origName.rightJustified(pos * 4 + origName.length(), ' ');
     CategoryData d(item->data(0, Qt::UserRole).toInt(), 0, name,
                    item->data(1, Qt::DisplayRole).toString());
     data.append(d);
@@ -109,7 +123,8 @@ void CategoryTreeWidget::populateData(QTreeWidgetItem *item, QList<CategoryData>
         if(item->childCount() > 0) {
             populateData(item->child(i), data, pos + 1);
         } else {
-            const QString &n = item->child(i)->data(0, Qt::DisplayRole).toString().leftJustified((pos + 1) * 2, ' ');
+            const QString &origN = item->child(i)->data(0, Qt::DisplayRole).toString();
+            const QString &n = origN.rightJustified((pos + 1) * 4 + origN.length(), ' ');
             CategoryData d1(item->child(i)->data(0, Qt::UserRole).toInt(), 0,
                             n, item->child(i)->data(1, Qt::DisplayRole).toString());
             data.append(d1);
