@@ -24,6 +24,15 @@
 
 namespace LibGUI {
 
+struct CategoryData {
+    int id;
+    int parent_id;
+    QString name;
+    QString code;
+    CategoryData(int id, int parent_id, const QString &name, const QString &code):
+        id(id), parent_id(parent_id), name(name), code(code) {}
+};
+
 class CategoryTreeWidget : public QTreeWidget
 {
     Q_OBJECT
@@ -31,10 +40,14 @@ public:
     CategoryTreeWidget(QWidget *parent = nullptr);
     ~CategoryTreeWidget();
     void load(const QVariantList &data);
+    void addItem(const QVariantMap &data);
+    void updateItem(const QVariantMap &data);
+    QList<CategoryData> getData();
 
 private:
     QList<QTreeWidgetItem*> mItems;
     QTreeWidgetItem *getItemWithId(int id);
+    void populateData(QTreeWidgetItem* item, QList<CategoryData> &data, int pos);
 };
 
 }

@@ -58,6 +58,37 @@ void CategoryTreeWidget::load(const QVariantList &data)
     expandAll();
 }
 
+void CategoryTreeWidget::addItem(const QVariantMap &data)
+{
+    int parent = data["parent_id"].toInt();
+    auto p = getItemWithId(parent);
+    auto item = new QTreeWidgetItem(QStringList() << data["name"].toString() << data["code"].toString());
+    if(p != nullptr)
+        p->addChild(item);
+    else
+        addTopLevelItem(item);
+    mItems.append(item);
+}
+
+void CategoryTreeWidget::updateItem(const QVariantMap &data)
+{
+    int id = data["id"].toInt();
+    auto item = getItemWithId(id);
+    if(item != nullptr) {
+        item->setData(0, Qt::DisplayRole, data["name"]);
+        item->setData(1, Qt::DisplayRole, data["code"]);
+    }
+}
+
+QList<CategoryData> CategoryTreeWidget::getData()
+{
+    QList<CategoryData> retVal;
+    for(int i = 0; i < topLevelItemCount(); i++) {
+        populateData(topLevelItem(i), retVal, 0);
+    }
+    return retVal;
+}
+
 QTreeWidgetItem *CategoryTreeWidget::getItemWithId(int id)
 {
     for(auto item : mItems) {
@@ -66,4 +97,22 @@ QTreeWidgetItem *CategoryTreeWidget::getItemWithId(int id)
         }
     }
     return nullptr;
+}
+
+void CategoryTreeWidget::populateData(QTreeWidgetItem *item, QList<CategoryData> &data, int pos)
+{
+    const QString &name = item->data(0, Qt::DisplayRole).toString().leftJustified(pos * 2, ' ');
+    CategoryData d(item->data(0, Qt::UserRole).toInt(), 0, name,
+                   item->data(1, Qt::DisplayRole).toString());
+    data.append(d);
+    for(int i = 0; i < item->childCount(); i++) {
+        if(item->childCount() > 0) {
+            populateData(item->child(i), data, pos + 1);
+        } else {
+            const QString &n = item->child(i)->data(0, Qt::DisplayRole).toString().leftJustified((pos + 1) * 2, ' ');
+            CategoryData d1(item->child(i)->data(0, Qt::UserRole).toInt(), 0,
+                            n, item->child(i)->data(1, Qt::DisplayRole).toString());
+            data.append(d1);
+        }
+    }
 }

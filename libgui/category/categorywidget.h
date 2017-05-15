@@ -33,6 +33,7 @@ class NormalWidget;
 namespace LibGUI {
 
 class CategoryTreeWidget;
+class CategoryAddDialog;
 
 class CategoryWidget : public QWidget, public LibG::MessageHandler
 {
@@ -47,13 +48,16 @@ protected:
 private:
     Ui::NormalWidget *ui;
     CategoryTreeWidget *mTreeWidget;
+    CategoryAddDialog *mAddDialog;
     QPushButton *addButtonAction(QHBoxLayout *layout, const QString &iconName);
+    void pupulateComboBox();
 
 private slots:
     void loadCategory();
     void addClicked();
     void updateClicked();
     void deleteClicked();
+    void saveRequested(const QVariantMap &data, int id);
 };
 
 }
