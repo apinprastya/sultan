@@ -1,5 +1,5 @@
 /*
- * categorywidget.h
+ * categorytreewidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,45 +17,25 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CATEGORYWIDGET_H
-#define CATEGORYWIDGET_H
+#ifndef CATEGORYTREEWIDGET_H
+#define CATEGORYTREEWIDGET_H
 
-#include "messagehandler.h"
-#include <QWidget>
-
-class QPushButton;
-class QHBoxLayout;
-
-namespace Ui {
-class NormalWidget;
-}
+#include <QTreeWidget>
 
 namespace LibGUI {
 
-class CategoryTreeWidget;
-
-class CategoryWidget : public QWidget, public LibG::MessageHandler
+class CategoryTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    CategoryWidget(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~CategoryWidget();
-
-protected:
-    void messageReceived(LibG::Message *msg);
+    CategoryTreeWidget(QWidget *parent = nullptr);
+    ~CategoryTreeWidget();
+    void load(const QVariantList &data);
 
 private:
-    Ui::NormalWidget *ui;
-    CategoryTreeWidget *mTreeWidget;
-    QPushButton *addButtonAction(QHBoxLayout *layout, const QString &iconName);
-
-private slots:
-    void loadCategory();
-    void addClicked();
-    void updateClicked();
-    void deleteClicked();
-    void refreshClicked();
+    QList<QTreeWidgetItem*> mItems;
+    QTreeWidgetItem *getItemWithId(int id);
 };
 
 }
-#endif // CATEGORYWIDGET_H
+#endif // CATEGORYTREEWIDGET_H

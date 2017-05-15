@@ -19,24 +19,81 @@
  */
 #include "categorywidget.h"
 #include "ui_normalwidget.h"
+#include "categorytreewidget.h"
+#include "message.h"
+#include "global_constant.h"
+#include <QPushButton>
+#include <QTimer>
 
 using namespace LibGUI;
+using namespace LibG;
 
 CategoryWidget::CategoryWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::NormalWidget)
+    ui(new Ui::NormalWidget),
+    mTreeWidget(new CategoryTreeWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Category"));
+    auto buttonLayout = new QHBoxLayout();
+    buttonLayout->addStretch();
+    QPushButton *btn = addButtonAction(buttonLayout, ":/images/16x16/plus.png");
+    connect(btn, SIGNAL(clicked(bool)), SLOT(addClicked()));
+    btn = addButtonAction(buttonLayout, ":/images/16x16/pencil.png");
+    connect(btn, SIGNAL(clicked(bool)), SLOT(updateClicked()));
+    btn = addButtonAction(buttonLayout, ":/images/16x16/cross.png");
+    connect(btn, SIGNAL(clicked(bool)), SLOT(deleteClicked()));
+    btn = addButtonAction(buttonLayout, ":/images/16x16/refresh.png");
+    connect(btn, SIGNAL(clicked(bool)), SLOT(refreshClicked()));
+    ui->verticalLayout->addWidget(mTreeWidget);
+    ui->verticalLayout->addLayout(buttonLayout);
+    mTreeWidget->setHeaderLabel(tr("Categories"));
+    QTimer::singleShot(10, this, SLOT(loadCategory()));
 }
 
 CategoryWidget::~CategoryWidget()
 {
-
 }
 
 void CategoryWidget::messageReceived(LibG::Message *msg)
 {
+    if(msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
+        if(msg->isSuccess()) {
+            mTreeWidget->load(msg->data("data").toList());;
+        } else {
+        }
+    }
+}
 
+QPushButton *CategoryWidget::addButtonAction(QHBoxLayout *layout, const QString &iconName)
+{
+    auto button = new QPushButton(this);
+    button->setFlat(true);
+    button->setIcon(QIcon(iconName));
+    layout->addWidget(button);
+    return button;
+}
+
+void CategoryWidget::loadCategory()
+{
+    Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
+    msg.setLimit(-1);
+    sendMessage(&msg);
+}
+
+void CategoryWidget::addClicked()
+{
+}
+
+void CategoryWidget::updateClicked()
+{
+}
+
+void CategoryWidget::deleteClicked()
+{
+}
+
+void CategoryWidget::refreshClicked()
+{
 }
