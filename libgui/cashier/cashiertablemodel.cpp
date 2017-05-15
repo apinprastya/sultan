@@ -27,7 +27,7 @@ using namespace LibGUI;
 CashierTableModel::CashierTableModel(QObject *parent):
     QAbstractTableModel(parent)
 {
-    mHeaders << "No" << "Name" << "Count" << "Price" << "Total";
+    mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Total");
 }
 
 CashierTableModel::~CashierTableModel()
@@ -58,17 +58,18 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         auto item = mData[index.row()];
         switch(index.column()) {
         case 0: return index.row() + 1;
-        case 1: return item->name;
-        case 2: return QLocale().toString(item->count);
-        case 3: return QLocale().toString(item->price);
-        case 4: return QLocale().toString(item->total);
+        case 1: return item->barcode;
+        case 2: return item->name;
+        case 3: return QLocale().toString(item->count);
+        case 4: return QLocale().toString(item->price);
+        case 5: return QLocale().toString(item->total);
         }
     } else if(role == Qt::TextAlignmentRole) {
         switch (index.column()) {
         case 0: return QVariant(Qt::AlignVCenter | Qt::AlignHCenter);
-        case 2:
         case 3:
         case 4:
+        case 5:
             return QVariant(Qt::AlignVCenter | Qt::AlignRight);
         default:
             return QVariant(Qt::AlignVCenter | Qt::AlignLeft);

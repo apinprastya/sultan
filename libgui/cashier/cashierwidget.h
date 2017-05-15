@@ -36,6 +36,7 @@ private slots:
     void tableKeyPressed(QObject *sender, QKeyEvent *event);
     void payCash();
     void payCashless();
+    void updateLastInputed();
 };
 
 }

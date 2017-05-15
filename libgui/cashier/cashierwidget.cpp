@@ -29,8 +29,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->verticalHeader()->hide();
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 150 << 50 << 120 << 120);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 150 << 150 << 50 << 120 << 120);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);
     keyevent->addConsumeKey(Qt::Key_Return);
@@ -42,6 +42,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
 }
 
 CashierWidget::~CashierWidget()
@@ -136,5 +137,16 @@ void CashierWidget::payCash()
 
 void CashierWidget::payCashless()
 {
+}
+
+void CashierWidget::updateLastInputed()
+{
+    const QModelIndex &index = ui->tableView->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<CashierItem*>(index.internalPointer());
+    bool ok = false;
+    double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
+    if(ok)
+        mModel->addItem(count - item->count, item->name, item->barcode);
 }
 
