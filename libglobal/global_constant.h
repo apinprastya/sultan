@@ -36,10 +36,12 @@ namespace CONSTANT {
 
 namespace PERMISSION {
     const int ADMINISTRATOR     = 9876;
-    const int USER_RW           = 1;
-    const int SUPLIER_RW        = 2;
+    const int USER              = 1;
+    const int SUPLIER           = 2;
     const int ITEM_RW           = 3;
     const int CASHIER           = 4;
+    const int CATEGORY          = 5;
+    const int PURCASHE          = 6;
 }
 
 namespace APPLICATION_TYPE {

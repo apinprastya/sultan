@@ -42,6 +42,10 @@ class GUISHARED_EXPORT MainWindow : public QMainWindow
 public:
     MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
     ~MainWindow();
+    void setup();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 signals:
     void logout();
@@ -50,6 +54,7 @@ private:
     Ui::MainWindow *ui;
     LibG::MessageBus *mMessageBus;
     QLabel *mLabelTime;
+    int mLastIdLogin = 0;
 
     void setupConnection();
 

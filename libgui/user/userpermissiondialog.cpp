@@ -22,8 +22,8 @@
 #include <QDebug>
 
 static QMap<int, QString> AVAIL_PERMISSION = {
-    {9876, "Administrator"}, {1, "User Read Write"}, {2, "Suplier Read Write"},
-    {3, "Item Read Write"}, {4, "Cashier"}
+    {9876, "Administrator"}, {1, "User"}, {2, "Suplier"},
+    {3, "Item"}, {4, "Cashier"}, {5, "Category"}, {6, "Purchase"}
 };
 
 UserPermissionDialog::UserPermissionDialog(const QVariantMap &data, QWidget *parent) :

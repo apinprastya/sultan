@@ -27,12 +27,16 @@
 #include "cashier/cashierwidget.h"
 #include "category/categorywidget.h"
 #include "purchase/purchasewidget.h"
+#include "usersession.h"
+#include "global_constant.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
 #include <QTimer>
+#include <QCloseEvent>
 
 using namespace LibGUI;
+using namespace LibG;
 
 MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
@@ -50,6 +54,23 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setup()
+{
+    if(mLastIdLogin != UserSession::id())
+        ui->tabWidget->closeAllTabAndFree();
+    ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::USER));
+    ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
+    ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
+    ui->action_Cashier->setEnabled(UserSession::hasPermission(PERMISSION::CASHIER));
+    ui->action_Purchase->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    emit logout();
+    event->ignore();
 }
 
 void MainWindow::setupConnection()

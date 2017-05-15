@@ -18,6 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "usersession.h"
+#include "global_constant.h"
 
 using namespace LibG;
 
@@ -41,6 +42,7 @@ LibG::UserSession *LibG::UserSession::init(const QVariantMap &data)
         int val = s.toInt();
         sInstance->mPermission.append(val);
     }
+    return sInstance;
 }
 
 QString LibG::UserSession::username()
@@ -60,6 +62,7 @@ int UserSession::id()
 
 bool LibG::UserSession::hasPermission(int permission)
 {
+    if(sInstance->mPermission.contains(PERMISSION::ADMINISTRATOR)) return true;
     return sInstance->mPermission.contains(permission);
 }
 

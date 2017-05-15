@@ -186,6 +186,7 @@ void Core::clientDisconnected()
 
 void Core::loginSuccess()
 {
+    mMainWindow->setup();
     mMainWindow->show();
 }
 

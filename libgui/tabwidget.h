@@ -36,6 +36,7 @@ class GUISHARED_EXPORT TabWidget : public QTabWidget
         void tbnAddTab(QWidget *widget, const QString &name);
         void tbnRemoveTab(int index);
         bool isTabAvailable(std::function<bool(QWidget *)> func);
+        void closeAllTabAndFree();
 
     private:
         QLabel *mLabel;
