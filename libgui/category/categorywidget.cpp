@@ -45,10 +45,9 @@ CategoryWidget::CategoryWidget(LibG::MessageBus *bus, QWidget *parent) :
     btn = addButtonAction(buttonLayout, ":/images/16x16/cross.png");
     connect(btn, SIGNAL(clicked(bool)), SLOT(deleteClicked()));
     btn = addButtonAction(buttonLayout, ":/images/16x16/refresh.png");
-    connect(btn, SIGNAL(clicked(bool)), SLOT(refreshClicked()));
+    connect(btn, SIGNAL(clicked(bool)), SLOT(loadCategory()));
     ui->verticalLayout->addWidget(mTreeWidget);
     ui->verticalLayout->addLayout(buttonLayout);
-    mTreeWidget->setHeaderLabel(tr("Categories"));
     QTimer::singleShot(10, this, SLOT(loadCategory()));
 }
 
@@ -91,9 +90,5 @@ void CategoryWidget::updateClicked()
 }
 
 void CategoryWidget::deleteClicked()
-{
-}
-
-void CategoryWidget::refreshClicked()
 {
 }

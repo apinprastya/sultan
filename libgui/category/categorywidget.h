@@ -54,7 +54,6 @@ private slots:
     void addClicked();
     void updateClicked();
     void deleteClicked();
-    void refreshClicked();
 };
 
 }

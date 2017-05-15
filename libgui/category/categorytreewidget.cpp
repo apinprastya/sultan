@@ -25,7 +25,8 @@ using namespace LibGUI;
 CategoryTreeWidget::CategoryTreeWidget(QWidget *parent):
     QTreeWidget(parent)
 {
-
+    setHeaderLabels(QStringList() << tr("Name") << tr("Code"));
+    setColumnWidth(0, 250);
 }
 
 CategoryTreeWidget::~CategoryTreeWidget()
