@@ -15,6 +15,7 @@ macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
     DESTDIR = ../bin
+    copymigration.commands = $$quote(cp -R $${PWD}/../migrations $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
     RC_FILE = sultan.rc

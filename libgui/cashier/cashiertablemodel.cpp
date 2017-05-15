@@ -19,6 +19,7 @@
  */
 #include "cashiertablemodel.h"
 #include "cashieritem.h"
+#include <cmath>
 #include <QLocale>
 
 using namespace LibGUI;

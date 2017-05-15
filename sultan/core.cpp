@@ -130,7 +130,12 @@ void Core::init()
             }
             mSplashUi->setMessage("Migrate database ...");
             qApp->processEvents();
+#ifdef Q_OS_MAC
+            qDebug() << qApp->applicationDirPath();
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/migrations")) {
+#else
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/migrations")) {
+#endif
                 LOG(ERROR) << TAG << "Error migration";
                 mSplashUi->setMessage("Migrate database failed");
                 qApp->processEvents();
