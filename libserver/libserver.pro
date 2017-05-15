@@ -48,7 +48,9 @@ SOURCES += \
     mainserver.cpp \
     action/suplieraction.cpp \
     action/itemaction.cpp \
-    action/sellpriceactions.cpp
+    action/sellpriceactions.cpp \
+    action/categoryaction.cpp \
+    action/purchaseaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -58,4 +60,6 @@ HEADERS += \
     mainserver.h \
     action/suplieraction.h \
     action/itemaction.h \
-    action/sellpriceactions.h
+    action/sellpriceactions.h \
+    action/categoryaction.h \
+    action/purchaseaction.h

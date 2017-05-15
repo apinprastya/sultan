@@ -58,6 +58,9 @@ namespace MSG_TYPE {
     const int SUPLIER       = 2;
     const int ITEM          = 3;
     const int SELLPRICE     = 4;
+    const int CATEGORY      = 5;
+    const int PURCHASE      = 6;
+    const int PURCHASE_ITEM = 7;
 }
 
 namespace MSG_COMMAND {
