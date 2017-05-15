@@ -24,6 +24,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
 {
     ui->setupUi(this);
     setMessageBus(bus);
+    ui->verticalLayout->setAlignment(Qt::AlignTop);
     ui->tableView->setModel(mModel);
     ui->tableView->verticalHeader()->hide();
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);

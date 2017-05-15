@@ -78,7 +78,7 @@ ItemWidget::~ItemWidget()
     delete ui;
 }
 
-void ItemWidget::messageReceived(LibG::Message *msg)
+void ItemWidget::messageReceived(LibG::Message */*msg*/)
 {
 }
 
