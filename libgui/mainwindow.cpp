@@ -27,6 +27,7 @@
 #include "cashier/cashierwidget.h"
 #include "category/categorywidget.h"
 #include "purchase/purchasewidget.h"
+#include "item/itemwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include <QShortcut>
@@ -178,7 +179,10 @@ void MainWindow::openCategory()
 
 void MainWindow::openItem()
 {
-
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<ItemWidget*>(widget) != nullptr);
+    }))
+        ui->tabWidget->tbnAddTab(new ItemWidget(mMessageBus, this), tr("Item"));
 }
 
 void MainWindow::openPurchase()

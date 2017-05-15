@@ -32,7 +32,6 @@ TableModel::TableModel(QObject *parent):
 {
     mIsLoaded = false;
     mQuery.setLimit(LibG::CONFIG::ITEMS_PER_LOAD);
-    mQuery.setSort("name ASC");
     connect(this, SIGNAL(loadMore(int)), SLOT(loadPage(int)));
 }
 
@@ -62,7 +61,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         }
         auto item = mData[row];
         if(mFormater.contains(mColumns[index.column()]))
-            return mFormater[mColumns[index.column()]](item);
+            return mFormater[mColumns[index.column()]](item, mColumns[index.column()]);
         return item->data(mColumns[index.column()]);
     } else if(role == Qt::TextAlignmentRole) {
         return mAlignments[index.column()];
@@ -96,12 +95,29 @@ void TableModel::reset()
     endResetModel();
 }
 
-void TableModel::addColumn(const QString &key, const QString &title, const int &align, std::function<QVariant(TableItem*)> formater)
+void TableModel::addColumn(const QString &key, const QString &title, const int &align, std::function<QVariant(TableItem *, const QString&)> formater)
 {
     mColumns.push_back(key);
     mHeaders.push_back(title);
     mAlignments.push_back(align | Qt::AlignVCenter);
     if(formater != nullptr) mFormater.insert(key, formater);
+}
+
+void TableModel::addColumnMoney(const QString &key, const QString &title)
+{
+    addColumn(key, title, Qt::AlignRight, [](TableItem *item, const QString &key) -> QVariant {
+        return QLocale().toString(item->data(key).toDouble());
+    });
+}
+
+void TableModel::setFilter(const QString &key, int type, const QVariant &value)
+{
+    mQuery.setFilter(key, type, value);
+}
+
+void TableModel::clearFilter()
+{
+    mQuery.clearFilter();
 }
 
 void TableModel::refresh()

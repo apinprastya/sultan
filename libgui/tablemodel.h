@@ -42,8 +42,11 @@ public:
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const override;
     void reset();
-    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*)> formater = nullptr);
+    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*,const QString&)> formater = nullptr);
+    void addColumnMoney(const QString &key, const QString &title);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
+    void setFilter(const QString &key, int type, const QVariant &value);
+    void clearFilter();
 
 public slots:
     void refresh();
@@ -56,7 +59,7 @@ protected:
     RowData mData;
     QList<QString> mHeaders;
     QList<QString> mColumns;
-    QMap<QString, std::function<QVariant(TableItem*)>> mFormater;
+    QMap<QString, std::function<QVariant(TableItem*,const QString&)>> mFormater;
     QList<int> mAlignments;
     std::tuple<int, int> mTypeCommand;
     QMap<int, int> mPageStatus;

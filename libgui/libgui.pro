@@ -67,7 +67,8 @@ SOURCES += \
     category/categorywidget.cpp \
     purchase/purchasewidget.cpp \
     category/categorytreewidget.cpp \
-    category/categotyadddialog.cpp
+    category/categotyadddialog.cpp \
+    item/itemwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -96,7 +97,8 @@ HEADERS += \
     category/categorywidget.h \
     purchase/purchasewidget.h \
     category/categorytreewidget.h \
-    category/categotyadddialog.h
+    category/categotyadddialog.h \
+    item/itemwidget.h
 
 FORMS += \
     mainwindow.ui \
@@ -108,4 +110,5 @@ FORMS += \
     cashier/cashierwidget.ui \
     user/userpermissiondialog.ui \
     cashier/paycashdialog.ui \
-    category/categoryadddialog.ui
+    category/categoryadddialog.ui \
+    item/itemwidget.ui
