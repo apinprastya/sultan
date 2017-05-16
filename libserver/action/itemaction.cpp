@@ -20,6 +20,7 @@
 #include "itemaction.h"
 #include "global_constant.h"
 #include "db.h"
+#include <QStringBuilder>
 #include <QDebug>
 
 using namespace LibServer;
@@ -52,4 +53,12 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
         }
     }
     return message;
+}
+
+void ItemAction::selectAndJoin()
+{
+    mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
+                (select price from sellprices where barcode = items.barcode order by count asc limit 1) as sell_price")->
+            join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
+            join("LEFT JOIN categories ON categories.id = items.category_id");
 }

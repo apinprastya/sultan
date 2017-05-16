@@ -23,5 +23,6 @@ using namespace LibGUI;
 
 TableView::TableView(QWidget *parent) : QTableView(parent)
 {
-
+    setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }

@@ -29,7 +29,9 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->verticalHeader()->hide();
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 150 << 150 << 50 << 120 << 120);
+    ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 50 << 120 << 120);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);

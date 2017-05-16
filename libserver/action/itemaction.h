@@ -29,6 +29,9 @@ class ItemAction : public ServerAction
 public:
     ItemAction();
     LibG::Message prices(LibG::Message *msg);
+
+protected:
+    void selectAndJoin() override;
 };
 
 }

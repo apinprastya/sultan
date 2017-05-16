@@ -50,6 +50,7 @@ protected:
 
     void setStart(LibG::Message *msg, LibG::Message *src);
     virtual QMap<QString, QString> fieldMap() const;
+    virtual void selectAndJoin() {}
 };
 
 }

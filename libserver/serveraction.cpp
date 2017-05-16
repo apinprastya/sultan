@@ -93,7 +93,8 @@ LibG::Message ServerAction::del(LibG::Message *msg)
 Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
-    DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
+    selectAndJoin();
+    DbResult res = mDb->where("id = ", msg->data("id").toInt())->get(mTableName);
     if(res.isEmpty()) {
         message.setError("Data not found");
     } else {
@@ -106,6 +107,7 @@ LibG::Message ServerAction::query(LibG::Message *msg)
 {
     LibG::Message message(msg);
     mDb->table(mTableName);
+    selectAndJoin();
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"), mDb->count());
