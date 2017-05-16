@@ -3,7 +3,7 @@ TARGET = global
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += concurrent
+QT += concurrent core
 
 CONFIG(static) {
     CONFIG += staticlib

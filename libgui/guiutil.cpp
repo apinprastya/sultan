@@ -46,3 +46,8 @@ void GuiUtil::setColumnWidth(QTableView *table, const QList<int> &widths)
     for(int i = 0; i < widths.size(); i++)
         table->setColumnWidth(i, widths[i]);
 }
+
+QString GuiUtil::toHtml(QString value)
+{
+    return value.replace("\n" , "<br>");
+}

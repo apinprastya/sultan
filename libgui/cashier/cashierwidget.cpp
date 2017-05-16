@@ -8,6 +8,8 @@
 #include "guiutil.h"
 #include "keyevent.h"
 #include "paycashdialog.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -45,6 +47,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
+    ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
+    ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
 
 CashierWidget::~CashierWidget()
@@ -75,7 +79,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
                     break;
                 }
             }
-            ui->labelPrice->setText(QLocale().toString(price));
+            ui->labelPrice->setText(Preference::toString(price));
             mModel->addItem(mCount, name, barcode, list);
         } else {
             QMessageBox::warning(this, tr("Error"), msg->data("error").toString());
@@ -103,7 +107,7 @@ void CashierWidget::barcodeEntered()
 
 void CashierWidget::totalChanged(double value)
 {
-    ui->labelTotal->setText(QLocale().toString(value));
+    ui->labelTotal->setText(Preference::toString(value));
 }
 
 void CashierWidget::selectRow(const QModelIndex &index)

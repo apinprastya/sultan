@@ -22,9 +22,13 @@
 
 #include <QWidget>
 
+class QComboBox;
+
 namespace Ui {
 class SettingWidget;
 }
+
+namespace LibGUI {
 
 class SettingWidget : public QWidget
 {
@@ -36,8 +40,15 @@ public:
 
 private:
     Ui::SettingWidget *ui;
+    void setupAppliaction();
     void setupLocale();
     void setupPrinter();
+    void setCurrentCombo(QComboBox *combo, QVariant value);
+
+private slots:
+    void signChanged();
+    void saveClicked();
 };
 
+}
 #endif // SETTINGWIDGET_H

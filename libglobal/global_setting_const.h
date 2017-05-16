@@ -37,6 +37,9 @@ namespace SETTING {
     const QString SERVER_ADDRESS                = QStringLiteral("global/server_address");
     const QString SERVER_PORT                   = QStringLiteral("global/server_port");
 
+    const QString MARKET_NAME                   = QStringLiteral("application/market_name");
+    const QString MARKET_SUBNAME                = QStringLiteral("application/market_subname");
+
     const QString APPLICATION_LANGUAGE          = QStringLiteral("application/language");
     const QString LOCALE_LANGUAGE               = QStringLiteral("application/locale_language");
     const QString LOCALE_COUNTRY                = QStringLiteral("application/locale_country");

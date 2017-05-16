@@ -33,6 +33,7 @@ class GuiUtil
 public:
     static bool anyEmpty(const QList<QWidget*> &lists);
     static void setColumnWidth(QTableView *table, const QList<int> &widths);
+    static QString toHtml(QString value);
 };
 
 }

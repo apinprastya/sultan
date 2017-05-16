@@ -22,9 +22,11 @@
 #include "tableitem.h"
 #include "rowdata.h"
 #include "message.h"
+#include "preference.h"
 #include <QDebug>
 
 using namespace LibGUI;
+using namespace LibG;
 
 TableModel::TableModel(QObject *parent):
     QAbstractTableModel(parent),
@@ -106,7 +108,7 @@ void TableModel::addColumn(const QString &key, const QString &title, const int &
 void TableModel::addColumnMoney(const QString &key, const QString &title)
 {
     addColumn(key, title, Qt::AlignRight, [](TableItem *item, const QString &key) -> QVariant {
-        return QLocale().toString(item->data(key).toDouble());
+        return Preference::toString(item->data(key).toDouble());
     });
 }
 

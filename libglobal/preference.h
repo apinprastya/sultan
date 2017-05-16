@@ -39,6 +39,11 @@ public:
     static bool getBool(const QString &key, bool def = false);
     static void sync();
 
+    static void applyApplicationSetting();
+    static QString toString(double val);
+    static QString toString(int val);
+    static QString toString(float val);
+
 private:
     static Preference *instance();
     QSettings *mSetting;

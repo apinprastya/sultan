@@ -19,10 +19,12 @@
  */
 #include "cashiertablemodel.h"
 #include "cashieritem.h"
+#include "preference.h"
 #include <cmath>
 #include <QLocale>
 
 using namespace LibGUI;
+using namespace LibG;
 
 CashierTableModel::CashierTableModel(QObject *parent):
     QAbstractTableModel(parent)
@@ -61,8 +63,8 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         case 1: return item->barcode;
         case 2: return item->name;
         case 3: return QLocale().toString(item->count);
-        case 4: return QLocale().toString(item->price);
-        case 5: return QLocale().toString(item->total);
+        case 4: return Preference::toString(item->price);
+        case 5: return Preference::toString(item->total);
         }
     } else if(role == Qt::TextAlignmentRole) {
         switch (index.column()) {

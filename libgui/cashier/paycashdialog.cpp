@@ -19,8 +19,11 @@
  */
 #include "paycashdialog.h"
 #include "ui_paycashdialog.h"
+#include "preference.h"
 #include <QLocale>
 #include <QMessageBox>
+
+using namespace LibG;
 
 PayCashDialog::PayCashDialog(double total, QWidget *parent) :
     QDialog(parent),
@@ -28,7 +31,7 @@ PayCashDialog::PayCashDialog(double total, QWidget *parent) :
     mTotal(total)
 {
     ui->setupUi(this);
-    ui->labelTotal->setText(QLocale().toString(total));
+    ui->labelTotal->setText(Preference::toString(total));
     ui->doubleSpinBox->setMaximum(std::numeric_limits<double>::max());
     ui->doubleSpinBox->setMinimum(std::numeric_limits<double>::min());
     ui->doubleSpinBox->setValue(total);

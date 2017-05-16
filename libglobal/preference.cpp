@@ -18,6 +18,8 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "preference.h"
+#include "global_setting_const.h"
+#include <QLocale>
 
 using namespace LibG;
 
@@ -52,6 +54,7 @@ void Preference::destroy()
 void Preference::createInstance()
 {
     instance();
+    applyApplicationSetting();
 }
 
 void Preference::setValue(const QString &key, const QVariant &data)
@@ -77,4 +80,26 @@ bool Preference::getBool(const QString &key, bool def)
 void Preference::sync()
 {
     sInstance->mSetting->sync();
+}
+
+void Preference::applyApplicationSetting()
+{
+    QLocale locale((QLocale::Language)Preference::getInt(SETTING::LOCALE_LANGUAGE, QLocale::Indonesian),
+                   (QLocale::Country)Preference::getInt(SETTING::LOCALE_COUNTRY, QLocale::Indonesia));
+    QLocale::setDefault(locale);
+}
+
+QString Preference::toString(double val)
+{
+    return QLocale().toString(val, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL));
+}
+
+QString Preference::toString(int val)
+{
+    return QLocale().toString(val);
+}
+
+QString Preference::toString(float val)
+{
+    return QLocale().toString(val, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL));
 }
