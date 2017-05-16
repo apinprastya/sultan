@@ -43,6 +43,7 @@ private:
     void saveMysqlSetting();
 
 private slots:
+    void databaseChanged();
     void checkSetting();
     void checkType();
     void checkMysql();

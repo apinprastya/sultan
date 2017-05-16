@@ -116,8 +116,10 @@ void Core::init()
         //show setting ui
     } else {
         if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
-            mSplashUi->setMessage("Setting Mysql connection ...");
+
+            mSplashUi->setMessage("Setting SQL connection ...");
             qApp->processEvents();
+            LibDB::Db::setDatabaseType(Preference::getString(SETTING::DATABASE));
             LibDB::Db::setDbSetting(
                     Preference::getString(SETTING::MYSQL_HOST),
                     Preference::getInt(SETTING::MYSQL_PORT),
@@ -130,11 +132,13 @@ void Core::init()
             }
             mSplashUi->setMessage("Migrate database ...");
             qApp->processEvents();
+            const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
+                        "migration_mysql" : "migrations_sqlite";
 #ifdef Q_OS_MAC
             qDebug() << qApp->applicationDirPath();
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/migrations")) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath)) {
 #else
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/migrations")) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath)) {
 #endif
                 LOG(ERROR) << TAG << "Error migration";
                 mSplashUi->setMessage("Migrate database failed");

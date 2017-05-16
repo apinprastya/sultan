@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>698</width>
-    <height>361</height>
+    <width>710</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,20 +42,20 @@
        <item>
         <widget class="QGroupBox" name="groupMysql">
          <property name="title">
-          <string>Mysql Setting</string>
+          <string>Database</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
           <property name="horizontalSpacing">
            <number>40</number>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Host</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QLineEdit" name="lineEditHost">
             <property name="inputMask">
              <string/>
@@ -68,14 +68,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Port</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="spinBoxPort">
             <property name="minimum">
              <number>1</number>
@@ -88,14 +88,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Username</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="lineEditUsername">
             <property name="inputMask">
              <string>root</string>
@@ -105,14 +105,14 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Password</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QLineEdit" name="lineEditPassword">
             <property name="echoMode">
              <enum>QLineEdit::Password</enum>
@@ -122,14 +122,14 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Database</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QLineEdit" name="lineEditDatabase">
             <property name="inputMask">
              <string/>
@@ -142,7 +142,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="6" column="1">
            <widget class="QPushButton" name="pushCheckMysql">
             <property name="text">
              <string>Check Mysql</string>
@@ -151,6 +151,16 @@
              <bool>false</bool>
             </property>
            </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Database</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboDatabase"/>
           </item>
          </layout>
         </widget>
@@ -322,6 +332,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboType</tabstop>
+  <tabstop>comboDatabase</tabstop>
+  <tabstop>lineEditHost</tabstop>
+  <tabstop>spinBoxPort</tabstop>
+  <tabstop>lineEditUsername</tabstop>
+  <tabstop>lineEditPassword</tabstop>
+  <tabstop>lineEditDatabase</tabstop>
+  <tabstop>pushCheckMysql</tabstop>
+  <tabstop>spinBoxServerPort</tabstop>
+  <tabstop>lineEditClientAddress</tabstop>
+  <tabstop>spinBoxClientPort</tabstop>
+  <tabstop>pushCheckConnection</tabstop>
+  <tabstop>pushSave</tabstop>
+  <tabstop>pushCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

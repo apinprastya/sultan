@@ -27,6 +27,7 @@ namespace LibG {
 namespace SETTING {
     const QString SETTING_OK                    = QStringLiteral("global/ok");
     const QString APP_TYPE                      = QStringLiteral("global/app_type");
+    const QString DATABASE                      = QStringLiteral("global/database");
     const QString MYSQL_HOST                    = QStringLiteral("global/mysql_host");
     const QString MYSQL_USERNAME                = QStringLiteral("global/mysql_username");
     const QString MYSQL_PASSWORD                = QStringLiteral("global/mysql_password");

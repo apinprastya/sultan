@@ -39,15 +39,19 @@ SettingDialog::SettingDialog(QWidget *parent) :
     ui->pushSave->setDisabled(true);
     ui->comboType->addItem(tr("Server"), APPLICATION_TYPE::SERVER);
     ui->comboType->addItem(tr("Client"), APPLICATION_TYPE::CLIENT);
+    ui->comboDatabase->addItem("SQLITE");
+    ui->comboDatabase->addItem("MYSQL");
 
     connect(ui->comboType, SIGNAL(currentIndexChanged(int)), SLOT(checkType()));
     connect(ui->pushCheckMysql, SIGNAL(clicked(bool)), SLOT(checkMysql()));
     connect(ui->pushCheckConnection, SIGNAL(clicked(bool)), SLOT(checkConnection()));
     connect(ui->pushCancel, SIGNAL(clicked(bool)), SLOT(cancel()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(save()));
+    connect(ui->comboDatabase, SIGNAL(currentIndexChanged(int)), SLOT(databaseChanged()));
     QSqlDatabase::addDatabase(QStringLiteral("QMYSQL"), QStringLiteral("settingtest"));
 
     checkType();
+    databaseChanged();
 }
 
 SettingDialog::~SettingDialog()
@@ -74,6 +78,19 @@ void SettingDialog::saveMysqlSetting()
     Preference::setValue(SETTING::MYSQL_PASSWORD, ui->lineEditPassword->text());
     Preference::setValue(SETTING::MYSQL_DB, ui->lineEditDatabase->text());
     Preference::sync();
+}
+
+void SettingDialog::databaseChanged()
+{
+    bool isMysql = ui->comboDatabase->currentText() == "MYSQL";
+    ui->lineEditDatabase->setEnabled(isMysql);
+    ui->lineEditHost->setEnabled(isMysql);
+    ui->lineEditPassword->setEnabled(isMysql);
+    ui->lineEditUsername->setEnabled(isMysql);
+    ui->pushCheckMysql->setEnabled(isMysql);
+    ui->spinBoxPort->setEnabled(isMysql);
+    mMysqlOk = !isMysql;
+    checkSetting();
 }
 
 void SettingDialog::checkSetting()
@@ -141,6 +158,7 @@ void SettingDialog::save()
     Preference::setValue(SETTING::APP_PORT, ui->spinBoxServerPort->text());
     Preference::setValue(SETTING::SERVER_PORT, ui->spinBoxClientPort->value());
     Preference::setValue(SETTING::SERVER_ADDRESS, ui->lineEditClientAddress->text());
+    Preference::setValue(SETTING::DATABASE, ui->comboDatabase->currentText());
     Preference::setValue(SETTING::SETTING_OK, true);
     Preference::sync();
     //restart the app for easier :D

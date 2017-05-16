@@ -59,6 +59,7 @@ public:
     static Db *createInstance();
     static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     static bool checkConnection(QString &error);
+    static bool setDatabaseType(const QString &db);
     Db *reset();
     Db *select(const QString &value);
     Db *table(const QString &value);

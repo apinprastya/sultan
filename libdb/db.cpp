@@ -30,6 +30,8 @@ using namespace LibDB;
 
 static std::string TAG = "DB";
 static DBSetting DBSETTING;
+static QString DBTYPE = "MYSQL";
+static QMap<QString, QString> SQLDRIVERNAME{{"MYSQL", "QMYSQL"}, {"SQLITE", "QSQLITE"}};
 QStringList Db::mCreated = QStringList();
 QStringList Db::mUpdate = QStringList();
 QStringList Db::mSoftDelete = QStringList();
@@ -88,6 +90,11 @@ bool Db::checkConnection(QString &error)
     }
     delete db;
     return true;
+}
+
+bool Db::setDatabaseType(const QString &db)
+{
+    DBTYPE = db;
 }
 
 Db *Db::reset()
@@ -407,13 +414,17 @@ bool Db::roolback()
 
 bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
-    auto database = QSqlDatabase::addDatabase(QStringLiteral("QMYSQL"), mConnectionName);
+    auto database = QSqlDatabase::addDatabase(SQLDRIVERNAME[DBTYPE], mConnectionName);
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
-    database.setPort(port);
-    database.setDatabaseName(dbname);
-    database.setHostName(host);
-    database.setUserName(username);
-    database.setPassword(password);
+    if(DBTYPE == "MYSQL") {
+        database.setDatabaseName(dbname);
+        database.setPort(port);
+        database.setHostName(host);
+        database.setUserName(username);
+        database.setPassword(password);
+    } else if(DBTYPE == "SQLITE") {
+        database.setDatabaseName("sultan.db");
+    }
     bool ret = database.open();
     if(!ret) mLastError = database.lastError();
     reset();
