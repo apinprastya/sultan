@@ -11,7 +11,7 @@ CREATE TABLE items (
 );
 -- separator
 CREATE TABLE sellprices (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
 	`barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT '1',
     `price` INT NOT NULL DEFAULT 0

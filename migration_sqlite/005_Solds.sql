@@ -1,5 +1,5 @@
 CREATE TABLE machines (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `deleted_at` DATETIME NULL,
@@ -7,7 +7,7 @@ CREATE TABLE machines (
 );
 -- separator
 CREATE TABLE solds (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `number` VARCHAR(64) NOT NULL DEFAULT '',
     `user_id` INT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE solds (
 );
 -- separator
 CREATE TABLE solddatas (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
 	`barcode` VARCHAR(64) NOT NULL,
 	`name` VARCHAR(255) NOT NULL DEFAULT '',

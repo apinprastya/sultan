@@ -1,6 +1,6 @@
 -- payment type : 1 = Cash; 2 = Non Cash
 CREATE TABLE purchases (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `deleted_at` DATETIME NULL,
@@ -15,7 +15,7 @@ CREATE TABLE purchases (
 );
 -- separator
 CREATE TABLE purchasedatas (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `deleted_at` DATETIME NULL,

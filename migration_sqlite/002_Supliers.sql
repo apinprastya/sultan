@@ -1,5 +1,5 @@
 CREATE TABLE supliers (
-	`id` INT PRIMARY KEY,
+	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `deleted_at` DATETIME NULL,
