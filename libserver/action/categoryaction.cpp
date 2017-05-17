@@ -22,6 +22,6 @@
 using namespace LibServer;
 
 CategoryAction::CategoryAction():
-    ServerAction("categories")
+    ServerAction("categories", "id")
 {
 }

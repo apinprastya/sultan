@@ -20,6 +20,7 @@
 #ifndef ADDITEMDIALOG_H
 #define ADDITEMDIALOG_H
 
+#include "messagehandler.h"
 #include <QDialog>
 
 namespace Ui {
@@ -28,16 +29,34 @@ class AddItemDialog;
 
 namespace LibGUI {
 
-class AddItemDialog : public QDialog
+class AddItemDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
 
 public:
-    explicit AddItemDialog(QWidget *parent = 0);
+    AddItemDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~AddItemDialog();
+    void reset(bool isAddAgain = false);
+    void fill(const QVariantMap &data);
+    void setAsUpdate();
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     Ui::AddItemDialog *ui;
+    bool mIsUpdate = false;
+    bool mIsAddAgain = false;
+
+    void saveData();
+    void populateSuplier(const QVariantList &list);
+    void populateCategory(const QVariantList &list);
+
+private slots:
+    void barcodeDone();
+    void saveClicked();
+    void saveAndAgainClicked();
 };
 
 }

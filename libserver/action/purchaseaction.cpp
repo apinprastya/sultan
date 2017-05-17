@@ -22,6 +22,6 @@
 using namespace LibServer;
 
 PurchaseAction::PurchaseAction():
-    ServerAction("purchases")
+    ServerAction("purchases", "id")
 {
 }

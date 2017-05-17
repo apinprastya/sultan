@@ -23,6 +23,7 @@
 #include "gui_global.h"
 #include <QVariantMap>
 #include <QWidget>
+#include <QComboBox>
 
 class QTableView;
 
@@ -34,6 +35,7 @@ public:
     static bool anyEmpty(const QList<QWidget*> &lists);
     static void setColumnWidth(QTableView *table, const QList<int> &widths);
     static QString toHtml(QString value);
+    static void selectCombo(QComboBox *combo, const QVariant &value);
 };
 
 }

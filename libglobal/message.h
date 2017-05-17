@@ -69,6 +69,7 @@ public:
     bool isSuccess();
 
     void addData(const QString &key, const QVariant &data);
+    void removeData(const QString &key);
     void clearData();
     void setData(const QVariantMap &data);
     QVariantMap data();

@@ -22,6 +22,6 @@
 using namespace LibServer;
 
 SuplierAction::SuplierAction():
-    ServerAction("supliers")
+    ServerAction("supliers", "id")
 {
 }

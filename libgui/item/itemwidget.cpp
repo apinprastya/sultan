@@ -20,12 +20,14 @@
 #include "itemwidget.h"
 #include "ui_itemwidget.h"
 #include "tablewidget.h"
+#include "tableitem.h"
 #include "tablemodel.h"
 #include "global_constant.h"
 #include "guiutil.h"
 #include "tableview.h"
 #include "db_constant.h"
 #include "tableitem.h"
+#include "additemdialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -34,7 +36,8 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ItemWidget),
     mMainTable(new TableWidget(this)),
-    mSecondTable(new TableWidget(this))
+    mSecondTable(new TableWidget(this)),
+    mAddDialog(new AddItemDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -71,6 +74,8 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayoutBottom->addWidget(mSecondTable);
 
     connect(mMainTable->getTableView(), SIGNAL(clicked(QModelIndex)), SLOT(mainTableSelectionChanges()));
+    connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
+    connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
 }
 
 ItemWidget::~ItemWidget()
@@ -90,5 +95,20 @@ void ItemWidget::mainTableSelectionChanges()
         mSecondTable->getModel()->setFilter("barcode", COMPARE::EQUAL, item->data("barcode"));
         mSecondTable->getModel()->refresh();
     }
+}
+
+void ItemWidget::addItemClicked()
+{
+    mAddDialog->reset();
+    mAddDialog->show();
+}
+
+void ItemWidget::updateItemClicked(const QModelIndex &index)
+{
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    mAddDialog->fill(item->data());
+    mAddDialog->setAsUpdate();
+    mAddDialog->show();
 }
 

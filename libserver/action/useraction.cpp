@@ -27,7 +27,7 @@ using namespace LibG;
 using namespace LibDB;
 
 UserAction::UserAction():
-    ServerAction("users")
+    ServerAction("users", "id")
 {
     mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
 }

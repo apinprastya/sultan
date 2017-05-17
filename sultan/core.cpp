@@ -133,7 +133,7 @@ void Core::init()
             mSplashUi->setMessage("Migrate database ...");
             qApp->processEvents();
             const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
-                        "migration_mysql" : "migrations_sqlite";
+                        "migration_mysql" : "migration_sqlite";
 #ifdef Q_OS_MAC
             qDebug() << qApp->applicationDirPath();
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath)) {

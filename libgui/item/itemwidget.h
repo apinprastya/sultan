@@ -30,6 +30,7 @@ class ItemWidget;
 namespace LibGUI {
 
 class TableWidget;
+class AddItemDialog;
 
 class ItemWidget : public QWidget, public LibG::MessageHandler
 {
@@ -45,9 +46,12 @@ private:
     Ui::ItemWidget *ui;
     TableWidget *mMainTable;
     TableWidget *mSecondTable;
+    AddItemDialog *mAddDialog;
 
 private slots:
     void mainTableSelectionChanges();
+    void addItemClicked();
+    void updateItemClicked(const QModelIndex &index);
 };
 
 }

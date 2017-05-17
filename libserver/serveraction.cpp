@@ -22,6 +22,7 @@
 #include "db.h"
 #include "queryhelper.h"
 #include "easylogging++.h"
+#include <QStringBuilder>
 
 using namespace LibServer;
 using namespace LibG;
@@ -29,9 +30,10 @@ using namespace LibDB;
 
 static std::string TAG = "[SERVERACTION]";
 
-ServerAction::ServerAction(const QString &tableName):
+ServerAction::ServerAction(const QString &tableName, const QString idfield):
     mDb(Db::createInstance()),
-    mTableName(tableName)
+    mTableName(tableName),
+    mIdField(idfield)
 {
     mFunctionMap.insert(MSG_COMMAND::INSERT, std::bind(&ServerAction::insert, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::UPDATE, std::bind(&ServerAction::update, this, std::placeholders::_1));
@@ -70,7 +72,7 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
 LibG::Message ServerAction::update(LibG::Message *msg)
 {
     LibG::Message message(msg);
-    mDb->where("id = ", msg->data("id"));
+    mDb->where(mIdField % " = ", msg->data(mIdField));
     if(!mDb->update(mTableName, msg->data("data").toMap())) {
         message.setError(mDb->lastError().text());
     } else {
@@ -83,7 +85,7 @@ LibG::Message ServerAction::update(LibG::Message *msg)
 LibG::Message ServerAction::del(LibG::Message *msg)
 {
     LibG::Message message(msg);
-    mDb->where("id = ", msg->data("id"));
+    mDb->where(mIdField % " = ", msg->data(mIdField));
     if(!mDb->del(mTableName)) {
         message.setError(mDb->lastError().text());
     }
@@ -94,7 +96,7 @@ Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
     selectAndJoin();
-    DbResult res = mDb->where("id = ", msg->data("id").toInt())->get(mTableName);
+    DbResult res = mDb->where(mIdField % " = ", msg->data(mIdField))->get(mTableName);
     if(res.isEmpty()) {
         message.setError("Data not found");
     } else {

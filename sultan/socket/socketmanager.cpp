@@ -28,8 +28,8 @@ static std::string TAG = "[SOCKETMANAGER]";
 
 SocketManager::SocketManager(QObject *parent):
     QObject(parent),
-    mServer(new QWebSocketServer(QStringLiteral("Sultan"), QWebSocketServer::NonSecureMode, this)),
-    mLastId(0)
+    mLastId(0),
+    mServer(new QWebSocketServer(QStringLiteral("Sultan"), QWebSocketServer::NonSecureMode, this))
 {
     connect(mServer, SIGNAL(newConnection()), SLOT(newConnection()));
 }

@@ -97,6 +97,11 @@ void Message::addData(const QString &key, const QVariant &data)
     mData.insert(key, data);
 }
 
+void Message::removeData(const QString &key)
+{
+    mData.remove(key);
+}
+
 void Message::clearData()
 {
     mData.clear();

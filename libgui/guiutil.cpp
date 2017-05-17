@@ -51,3 +51,13 @@ QString GuiUtil::toHtml(QString value)
 {
     return value.replace("\n" , "<br>");
 }
+
+void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value)
+{
+    for(int i = 0; i < combo->count(); i++) {
+        if(combo->itemData(i) == value) {
+            combo->setCurrentIndex(i);
+            return;
+        }
+    }
+}

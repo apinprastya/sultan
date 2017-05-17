@@ -28,6 +28,8 @@ class ItemAction : public ServerAction
 {
 public:
     ItemAction();
+    LibG::Message insert(LibG::Message *msg) override;
+    LibG::Message update(LibG::Message *msg) override;
     LibG::Message prices(LibG::Message *msg);
 
 protected:

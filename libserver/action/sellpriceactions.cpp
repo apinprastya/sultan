@@ -22,6 +22,6 @@
 using namespace LibServer;
 
 SellPriceActions::SellPriceActions():
-    ServerAction("sellprices")
+    ServerAction("sellprices", "id")
 {
 }
