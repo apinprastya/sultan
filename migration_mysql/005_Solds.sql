@@ -16,7 +16,7 @@ CREATE TABLE solds (
     `machine_id` INT NOT NULL,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `payment_type` TINTYINT NOT NULL DEFAULT 1,
-    `card_number` VARCHAR NULL,
+    `card_number` VARCHAR(16) NULL,
     `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

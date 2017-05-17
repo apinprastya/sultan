@@ -31,14 +31,15 @@ class Db;
 class DBSHARED_EXPORT Migration
 {
 public:
-    static bool migrateAll(const QString &folder);
-    Migration(Db *db, const QString &folder);
+    static bool migrateAll(const QString &folder, const QString &dbtype);
+    Migration(Db *db, const QString &folder, const QString &dbtype);
     bool migrate();
 
 private:
     Db *mDb;
     QDir mDir;
     QString mLastFile;
+    QString mDbType;
 
     void init();
     bool executeFile(const QString &filePath);

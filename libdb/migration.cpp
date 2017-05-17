@@ -27,16 +27,17 @@ using namespace LibDB;
 
 static std::string TAG = "MIGRATION";
 
-bool Migration::migrateAll(const QString &folder)
+bool Migration::migrateAll(const QString &folder, const QString &dbtype)
 {
     auto db = Db::createInstance();
-    Migration mg(db, folder);
+    Migration mg(db, folder, dbtype);
     return mg.migrate();
 }
 
-Migration::Migration(Db *db, const QString &folder):
+Migration::Migration(Db *db, const QString &folder, const QString &dbtype):
     mDb(db),
-    mDir(QDir(folder))
+    mDir(QDir(folder)),
+    mDbType(dbtype)
 {
     init();
 }
@@ -100,8 +101,20 @@ bool Migration::executeFile(const QString &filename)
         return false;
     }
     const QString sqlCommand(file.readAll());
-    bool ret = mDb->exec(sqlCommand);
-    if(!ret)
-        LOG(ERROR) << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
-    return ret;
+    if(mDbType == "SQLITE") {
+        const QStringList sqllist = sqlCommand.split("-- separator");
+        for(const QString &cmd : sqllist) {
+            bool ret = mDb->exec(cmd);
+            if(!ret) {
+                LOG(ERROR) << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
+                return false;
+            }
+        }
+        return true;
+    } else {
+        bool ret = mDb->exec(sqlCommand);
+        if(!ret)
+            LOG(ERROR) << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
+        return ret;
+    }
 }
