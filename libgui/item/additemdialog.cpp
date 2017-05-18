@@ -79,6 +79,8 @@ void AddItemDialog::fill(const QVariantMap &data)
     GuiUtil::selectCombo(ui->comboCategory, data["category_id"].toInt());
     GuiUtil::selectCombo(ui->comboSuplier, data["suplier_id"].toInt());
     ui->labelError->hide();
+    mCurrentSuplier = data["suplier_id"].toInt();
+    mCUrrentCategory = data["category_id"].toInt();
 }
 
 void AddItemDialog::setAsUpdate()
@@ -158,26 +160,24 @@ void AddItemDialog::saveData()
 
 void AddItemDialog::populateSuplier(const QVariantList &list)
 {
-    QVariant curdata = ui->comboSuplier->currentData();
     ui->comboSuplier->clear();
     ui->comboSuplier->addItem(tr("-- Select Suplier --"), 0);
     for(auto &d : list) {
         const QVariantMap &m = d.toMap();
         ui->comboSuplier->addItem(m["name"].toString(), m["id"].toInt());
     }
-    GuiUtil::selectCombo(ui->comboSuplier, curdata);
+    GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
 }
 
 void AddItemDialog::populateCategory(const QVariantList &list)
 {
-    QVariant curdata = ui->comboCategory->currentData();
     ui->comboCategory->clear();
     ui->comboCategory->addItem(tr("-- Select Category --"), 0);
     for(auto &d : list) {
         const QVariantMap &m = d.toMap();
         ui->comboCategory->addItem(m["name"].toString(), m["id"].toInt());
     }
-    GuiUtil::selectCombo(ui->comboCategory, curdata);
+    GuiUtil::selectCombo(ui->comboCategory, mCUrrentCategory);
 }
 
 void AddItemDialog::barcodeDone()

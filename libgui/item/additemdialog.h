@@ -48,6 +48,8 @@ private:
     Ui::AddItemDialog *ui;
     bool mIsUpdate = false;
     bool mIsAddAgain = false;
+    int mCurrentSuplier;
+    int mCUrrentCategory;
 
     void saveData();
     void populateSuplier(const QVariantList &list);

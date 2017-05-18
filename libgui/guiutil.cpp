@@ -54,6 +54,7 @@ QString GuiUtil::toHtml(QString value)
 
 void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value)
 {
+    if(!value.isValid()) return;
     for(int i = 0; i < combo->count(); i++) {
         if(combo->itemData(i) == value) {
             combo->setCurrentIndex(i);
