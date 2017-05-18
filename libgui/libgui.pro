@@ -70,7 +70,8 @@ SOURCES += \
     category/categotyadddialog.cpp \
     item/itemwidget.cpp \
     item/additemdialog.cpp \
-    item/addpricedialog.cpp
+    item/addpricedialog.cpp \
+    purchase/purchaseadddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -102,7 +103,8 @@ HEADERS += \
     category/categotyadddialog.h \
     item/itemwidget.h \
     item/additemdialog.h \
-    item/addpricedialog.h
+    item/addpricedialog.h \
+    purchase/purchaseadddialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -117,4 +119,5 @@ FORMS += \
     category/categoryadddialog.ui \
     item/itemwidget.ui \
     item/additemdialog.ui \
-    item/addpricedialog.ui
+    item/addpricedialog.ui \
+    purchase/purchaseadddialog.ui

@@ -1,5 +1,5 @@
 /*
- * purchasewidget.h
+ * purchaseadddialog.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,41 +17,37 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEWIDGET_H
-#define PURCHASEWIDGET_H
+#include "purchaseadddialog.h"
+#include "ui_purchaseadddialog.h"
+#include <QDebug>
 
-#include "messagehandler.h"
-#include <QWidget>
+using namespace LibGUI;
 
-namespace Ui {
-class NormalWidget;
-}
-
-namespace LibGUI {
-
-class TableWidget;
-class PurchaseAddDialog;
-
-class PurchaseWidget : public QWidget, public LibG::MessageHandler
+PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::PurchaseAddDialog)
 {
-    Q_OBJECT
-public:
-    PurchaseWidget(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~PurchaseWidget();
+    ui->setupUi(this);
+    setMessageBus(bus);
+    ui->dateCreated->setCalendarPopup(true);
+    ui->dateDeadline->setCalendarPopup(true);
+}
 
-protected:
-    void messageReceived(LibG::Message *msg);
+PurchaseAddDialog::~PurchaseAddDialog()
+{
+    delete ui;
+}
 
-private:
-    Ui::NormalWidget *ui;
-    TableWidget *mTableWidget;
-    PurchaseAddDialog *mAddDialog;
+void PurchaseAddDialog::reset()
+{
+}
 
-private slots:
-    void addClicked();
-    void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
-};
+void PurchaseAddDialog::fill(const QVariantMap &data)
+{
+    qDebug() << data;
+}
+
+void PurchaseAddDialog::messageReceived(LibG::Message *msg)
+{
 
 }
-#endif // PURCHASEWIDGET_H
