@@ -1,5 +1,5 @@
 /*
- * itemwidget.h
+ * addpricedialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,49 +17,42 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ITEMWIDGET_H
-#define ITEMWIDGET_H
+#ifndef ADDPRICEDIALOG_H
+#define ADDPRICEDIALOG_H
 
 #include "messagehandler.h"
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
-class ItemWidget;
+class AddPriceDialog;
 }
 
 namespace LibGUI {
 
-class TableWidget;
-class AddItemDialog;
-class AddPriceDialog;
-
-class ItemWidget : public QWidget, public LibG::MessageHandler
+class AddPriceDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
+
 public:
-    ItemWidget(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~ItemWidget();
+    AddPriceDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~AddPriceDialog();
+    void reset();
+    void fill(const QVariantMap &data);
+    void setBarcodeName(const QString &barcode, const QString &name);
 
 protected:
-    void messageReceived(LibG::Message *msg);
+    void messageReceived(LibG::Message *msg) override;
 
 private:
-    Ui::ItemWidget *ui;
-    TableWidget *mMainTable;
-    TableWidget *mSecondTable;
-    AddItemDialog *mAddDialog;
-    AddPriceDialog *mPriceDialog;
-    QString mCurrentBarcode;
-    QString mCurrentName;
+    Ui::AddPriceDialog *ui;
+    int mId = 0;
+
+signals:
+    void success();
 
 private slots:
-    void mainTableSelectionChanges();
-    void addItemClicked();
-    void updateItemClicked(const QModelIndex &index);
-    void addPriceClicked();
-    void updatePriceClicked(const QModelIndex &index);
-    void deletePriceClicked(const QModelIndex &index);
+    void saveClicked();
 };
 
 }
-#endif // ITEMWIDGET_H
+#endif // ADDPRICEDIALOG_H

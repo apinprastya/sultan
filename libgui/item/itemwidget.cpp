@@ -28,6 +28,7 @@
 #include "db_constant.h"
 #include "tableitem.h"
 #include "additemdialog.h"
+#include "addpricedialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -37,7 +38,8 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui(new Ui::ItemWidget),
     mMainTable(new TableWidget(this)),
     mSecondTable(new TableWidget(this)),
-    mAddDialog(new AddItemDialog(bus, this))
+    mAddDialog(new AddItemDialog(bus, this)),
+    mPriceDialog(new AddPriceDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -76,6 +78,10 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mMainTable->getTableView(), SIGNAL(clicked(QModelIndex)), SLOT(mainTableSelectionChanges()));
     connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
+    connect(mSecondTable, SIGNAL(addClicked()), SLOT(addPriceClicked()));
+    connect(mSecondTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePriceClicked(QModelIndex)));
+    connect(mSecondTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
+    connect(mPriceDialog, SIGNAL(success()), mSecondTable->getModel(), SLOT(refresh()));
 }
 
 ItemWidget::~ItemWidget()
@@ -92,6 +98,8 @@ void ItemWidget::mainTableSelectionChanges()
     const QModelIndex &index = mMainTable->getTableView()->currentIndex();
     if(index.isValid()) {
         auto item = static_cast<TableItem*>(index.internalPointer());
+        mCurrentBarcode = item->data("barcode").toString();
+        mCurrentName = item->data("name").toString();
         mSecondTable->getModel()->setFilter("barcode", COMPARE::EQUAL, item->data("barcode"));
         mSecondTable->getModel()->refresh();
     }
@@ -110,5 +118,27 @@ void ItemWidget::updateItemClicked(const QModelIndex &index)
     mAddDialog->fill(item->data());
     mAddDialog->setAsUpdate();
     mAddDialog->show();
+}
+
+void ItemWidget::addPriceClicked()
+{
+    mPriceDialog->reset();
+    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName);
+    mPriceDialog->show();
+}
+
+void ItemWidget::updatePriceClicked(const QModelIndex &index)
+{
+    if(!index.isValid() || mCurrentBarcode.isEmpty()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName);
+    mPriceDialog->fill(item->data());
+    mPriceDialog->show();
+}
+
+void ItemWidget::deletePriceClicked(const QModelIndex &index)
+{
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
 }
 

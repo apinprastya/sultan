@@ -18,10 +18,23 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "sellpriceactions.h"
+#include "db.h"
 
 using namespace LibServer;
 
 SellPriceActions::SellPriceActions():
     ServerAction("sellprices", "id")
 {
+}
+
+void SellPriceActions::selectAndJoin()
+{
+    mDb->table(mTableName)->select("sellprices.*, items.name")->join("LEFT JOIN items ON sellprices.barcode = items.barcode");
+}
+
+QMap<QString, QString> SellPriceActions::fieldMap() const
+{
+    QMap<QString, QString> map;
+    map.insert("barcode", "sellprices.barcode");
+    return map;
 }

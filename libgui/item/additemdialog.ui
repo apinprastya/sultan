@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>471</width>
-    <height>295</height>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <property name="labelAlignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -65,13 +68,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineBarcode">
-       <property name="placeholderText">
-        <string>Barcode</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="lineName">
        <property name="placeholderText">
@@ -114,6 +110,30 @@
         <double>1000000.000000000000000</double>
        </property>
       </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="lineBarcode">
+         <property name="placeholderText">
+          <string>Barcode</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelError">
+         <property name="styleSheet">
+          <string notr="true">color: red; font-size: 12px;</string>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -180,7 +200,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>lineBarcode</tabstop>
   <tabstop>lineName</tabstop>
   <tabstop>comboCategory</tabstop>
   <tabstop>comboSuplier</tabstop>

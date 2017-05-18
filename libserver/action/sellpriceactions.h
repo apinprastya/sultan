@@ -28,6 +28,10 @@ class SellPriceActions : public ServerAction
 {
 public:
     SellPriceActions();
+
+protected:
+    void selectAndJoin() override;
+    QMap<QString, QString> fieldMap() const override;
 };
 
 }

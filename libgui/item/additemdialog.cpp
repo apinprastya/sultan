@@ -22,6 +22,8 @@
 #include "guiutil.h"
 #include "message.h"
 #include "global_constant.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -33,8 +35,11 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
 {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->doubleBuyPrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
+    ui->doubleSellPrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAndAgainClicked()));
+    connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
 }
 
 AddItemDialog::~AddItemDialog()
@@ -59,6 +64,7 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->pushSave->setEnabled(true);
     ui->pushSaveAgain->setEnabled(true);
     ui->pushSaveAgain->show();
+    ui->labelError->hide();
     setWindowTitle(tr("Add New Item"));
 }
 
@@ -72,6 +78,7 @@ void AddItemDialog::fill(const QVariantMap &data)
     ui->lineBarcode->setEnabled(false);
     GuiUtil::selectCombo(ui->comboCategory, data["category_id"].toInt());
     GuiUtil::selectCombo(ui->comboSuplier, data["suplier_id"].toInt());
+    ui->labelError->hide();
 }
 
 void AddItemDialog::setAsUpdate()
@@ -86,7 +93,10 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
-            QMessageBox::warning(this, tr("Item exitst"), tr("Item with barcode already exist"));
+            ui->labelError->setText(tr("Items with barcode already exist : %1").arg(msg->data("name").toString()));
+            ui->labelError->show();
+        } else {
+            ui->labelError->hide();
         }
     } else if(msg->isType(MSG_TYPE::ITEM)) {
         if(msg->isSuccess()) {
