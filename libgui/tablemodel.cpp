@@ -128,11 +128,21 @@ void TableModel::refresh()
     loadPage();
 }
 
+void TableModel::resfreshOne(const QVariant &id)
+{
+    Message msg(std::get<0>(mTypeCommandOne), std::get<1>(mTypeCommandOne));
+    msg.addData(mIdKey, id);
+    sendMessage(&msg);
+}
+
 void TableModel::messageReceived(LibG::Message *msg)
 {
     if(msg->status() == LibG::STATUS::OK) {
-        if(msg->command() == std::get<1>(mTypeCommand))
+        if(msg->isTypeCommand(std::get<0>(mTypeCommand), std::get<1>(mTypeCommand)))
             readData(msg);
+        else if(msg->isTypeCommand(std::get<0>(mTypeCommandOne), std::get<1>(mTypeCommandOne))) {
+            readOneData(msg);
+        }
     }
 }
 
@@ -172,4 +182,14 @@ void TableModel::readData(LibG::Message *msg)
     if(mIsLoaded)
         emit dataChanged(createIndex(start, 0), createIndex(start + l.size(), mHeaders.size()));
     mIsLoaded = true;
+}
+
+void TableModel::readOneData(Message *msg)
+{
+    int row = mData.getIndexOfId(mIdKey, msg->data(mIdKey));
+    auto item = mData.getItem(mIdKey, msg->data(mIdKey));
+    if(item != nullptr) {
+        item->fill(msg->data());
+        emit dataChanged(createIndex(row, 0), createIndex(row, mHeaders.size()));
+    }
 }

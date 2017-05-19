@@ -45,11 +45,14 @@ public:
     void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*,const QString&)> formater = nullptr);
     void addColumnMoney(const QString &key, const QString &title);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
+    inline void setTypeCommandOne(const int &type, const int &command) { mTypeCommandOne = std::make_tuple(type, command); }
     void setFilter(const QString &key, int type, const QVariant &value);
     void clearFilter();
+    inline void setIdKey(const QString &key) { mIdKey = key; }
 
 public slots:
     void refresh();
+    void resfreshOne(const QVariant &id);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -62,9 +65,11 @@ protected:
     QMap<QString, std::function<QVariant(TableItem*,const QString&)>> mFormater;
     QList<int> mAlignments;
     std::tuple<int, int> mTypeCommand;
+    std::tuple<int, int> mTypeCommandOne;
     QMap<int, int> mPageStatus;
     bool mIsLoaded;
     LibDB::QueryDB mQuery;
+    QString mIdKey = QStringLiteral("id");
 
 signals:
     void loadMore(int page) const;
@@ -75,6 +80,7 @@ private slots:
 
 private:
     void readData(LibG::Message *msg);
+    void readOneData(LibG::Message *msg);
 };
 
 }

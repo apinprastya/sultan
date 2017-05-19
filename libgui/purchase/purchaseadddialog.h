@@ -52,7 +52,7 @@ private:
 
 signals:
     void successAdd();
-    void successUpdate(int id);
+    void successUpdate(const QVariant &id);
 
 private slots:
     void saveClicked();

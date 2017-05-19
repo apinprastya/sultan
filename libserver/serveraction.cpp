@@ -96,7 +96,7 @@ Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
     selectAndJoin();
-    DbResult res = mDb->where(mIdField % " = ", msg->data(mIdField))->get(mTableName);
+    DbResult res = mDb->where(mTableName % "." % mIdField % " = ", msg->data(mIdField))->get(mTableName);
     if(res.isEmpty()) {
         message.setError("Data not found");
     } else {

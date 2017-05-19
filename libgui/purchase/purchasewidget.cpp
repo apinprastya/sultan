@@ -53,6 +53,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
     model->addColumnMoney("total", tr("Total"));
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
+    model->setTypeCommandOne(MSG_TYPE::PURCHASE, MSG_COMMAND::GET);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
@@ -61,7 +62,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(successAdd()), mTableWidget->getModel(), SLOT(refresh()));
-    connect(mAddDialog, SIGNAL(successUpdate(int)), mTableWidget->getModel(), SLOT(refresh()));
+    connect(mAddDialog, SIGNAL(successUpdate(QVariant)), mTableWidget->getModel(), SLOT(resfreshOne(QVariant)));
 }
 
 PurchaseWidget::~PurchaseWidget()
