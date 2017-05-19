@@ -1,7 +1,7 @@
 include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
 include(../libglobal/libglobal.pri)
 
-QT += sql
+QT += sql concurrent
 
 TEMPLATE = lib
 TARGET = db

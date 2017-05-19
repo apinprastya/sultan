@@ -41,9 +41,21 @@ public:
 
 protected:
     void messageReceived(LibG::Message *msg) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     Ui::PurchaseAddDialog *ui;
+    int mCurrentSuplier = 0;
+    int mId = 0;
+
+    void populateSuplier(const QVariantList &list);
+
+signals:
+    void successAdd();
+    void successUpdate(int id);
+
+private slots:
+    void saveClicked();
 };
 
 }

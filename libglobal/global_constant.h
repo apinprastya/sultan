@@ -68,7 +68,7 @@ namespace MSG_TYPE {
 namespace MSG_COMMAND {
     const int INSERT        = 0;
     const int UPDATE        = 1;
-    const int DELETE        = 2;
+    const int DEL           = 2;
     const int GET           = 3;
     const int QUERY         = 4;
     //custom command

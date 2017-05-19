@@ -78,7 +78,7 @@ void CategoryWidget::messageReceived(LibG::Message *msg)
                 mTreeWidget->setCurrentItem(item);
             } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
                 mTreeWidget->updateItem(msg->data());
-            } else if(msg->isCommand(MSG_COMMAND::DELETE)) {
+            } else if(msg->isCommand(MSG_COMMAND::DEL)) {
                 mTreeWidget->deleteItem(mDeletedId);
             }
         } else {
@@ -147,7 +147,7 @@ void CategoryWidget::deleteClicked()
         int ret = QMessageBox::question(this, tr("Delete confirmation"), tr("Sure to delete category?"));
         if(ret == QMessageBox::Yes) {
             mDeletedId = item->data(0, Qt::UserRole).toInt();
-            Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::DELETE);
+            Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::DEL);
             msg.addData("id", item->data(0, Qt::UserRole));
             sendMessage(&msg);
         }

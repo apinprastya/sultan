@@ -26,6 +26,7 @@
 #include "tableview.h"
 #include "tableitem.h"
 #include "purchaseadddialog.h"
+#include "dbutil.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -42,11 +43,14 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
+    auto dateFormater = [](TableItem *item, const QString &key) {
+        return LibDB::DBUtil::sqlDateToDate(item->data(key).toString()).toString("dd-MM-yyyy");
+    };
     model->setMessageBus(bus);
-    model->addColumn("created_at", tr("Date"));
+    model->addColumn("created_at", tr("Date"), Qt::AlignLeft, dateFormater);
     model->addColumn("number", tr("Number"));
     model->addColumn("suplier", tr("Suplier"));
-    model->addColumn("deadline", tr("Deadline"));
+    model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
     model->addColumnMoney("total", tr("Total"));
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
@@ -56,6 +60,8 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mAddDialog, SIGNAL(successAdd()), mTableWidget->getModel(), SLOT(refresh()));
+    connect(mAddDialog, SIGNAL(successUpdate(int)), mTableWidget->getModel(), SLOT(refresh()));
 }
 
 PurchaseWidget::~PurchaseWidget()
@@ -63,14 +69,14 @@ PurchaseWidget::~PurchaseWidget()
 
 }
 
-void PurchaseWidget::messageReceived(LibG::Message *msg)
-{
+void PurchaseWidget::messageReceived(LibG::Message */*msg*/){
 
 }
 
 void PurchaseWidget::addClicked()
 {
-
+    mAddDialog->reset();
+    mAddDialog->show();
 }
 
 void PurchaseWidget::updateClicked(const QModelIndex &index)

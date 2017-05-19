@@ -81,7 +81,7 @@ void SuplierWidget::messageReceived(Message *msg)
             mAddDialog->enableSave();
             return;
         }
-    } else if(msg->isCommand(MSG_COMMAND::DELETE) && msg->isSuccess()) {
+    } else if(msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
         mTableWidget->getModel()->refresh();
     }
 }
@@ -104,7 +104,7 @@ void SuplierWidget::deleteClicked(const QModelIndex &index)
     auto item = static_cast<TableItem*>(index.internalPointer());
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove suplier?"));
     if(ret == QMessageBox::Yes) {
-        Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::DELETE);
+        Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::DEL);
         msg.addData("id", item->id);
         sendMessage(&msg);
     }

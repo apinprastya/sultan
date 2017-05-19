@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QCloseEvent>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -76,6 +77,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::setupConnection()
 {
+    new QShortcut(QKeySequence(Qt::Key_F11), this, SLOT(showWindowFullScreen()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab), this, SLOT(nextTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab), this, SLOT(prevTab()));
@@ -91,6 +93,14 @@ void MainWindow::setupConnection()
     connect(ui->action_Items, SIGNAL(triggered(bool)), SLOT(openItem()));
     connect(ui->action_Category, SIGNAL(triggered(bool)), SLOT(openCategory()));
     connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
+}
+
+void MainWindow::showWindowFullScreen()
+{
+    if(isFullScreen())
+        showNormal();
+    else
+        showFullScreen();
 }
 
 void MainWindow::updateClock()

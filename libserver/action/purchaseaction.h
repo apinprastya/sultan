@@ -28,6 +28,9 @@ class PurchaseAction: public ServerAction
 {
 public:
     PurchaseAction();
+
+protected:
+    void selectAndJoin() override;
 };
 
 }

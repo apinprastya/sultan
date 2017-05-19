@@ -37,7 +37,7 @@ ServerAction::ServerAction(const QString &tableName, const QString idfield):
 {
     mFunctionMap.insert(MSG_COMMAND::INSERT, std::bind(&ServerAction::insert, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::UPDATE, std::bind(&ServerAction::update, this, std::placeholders::_1));
-    mFunctionMap.insert(MSG_COMMAND::DELETE, std::bind(&ServerAction::del, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::DEL, std::bind(&ServerAction::del, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::GET, std::bind(&ServerAction::get, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::QUERY, std::bind(&ServerAction::query, this, std::placeholders::_1));
 }

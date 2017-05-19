@@ -18,10 +18,18 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchaseaction.h"
+#include "db.h"
 
 using namespace LibServer;
+using namespace LibDB;
 
 PurchaseAction::PurchaseAction():
     ServerAction("purchases", "id")
 {
+}
+
+void PurchaseAction::selectAndJoin()
+{
+    mDb->table(mTableName)->select("purchases.*, supliers.name as suplier")->
+            join("LEFT JOIN supliers ON purchases.suplier_id = supliers.id");
 }

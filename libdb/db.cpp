@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QSqlDriver>
 #include <QStringBuilder>
+#include <QThreadStorage>
 
 using namespace LibDB;
 
@@ -35,6 +36,7 @@ static QMap<QString, QString> SQLDRIVERNAME{{"MYSQL", "QMYSQL"}, {"SQLITE", "QSQ
 QStringList Db::mCreated = QStringList();
 QStringList Db::mUpdate = QStringList();
 QStringList Db::mSoftDelete = QStringList();
+static QThreadStorage<QSqlDatabase> mDatabasePool;
 #ifdef QT_DEBUG
 bool Db::DEBUG = true;
 #else
@@ -42,8 +44,7 @@ bool Db::DEBUG = false;
 #endif
 
 Db::Db():
-    parent(NULL),
-    mConnectionName(QUuid::createUuid().toString())
+    parent(NULL)
 {
     mDebug = DEBUG;
 }
@@ -51,12 +52,6 @@ Db::Db():
 Db::~Db()
 {
     if(parent == NULL) {
-        {
-            QSqlDatabase db = QSqlDatabase::database(mConnectionName);
-            if(db.isOpen())
-                db.close();
-        }
-        QSqlDatabase::removeDatabase(mConnectionName);
         for(int i = 0; i < childs.size(); i++)
             delete childs[i];
     }
@@ -92,7 +87,7 @@ bool Db::checkConnection(QString &error)
     return true;
 }
 
-bool Db::setDatabaseType(const QString &db)
+void Db::setDatabaseType(const QString &db)
 {
     DBTYPE = db;
 }
@@ -259,7 +254,7 @@ QString Db::lastQuery() { return mLastQuery; }
 DbResult Db::exec()
 {
     QList<QVariant> result;
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    QSqlQuery query(getDatabase());
     if (query.exec(getSelectQuery())) {
         QSqlRecord record = query.record();
         while(query.next()) {
@@ -281,7 +276,7 @@ DbResult Db::get(const QString &tableName)
 
 bool Db::exec(const QString &sqlcommand)
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    QSqlQuery query(getDatabase());
     bool ok = query.exec(sqlcommand);
     reset();
     postQuery(&query);
@@ -296,7 +291,7 @@ bool Db::exec(const QString &sqlcommand)
 
 bool Db::insert(const QString &table, const QVariantMap &data)
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    QSqlQuery query(getDatabase());
     QString sql = QString(QStringLiteral("INSERT INTO "));
     QString values = QString(QStringLiteral("VALUES ("));
     sql.append(table).append(QStringLiteral(" ("));
@@ -325,7 +320,7 @@ bool Db::insert(const QString &table, const QVariantMap &data)
 
 bool Db::update(const QString &table, const QVariantMap &data)
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    QSqlQuery query(getDatabase());
     QString sql = QString(QStringLiteral("UPDATE "));
     sql.append(table).append(QStringLiteral(" SET "));
     if(mUpdate.contains(table)) {
@@ -361,7 +356,7 @@ bool Db::del(const QString &table)
         map.insert(QStringLiteral("deleted"), 1);
         return update(table, map);
     } else {
-        QSqlQuery query(QSqlDatabase::database(mConnectionName));
+        QSqlQuery query(getDatabase());
         QString sql = QString(QStringLiteral("DELETE FROM "));
         sql.append(table).append(QStringLiteral(" WHERE ")).append(mWhere);
         reset();
@@ -377,7 +372,7 @@ bool Db::del(const QString &table)
 
 int Db::count()
 {
-    QSqlQuery query(QSqlDatabase::database(mConnectionName));
+    QSqlQuery query(getDatabase());
     Db *db = clone();
     QString sql = db->getSelectQuery(QStringLiteral("count(*)"));
     query.exec(sql);
@@ -399,22 +394,34 @@ Db *Db::clone()
 
 bool Db::beginTransaction()
 {
-    return QSqlDatabase::database(mConnectionName).transaction();
+    return getDatabase().transaction();
 }
 
 bool Db::commit()
 {
-    return QSqlDatabase::database(mConnectionName).commit();
+    return getDatabase().commit();
 }
 
 bool Db::roolback()
 {
-    return QSqlDatabase::database(mConnectionName).rollback();
+    return getDatabase().rollback();
+}
+
+QSqlDatabase Db::getDatabase()
+{
+    if(mDatabasePool.hasLocalData()) {
+        return mDatabasePool.localData();
+    } else {
+        auto database = QSqlDatabase::addDatabase(SQLDRIVERNAME[DBTYPE], QUuid::createUuid().toString());
+        mDatabasePool.setLocalData(database);
+        return database;
+    }
 }
 
 bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
-    auto database = QSqlDatabase::addDatabase(SQLDRIVERNAME[DBTYPE], mConnectionName);
+    auto database = getDatabase();
+    if(database.isOpen()) return true;
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
     if(DBTYPE == "MYSQL") {
         database.setDatabaseName(dbname);
@@ -450,4 +457,3 @@ QString Db::dataToString(const QVariantMap &map)
     str.append(QStringLiteral("}"));
     return str;
 }
-

@@ -59,6 +59,7 @@ private:
     void setupConnection();
 
 private slots:
+    void showWindowFullScreen();
     void updateClock();
     void closeTab(int index);
     void closeCurrentTab();

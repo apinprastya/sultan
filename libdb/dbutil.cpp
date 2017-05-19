@@ -23,11 +23,11 @@
 
 using namespace LibDB;
 
+static QStringList format{"yyyy-MM-dd", "yyyy-MM-ddThh:mm:ss", "yyyy-MM-dd hh:mm:ss"};
+
 DBUtil::DBUtil()
 {
-
 }
-
 
 QString DBUtil::formatDateToIndo(const QString &d, bool useTime)
 {
@@ -37,4 +37,14 @@ QString DBUtil::formatDateToIndo(const QString &d, bool useTime)
     if(useTime)
         return date.toString(QLatin1String("dd-MM-yyyy hh:mm:ss"));
     return date.toString(QLatin1String("dd-MM-yyyy"));
+}
+
+QDate DBUtil::sqlDateToDate(const QString &value)
+{
+    for(const QString &s : format) {
+        auto date = QDate::fromString(value, s);
+        if(date.isValid())
+            return date;
+    }
+    return QDate();
 }

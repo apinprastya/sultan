@@ -59,7 +59,7 @@ public:
     static Db *createInstance();
     static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     static bool checkConnection(QString &error);
-    static bool setDatabaseType(const QString &db);
+    static void setDatabaseType(const QString &db);
     Db *reset();
     Db *select(const QString &value);
     Db *table(const QString &value);
@@ -97,7 +97,6 @@ private:
     static QStringList mSoftDelete;
     static bool DEBUG;
     bool mSupportTransaction;
-    QSqlDatabase mDatabase;
     QString mWhere;
     QString mSelect;
     QString mJoin;
@@ -108,11 +107,11 @@ private:
     QString mGroup;
     QList<Db*> childs;
     Db* parent;
-    QString mConnectionName;
     QString mLastQuery;
     QVariant mInsertedId;
     QSqlError mLastError;
 
+    static QSqlDatabase getDatabase();
     bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     void postQuery(QSqlQuery *query);
     QString dataToString(const QVariantMap &map);
