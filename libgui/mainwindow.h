@@ -73,6 +73,7 @@ private slots:
     void openCategory();
     void openItem();
     void openPurchase();
+    void openPurchaseItem(int id, const QString &number);
 };
 
 }

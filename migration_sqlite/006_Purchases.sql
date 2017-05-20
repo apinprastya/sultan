@@ -14,7 +14,7 @@ CREATE TABLE purchases (
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE TABLE purchasedatas (
+CREATE TABLE purchaseitems (
 	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
@@ -22,8 +22,8 @@ CREATE TABLE purchasedatas (
     `purchase_id` INT NOT NULL,
     `barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT 0,
-    `single_price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE INDEX PURCHASEDATA ON purchasedatas (barcode);
+CREATE INDEX PURCHASEITEM ON purchaseitems (barcode);

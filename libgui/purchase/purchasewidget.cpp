@@ -63,6 +63,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(successAdd()), mTableWidget->getModel(), SLOT(refresh()));
     connect(mAddDialog, SIGNAL(successUpdate(QVariant)), mTableWidget->getModel(), SLOT(resfreshOne(QVariant)));
+    connect(mTableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
 }
 
 PurchaseWidget::~PurchaseWidget()
@@ -70,7 +71,8 @@ PurchaseWidget::~PurchaseWidget()
 
 }
 
-void PurchaseWidget::messageReceived(LibG::Message */*msg*/){
+void PurchaseWidget::messageReceived(LibG::Message */*msg*/)
+{
 
 }
 
@@ -90,4 +92,12 @@ void PurchaseWidget::updateClicked(const QModelIndex &index)
 void PurchaseWidget::deleteClicked(const QModelIndex &index)
 {
 
+}
+
+void PurchaseWidget::tableDoubleClicked(const QModelIndex &index)
+{
+    if(index.isValid()) {
+        auto item = static_cast<TableItem*>(index.internalPointer());
+        emit requestOpenPurchaseWidget(item->id, item->data("number").toString());
+    }
 }

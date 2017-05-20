@@ -15,7 +15,7 @@ CREATE TABLE purchases (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE purchasedatas (
+CREATE TABLE purchaseitems (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -23,7 +23,7 @@ CREATE TABLE purchasedatas (
     `purchase_id` INT NOT NULL,
     `barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAUL 0,
-    `single_price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     INDEX `BARCODE` (`barcode` ASC),
     PRIMARY KEY (`id`)

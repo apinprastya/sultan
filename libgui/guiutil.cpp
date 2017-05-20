@@ -22,6 +22,9 @@
 #include <QPlainTextEdit>
 #include <QComboBox>
 #include <QTableView>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QLabel>
 
 using namespace LibGUI;
 
@@ -60,5 +63,30 @@ void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value)
             combo->setCurrentIndex(i);
             return;
         }
+    }
+}
+
+void GuiUtil::clearAll(const QList<QWidget *> &lists)
+{
+    for(auto w : lists) {
+        auto line = qobject_cast<QLineEdit*>(w);
+        if(line != nullptr) line->clear();
+        auto combo = qobject_cast<QComboBox*>(w);
+        if(combo != nullptr) combo->setCurrentIndex(0);
+        auto plain = qobject_cast<QPlainTextEdit*>(w);
+        if(plain != nullptr) plain->clear();
+        auto ds = qobject_cast<QDoubleSpinBox*>(w);
+        if(ds != nullptr) ds->setValue(0);
+        auto s = qobject_cast<QSpinBox*>(w);
+        if(s != nullptr) s->setValue(0);
+        auto l = qobject_cast<QLabel*>(w);
+        if(l != nullptr) l->clear();
+    }
+}
+
+void GuiUtil::enableWidget(bool enable, const QList<QWidget *> &lists)
+{
+    for(auto w : lists) {
+        w->setEnabled(enable);
     }
 }

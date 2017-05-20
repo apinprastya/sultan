@@ -27,6 +27,7 @@
 #include "cashier/cashierwidget.h"
 #include "category/categorywidget.h"
 #include "purchase/purchasewidget.h"
+#include "purchase/purchaseitemwidget.h"
 #include "item/itemwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
@@ -199,6 +200,22 @@ void MainWindow::openPurchase()
 {
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<PurchaseWidget*>(widget) != nullptr);
-    }))
-        ui->tabWidget->tbnAddTab(new PurchaseWidget(mMessageBus, this), tr("Purcase"));
+    })) {
+        auto widget = new PurchaseWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Purcase"));
+        connect(widget, SIGNAL(requestOpenPurchaseWidget(int,QString)), SLOT(openPurchaseItem(int,QString)));
+    }
+}
+
+void MainWindow::openPurchaseItem(int id, const QString &number)
+{
+    for(int i = 0; i < ui->tabWidget->count(); i++) {
+        auto widget = dynamic_cast<PurchaseItemWidget*>(ui->tabWidget->widget(i));
+        if(widget != nullptr && widget->getId() == id) {
+            ui->tabWidget->setCurrentIndex(i);
+            return;
+        }
+    }
+    auto w = new PurchaseItemWidget(id, number, mMessageBus, this);
+    ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(number));
 }

@@ -71,7 +71,9 @@ SOURCES += \
     item/itemwidget.cpp \
     item/additemdialog.cpp \
     item/addpricedialog.cpp \
-    purchase/purchaseadddialog.cpp
+    purchase/purchaseadddialog.cpp \
+    purchase/purchaseitemwidget.cpp \
+    purchase/purchaseadditemdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -104,7 +106,9 @@ HEADERS += \
     item/itemwidget.h \
     item/additemdialog.h \
     item/addpricedialog.h \
-    purchase/purchaseadddialog.h
+    purchase/purchaseadddialog.h \
+    purchase/purchaseitemwidget.h \
+    purchase/purchaseadditemdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -120,4 +124,5 @@ FORMS += \
     item/itemwidget.ui \
     item/additemdialog.ui \
     item/addpricedialog.ui \
-    purchase/purchaseadddialog.ui
+    purchase/purchaseadddialog.ui \
+    purchase/purchaseadditemdialog.ui

@@ -1,8 +1,8 @@
 /*
- * guiutil.h
+ * purchaseitemaction.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,28 +17,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GUIUTIL_H
-#define GUIUTIL_H
+#ifndef PURCHASEITEMACTION_H
+#define PURCHASEITEMACTION_H
 
-#include "gui_global.h"
-#include <QVariantMap>
-#include <QWidget>
-#include <QComboBox>
+#include "serveraction.h"
 
-class QTableView;
+namespace LibServer {
 
-namespace LibGUI {
-
-class GuiUtil
+class PurchaseItemAction: public ServerAction
 {
 public:
-    static bool anyEmpty(const QList<QWidget*> &lists);
-    static void setColumnWidth(QTableView *table, const QList<int> &widths);
-    static QString toHtml(QString value);
-    static void selectCombo(QComboBox *combo, const QVariant &value);
-    static void clearAll(const QList<QWidget*> &lists);
-    static void enableWidget(bool enable, const QList<QWidget*> &lists);
+    PurchaseItemAction();
 };
 
 }
-#endif // GUIUTIL_H
+#endif // PURCHASEITEMACTION_H

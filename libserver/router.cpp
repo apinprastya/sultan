@@ -27,6 +27,7 @@
 #include "action/sellpriceactions.h"
 #include "action/categoryaction.h"
 #include "action/purchaseaction.h"
+#include "action/purchaseitemaction.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -59,6 +60,8 @@ ServerAction *Router::getServerAction(int type)
         return new CategoryAction();
     case MSG_TYPE::PURCHASE:
         return new PurchaseAction();
+    case MSG_TYPE::PURCHASE_ITEM:
+        return new PurchaseItemAction();
     }
     return nullptr;
 }
