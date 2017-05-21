@@ -57,12 +57,24 @@ void PurchaseAddItemDialog::reset()
     GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
                           ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave << ui->pushSaveAgain);
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
+    ui->lineBarcode->setReadOnly(false);
     mId = 0;
+    ui->pushSaveAgain->show();
 }
 
 void PurchaseAddItemDialog::fill(const QVariantMap &data)
 {
     mId = data["id"].toInt();
+    ui->lineBarcode->setText(data["barcode"].toString());
+    ui->lineBarcode->setReadOnly(true);
+    ui->labelName->setText(data["name"].toString());
+    ui->doubleBuyPrice->setValue(data["buy_price"].toDouble());
+    ui->doubleCount->setValue(data["count"].toDouble());
+    ui->doublePrice->setValue(data["price"].toDouble());
+    ui->doubleSellPrice->setValue(data["sell_price"].toDouble());
+    ui->doubleTotal->setValue(data["total"].toDouble());
+    ui->doubleCount->setFocus();
+    ui->pushSaveAgain->hide();
 }
 
 void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
@@ -89,6 +101,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
                     reset();
                 }
             } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+                hide();
                 emit updateSuccess(mId);
             }
         } else {

@@ -28,6 +28,13 @@ class PurchaseItemAction: public ServerAction
 {
 public:
     PurchaseItemAction();
+    LibG::Message insert(LibG::Message *msg) override;
+    LibG::Message update(LibG::Message *msg) override;
+    LibG::Message del(LibG::Message *msg) override;
+
+protected:
+    QMap<QString, QString> fieldMap() const override;
+    void selectAndJoin() override;
 };
 
 }

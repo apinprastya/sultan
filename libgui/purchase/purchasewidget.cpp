@@ -98,6 +98,6 @@ void PurchaseWidget::tableDoubleClicked(const QModelIndex &index)
 {
     if(index.isValid()) {
         auto item = static_cast<TableItem*>(index.internalPointer());
-        emit requestOpenPurchaseWidget(item->id, item->data("number").toString());
+        emit requestOpenPurchaseWidget(item->id.toInt(), item->data("number").toString());
     }
 }

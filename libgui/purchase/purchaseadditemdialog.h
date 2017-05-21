@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QDialog>
+#include <QVariant>
 
 namespace Ui {
 class PurchaseAddItemDialog;
@@ -55,7 +56,7 @@ private:
 
 signals:
     void addSuccess();
-    void updateSuccess(int id);
+    void updateSuccess(QVariant id);
 
 private slots:
     void barcodeDone();

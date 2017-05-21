@@ -88,10 +88,18 @@
     <addaction name="action_About"/>
     <addaction name="actionAbout_Qt"/>
    </widget>
+   <widget class="QMenu" name="menuReport">
+    <property name="title">
+     <string>Report</string>
+    </property>
+    <addaction name="actionSales"/>
+    <addaction name="actionItems"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAdministration"/>
    <addaction name="menuInventory"/>
    <addaction name="menuTransaction"/>
+   <addaction name="menuReport"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -143,6 +151,16 @@
   <action name="action_Category">
    <property name="text">
     <string>&amp;Category</string>
+   </property>
+  </action>
+  <action name="actionSales">
+   <property name="text">
+    <string>Sales</string>
+   </property>
+  </action>
+  <action name="actionItems">
+   <property name="text">
+    <string>Items</string>
    </property>
   </action>
  </widget>

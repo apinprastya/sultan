@@ -22,10 +22,13 @@
 #include "tablewidget.h"
 #include "tablemodel.h"
 #include "tableview.h"
+#include "tableitem.h"
 #include "global_constant.h"
 #include "guiutil.h"
 #include "db_constant.h"
+#include "message.h"
 #include "purchaseadditemdialog.h"
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -52,7 +55,7 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
     model->setFilter("purchase_id", COMPARE::EQUAL, id);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 150 << 150);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 150 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     model->refresh();
     ui->verticalLayout->addWidget(mTableWidget);
@@ -60,7 +63,7 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(delClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(addSuccess()), mTableWidget->getModel(), SLOT(refresh()));
-    connect(mAddDialog, SIGNAL(updateSuccess(int)), model, SLOT(resfreshOne(QVariant)));
+    connect(mAddDialog, SIGNAL(updateSuccess(QVariant)), model, SLOT(resfreshOne(QVariant)));
 }
 
 PurchaseItemWidget::~PurchaseItemWidget()
@@ -68,8 +71,15 @@ PurchaseItemWidget::~PurchaseItemWidget()
     delete ui;
 }
 
-void PurchaseItemWidget::messageReceived(LibG::Message */*msg*/)
+void PurchaseItemWidget::messageReceived(LibG::Message *msg)
 {
+    if(msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL)) {
+        if(msg->isSuccess()) {
+            mTableWidget->getModel()->refresh();
+        } else {
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    }
 }
 
 void PurchaseItemWidget::addClicked()
@@ -80,10 +90,22 @@ void PurchaseItemWidget::addClicked()
 
 void PurchaseItemWidget::updateClicked(const QModelIndex &index)
 {
-
+    if(index.isValid()) {
+        auto item = static_cast<TableItem*>(index.internalPointer());
+        mAddDialog->fill(item->data());
+        mAddDialog->show();
+    }
 }
 
 void PurchaseItemWidget::delClicked(const QModelIndex &index)
 {
-
+    if(index.isValid()) {
+        auto item = static_cast<TableItem*>(index.internalPointer());
+        int res = QMessageBox::question(this, tr("Confirmation remove"), tr("Are you sure to delete the item?"));
+        if(res == QMessageBox::Yes) {
+            Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL);
+            msg.addData("id", item->id);
+            sendMessage(&msg);
+        }
+    }
 }

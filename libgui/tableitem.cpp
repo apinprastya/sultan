@@ -27,7 +27,7 @@ TableItem::TableItem()
 
 void TableItem::fill(const QVariantMap &data)
 {
-    id = data["id"].toInt();
+    id = data["id"];
     mData = data;
 }
 

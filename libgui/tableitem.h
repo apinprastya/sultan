@@ -28,7 +28,7 @@ namespace LibGUI {
 class GUISHARED_EXPORT TableItem
 {
 public:
-    int id;
+    QVariant id;
     TableItem();
     virtual void fill(const QVariantMap &data);
     virtual QVariant data(const QString &key);
