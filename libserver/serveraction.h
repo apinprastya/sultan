@@ -37,17 +37,18 @@ public:
     ServerAction(const QString &tableName, const QString idfield);
     ~ServerAction();
     LibG::Message exec(LibG::Message *msg);
-    virtual LibG::Message insert(LibG::Message *msg);
-    virtual LibG::Message update(LibG::Message *msg);
-    virtual LibG::Message del(LibG::Message *msg);
-    virtual LibG::Message get(LibG::Message *msg);
-    virtual LibG::Message query(LibG::Message *msg);
 
 protected:
     LibDB::Db *mDb;
     QString mTableName;
     QString mIdField;
     QMap<int, std::function<LibG::Message(LibG::Message*)> > mFunctionMap;
+
+    virtual LibG::Message insert(LibG::Message *msg);
+    virtual LibG::Message update(LibG::Message *msg);
+    virtual LibG::Message del(LibG::Message *msg);
+    virtual LibG::Message get(LibG::Message *msg);
+    virtual LibG::Message query(LibG::Message *msg);
 
     void setStart(LibG::Message *msg, LibG::Message *src);
     virtual QMap<QString, QString> fieldMap() const;

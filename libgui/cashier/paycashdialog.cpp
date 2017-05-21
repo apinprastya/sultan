@@ -23,25 +23,32 @@
 #include <QLocale>
 #include <QMessageBox>
 
+using namespace LibGUI;
 using namespace LibG;
 
-PayCashDialog::PayCashDialog(double total, QWidget *parent) :
+PayCashDialog::PayCashDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::PayCashDialog),
-    mTotal(total)
+    ui(new Ui::PayCashDialog)
 {
     ui->setupUi(this);
-    ui->labelTotal->setText(Preference::toString(total));
+
     ui->doubleSpinBox->setMaximum(std::numeric_limits<double>::max());
     ui->doubleSpinBox->setMinimum(std::numeric_limits<double>::min());
-    ui->doubleSpinBox->setValue(total);
-    ui->doubleSpinBox->selectAll();
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payClicked()));
 }
 
 PayCashDialog::~PayCashDialog()
 {
     delete ui;
+}
+
+void PayCashDialog::fill(double total)
+{
+    mTotal = total;
+    ui->labelTotal->setText(Preference::toString(total));
+    ui->doubleSpinBox->setValue(total);
+    ui->doubleSpinBox->selectAll();
+    ui->pushPay->setEnabled(true);
 }
 
 void PayCashDialog::payClicked()
@@ -51,7 +58,6 @@ void PayCashDialog::payClicked()
         QMessageBox::critical(this, tr("Error Payment"), tr("Payment must bigger or equal to total"));
         return;
     }
-    mTotal = payment;
-    mIsPayed = true;
-    close();
+    ui->pushPay->setEnabled(false);
+    emit requestPay(payment);
 }

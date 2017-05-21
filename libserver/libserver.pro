@@ -51,7 +51,9 @@ SOURCES += \
     action/sellpriceactions.cpp \
     action/categoryaction.cpp \
     action/purchaseaction.cpp \
-    action/purchaseitemaction.cpp
+    action/purchaseitemaction.cpp \
+    action/soldaction.cpp \
+    action/solditemaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -64,4 +66,6 @@ HEADERS += \
     action/sellpriceactions.h \
     action/categoryaction.h \
     action/purchaseaction.h \
-    action/purchaseitemaction.h
+    action/purchaseitemaction.h \
+    action/soldaction.h \
+    action/solditemaction.h

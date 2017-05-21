@@ -44,6 +44,7 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         float stock = msg->data("count").toFloat();
         const QString &barcode = msg->data("barcode").toString();
         mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").arg(QString::number(stock)).arg(barcode));
+        updatePurchaseTotal(msg->data("purchase_id").toInt());
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
         message.setData(res.first());
     }
@@ -65,6 +66,7 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
             mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
                       arg(QString::number(diff)).arg(old["barcode"].toString()));
         }
+        updatePurchaseTotal(old["puchase_id"].toInt());
         res = mDb->where("id = ", msg->data("id"))->get(mTableName);
         message.setData(res.first());
     }
@@ -82,6 +84,7 @@ LibG::Message PurchaseItemAction::del(LibG::Message *msg)
     const QVariantMap old = res.first();
     mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
               arg(QString::number(-old["count"].toFloat())).arg(old["barcode"].toString()));
+    updatePurchaseTotal(old["puchase_id"].toInt());
     return message;
 }
 
@@ -96,5 +99,11 @@ void PurchaseItemAction::selectAndJoin()
 {
     mDb->table(mTableName)->select("purchaseitems.*, items.name, items.buy_price, \
             (select price from sellprices where barcode = purchaseitems.barcode order by count asc limit 1) as sell_price")->
-            join("LEFT JOIN items ON items.barcode = purchaseitems.barcode");
+                                   join("LEFT JOIN items ON items.barcode = purchaseitems.barcode");
+}
+
+void PurchaseItemAction::updatePurchaseTotal(int purchaseid)
+{
+    mDb->exec(QString("UPDATE purchases SET total = (SELECT sum(total) FROM purchaseitems WHERE purchase_id = %1) WHERE id = %2").
+              arg(purchaseid).arg(purchaseid));
 }

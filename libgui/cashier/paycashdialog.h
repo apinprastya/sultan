@@ -20,29 +20,35 @@
 #ifndef PAYCASHDIALOG_H
 #define PAYCASHDIALOG_H
 
+#include <functional>
 #include <QDialog>
 
 namespace Ui {
 class PayCashDialog;
 }
 
+namespace LibGUI {
+
 class PayCashDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    PayCashDialog(double total, QWidget *parent = 0);
+    PayCashDialog(QWidget *parent = 0);
     ~PayCashDialog();
-    inline bool isPayed() { return mIsPayed; }
-    inline double getPayment() { return mTotal; }
+    void fill(double total);
 
 private:
     Ui::PayCashDialog *ui;
     double mTotal;
-    bool mIsPayed = false;
+    std::function<bool(double)> mPayCallback;
 
 private slots:
     void payClicked();
+
+signals:
+    void requestPay(double payment);
 };
 
+}
 #endif // PAYCASHDIALOG_H

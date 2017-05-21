@@ -163,5 +163,5 @@ void SettingDialog::save()
     Preference::sync();
     //restart the app for easier :D
     qApp->quit();
-    QProcess::startDetached(qApp->arguments()[0]);
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }

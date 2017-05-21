@@ -7,7 +7,7 @@ CREATE TABLE machines (
     PRIMARY KEY(`id`)
 ) ENGINE = InnoDB;
 
--- payment_type : 1 = Cash; 2 = Card
+-- payment_type : 0 = Cash; 1 = Card
 CREATE TABLE solds (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,13 +21,12 @@ CREATE TABLE solds (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE solddatas (
+CREATE TABLE solditems (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`barcode` VARCHAR(64) NOT NULL,
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`sold_id` INT NOT NULL,
-	`number` VARCHAR(128) NOT NULL DEFAULT '',
 	`count` FLOAT NOT NULL,
 	`price` DECIMAL(15, 2) NOT NULL,
 	`total` DECIMAL(15, 2) NOT NULL,

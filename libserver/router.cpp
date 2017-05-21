@@ -28,6 +28,8 @@
 #include "action/categoryaction.h"
 #include "action/purchaseaction.h"
 #include "action/purchaseitemaction.h"
+#include "action/soldaction.h"
+#include "action/solditemaction.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -62,6 +64,10 @@ ServerAction *Router::getServerAction(int type)
         return new PurchaseAction();
     case MSG_TYPE::PURCHASE_ITEM:
         return new PurchaseItemAction();
+    case MSG_TYPE::SOLD:
+        return new SoldAction();
+    case MSG_TYPE::SOLD_ITEM:
+        return new SoldItemAction();
     }
     return nullptr;
 }

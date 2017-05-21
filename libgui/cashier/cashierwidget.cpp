@@ -10,6 +10,7 @@
 #include "paycashdialog.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "usersession.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -22,7 +23,8 @@ using namespace LibGUI;
 CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CashierWidget),
-    mModel(new CashierTableModel(this))
+    mModel(new CashierTableModel(this)),
+    mPayCashDialog(new PayCashDialog(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -44,8 +46,10 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mModel, SIGNAL(totalChanged(double)), SLOT(totalChanged(double)));
     connect(mModel, SIGNAL(selectRow(QModelIndex)), SLOT(selectRow(QModelIndex)));
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
+    connect(mPayCashDialog, SIGNAL(requestPay(double)), SLOT(payCashRequested(double)));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
-    new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
+    //new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
@@ -82,7 +86,16 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             ui->labelPrice->setText(Preference::toString(price));
             mModel->addItem(mCount, name, barcode, list);
         } else {
-            QMessageBox::warning(this, tr("Error"), msg->data("error").toString());
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
+        if(msg->isSuccess()) {
+            mPayCashDialog->hide();
+            //print it
+            mModel->reset();
+            qDebug() << msg->data();
+        } else {
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
     }
 }
@@ -134,15 +147,17 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
 void CashierWidget::payCash()
 {
     if(mModel->isEmpty()) return;
-    PayCashDialog dialog(mModel->getTotal(), this);
-    dialog.exec();
-    if(dialog.isPayed()) {
-        //send the items to server
-    }
+    mPayCashDialog->fill(mModel->getTotal());
+    mPayCashDialog->show();
 }
 
 void CashierWidget::payCashless()
 {
+}
+
+void CashierWidget::openDrawer()
+{
+
 }
 
 void CashierWidget::updateLastInputed()
@@ -156,3 +171,20 @@ void CashierWidget::updateLastInputed()
         mModel->addItem(count - item->count, item->name, item->barcode);
 }
 
+void CashierWidget::payCashRequested(double value)
+{
+    QVariantMap data;
+    data.insert("cart", mModel->getCart());
+    data.insert("user_id", UserSession::id());
+    data.insert("machine_id", 1);
+    data.insert("total", mModel->getTotal());
+    data.insert("payment", value);
+    Message msg(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD);
+    msg.setData(data);
+    sendMessage(&msg);
+}
+
+void CashierWidget::printBill(const QVariantMap &data)
+{
+    //TODO: print bill here
+}

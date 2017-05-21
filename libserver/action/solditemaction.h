@@ -1,8 +1,8 @@
 /*
- * cashieritem.h
+ * solditemaction.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,32 +17,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CASHIERITEM_H
-#define CASHIERITEM_H
+#ifndef SOLDITEMACTION_H
+#define SOLDITEMACTION_H
 
-#include <QVariantMap>
-#include <QString>
+#include "serveraction.h"
 
-namespace LibGUI {
+namespace LibServer {
 
-class CashierItem
+class SoldItemAction : public ServerAction
 {
 public:
-    enum Type { Item, Discount };
-    int id = 0;
-    int parent = 0;
-    int type = Item;
-    float count = 0;
-    double price = 0;
-    double total = 0;
-    QString barcode;
-    QString name;
-    CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
-    void fill(const QVariantMap &data);
-    QVariantMap toMap();
+    SoldItemAction();
 };
 
 }
-#endif // CASHIERITEM_H
+#endif // SOLDITEMACTION_H

@@ -13,23 +13,22 @@ CREATE TABLE solds (
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `payment_type` TINTYINT NOT NULL DEFAULT 1,
+    `payment_type` TINTYINT NOT NULL DEFAULT 0,
     `card_number` VARCHAR(16) NULL,
     `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE TABLE solddatas (
+CREATE TABLE solditems (
 	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
 	`barcode` VARCHAR(64) NOT NULL,
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`sold_id` INT NOT NULL,
-	`number` VARCHAR(128) NOT NULL DEFAULT '',
 	`count` FLOAT NOT NULL,
 	`price` DECIMAL(15, 2) NOT NULL,
 	`total` DECIMAL(15, 2) NOT NULL
 );
 -- separator
-CREATE INDEX SOLDDATA ON solddatas (barcode);
+CREATE INDEX SOLDITEM ON solditems (barcode);
 -- separator
 INSERT INTO machines(name) VALUES ('Cashier 1');

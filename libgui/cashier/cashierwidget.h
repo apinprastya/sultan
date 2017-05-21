@@ -11,6 +11,7 @@ class CashierWidget;
 namespace LibGUI {
 
 class CashierTableModel;
+class PayCashDialog;
 
 class CashierWidget : public QWidget, public LibG::MessageHandler
 {
@@ -28,6 +29,7 @@ private:
     Ui::CashierWidget *ui;
     float mCount = 0.0f;
     CashierTableModel *mModel;
+    PayCashDialog *mPayCashDialog;
 
 private slots:
     void barcodeEntered();
@@ -36,7 +38,10 @@ private slots:
     void tableKeyPressed(QObject *sender, QKeyEvent *event);
     void payCash();
     void payCashless();
+    void openDrawer();
     void updateLastInputed();
+    void payCashRequested(double value);
+    void printBill(const QVariantMap &data);
 };
 
 }

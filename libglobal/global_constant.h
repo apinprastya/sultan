@@ -63,6 +63,8 @@ namespace MSG_TYPE {
     const int CATEGORY      = 5;
     const int PURCHASE      = 6;
     const int PURCHASE_ITEM = 7;
+    const int SOLD          = 8;
+    const int SOLD_ITEM     = 9;
 }
 
 namespace MSG_COMMAND {
@@ -74,6 +76,7 @@ namespace MSG_COMMAND {
     //custom command
     const int LOGIN         = 5;
     const int CASHIER_PRICE = 6;
+    const int NEW_SOLD      = 7;
 }
 
 namespace PRINT_TYPE {

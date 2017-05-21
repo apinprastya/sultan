@@ -123,6 +123,16 @@ void CashierTableModel::reset()
     mPrices.clear();
     endResetModel();
     calculateTotal();
+    emit totalChanged(0);
+}
+
+QVariantList CashierTableModel::getCart()
+{
+    QVariantList list;
+    for(auto item : mData) {
+        list.append(item->toMap());
+    }
+    return list;
 }
 
 float CashierTableModel::getTotalCount(const QString &barcode)

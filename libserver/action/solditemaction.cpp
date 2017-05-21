@@ -1,5 +1,5 @@
 /*
- * purchaseitemaction.h
+ * solditemaction.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,28 +17,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEITEMACTION_H
-#define PURCHASEITEMACTION_H
+#include "solditemaction.h"
 
-#include "serveraction.h"
+using namespace LibServer;
 
-namespace LibServer {
-
-class PurchaseItemAction: public ServerAction
+SoldItemAction::SoldItemAction():
+    ServerAction("solditems", "id")
 {
-public:
-    PurchaseItemAction();
-    LibG::Message insert(LibG::Message *msg) override;
-    LibG::Message update(LibG::Message *msg) override;
-    LibG::Message del(LibG::Message *msg) override;
-
-protected:
-    QMap<QString, QString> fieldMap() const override;
-    void selectAndJoin() override;
-
-private:
-    void updatePurchaseTotal(int purchaseid);
-};
-
 }
-#endif // PURCHASEITEMACTION_H

@@ -51,3 +51,14 @@ void CashierItem::fill(const QVariantMap &data)
     price = data["price"].toDouble();
     total = data["total"].toDouble();
 }
+
+QVariantMap CashierItem::toMap()
+{
+    QVariantMap data;
+    data.insert("barcode", barcode);
+    data.insert("name", name);
+    data.insert("count", count);
+    data.insert("price", price);
+    data.insert("total", total);
+    return data;
+}

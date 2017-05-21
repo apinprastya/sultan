@@ -36,10 +36,10 @@ public:
     QVariantMap first();
     inline int size() { return mData.size(); }
     QVariantMap data(int pos);
-    inline QList<QVariant> &data() { return mData; }
+    inline QVariantList &data() { return mData; }
 
 private:
-    QList<QVariant> mData;
+    QVariantList mData;
 };
 
 }
