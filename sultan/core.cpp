@@ -191,7 +191,11 @@ void Core::clientDisconnected()
 void Core::loginSuccess()
 {
     mMainWindow->setup();
+#ifdef Q_PROCESSOR_ARM
+    mMainWindow->showFullScreen();
+#else
     mMainWindow->show();
+#endif
 }
 
 void Core::logout()

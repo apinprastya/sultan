@@ -36,7 +36,7 @@ macx {
     LIBS += -lKernel32 -lwinspool
     LIBS += -L$$OUT_PWD/../bin/
 } else {
-    LIBS += -lcups
+    #LIBS += -lcups
     QMAKE_LIBDIR = $$OUT_PWD/../bin/ $$QMAKE_LIBDIR
 }
 

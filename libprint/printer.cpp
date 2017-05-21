@@ -1,3 +1,22 @@
+/*
+ * printer.cpp
+ * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
+ *
+ * This file is part of Sultan.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "printer.h"
 #include "preference.h"
 #include "global_constant.h"
@@ -9,7 +28,9 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #else
+#ifndef Q_PROCESSOR_ARM
 #include <cups/cups.h>
+#endif
 #endif
 
 using namespace LibPrint;
@@ -93,6 +114,7 @@ void Printer::print(const QString &printName, const QString &data, int type)
             file.write(data.toLocal8Bit());
         }
     } else {
+#ifndef Q_PROCESSOR_ARM
         int jobId = 0;
         jobId = cupsCreateJob(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), "WS print", 0, NULL);
         if(jobId > 0) {
@@ -100,6 +122,7 @@ void Printer::print(const QString &printName, const QString &data, int type)
             cupsWriteRequestData(CUPS_HTTP_DEFAULT, data.toStdString().c_str(), data.length());
             cupsFinishDocument(CUPS_HTTP_DEFAULT, printName.toStdString().c_str());
         }
+#endif
     }
 #endif
 }
