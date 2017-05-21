@@ -6,5 +6,6 @@ SUBDIRS = \
         libglobal \
         libdb \
         libserver \
+        libprint \
         libgui \
         sultan

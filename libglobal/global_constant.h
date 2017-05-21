@@ -76,6 +76,11 @@ namespace MSG_COMMAND {
     const int CASHIER_PRICE = 6;
 }
 
+namespace PRINT_TYPE {
+    const int DEVICE    = 0;
+    const int SPOOL     = 1;
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H
