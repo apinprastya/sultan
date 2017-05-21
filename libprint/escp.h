@@ -43,23 +43,23 @@ public:
         LEFT, CENTER, RIGHT
     };
     Escp(int type, int width10, int width12, int width15 = 0);
-    void setWidth(int width);
-    void line(const QChar &ch = QChar(0x2d));
-    void newLine(int line = 1);
-    void bold(bool bold = true);
-    void doubleHeight(bool value = true);
-    void doubleWidth(bool value = true);
-    void cpi10();
-    void cpi12();
-    void cpi15();
-    void column(const QList<int> col);
-    void leftText(const QString &str, bool overflow = false);
-    void centerText(const QString &str, bool overflow = false);
-    void rightText(const QString &str, bool overflow = false);
+    Escp *setWidth(int width);
+    Escp *line(const QChar &ch = QChar(0x2d));
+    Escp *newLine(int line = 1);
+    Escp *bold(bool bold = true);
+    Escp *doubleHeight(bool value = true);
+    Escp *doubleWidth(bool value = true);
+    Escp *cpi10();
+    Escp *cpi12();
+    Escp *cpi15();
+    Escp *column(const QList<int> col);
+    Escp *leftText(const QString &str, bool overflow = false);
+    Escp *centerText(const QString &str, bool overflow = false);
+    Escp *rightText(const QString &str, bool overflow = false);
     inline QString data() const { return mData; }
     inline int numLine() { return mNumLine; }
     inline void append(const QString &data) { mData.append(data); }
-    void openDrawer();
+    Escp *openDrawer();
     static QString openDrawerCommand();
 
 private:

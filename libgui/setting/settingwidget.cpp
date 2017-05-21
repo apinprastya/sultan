@@ -21,9 +21,13 @@
 #include "ui_settingwidget.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "global_constant.h"
+#include "printer.h"
+#include "guiutil.h"
 
 using namespace LibG;
 using namespace LibGUI;
+using namespace LibPrint;
 
 SettingWidget::SettingWidget(QWidget *parent) :
     QWidget(parent),
@@ -68,7 +72,19 @@ void SettingWidget::setupLocale()
 
 void SettingWidget::setupPrinter()
 {
-
+    ui->comboPrintCashierType->addItem(tr("Device Printer"), PRINT_TYPE::DEVICE);
+    ui->comboPrintCashierType->addItem(tr("Spool Printer"), PRINT_TYPE::SPOOL);
+    ui->comboPrintCashier->addItems(Printer::instance()->getPrintList());
+    connect(ui->comboPrintCashierType, SIGNAL(currentIndexChanged(int)), SLOT(cashierPrintTypeChanged()));
+    cashierPrintTypeChanged();
+    GuiUtil::selectCombo(ui->comboPrintCashierType, Preference::getInt(SETTING::PRINTER_CASHIER_TYPE));
+    ui->comboPrintCashier->setCurrentText(Preference::getString(SETTING::PRINTER_CASHIER_NAME));
+    ui->linePrintCashierDevice->setText(Preference::getString(SETTING::PRINTER_CASHIER_DEVICE));
+    ui->linePrintCashierTitle->setText(Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket"));
+    ui->linePrintCashierSubtitle->setText(Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul"));
+    ui->plainPrintCashierFooter->setPlainText(Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar"));
+    ui->spinCashierCpi10->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32));
+    ui->spinCashierCpi12->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40));
 }
 
 void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value)
@@ -86,6 +102,12 @@ void SettingWidget::signChanged()
     ui->lineSign->setEnabled(ui->checkSign->isChecked());
 }
 
+void SettingWidget::cashierPrintTypeChanged()
+{
+    ui->comboPrintCashier->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::SPOOL);
+    ui->linePrintCashierDevice->setDisabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::SPOOL);
+}
+
 void SettingWidget::saveClicked()
 {
     //market name
@@ -97,6 +119,15 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::LOCALE_USE_SIGN, ui->checkSign->isChecked());
     Preference::setValue(SETTING::LOCALE_SIGN, ui->lineSign->text());
     Preference::setValue(SETTING::LOCALE_DECIMAL, ui->spinMoneyDecimal->value());
+    //printer
+    Preference::setValue(SETTING::PRINTER_CASHIER_TYPE, ui->comboPrintCashierType->currentData());
+    Preference::setValue(SETTING::PRINTER_CASHIER_NAME, ui->comboPrintCashier->currentText());
+    Preference::setValue(SETTING::PRINTER_CASHIER_DEVICE, ui->linePrintCashierDevice->text());
+    Preference::setValue(SETTING::PRINTER_CASHIER_TITLE, ui->linePrintCashierTitle->text());
+    Preference::setValue(SETTING::PRINTER_CASHIER_SUBTITLE, ui->linePrintCashierSubtitle->text());
+    Preference::setValue(SETTING::PRINTER_CASHIER_FOOTER, ui->plainPrintCashierFooter->toPlainText());
+    Preference::setValue(SETTING::PRINTER_CASHIER_CPI10, ui->spinCashierCpi10->value());
+    Preference::setValue(SETTING::PRINTER_CASHIER_CPI12, ui->spinCashierCpi12->value());
     Preference::sync();
     Preference::applyApplicationSetting();
 }

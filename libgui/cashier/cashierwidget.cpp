@@ -11,6 +11,8 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "usersession.h"
+#include "printer.h"
+#include "escp.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -19,6 +21,7 @@
 
 using namespace LibG;
 using namespace LibGUI;
+using namespace LibPrint;
 
 CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
@@ -91,9 +94,8 @@ void CashierWidget::messageReceived(LibG::Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         if(msg->isSuccess()) {
             mPayCashDialog->hide();
-            //print it
             mModel->reset();
-            qDebug() << msg->data();
+            printBill(msg->data());
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
@@ -187,4 +189,38 @@ void CashierWidget::payCashRequested(double value)
 void CashierWidget::printBill(const QVariantMap &data)
 {
     //TODO: print bill here
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    if(type < 0) {
+        QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
+        return;
+    }
+    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
+    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
+    const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
+    const QString &subtitle = Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul");
+    const QString &footer = Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar");
+    int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
+    int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
+
+    auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
+    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12()->
+            centerText(subtitle)->newLine(2);
+    escp->column(QList<int>{50, 50})->leftText(data["number"].toString())->rightText(data["number"].toString());
+    escp->newLine()->column(QList<int>())->line(QChar('='));
+    const QVariantList &l = data["cart"].toList();
+    for(auto v : l) {
+        QVariantMap m = v.toMap();
+        escp->leftText(m["name"].toString())->newLine();
+        escp->column(QList<int>{50, 50})->leftText(QString("%1 x %2").
+                                                   arg(Preference::toString(m["count"].toFloat())).
+                                                    arg(Preference::toString(m["price"].toDouble())));
+        escp->rightText(Preference::toString(m["total"].toDouble()))->column(QList<int>())->newLine();
+    }
+    escp->line();
+    escp->column(QList<int>{50, 50})->doubleHeight(true)->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
+            leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
+            leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
+    escp->column(QList<int>())->doubleHeight(false)->line()->newLine()->leftText(footer, true)->newLine(3);
+    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    delete escp;
 }

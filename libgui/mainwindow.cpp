@@ -31,6 +31,7 @@
 #include "item/itemwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
+#include "printer.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -52,11 +53,13 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     ui->tabWidget->clear();
     setupConnection();
     updateClock();
+    LibPrint::Printer::instance();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    LibPrint::Printer::destroy();
 }
 
 void MainWindow::setup()

@@ -37,28 +37,31 @@ Escp::Escp(int type, int width10, int width12, int width15):
     init();
 }
 
-void Escp::setWidth(int width)
+Escp *Escp::setWidth(int width)
 {
     mWidth = width;
+    return this;
 }
 
-void Escp::line(const QChar &ch)
+Escp *Escp::line(const QChar &ch)
 {
     for(int i = 0; i < mWidth; i++)
         mData.append(ch);
     newLine();
+    return this;
 }
 
-void Escp::newLine(int line)
+Escp *Escp::newLine(int line)
 {
     for(int i = 0; i < line; i++)
         mData.append(QChar(0xA));
     mRestWidth = mWidth;
     mCurCol = 0;
     mNumLine++;
+    return this;
 }
 
-void Escp::bold(bool bold)
+Escp *Escp::bold(bool bold)
 {
     mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
@@ -67,9 +70,10 @@ void Escp::bold(bool bold)
     else
         mMaster &= ~BOLD;
     mData.append(QChar(mMaster));
+    return this;
 }
 
-void Escp::doubleHeight(bool value)
+Escp *Escp::doubleHeight(bool value)
 {
     mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
@@ -78,9 +82,10 @@ void Escp::doubleHeight(bool value)
     else
         mMaster &= ~DOUBLE_HEIGHT;
     mData.append(QChar(mMaster));
+    return this;
 }
 
-void Escp::doubleWidth(bool /*value*/)
+Escp *Escp::doubleWidth(bool /*value*/)
 {
     /*mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
@@ -89,39 +94,44 @@ void Escp::doubleWidth(bool /*value*/)
     else
         mMaster &= ~DOUBLE_WIDTH;
     mData.append(QChar(mMaster));*/
+    return this;
 }
 
-void Escp::cpi10()
+Escp *Escp::cpi10()
 {
     mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
     mMaster &= ~CPI;
     mData.append(QChar(mMaster));
     mWidth = mWidth10;
+    return this;
 }
 
-void Escp::cpi12()
+Escp *Escp::cpi12()
 {
     mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
     mMaster |= CPI;
     mData.append(QChar(mMaster));
     mWidth = mWidth12;
+    return this;
 }
 
-void Escp::cpi15()
+Escp *Escp::cpi15()
 {
     mData.append(QChar(0x1B));
     mData.append(QChar(0x67));
+    return this;
 }
 
-void Escp::column(const QList<int> col)
+Escp *Escp::column(const QList<int> col)
 {
     mColumn = col;
     mCurCol = 0;
+    return this;
 }
 
-void Escp::leftText(const QString &str, bool overflow)
+Escp *Escp::leftText(const QString &str, bool overflow)
 {
     int w = mWidth;
     if(mColumn.size() > 0 && mCurCol < mColumn.size()) {
@@ -140,9 +150,10 @@ void Escp::leftText(const QString &str, bool overflow)
             mData.append(s);
         }
     }
+    return this;
 }
 
-void Escp::centerText(const QString &str, bool overflow)
+Escp *Escp::centerText(const QString &str, bool overflow)
 {
     int w = mWidth;
     if(mColumn.size() > 0 && mCurCol < mColumn.size()) {
@@ -162,9 +173,10 @@ void Escp::centerText(const QString &str, bool overflow)
             mData.append(s);
         }
     }
+    return this;
 }
 
-void Escp::rightText(const QString &str, bool overflow)
+Escp *Escp::rightText(const QString &str, bool overflow)
 {
     int w = mWidth;
     if(mColumn.size() > 0 && mCurCol < mColumn.size()) {
@@ -183,11 +195,13 @@ void Escp::rightText(const QString &str, bool overflow)
             mData.append(s);
         }
     }
+    return this;
 }
 
-void Escp::openDrawer()
+Escp *Escp::openDrawer()
 {
     mData.append(openDrawerCommand());
+    return this;
 }
 
 QString Escp::openDrawerCommand()

@@ -1,5 +1,6 @@
 include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
 include(../libglobal/libglobal.pri)
+include(../libprint/libprint.pri)
 include(../libdb/libdb.pri)
 include(../libserver/libserver.pri)
 include(../libgui/libgui.pri)
