@@ -33,6 +33,9 @@ macx {
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $${OUT_PWD}/../bin/)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $${OUT_PWD}/../bin/)
+    copysh.commands = $$quote(cp -R $${PWD}/../script/Sultan.sh $${OUT_PWD}/../bin/)
+    QMAKE_EXTRA_TARGETS += copysh
+    POST_TARGETDEPS += copysh
 }
 
 QMAKE_EXTRA_TARGETS += copymigration_sqlite copymigration_mysql
