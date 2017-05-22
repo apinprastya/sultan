@@ -39,10 +39,14 @@ macx {
     POST_TARGETDEPS += copysh
 }
 
-QMAKE_EXTRA_TARGETS += copymigration_sqlite copymigration_mysql
-POST_TARGETDEPS += copymigration_sqlite copymigration_mysql
+copytr.commands = $$quote(cp -R $${PWD}/sultan_id.qm $${OUT_PWD}/../bin/)
+
+QMAKE_EXTRA_TARGETS += copymigration_sqlite copymigration_mysql copytr
+POST_TARGETDEPS += copymigration_sqlite copymigration_mysql copytr
 
 RESOURCES += sultan.qrc
+
+TRANSLATIONS = sultan_id.ts
 
 SOURCES += main.cpp \
     core.cpp \

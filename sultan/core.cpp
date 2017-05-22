@@ -55,7 +55,6 @@ Core::Core(QObject *parent) :
     mMessageBus(new MessageBus(this)),
     mMainWindow(new LibGUI::MainWindow(mMessageBus))
 {
-    Preference::createInstance();
     mLoginDialog->setMessageBus(mMessageBus);
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));

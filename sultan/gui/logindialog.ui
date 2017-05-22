@@ -41,21 +41,21 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Username</string>
+          <string notr="true">Username</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Password</string>
+          <string notr="true">Password</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="lineUsername">
          <property name="placeholderText">
-          <string>Username</string>
+          <string notr="true">Username</string>
          </property>
         </widget>
        </item>
@@ -65,14 +65,14 @@
           <enum>QLineEdit::Password</enum>
          </property>
          <property name="placeholderText">
-          <string>Password</string>
+          <string notr="true">Password</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
         <widget class="QPushButton" name="pushLogin">
          <property name="text">
-          <string>Login</string>
+          <string notr="true">Login</string>
          </property>
         </widget>
        </item>
@@ -114,7 +114,7 @@
         <string notr="true">font-size: 12px;</string>
        </property>
        <property name="text">
-        <string>version : 0.1</string>
+        <string notr="true">version : 0.1</string>
        </property>
       </widget>
      </item>

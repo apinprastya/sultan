@@ -54,8 +54,9 @@ void SettingWidget::setupAppliaction()
 
 void SettingWidget::setupLocale()
 {
-    ui->comboApplicationLanguage->addItem("English", "EN");
-    ui->comboApplicationLanguage->addItem("Bahasa Indonesia", "ID");
+    ui->comboApplicationLanguage->addItem("English", "en");
+    ui->comboApplicationLanguage->addItem("Bahasa Indonesia", "id");
+    GuiUtil::selectCombo(ui->comboApplicationLanguage, Preference::getString(SETTING::APPLICATION_LANGUAGE, "id"));
     //TODO : init this with QLocale::Language and QLocale::Country
     ui->comboLocale->addItem("English", QLocale::English);
     ui->comboLocale->addItem("Indonesian", QLocale::Indonesian);
@@ -114,6 +115,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
     //locale
+    Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());
     Preference::setValue(SETTING::LOCALE_LANGUAGE, ui->comboLocale->currentData().toInt());
     Preference::setValue(SETTING::LOCALE_USE_SIGN, ui->checkSign->isChecked());

@@ -41,6 +41,12 @@ macx {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
 }
 
+TRANSLATIONS = libgui_id.ts
+
+copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
+
+QMAKE_EXTRA_TARGETS += copytr
+POST_TARGETDEPS += copytr
 
 SOURCES += \
     mainwindow.cpp \

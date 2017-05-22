@@ -51,7 +51,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Host</string>
+             <string notr="true">Host</string>
             </property>
            </widget>
           </item>
@@ -61,17 +61,17 @@
              <string/>
             </property>
             <property name="text">
-             <string>localhost</string>
+             <string notr="true">localhost</string>
             </property>
             <property name="placeholderText">
-             <string>Myqsl host</string>
+             <string notr="true">Myqsl host</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Port</string>
+             <string notr="true">Port</string>
             </property>
            </widget>
           </item>
@@ -91,7 +91,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Username</string>
+             <string notr="true">Username</string>
             </property>
            </widget>
           </item>
@@ -100,32 +100,38 @@
             <property name="inputMask">
              <string>root</string>
             </property>
+            <property name="text">
+             <string notr="true">root</string>
+            </property>
             <property name="placeholderText">
-             <string>Mysql username</string>
+             <string notr="true">Mysql username</string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Password</string>
+             <string notr="true">Password</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
            <widget class="QLineEdit" name="lineEditPassword">
+            <property name="text">
+             <string notr="true"/>
+            </property>
             <property name="echoMode">
              <enum>QLineEdit::Password</enum>
             </property>
             <property name="placeholderText">
-             <string>Mysql password</string>
+             <string notr="true">Mysql password</string>
             </property>
            </widget>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Database</string>
+             <string notr="true">Database</string>
             </property>
            </widget>
           </item>
@@ -135,10 +141,10 @@
              <string/>
             </property>
             <property name="text">
-             <string>sultan</string>
+             <string notr="true">sultan</string>
             </property>
             <property name="placeholderText">
-             <string>Mysql database</string>
+             <string notr="true">Mysql database</string>
             </property>
            </widget>
           </item>
@@ -155,7 +161,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Database</string>
+             <string notr="true">Database</string>
             </property>
            </widget>
           </item>
@@ -239,7 +245,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Port</string>
+             <string notr="true">Port</string>
             </property>
            </widget>
           </item>
