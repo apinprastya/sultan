@@ -49,6 +49,7 @@ TableWidget::TableWidget(QWidget *parent) :
     mTableView->verticalHeader()->hide();
     mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(mTableView, SIGNAL(clicked(QModelIndex)), SLOT(tableSelected()));
 }
 
 TableWidget::~TableWidget()
@@ -58,9 +59,14 @@ TableWidget::~TableWidget()
 void TableWidget::initButton(const QList<ButtonType> buttons)
 {
     for(int i : buttons) {
-        if(BTNICONS.contains(i))
-            addActionButton(BTNICONS[i], i);
+        if(BTNICONS.contains(i)) {
+            auto push = addActionButton(BTNICONS[i], i);
+            if(i == Delete || i == Update) {
+                mEnableNoSelect.append(push);
+            }
+        }
     }
+    enableNoSelect(false);
 }
 
 void TableWidget::initCrudButton()
@@ -104,6 +110,12 @@ QPushButton *TableWidget::addActionButton(const QIcon &icon, int type)
     return push;
 }
 
+void TableWidget::enableNoSelect(bool value)
+{
+    for(auto btn : mEnableNoSelect)
+        btn->setEnabled(value);
+}
+
 void TableWidget::actionClicked()
 {
     auto button = static_cast<QPushButton*>(QObject::sender());
@@ -111,6 +123,7 @@ void TableWidget::actionClicked()
     switch(type) {
     case Refresh:
         mModel->refresh();
+        enableNoSelect(false);
         emit tableRefreshed();
         break;
     case Add:
@@ -125,4 +138,9 @@ void TableWidget::actionClicked()
             emit deleteClicked(mTableView->currentIndex());
         break;
     }
+}
+
+void TableWidget::tableSelected()
+{
+    enableNoSelect(true);
 }

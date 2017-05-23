@@ -49,15 +49,18 @@ public:
     inline TableModel *getModel() { return mModel; }
     inline TableView *getTableView() { return mTableView; }
     QPushButton *addActionButton(const QIcon &icon);
+    inline void addEnableNoSelect(QPushButton *btn) { mEnableNoSelect.append(btn); }
 
 private:
     TableView *mTableView;
     TableModel *mModel;
     QHBoxLayout *mActionLayout;
     QMap<int, QPushButton*> mActionButton;
+    QList<QPushButton*> mEnableNoSelect;
 
     QPushButton *addActionButton(const QString &path, int type);
     QPushButton *addActionButton(const QIcon &icon, int type);
+    void enableNoSelect(bool value);
 
 signals:
     void tableRefreshed();
@@ -67,6 +70,7 @@ signals:
 
 private slots:
     void actionClicked();
+    void tableSelected();
 };
 
 }
