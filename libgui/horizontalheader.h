@@ -36,6 +36,9 @@ public:
 private:
     QMap<int, QWidget*> mBoxes;
 
+signals:
+    void filterValueChanged(int index, const QVariant &value);
+
 private slots:
     void fixWidgetPositions();
     void handleSectionResized(int i);

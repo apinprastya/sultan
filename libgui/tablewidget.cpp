@@ -20,6 +20,7 @@
 #include "tablewidget.h"
 #include "tableview.h"
 #include "tablemodel.h"
+#include "horizontalheader.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -49,6 +50,8 @@ TableWidget::TableWidget(QWidget *parent) :
     mTableView->verticalHeader()->hide();
     mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    auto header = static_cast<HorizontalHeader*>(mTableView->horizontalHeader());
+    connect(header, SIGNAL(filterValueChanged(int,QVariant)), mModel, SLOT(filterChanged(int,QVariant)));
     connect(mTableView, SIGNAL(clicked(QModelIndex)), SLOT(tableSelected()));
 }
 

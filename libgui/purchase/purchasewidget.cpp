@@ -27,6 +27,8 @@
 #include "tableitem.h"
 #include "purchaseadddialog.h"
 #include "dbutil.h"
+#include "headerwidget.h"
+#include "db_constant.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -52,6 +54,8 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("suplier", tr("Suplier"));
     model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
     model->addColumnMoney("total", tr("Total"));
+    model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, COMPARE::LIKE});
+    model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, COMPARE::LIKE});
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE, MSG_COMMAND::GET);
     mTableWidget->setupTable();

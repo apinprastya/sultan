@@ -18,11 +18,15 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tableview.h"
+#include "horizontalheader.h"
 
 using namespace LibGUI;
 
-TableView::TableView(QWidget *parent) : QTableView(parent)
+TableView::TableView(QWidget *parent) :
+    QTableView(parent),
+    mHeader(new HorizontalHeader(this))
 {
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setHorizontalHeader(mHeader);
 }

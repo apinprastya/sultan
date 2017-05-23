@@ -29,11 +29,17 @@
 
 namespace LibGUI {
 
+struct HeaderFilter {
+    int type;
+    int compare;
+};
+
 class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
     enum PageStatus { None, Loading, Loaded };
+    enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1 };
     TableModel(QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -44,6 +50,7 @@ public:
     void reset();
     void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*,const QString&)> formater = nullptr);
     void addColumnMoney(const QString &key, const QString &title);
+    void addHeaderFilter(const QString &key, HeaderFilter filter);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
     inline void setTypeCommandOne(const int &type, const int &command) { mTypeCommandOne = std::make_tuple(type, command); }
     void setFilter(const QString &key, int type, const QVariant &value);
@@ -53,6 +60,7 @@ public:
 public slots:
     void refresh();
     void resfreshOne(const QVariant &id);
+    void filterChanged(int index, const QVariant &value);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -70,6 +78,7 @@ protected:
     bool mIsLoaded;
     LibDB::QueryDB mQuery;
     QString mIdKey = QStringLiteral("id");
+    QMap<QString, HeaderFilter> mHeaderFilter;
 
 signals:
     void loadMore(int page) const;

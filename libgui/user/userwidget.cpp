@@ -30,6 +30,8 @@
 #include "userpermissiondialog.h"
 #include "usersession.h"
 #include "guiutil.h"
+#include "headerwidget.h"
+#include "db_constant.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -53,6 +55,8 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("name", tr("Name"));
     model->addColumn("phone", tr("Phone"));
     model->addColumn("address", tr("Address"));
+    model->addHeaderFilter("username", HeaderFilter{HeaderWidget::LineEdit, COMPARE::LIKE});
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, COMPARE::LIKE});
     model->setTypeCommand(MSG_TYPE::USER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);

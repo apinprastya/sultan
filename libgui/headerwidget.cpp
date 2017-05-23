@@ -21,14 +21,47 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QComboBox>
+#include <QDateEdit>
 
 using namespace LibGUI;
 
-HeaderWidget::HeaderWidget(QWidget *parent):
-    QWidget(parent)
+HeaderWidget::HeaderWidget(int index, int type, const QString &title, QWidget *parent):
+    QWidget(parent),
+    mIndex(index)
 {
     auto lay = new QVBoxLayout();
-    lay->addWidget(new QLabel("hoRAS", this));
-    lay->addWidget(new QLineEdit(this));
+    auto label = new QLabel(title, this);
+    label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    if(type != DateStartEnd) lay->addWidget(label);
+    if(type == LineEdit) {
+        mLineEdit = new QLineEdit(this);
+        lay->addWidget(mLineEdit);
+        connect(mLineEdit, SIGNAL(returnPressed()), SLOT(lineEditDone()));
+    } else if(type == Combo) {
+        mComboBox = new QComboBox(this);
+        lay->addWidget(mComboBox);
+        connect(mComboBox, SIGNAL(currentIndexChanged(int)), SLOT(comboChanged()));
+    } else if(type == Date) {
+        mDateEdit = new QDateEdit(this);
+        mDateEdit->setCalendarPopup(true);
+        lay->addWidget(mDateEdit);
+        connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateChanged()));
+    }
     setLayout(lay);
+}
+
+void HeaderWidget::lineEditDone()
+{
+    emit filterValueChanged(mIndex, mLineEdit->text());
+}
+
+void HeaderWidget::comboChanged()
+{
+    emit filterValueChanged(mIndex, mComboBox->currentData());
+}
+
+void HeaderWidget::dateChanged()
+{
+    emit filterValueChanged(mIndex, mDateEdit->date());
 }

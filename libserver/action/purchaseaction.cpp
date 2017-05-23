@@ -33,3 +33,10 @@ void PurchaseAction::selectAndJoin()
     mDb->table(mTableName)->select("purchases.*, supliers.name as suplier")->
             join("LEFT JOIN supliers ON purchases.suplier_id = supliers.id");
 }
+
+QMap<QString, QString> PurchaseAction::fieldMap() const
+{
+    QMap<QString, QString> map;
+    map.insert("suplier", "supliers.name");
+    return map;
+}

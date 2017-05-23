@@ -19,8 +19,11 @@
  */
 #include "horizontalheader.h"
 #include "headerwidget.h"
+#include "tablemodel.h"
 #include <QComboBox>
 #include <QLineEdit>
+#include <QDateEdit>
+#include <QDebug>
 
 using namespace LibGUI;
 
@@ -33,14 +36,16 @@ HorizontalHeader::HorizontalHeader(QWidget *parent):
 
 void HorizontalHeader::showEvent(QShowEvent *e)
 {
-    for (int i=0;i<count();i++) {
-       if (!mBoxes[i]) {
-          auto *box = new HeaderWidget(this);
-          mBoxes[i] = box;
-       }
-       mBoxes[i]->setGeometry(sectionViewportPosition(i), 0,
-                                sectionSize(i) - 5, height());
-       mBoxes[i]->show();
+    for (int i = 0; i < count(); i++) {
+        int type = model()->headerData(i, Qt::Horizontal, TableModel::FilterRole).toInt();
+        const QString &title = model()->headerData(i, Qt::Horizontal, TableModel::TitleRole).toString();
+        if (!mBoxes[i]) {
+            auto *box = new HeaderWidget(i, type, title, this);
+            mBoxes[i] = box;
+            connect(box, SIGNAL(filterValueChanged(int,QVariant)), SIGNAL(filterValueChanged(int,QVariant)));
+        }
+        mBoxes[i]->setGeometry(sectionViewportPosition(i), 0, sectionSize(i) - 5, height());
+        mBoxes[i]->show();
     }
     QHeaderView::showEvent(e);
 }
@@ -59,6 +64,7 @@ void HorizontalHeader::fixWidgetPositions()
 
 void HorizontalHeader::handleSectionResized(int i)
 {
+    if(mBoxes.isEmpty()) return;
     for (int j = visualIndex(i); j < count(); j++)
     {
         int logical = logicalIndex(j);

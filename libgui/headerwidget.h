@@ -22,17 +22,39 @@
 
 #include "gui_global.h"
 #include <QWidget>
+#include <QVariant>
+
+class QLineEdit;
+class QComboBox;
+class QDateEdit;
 
 namespace LibGUI {
 
 class GUISHARED_EXPORT HeaderWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
     enum Type {
-        None, Line, LineUpperCase, Combo
+        None, LineEdit, Combo, Date, DateStartEnd
     };
 
-    HeaderWidget(QWidget *parent = nullptr);
+    HeaderWidget(int index, int type, const QString &title, QWidget *parent = nullptr);
+
+signals:
+    void filterValueChanged(int index, QVariant value);
+
+private:
+    int mIndex;
+    QLineEdit *mLineEdit = nullptr;
+    QComboBox *mComboBox = nullptr;
+    QDateEdit *mDateEdit = nullptr;
+    QDateEdit *mDateEnd = nullptr;
+
+private slots:
+    void lineEditDone();
+    void comboChanged();
+    void dateChanged();
 };
 
 }

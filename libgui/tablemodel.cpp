@@ -73,8 +73,16 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-        return mHeaders[section];
+    if(orientation == Qt::Horizontal) {
+        if(role == Qt::DisplayRole)
+            return QVariant();
+        else if(role == TitleRole)
+            return mHeaders[section];
+        else if(role == FilterRole) {
+            if(mHeaderFilter.contains(mColumns[section]))
+                return mHeaderFilter[mColumns[section]].type;
+            return QVariant(0);
+        }
     }
     return QVariant();
 }
@@ -112,6 +120,11 @@ void TableModel::addColumnMoney(const QString &key, const QString &title)
     });
 }
 
+void TableModel::addHeaderFilter(const QString &key, HeaderFilter filter)
+{
+    mHeaderFilter.insert(key, filter);
+}
+
 void TableModel::setFilter(const QString &key, int type, const QVariant &value)
 {
     mQuery.setFilter(key, type, value);
@@ -133,6 +146,12 @@ void TableModel::resfreshOne(const QVariant &id)
     Message msg(std::get<0>(mTypeCommandOne), std::get<1>(mTypeCommandOne));
     msg.addData(mIdKey, id);
     sendMessage(&msg);
+}
+
+void TableModel::filterChanged(int index, const QVariant &value)
+{
+    mQuery.setFilter(mColumns[index], mHeaderFilter[mColumns[index]].compare, value);
+    refresh();
 }
 
 void TableModel::messageReceived(LibG::Message *msg)

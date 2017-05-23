@@ -25,15 +25,16 @@
 
 namespace LibGUI {
 
+class HorizontalHeader;
+
 class TableView : public QTableView
 {
     Q_OBJECT
 public:
     TableView(QWidget *parent = 0);
 
-signals:
-
-public slots:
+private:
+    HorizontalHeader *mHeader;
 };
 
 }
