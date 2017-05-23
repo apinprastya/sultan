@@ -13,6 +13,7 @@
 #include "usersession.h"
 #include "printer.h"
 #include "escp.h"
+#include "paymentcashsuccessdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -93,9 +94,12 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         if(msg->isSuccess()) {
+            const QVariantMap &data = msg->data();
             mPayCashDialog->hide();
+            printBill(data);
+            PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(), data["total"].toDouble() - data["payment"].toDouble());
+            dialog.exec();
             mModel->reset();
-            printBill(msg->data());
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
