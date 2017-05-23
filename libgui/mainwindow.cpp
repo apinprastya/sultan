@@ -158,7 +158,7 @@ void MainWindow::openUser()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<UserWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new UserWidget(mMessageBus, this), tr("User"));
+        ui->tabWidget->tbnAddTab(new UserWidget(mMessageBus, this), tr("User"), ":/images/16x16/user.png");
 }
 
 void MainWindow::openSuplier()
@@ -166,7 +166,7 @@ void MainWindow::openSuplier()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<SuplierWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new SuplierWidget(mMessageBus, this), tr("Suplier"));
+        ui->tabWidget->tbnAddTab(new SuplierWidget(mMessageBus, this), tr("Suplier"), ":/images/16x16/truck.png");
 }
 
 void MainWindow::openCashier()
@@ -174,7 +174,7 @@ void MainWindow::openCashier()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<CashierWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new CashierWidget(mMessageBus, this), tr("Cahsier"));
+        ui->tabWidget->tbnAddTab(new CashierWidget(mMessageBus, this), tr("Cahsier"), ":/images/16x16/money-bag.png");
 }
 
 void MainWindow::openAbout()
@@ -188,7 +188,7 @@ void MainWindow::openCategory()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<CategoryWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new CategoryWidget(mMessageBus, this), tr("Category"));
+        ui->tabWidget->tbnAddTab(new CategoryWidget(mMessageBus, this), tr("Category"), ":/images/16x16/folder-open.png");
 }
 
 void MainWindow::openItem()
@@ -196,7 +196,7 @@ void MainWindow::openItem()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<ItemWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new ItemWidget(mMessageBus, this), tr("Item"));
+        ui->tabWidget->tbnAddTab(new ItemWidget(mMessageBus, this), tr("Item"), ":/images/16x16/odata.png");
 }
 
 void MainWindow::openPurchase()
@@ -205,7 +205,7 @@ void MainWindow::openPurchase()
         return (dynamic_cast<PurchaseWidget*>(widget) != nullptr);
     })) {
         auto widget = new PurchaseWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Purcase"));
+        ui->tabWidget->tbnAddTab(widget, tr("Purcase"), ":/images/16x16/bagbox.png");
         connect(widget, SIGNAL(requestOpenPurchaseWidget(int,QString)), SLOT(openPurchaseItem(int,QString)));
     }
 }

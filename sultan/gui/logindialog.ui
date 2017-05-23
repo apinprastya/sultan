@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>162</height>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,6 +74,9 @@
          <property name="text">
           <string notr="true">Login</string>
          </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="2" column="1">
@@ -109,14 +112,44 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_4">
-       <property name="styleSheet">
-        <string notr="true">font-size: 12px;</string>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <property name="text">
-        <string notr="true">version : 0.1</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 12px;</string>
+         </property>
+         <property name="text">
+          <string notr="true">version : 0.1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushConfig">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../sultan.qrc">
+           <normaloff>:/images/16x16/gear.png</normaloff>:/images/16x16/gear.png</iconset>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

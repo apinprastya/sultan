@@ -44,6 +44,14 @@ void TabWidget::tbnAddTab(QWidget *widget, const QString &name)
     setCurrentIndex(indexOf(widget));
 }
 
+void TabWidget::tbnAddTab(QWidget *widget, const QString &name, const QString &iconName)
+{
+    if(mLabel->isVisible())
+        mLabel->setVisible(false);
+    addTab(widget, QIcon(iconName), name);
+    setCurrentIndex(indexOf(widget));
+}
+
 void TabWidget::tbnRemoveTab(int index)
 {
     removeTab(index);
