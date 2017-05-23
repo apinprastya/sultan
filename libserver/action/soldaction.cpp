@@ -42,6 +42,7 @@ Message SoldAction::insertSold(Message *msg)
     auto now = QDateTime::currentMSecsSinceEpoch() / 10000;
     msg->removeData("cart");
     msg->addData("number", QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0')));
+    if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(mDb->insert(mTableName, msg->data())) {
         //TODO: change it to insert batch
         QVariant id = mDb->lastInsertedId();
@@ -52,6 +53,12 @@ Message SoldAction::insertSold(Message *msg)
             //TODO: calculate the current stock
         }
         msg->setData(QVariantMap{{"id", id}});
+        if(mDb->isSupportTransaction()) {
+            if(!mDb->commit()) {
+                message.setError(mDb->lastError().text());
+                return message;
+            }
+        }
         return get(msg);
     } else {
         message.setError(mDb->lastError().text());
