@@ -18,5 +18,13 @@
 		<file>images/16x16/barcode.png</file>
 		<file>images/16x16/tick-white.png</file>
 		<file>images/16x16/hand-shake.png</file>
+		<file>images/16x16/configure.png</file>
+		<file>images/16x16/gear.png</file>
+		<file>images/16x16/truck.png</file>
+		<file>images/16x16/user.png</file>
+		<file>images/16x16/bagbox.png</file>
+		<file>images/16x16/folder-open.png</file>
+		<file>images/16x16/money-bag.png</file>
+		<file>images/16x16/odata.png</file>
     </qresource>
 </RCC>

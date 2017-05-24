@@ -21,29 +21,32 @@ CONFIG(staticlib) {
 } else {
     DEFINES += GUI_LIBRARY
 }
+
 contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
+
+DLLDESTDIR = ../
 
 macx {
     DESTDIR = ../bin/Sultan.app/Contents/Frameworks
     QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
+    LIBS += -framework Foundation
+    copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
+} else:win32 {
+    DESTDIR = ../bin
+    LIBS += -L$$OUT_PWD/../bin
+    PWD_WIN = $${PWD}
+    DESTDIR_WIN = $$OUT_PWD/../bin/
+    PWD_WIN ~= s,/,\\,g
+    DESTDIR_WIN ~= s,/,\\,g
+    copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\libgui_id.qm $${DESTDIR_WIN})
 } else {
     DESTDIR = ../bin
-}
-DLLDESTDIR = ../
-
-macx {
-    QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
-    LIBS += -framework Foundation
-} else:win32 {
-    LIBS += -L$$OUT_PWD/../bin
-} else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
 }
 
 TRANSLATIONS = libgui_id.ts
-
-copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
 
 QMAKE_EXTRA_TARGETS += copytr
 POST_TARGETDEPS += copytr
