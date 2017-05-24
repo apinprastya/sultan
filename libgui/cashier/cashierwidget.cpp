@@ -14,6 +14,7 @@
 #include "printer.h"
 #include "escp.h"
 #include "paymentcashsuccessdialog.h"
+#include "searchitemdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -53,7 +54,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mPayCashDialog, SIGNAL(requestPay(double)), SLOT(payCashRequested(double)));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
-    //new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
@@ -227,4 +228,14 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->column(QList<int>())->doubleHeight(false)->line()->newLine()->leftText(footer, true)->newLine(3);
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;
+}
+
+void CashierWidget::openSearch()
+{
+    SearchItemDialog dialog(mMessageBus);
+    dialog.exec();
+    const QString &barcode = dialog.getSelectedBarcode();
+    if(barcode.isEmpty()) return;
+    ui->lineBarcode->setText(barcode);
+    barcodeEntered();
 }

@@ -31,4 +31,5 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
         mHeader = new HorizontalHeader(this);
         setHorizontalHeader(mHeader);
     }
+    setTabKeyNavigation(false);
 }
