@@ -63,7 +63,9 @@ QSize HorizontalHeader::sizeHint() const
 
 void HorizontalHeader::fixWidgetPositions()
 {
-
+    for(int i = 0; i < mBoxes.size(); i++)
+        mBoxes[i]->setGeometry(sectionViewportPosition(i), 0,
+                               sectionSize(i) - 5, height());
 }
 
 void HorizontalHeader::handleSectionResized(int i)

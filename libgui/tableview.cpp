@@ -31,3 +31,10 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
     setHorizontalHeader(mHeader);
     setTabKeyNavigation(false);
 }
+
+void TableView::scrollContentsBy(int dx, int dy)
+{
+    QTableView::scrollContentsBy(dx, dy);
+    if(dx != 0)
+        mHeader->fixWidgetPositions();
+}

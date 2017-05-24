@@ -32,6 +32,7 @@ public:
     HorizontalHeader(QWidget *parent = nullptr, bool useStandartHeader = false);
     void showEvent(QShowEvent *e) override;
     QSize sizeHint() const override;
+    void fixWidgetPositions();
 
 private:
     QMap<int, QWidget*> mBoxes;
@@ -41,7 +42,6 @@ signals:
     void filterValueChanged(int index, const QVariant &value);
 
 private slots:
-    void fixWidgetPositions();
     void handleSectionResized(int i);
     void handleSectionMoved(int logical, int oldVisualIndex, int newVisualIndex);
 };

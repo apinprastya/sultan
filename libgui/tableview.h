@@ -33,6 +33,9 @@ class TableView : public QTableView
 public:
     TableView(QWidget *parent = 0, bool useStandartHeader = false);
 
+protected:
+    void scrollContentsBy(int dx, int dy) override;
+
 private:
     HorizontalHeader *mHeader;
 };
