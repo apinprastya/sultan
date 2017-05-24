@@ -47,7 +47,6 @@ static std::string TAG = "CORE";
 Core::Core(QObject *parent) :
     QObject(parent),
     mSplashUi(new Splash()),
-    mSettingDialog(new SettingDialog()),
     mLoginDialog(new LoginDialog()),
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this)),
@@ -72,7 +71,6 @@ Core::~Core()
     LOG(INFO) << TAG << "Application Exited";
     Preference::destroy();
     if(mSplashUi) delete mSplashUi;
-    if(mSettingDialog) delete mSettingDialog;
     if(mLoginDialog) delete mLoginDialog;
     if(mMainWindow) delete mMainWindow;
     UserSession::destroy();
@@ -111,8 +109,9 @@ void Core::init()
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting
         mSplashUi->hide();
-        mSettingDialog->showDialog();
-        //show setting ui
+        SettingDialog dialog;
+        dialog.showDialog();
+        dialog.exec();
     } else {
         if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
 

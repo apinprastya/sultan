@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "message.h"
 #include "usersession.h"
+#include "settingdialog.h"
 #include <QStringBuilder>
 #include <QCryptographicHash>
 #include <QDebug>
@@ -35,6 +36,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
     connect(ui->pushLogin, SIGNAL(clicked(bool)), SLOT(loginClicked()));
+    connect(ui->pushConfig, SIGNAL(clicked(bool)), SLOT(openSetting()));
 }
 
 LoginDialog::~LoginDialog()
@@ -86,4 +88,11 @@ void LoginDialog::loginClicked()
     msg.addData("username", username);
     msg.addData("password", QString(QCryptographicHash::hash(password.toUtf8(),QCryptographicHash::Md5).toHex()));
     sendMessage(&msg);
+}
+
+void LoginDialog::openSetting()
+{
+    SettingDialog dialog;
+    dialog.showDialog();
+    dialog.exec();
 }

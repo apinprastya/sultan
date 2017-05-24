@@ -24,7 +24,6 @@
 #include <QObject>
 
 class Splash;
-class SettingDialog;
 class LoginDialog;
 class SocketManager;
 class SocketClient;
@@ -52,7 +51,6 @@ public:
 
 private:
     Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
     LoginDialog *mLoginDialog;
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
