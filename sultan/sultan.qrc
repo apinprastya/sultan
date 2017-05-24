@@ -26,5 +26,6 @@
 		<file>images/16x16/folder-open.png</file>
 		<file>images/16x16/money-bag.png</file>
 		<file>images/16x16/odata.png</file>
+		<file>images/16x16/baggage-cart.png</file>
     </qresource>
 </RCC>

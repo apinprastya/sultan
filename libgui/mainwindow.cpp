@@ -150,7 +150,7 @@ void MainWindow::openSetting()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<SettingWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"));
+        ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"), ":/images/16x16/gear.png");
 }
 
 void MainWindow::openUser()
@@ -205,7 +205,7 @@ void MainWindow::openPurchase()
         return (dynamic_cast<PurchaseWidget*>(widget) != nullptr);
     })) {
         auto widget = new PurchaseWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Purcase"), ":/images/16x16/bagbox.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Purcase"), ":/images/16x16/baggage-cart.png");
         connect(widget, SIGNAL(requestOpenPurchaseWidget(int,QString)), SLOT(openPurchaseItem(int,QString)));
     }
 }
@@ -220,5 +220,5 @@ void MainWindow::openPurchaseItem(int id, const QString &number)
         }
     }
     auto w = new PurchaseItemWidget(id, number, mMessageBus, this);
-    ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(number));
+    ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(number), ":/images/16x16/bagbox.png");
 }

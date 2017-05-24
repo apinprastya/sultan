@@ -64,6 +64,12 @@ void QueryDB::clearSort()
     mSort = QString();
 }
 
+void QueryDB::removeFilter(const QString &key)
+{
+    if(mFilter.contains(key))
+        mFilter.remove(key);
+}
+
 void QueryDB::setSort(const QString &sort)
 {
     mSort = sort;

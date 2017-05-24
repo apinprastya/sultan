@@ -23,6 +23,7 @@
 #include "rowdata.h"
 #include "message.h"
 #include "preference.h"
+#include "db_constant.h"
 #include <QDebug>
 
 using namespace LibGUI;
@@ -150,7 +151,24 @@ void TableModel::resfreshOne(const QVariant &id)
 
 void TableModel::filterChanged(int index, const QVariant &value)
 {
-    mQuery.setFilter(mColumns[index], mHeaderFilter[mColumns[index]].compare, value);
+    const QString &key = mColumns[index];
+    const HeaderFilter &filter = mHeaderFilter[key];
+    if(filter.compare == FilterLike) {
+        if(value.canConvert(QVariant::String) && value.toString().isEmpty())
+            mQuery.removeFilter(key);
+        else
+            mQuery.setFilter(key, COMPARE::LIKE, value);
+    } else if(filter.compare == FilterEQ) {
+        if(value.canConvert(QVariant::String) && value.toString().isEmpty())
+            mQuery.removeFilter(key);
+        else
+            mQuery.setFilter(key, COMPARE::EQUAL, value);
+    } else if(filter.compare == FilterLikeNative) {
+        if(value.canConvert(QVariant::String) && value.toString().isEmpty())
+            mQuery.removeFilter(key);
+        else
+            mQuery.setFilter(key, COMPARE::LIKE_NATIVE, value);
+    }
     refresh();
 }
 

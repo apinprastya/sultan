@@ -29,6 +29,7 @@
 #include "tableitem.h"
 #include "additemdialog.h"
 #include "addpricedialog.h"
+#include "headerwidget.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -55,6 +56,8 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumnMoney("stock", tr("Stock"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));
+    model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative});
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
     mMainTable->setupTable();
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);

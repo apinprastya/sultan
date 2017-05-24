@@ -54,6 +54,7 @@ public:
     void clearAll();
     void clearData();
     void clearSort();
+    void removeFilter(const QString &key);
     void setSort(const QString &sort);
     void setLimit(int val);
     void setStart(int val);
