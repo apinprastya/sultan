@@ -29,9 +29,10 @@
 using namespace LibGUI;
 using namespace LibG;
 
-TableModel::TableModel(QObject *parent):
+TableModel::TableModel(QObject *parent, bool useStandartHeader):
     QAbstractTableModel(parent),
-    mNumRow(0)
+    mNumRow(0),
+    mUseStandartHeader(useStandartHeader)
 {
     mIsLoaded = false;
     mQuery.setLimit(LibG::CONFIG::ITEMS_PER_LOAD);
@@ -75,6 +76,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(orientation == Qt::Horizontal) {
+        if(mUseStandartHeader && role == Qt::DisplayRole)
+            return mHeaders[section];
         if(role == Qt::DisplayRole)
             return QVariant();
         else if(role == TitleRole)

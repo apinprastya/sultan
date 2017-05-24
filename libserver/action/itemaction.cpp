@@ -99,5 +99,13 @@ void ItemAction::selectAndJoin()
     mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
                 (select price from sellprices where barcode = items.barcode order by count asc limit 1) as sell_price")->
             join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
-            join("LEFT JOIN categories ON categories.id = items.category_id");
+                join("LEFT JOIN categories ON categories.id = items.category_id");
+}
+
+QMap<QString, QString> ItemAction::fieldMap() const
+{
+    QMap<QString, QString> map;
+    map.insert("name", "items.name");
+    map.insert("suplier", "supliers.name");
+    return map;
 }

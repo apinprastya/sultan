@@ -26,6 +26,8 @@
 
 using namespace LibGUI;
 
+static QString STYLE{"font-size: 11px;"};
+
 HeaderWidget::HeaderWidget(int index, int type, const QString &title, QWidget *parent):
     QWidget(parent),
     mIndex(index)
@@ -33,18 +35,22 @@ HeaderWidget::HeaderWidget(int index, int type, const QString &title, QWidget *p
     auto lay = new QVBoxLayout();
     auto label = new QLabel(title, this);
     label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    label->setStyleSheet(STYLE);
     if(type != DateStartEnd) lay->addWidget(label);
     if(type == LineEdit) {
         mLineEdit = new QLineEdit(this);
+        mLineEdit->setStyleSheet(STYLE);
         lay->addWidget(mLineEdit);
         connect(mLineEdit, SIGNAL(returnPressed()), SLOT(lineEditDone()));
     } else if(type == Combo) {
         mComboBox = new QComboBox(this);
+        mComboBox->setStyleSheet(STYLE);
         lay->addWidget(mComboBox);
         connect(mComboBox, SIGNAL(currentIndexChanged(int)), SLOT(comboChanged()));
     } else if(type == Date) {
         mDateEdit = new QDateEdit(this);
         mDateEdit->setCalendarPopup(true);
+        mDateEdit->setStyleSheet(STYLE);
         lay->addWidget(mDateEdit);
         connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateChanged()));
     }

@@ -45,6 +45,7 @@ signals:
     void socketError();
     void socketDisconnected();
     void messageReceived(LibG::Message *msg);
+    void connectionTimeout();
 
 private slots:
     void checkConnection();

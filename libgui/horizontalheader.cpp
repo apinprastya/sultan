@@ -25,6 +25,8 @@
 #include <QDateEdit>
 #include <QDebug>
 
+#define HEADER_HEGHT 60
+
 using namespace LibGUI;
 
 HorizontalHeader::HorizontalHeader(QWidget *parent):
@@ -53,7 +55,7 @@ void HorizontalHeader::showEvent(QShowEvent *e)
 QSize HorizontalHeader::sizeHint() const
 {
     QSize baseSize = QHeaderView::sizeHint();
-    baseSize.setHeight(70);
+    baseSize.setHeight(HEADER_HEGHT);
     return baseSize;
 }
 

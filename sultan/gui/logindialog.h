@@ -48,6 +48,7 @@ signals:
 
 private slots:
     void loginClicked();
+    void openSetting();
 };
 
 #endif // LOGINDIALOG_H

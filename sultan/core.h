@@ -24,7 +24,6 @@
 #include <QObject>
 
 class Splash;
-class SettingDialog;
 class LoginDialog;
 class SocketManager;
 class SocketClient;
@@ -52,7 +51,6 @@ public:
 
 private:
     Splash *mSplashUi;
-    SettingDialog *mSettingDialog;
     LoginDialog *mLoginDialog;
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
@@ -67,6 +65,7 @@ private slots:
     void clientDisconnected();
     void loginSuccess();
     void logout();
+    void connectionTimeout();
 };
 
 #endif // CORE_H

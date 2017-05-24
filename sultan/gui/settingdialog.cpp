@@ -163,5 +163,11 @@ void SettingDialog::save()
     Preference::sync();
     //restart the app for easier :D
     qApp->quit();
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    QStringList list;
+    const QStringList &args = qApp->arguments();
+    for(int i = 0; i < args.count(); i++) {
+        if(i == 0) continue;
+        list.append(args[i]);
+    }
+    QProcess::startDetached(qApp->arguments()[0], list);
 }
