@@ -34,6 +34,7 @@
 #include "migration.h"
 #include "usersession.h"
 #include "mainwindow.h"
+#include "gui/restartconfirmationdialog.h"
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
@@ -57,6 +58,7 @@ Core::Core(QObject *parent) :
     mLoginDialog->setMessageBus(mMessageBus);
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
+    connect(mSocketClient, SIGNAL(connectionTimeout()), SLOT(connectionTimeout()));
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
     connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
@@ -183,7 +185,9 @@ void Core::clientConnected()
 
 void Core::clientDisconnected()
 {
-
+    RestartConfirmationDialog dialog;
+    dialog.setMessage(tr("Error Disconnect"), tr("Connection to server lost. Please check your connectivity."));
+    dialog.exec();
 }
 
 void Core::loginSuccess()
@@ -200,4 +204,11 @@ void Core::logout()
 {
     mMainWindow->hide();
     mLoginDialog->showDialog();
+}
+
+void Core::connectionTimeout()
+{
+    RestartConfirmationDialog dialog;
+    dialog.setMessage(tr("Error Timeout"), tr("Connection to server timeout. Please check your connectivity."));
+    dialog.exec();
 }

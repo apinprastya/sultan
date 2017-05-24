@@ -65,6 +65,7 @@ private slots:
     void clientDisconnected();
     void loginSuccess();
     void logout();
+    void connectionTimeout();
 };
 
 #endif // CORE_H

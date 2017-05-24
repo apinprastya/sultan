@@ -57,6 +57,7 @@ void SocketClient::checkConnection()
     if(mSocket->state() != QAbstractSocket::ConnectedState) {
         LOG(ERROR) << TAG << "Connection to server timeout";
         mSocket->close();
+        emit connectionTimeout();
     }
 }
 

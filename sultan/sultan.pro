@@ -55,7 +55,8 @@ SOURCES += main.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
     socket/sockethandler.cpp \
-    gui/logindialog.cpp
+    gui/logindialog.cpp \
+    gui/restartconfirmationdialog.cpp
 
 HEADERS  += \
     core.h \
@@ -64,9 +65,11 @@ HEADERS  += \
     socket/socketmanager.h \
     socket/socketclient.h \
     socket/sockethandler.h \
-    gui/logindialog.h
+    gui/logindialog.h \
+    gui/restartconfirmationdialog.h
 
 FORMS += \
     gui/splash.ui \
     gui/settingdialog.ui \
-    gui/logindialog.ui
+    gui/logindialog.ui \
+    gui/restartconfirmationdialog.ui
