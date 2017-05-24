@@ -25,12 +25,14 @@
 #include <QDateEdit>
 #include <QDebug>
 
+#define HEADER_HEGHT_NORMAL 30
 #define HEADER_HEGHT 60
 
 using namespace LibGUI;
 
-HorizontalHeader::HorizontalHeader(QWidget *parent):
-    QHeaderView(Qt::Horizontal, parent)
+HorizontalHeader::HorizontalHeader(QWidget *parent, bool useStandartHeader):
+    QHeaderView(Qt::Horizontal, parent),
+    mUseStandartHeader(useStandartHeader)
 {
     connect(this, SIGNAL(sectionResized(int,int,int)), SLOT(handleSectionResized(int)));
     connect(this, SIGNAL(sectionMoved(int,int,int)), SLOT(handleSectionMoved(int,int,int)));
@@ -55,7 +57,7 @@ void HorizontalHeader::showEvent(QShowEvent *e)
 QSize HorizontalHeader::sizeHint() const
 {
     QSize baseSize = QHeaderView::sizeHint();
-    baseSize.setHeight(HEADER_HEGHT);
+    baseSize.setHeight(mUseStandartHeader ? HEADER_HEGHT_NORMAL : HEADER_HEGHT);
     return baseSize;
 }
 

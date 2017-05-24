@@ -29,12 +29,13 @@ class GUISHARED_EXPORT HorizontalHeader : public QHeaderView
 {
     Q_OBJECT
 public:
-    HorizontalHeader(QWidget *parent = nullptr);
+    HorizontalHeader(QWidget *parent = nullptr, bool useStandartHeader = false);
     void showEvent(QShowEvent *e) override;
     QSize sizeHint() const override;
 
 private:
     QMap<int, QWidget*> mBoxes;
+    bool mUseStandartHeader;
 
 signals:
     void filterValueChanged(int index, const QVariant &value);

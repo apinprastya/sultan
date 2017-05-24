@@ -27,6 +27,7 @@
 #include "message.h"
 #include "guiutil.h"
 #include "tableview.h"
+#include "headerwidget.h"
 #include <QDebug>
 #include <QMessageBox>
 
@@ -50,6 +51,9 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     model->addColumn("code", tr("Code"));
     model->addColumn("phone", tr("Phone"));
     model->addColumn("address", tr("Address"));
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    model->addHeaderFilter("code", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    model->addHeaderFilter("phone", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
     model->setTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);

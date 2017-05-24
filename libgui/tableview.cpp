@@ -27,9 +27,7 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
 {
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    if(!useStandartHeader) {
-        mHeader = new HorizontalHeader(this);
-        setHorizontalHeader(mHeader);
-    }
+    mHeader = new HorizontalHeader(this, useStandartHeader);
+    setHorizontalHeader(mHeader);
     setTabKeyNavigation(false);
 }

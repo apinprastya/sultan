@@ -25,13 +25,13 @@ SearchItemDialog::SearchItemDialog(MessageBus *bus, QWidget *parent) :
     model->setMessageBus(bus);
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
-    model->addColumn("sell_price", tr("Price"));
-    model->addColumn("stock", tr("Stock"));
+    model->addColumnMoney("sell_price", tr("Price"));
+    model->addColumnMoney("stock", tr("Stock"));
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     ui->verticalLayout->addWidget(mTableWidget);
     connect(ui->lineName, SIGNAL(returnPressed()), SLOT(nameDone()));
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 200 << 200 << 80 << 80);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 200 << 200 << 100 << 80);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     ui->lineName->setFocus();
     connect(mTableWidget->getModel(), SIGNAL(firstDataLoaded()), SLOT(dataLoaded()));

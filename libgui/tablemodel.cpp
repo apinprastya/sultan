@@ -76,8 +76,6 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(orientation == Qt::Horizontal) {
-        if(mUseStandartHeader && role == Qt::DisplayRole)
-            return mHeaders[section];
         if(role == Qt::DisplayRole)
             return QVariant();
         else if(role == TitleRole)
