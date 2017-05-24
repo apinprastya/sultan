@@ -30,6 +30,7 @@ CREATE TABLE solditems (
 	`count` FLOAT NOT NULL,
 	`price` DECIMAL(15, 2) NOT NULL,
 	`total` DECIMAL(15, 2) NOT NULL,
+    `buy_price` DECIMAL(15, 2) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

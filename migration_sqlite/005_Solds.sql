@@ -26,7 +26,8 @@ CREATE TABLE solditems (
 	`sold_id` INT NOT NULL,
 	`count` FLOAT NOT NULL,
 	`price` DECIMAL(15, 2) NOT NULL,
-	`total` DECIMAL(15, 2) NOT NULL
+	`total` DECIMAL(15, 2) NOT NULL,
+    `buy_price` DECIMAL(15, 2) NOT NULL
 );
 -- separator
 CREATE INDEX SOLDITEM ON solditems (barcode);

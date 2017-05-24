@@ -49,8 +49,10 @@ Message SoldAction::insertSold(Message *msg)
         for(auto v : l) {
             QVariantMap m = v.toMap();
             m["sold_id"] = id;
+            DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
+            m["buy_price"] = m["count"].toFloat() * res.first()["buy_price"].toDouble();
             mDb->insert("solditems", m);
-            //TODO: calculate the current stock
+            mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
         }
         msg->setData(QVariantMap{{"id", id}});
         if(mDb->isSupportTransaction()) {
