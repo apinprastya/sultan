@@ -35,10 +35,10 @@ static QMap<int, QString> BTNICONS = {
     {TableWidget::Delete, QStringLiteral(":/images/16x16/cross.png")}
 };
 
-TableWidget::TableWidget(QWidget *parent) :
+TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     QWidget(parent),
-    mTableView(new TableView(this)),
-    mModel(new TableModel(this))
+    mTableView(new TableView(this, useStandartHeader)),
+    mModel(new TableModel(this, useStandartHeader))
 {
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(mTableView);

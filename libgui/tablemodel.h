@@ -40,7 +40,7 @@ class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::Mess
 public:
     enum PageStatus { None, Loading, Loaded };
     enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1 };
-    TableModel(QObject *parent = nullptr);
+    TableModel(QObject *parent = nullptr, bool useStandartHeader = false);
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -79,6 +79,7 @@ protected:
     LibDB::QueryDB mQuery;
     QString mIdKey = QStringLiteral("id");
     QMap<QString, HeaderFilter> mHeaderFilter;
+    bool mUseStandartHeader = false;
 
 signals:
     void loadMore(int page) const;

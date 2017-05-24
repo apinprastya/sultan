@@ -40,7 +40,7 @@ public:
         Refresh, Add, Delete, Update, Unknown
     };
 
-    TableWidget(QWidget *parent = 0);
+    TableWidget(QWidget *parent = 0, bool useStandartHeader = false);
     ~TableWidget();
     void initButton(const QList<ButtonType> buttons);
     void initCrudButton();

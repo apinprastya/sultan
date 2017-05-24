@@ -22,11 +22,13 @@
 
 using namespace LibGUI;
 
-TableView::TableView(QWidget *parent) :
-    QTableView(parent),
-    mHeader(new HorizontalHeader(this))
+TableView::TableView(QWidget *parent, bool useStandartHeader) :
+    QTableView(parent)
 {
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    setHorizontalHeader(mHeader);
+    if(!useStandartHeader) {
+        mHeader = new HorizontalHeader(this);
+        setHorizontalHeader(mHeader);
+    }
 }

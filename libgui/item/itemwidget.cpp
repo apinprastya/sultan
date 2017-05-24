@@ -37,7 +37,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ItemWidget),
     mMainTable(new TableWidget(this)),
-    mSecondTable(new TableWidget(this)),
+    mSecondTable(new TableWidget(this, true)),
     mAddDialog(new AddItemDialog(bus, this)),
     mPriceDialog(new AddPriceDialog(bus, this))
 {
