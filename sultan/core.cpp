@@ -104,6 +104,13 @@ void Core::initLogger()
     });
 }
 
+void Core::showRestartError(const QString &title, const QString &msg)
+{
+    RestartConfirmationDialog dialog;
+    dialog.setMessage(title, msg);
+    dialog.exec();
+}
+
 void Core::init()
 {
     initLogger();
@@ -128,6 +135,7 @@ void Core::init()
                     Preference::getString(SETTING::MYSQL_DB));
             QString error;
             if(!LibDB::Db::checkConnection(error)) {
+                showRestartError(tr("Database Error"), error);
                 return;
             }
             mSplashUi->setMessage("Migrate database ...");
@@ -143,6 +151,7 @@ void Core::init()
                 LOG(ERROR) << TAG << "Error migration";
                 mSplashUi->setMessage("Migrate database failed");
                 qApp->processEvents();
+                showRestartError(tr("Database Error"), tr("Migrate database failed"));
                 return;
             }
             mSplashUi->setMessage("Start action server ...");
@@ -152,6 +161,7 @@ void Core::init()
             qApp->processEvents();
             mSocketManager = new SocketManager(this);
             if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
+                showRestartError(tr("Server Socket Error"), tr("Port already in used"));
                 return;
             }
             connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));
@@ -185,9 +195,7 @@ void Core::clientConnected()
 
 void Core::clientDisconnected()
 {
-    RestartConfirmationDialog dialog;
-    dialog.setMessage(tr("Error Disconnect"), tr("Connection to server lost. Please check your connectivity."));
-    dialog.exec();
+    showRestartError(tr("Error Disconnect"), tr("Connection to server lost. Please check your connectivity."));
 }
 
 void Core::loginSuccess()
@@ -208,7 +216,5 @@ void Core::logout()
 
 void Core::connectionTimeout()
 {
-    RestartConfirmationDialog dialog;
-    dialog.setMessage(tr("Error Timeout"), tr("Connection to server timeout. Please check your connectivity."));
-    dialog.exec();
+    showRestartError(tr("Error Timeout"), tr("Connection to server timeout. Please check your connectivity."));
 }

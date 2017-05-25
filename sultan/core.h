@@ -58,6 +58,8 @@ private:
     LibG::MessageBus *mMessageBus;
     LibGUI::MainWindow *mMainWindow;
 
+    void showRestartError(const QString &title, const QString &msg);
+
 private slots:
     void init();
     void connectToServer();

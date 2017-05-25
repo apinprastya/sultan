@@ -29,7 +29,7 @@
 
 using namespace LibDB;
 
-static std::string TAG = "DB";
+static std::string TAG = "[DB]";
 static DBSetting DBSETTING;
 static QString DBTYPE = "MYSQL";
 static QMap<QString, QString> SQLDRIVERNAME{{"MYSQL", "QMYSQL"}, {"SQLITE", "QSQLITE"}};
@@ -423,6 +423,7 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
     auto database = getDatabase();
     if(database.isOpen()) return true;
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
+    LOG(INFO) << TAG << "Database support transaction :" << (mSupportTransaction ? "TRUE" : "FALSE");
     if(DBTYPE == "MYSQL") {
         database.setDatabaseName(dbname);
         database.setPort(port);
