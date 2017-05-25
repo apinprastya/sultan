@@ -17,6 +17,9 @@ Note: This project is still in heavy development. A lot of changes will be happe
 ## Compile
 * Please check [Wiki Compile](https://github.com/apinprastya/sultan/wiki/Compile)
 
+## Screenshot
+* Please check [Wiki Screenshot](https://github.com/apinprastya/sultan/wiki/Screenshot)
+
 ## Contact
 Any question please contact me apin.klas@gmail.com
 
