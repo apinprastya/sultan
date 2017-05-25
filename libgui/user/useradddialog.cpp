@@ -67,7 +67,8 @@ void UserAddDialog::saveClicked()
     }
     QVariantMap data;
     data["username"] = ui->lineUsername->text();
-    data["password"] = QString(QCryptographicHash::hash(ui->linePassword->text().toUtf8(),QCryptographicHash::Md5).toHex());
+    if(mId <= 0)
+        data["password"] = QString(QCryptographicHash::hash(ui->linePassword->text().toUtf8(),QCryptographicHash::Md5).toHex());
     data["name"] = ui->lineName->text();
     data["phone"] = ui->linePhone->text();
     data["address"] = ui->textAddress->toPlainText();
