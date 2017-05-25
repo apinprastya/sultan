@@ -48,3 +48,13 @@ QDate DBUtil::sqlDateToDate(const QString &value)
     }
     return QDate();
 }
+
+QDateTime DBUtil::sqlDateToDateTime(const QString &value)
+{
+    for(const QString &s : format) {
+        auto date = QDateTime::fromString(value, s);
+        if(date.isValid())
+            return date;
+    }
+    return QDateTime();
+}

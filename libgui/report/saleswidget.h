@@ -1,5 +1,5 @@
 /*
- * solditemaction.cpp
+ * saleswidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,17 +17,34 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "solditemaction.h"
-#include "db.h"
+#ifndef SALESWIDGET_H
+#define SALESWIDGET_H
 
-using namespace LibServer;
+#include "messagehandler.h"
+#include <QWidget>
 
-SoldItemAction::SoldItemAction():
-    ServerAction("solditems", "id")
-{
+namespace Ui {
+class NormalWidget;
 }
 
-void SoldItemAction::selectAndJoin()
+namespace LibGUI {
+
+class TableWidget;
+
+class SalesWidget : public QWidget, public LibG::MessageHandler
 {
-    mDb->select("*, (total - buy_price) as margin");
+    Q_OBJECT
+public:
+    SalesWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+
+private:
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
+};
+
 }
+
+#endif // SALESWIDGET_H

@@ -23,7 +23,7 @@
 
 #include "db_global.h"
 #include <QString>
-#include <QDate>
+#include <QDateTime>
 
 namespace LibDB {
 
@@ -33,6 +33,7 @@ public:
     DBUtil();
     static QString formatDateToIndo(const QString &d, bool useTime = true);
     static QDate sqlDateToDate(const QString &value);
+    static QDateTime sqlDateToDateTime(const QString &value);
 };
 
 }

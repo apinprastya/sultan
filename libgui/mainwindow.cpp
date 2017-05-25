@@ -29,6 +29,7 @@
 #include "purchase/purchasewidget.h"
 #include "purchase/purchaseitemwidget.h"
 #include "item/itemwidget.h"
+#include "report/saleswidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -97,6 +98,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Items, SIGNAL(triggered(bool)), SLOT(openItem()));
     connect(ui->action_Category, SIGNAL(triggered(bool)), SLOT(openCategory()));
     connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
+    connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -221,4 +223,14 @@ void MainWindow::openPurchaseItem(int id, const QString &number)
     }
     auto w = new PurchaseItemWidget(id, number, mMessageBus, this);
     ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(number), ":/images/16x16/bagbox.png");
+}
+
+void MainWindow::openSalesReport()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<SalesWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new SalesWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/baggage-cart.png");
+    }
 }

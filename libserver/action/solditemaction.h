@@ -28,6 +28,9 @@ class SoldItemAction : public ServerAction
 {
 public:
     SoldItemAction();
+
+protected:
+    void selectAndJoin() override;
 };
 
 }

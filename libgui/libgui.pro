@@ -85,7 +85,8 @@ SOURCES += \
     purchase/purchaseitemwidget.cpp \
     purchase/purchaseadditemdialog.cpp \
     cashier/paymentcashsuccessdialog.cpp \
-    cashier/searchitemdialog.cpp
+    cashier/searchitemdialog.cpp \
+    report/saleswidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -122,7 +123,8 @@ HEADERS += \
     purchase/purchaseitemwidget.h \
     purchase/purchaseadditemdialog.h \
     cashier/paymentcashsuccessdialog.h \
-    cashier/searchitemdialog.h
+    cashier/searchitemdialog.h \
+    report/saleswidget.h
 
 FORMS += \
     mainwindow.ui \
