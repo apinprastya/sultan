@@ -30,6 +30,7 @@
 #include "purchase/purchaseitemwidget.h"
 #include "item/itemwidget.h"
 #include "report/saleswidget.h"
+#include "statusbar/statusbarwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -46,14 +47,13 @@ using namespace LibG;
 MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mMessageBus(bus),
-    mLabelTime(new QLabel(this))
+    mMessageBus(bus)
 {
     ui->setupUi(this);
-    statusBar()->addWidget(mLabelTime);
+    mStatusBar = new StatusBarWidget(this);
+    statusBar()->addPermanentWidget(mStatusBar, 1);
     ui->tabWidget->clear();
     setupConnection();
-    updateClock();
     LibPrint::Printer::instance();
 }
 
@@ -78,6 +78,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     emit logout();
     event->ignore();
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    mStatusBar->updateUser();
+    QMainWindow::showEvent(event);
 }
 
 void MainWindow::setupConnection()
@@ -107,13 +113,6 @@ void MainWindow::showWindowFullScreen()
         showNormal();
     else
         showFullScreen();
-}
-
-void MainWindow::updateClock()
-{
-    /*auto dt = QDateTime::currentDateTime();
-    mLabelTime->setText(dt.toString("dd-MMM-yyyy hh:mm:ss"));
-    QTimer::singleShot(1000, this, SLOT(updateClock()));*/
 }
 
 void MainWindow::closeTab(int index)

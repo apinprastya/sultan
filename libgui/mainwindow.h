@@ -35,6 +35,8 @@ class MessageBus;
 
 namespace LibGUI {
 
+class StatusBarWidget;
+
 class GUISHARED_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -46,6 +48,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 signals:
     void logout();
@@ -53,14 +56,13 @@ signals:
 private:
     Ui::MainWindow *ui;
     LibG::MessageBus *mMessageBus;
-    QLabel *mLabelTime;
     int mLastIdLogin = 0;
+    StatusBarWidget *mStatusBar;
 
     void setupConnection();
 
 private slots:
     void showWindowFullScreen();
-    void updateClock();
     void closeTab(int index);
     void closeCurrentTab();
     void nextTab();
