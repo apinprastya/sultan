@@ -173,6 +173,12 @@ void TableModel::filterChanged(int index, const QVariant &value)
             mQuery.removeFilter(key);
         else
             mQuery.setFilter(key, COMPARE::LIKE_NATIVE, value);
+    } else if(filter.compare == FilterBetweenDate) {
+        if(value.canConvert(QVariant::Map)) {
+            const QVariantMap &map = value.toMap();
+            mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"]);
+            mQuery.setFilter("1$" + key, COMPARE::LESS_EQUAL, map["end"]);
+        }
     }
     refresh();
 }

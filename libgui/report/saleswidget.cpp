@@ -57,7 +57,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     QVariantMap defVal;
     defVal.insert("start", Util::getBeginningOfMonth());
     defVal.insert("end", Util::getEndOfMonth());
-    model->addHeaderFilter("created_at", HeaderFilter{HeaderWidget::DateStartEnd, TableModel::FilterBetween, defVal});
+    model->addHeaderFilter("created_at", HeaderFilter{HeaderWidget::DateStartEnd, TableModel::FilterBetweenDate, defVal});
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::QUERY);

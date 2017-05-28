@@ -84,11 +84,14 @@ void HorizontalHeader::fillDefValue(int index)
     if(d.isValid()) {
         if(type == HeaderWidget::LineEdit) {
             widget->getLineEdit()->setText(d.toString());
+            emit filterValueChanged(index, d);
         } else if(type == HeaderWidget::Date) {
             widget->getDateEdit()->setDate(d.toDate());
+            emit filterValueChanged(index, d);
         } else if(type == HeaderWidget::DateStartEnd) {
             widget->getDateEdit()->setDate(d.toMap()["start"].toDate());
             widget->getDateEnd()->setDate(d.toMap()["end"].toDate());
+            emit filterValueChanged(index, d);
         }
     }
 }
