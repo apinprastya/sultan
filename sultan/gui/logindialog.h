@@ -42,6 +42,7 @@ private:
 
 protected:
     void messageReceived(LibG::Message *msg) override;
+    void closeEvent(QCloseEvent *event) override;
 
 signals:
     void loginSuccess();

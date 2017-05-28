@@ -23,8 +23,11 @@
 #include "message.h"
 #include "usersession.h"
 #include "settingdialog.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QStringBuilder>
 #include <QCryptographicHash>
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibG;
@@ -73,6 +76,20 @@ void LoginDialog::messageReceived(Message *msg)
         hide();
         emit loginSuccess();
     }
+}
+
+void LoginDialog::closeEvent(QCloseEvent *event)
+{
+    int type = Preference::getInt(SETTING::APP_TYPE);
+    if(type == APPLICATION_TYPE::SERVER) {
+        int ret = QMessageBox::question(this, tr("Close Confirmation"),
+                                        tr("This is a server, any client will be disconnect. Are you sure to exit?"));
+        if(ret == QMessageBox::No) {
+            event->ignore();
+            return;
+        }
+    }
+    QDialog::closeEvent(event);
 }
 
 void LoginDialog::loginClicked()

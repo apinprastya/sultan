@@ -204,7 +204,11 @@ void Core::loginSuccess()
 #ifdef Q_PROCESSOR_ARM
     mMainWindow->showFullScreen();
 #else
+#ifdef QT_DEBUG
     mMainWindow->show();
+#else
+    mMainWindow->showMaximized();
+#endif
 #endif
 }
 
