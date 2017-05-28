@@ -28,6 +28,7 @@
 #include <QStringBuilder>
 #include <QCryptographicHash>
 #include <QMessageBox>
+#include <QCloseEvent>
 #include <QDebug>
 
 using namespace LibG;
