@@ -58,6 +58,7 @@ public:
     void setFilter(const QString &key, int type, const QVariant &value);
     void clearFilter();
     inline void setIdKey(const QString &key) { mIdKey = key; }
+    inline LibDB::QueryDB *getQuery() { return &mQuery; }
 
 public slots:
     void refresh();

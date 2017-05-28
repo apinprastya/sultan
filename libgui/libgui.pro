@@ -146,4 +146,5 @@ FORMS += \
     purchase/purchaseadditemdialog.ui \
     cashier/paymentcashsuccessdialog.ui \
     cashier/searchitemdialog.ui \
-    statusbar/statusbarwidget.ui
+    statusbar/statusbarwidget.ui \
+    report/saleswidget.ui

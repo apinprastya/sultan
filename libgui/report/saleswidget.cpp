@@ -18,7 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "saleswidget.h"
-#include "ui_normalwidget.h"
+#include "ui_saleswidget.h"
 #include "tablewidget.h"
 #include "tablemodel.h"
 #include "tableview.h"
@@ -28,13 +28,17 @@
 #include "dbutil.h"
 #include "util.h"
 #include "tableitem.h"
+#include "message.h"
+#include "querydb.h"
+#include "preference.h"
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
 SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     QWidget(parent),
-    ui(new Ui::NormalWidget),
+    ui(new Ui::SalesWidget),
     mTableWidget(new TableWidget(this))
 {
     ui->setupUi(this);
@@ -65,9 +69,21 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 70 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     model->refresh();
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
 }
 
 void SalesWidget::messageReceived(LibG::Message *msg)
 {
+    if(msg->isTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_SUMMARY) && msg->isSuccess()) {
+        ui->labelSales->setText(Preference::toString(msg->data("total").toDouble()));
+        ui->labelMargin->setText(Preference::toString(msg->data("margin").toDouble()));
+    }
+}
 
+void SalesWidget::refreshSummary()
+{
+    Message msg(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_SUMMARY);
+    auto query = mTableWidget->getModel()->getQuery();
+    query->bind(&msg);
+    sendMessage(&msg);
 }

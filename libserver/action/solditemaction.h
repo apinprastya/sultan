@@ -28,6 +28,7 @@ class SoldItemAction : public ServerAction
 {
 public:
     SoldItemAction();
+    LibG::Message getSummary(LibG::Message *msg);
 
 protected:
     void selectAndJoin() override;

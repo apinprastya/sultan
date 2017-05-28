@@ -19,15 +19,30 @@
  */
 #include "solditemaction.h"
 #include "db.h"
+#include "global_constant.h"
+#include "queryhelper.h"
 
 using namespace LibServer;
+using namespace LibG;
+using namespace LibDB;
 
 SoldItemAction::SoldItemAction():
     ServerAction("solditems", "id")
 {
+    mFunctionMap.insert(MSG_COMMAND::SOLD_SUMMARY, std::bind(&SoldItemAction::getSummary, this, std::placeholders::_1));
 }
 
 void SoldItemAction::selectAndJoin()
 {
     mDb->select("*, (total - buy_price) as margin");
+}
+
+Message SoldItemAction::getSummary(Message *msg)
+{
+    LibG::Message message(msg);
+    mDb->table(mTableName);
+    mDb->select("sum(total) as total, sum(total - buy_price) as margin");
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    message.setData(mDb->exec().first());
+    return message;
 }

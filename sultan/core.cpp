@@ -143,7 +143,6 @@ void Core::init()
             const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
                         "migration_mysql" : "migration_sqlite";
 #ifdef Q_OS_MAC
-            qDebug() << qApp->applicationDirPath();
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE))) {
 #else
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {

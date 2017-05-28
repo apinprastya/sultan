@@ -24,7 +24,7 @@
 #include <QWidget>
 
 namespace Ui {
-class NormalWidget;
+class SalesWidget;
 }
 
 namespace LibGUI {
@@ -41,8 +41,11 @@ protected:
     void messageReceived(LibG::Message *msg) override;
 
 private:
-    Ui::NormalWidget *ui;
+    Ui::SalesWidget *ui;
     TableWidget *mTableWidget;
+
+private slots:
+    void refreshSummary();
 };
 
 }

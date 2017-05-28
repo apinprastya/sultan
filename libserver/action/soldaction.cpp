@@ -20,6 +20,7 @@
 #include "soldaction.h"
 #include "db.h"
 #include "global_constant.h"
+#include "queryhelper.h"
 #include <QDateTime>
 #include <QStringBuilder>
 

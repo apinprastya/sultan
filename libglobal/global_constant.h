@@ -77,6 +77,7 @@ namespace MSG_COMMAND {
     const int LOGIN         = 5;
     const int CASHIER_PRICE = 6;
     const int NEW_SOLD      = 7;
+    const int SOLD_SUMMARY  = 8;
 }
 
 namespace PRINT_TYPE {
