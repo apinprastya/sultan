@@ -54,8 +54,8 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("suplier", tr("Suplier"));
     model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
     model->addColumnMoney("total", tr("Total"));
-    model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
-    model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE, MSG_COMMAND::GET);
     mTableWidget->setupTable();

@@ -32,6 +32,11 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
     setTabKeyNavigation(false);
 }
 
+HeaderWidget *TableView::getHeaderWidget(int index)
+{
+    mHeader->getHeaderWidget(index);
+}
+
 void TableView::scrollContentsBy(int dx, int dy)
 {
     QTableView::scrollContentsBy(dx, dy);

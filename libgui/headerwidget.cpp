@@ -53,6 +53,17 @@ HeaderWidget::HeaderWidget(int index, int type, const QString &title, QWidget *p
         mDateEdit->setStyleSheet(STYLE);
         lay->addWidget(mDateEdit);
         connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateChanged()));
+    } else if(type == DateStartEnd) {
+        mDateEdit = new QDateEdit(this);
+        mDateEdit->setCalendarPopup(true);
+        mDateEdit->setStyleSheet(STYLE);
+        lay->addWidget(mDateEdit);
+        connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateStartEndChanged()));
+        mDateEnd = new QDateEdit(this);
+        mDateEnd->setCalendarPopup(true);
+        mDateEnd->setStyleSheet(STYLE);
+        lay->addWidget(mDateEnd);
+        connect(mDateEnd, SIGNAL(dateChanged(QDate)), SLOT(dateStartEndChanged()));
     }
     setLayout(lay);
 }
@@ -70,4 +81,12 @@ void HeaderWidget::comboChanged()
 void HeaderWidget::dateChanged()
 {
     emit filterValueChanged(mIndex, mDateEdit->date());
+}
+
+void HeaderWidget::dateStartEndChanged()
+{
+    QVariantMap map;
+    map.insert("start", mDateEdit->date());
+    map.insert("end", mDateEnd->date());
+    emit filterValueChanged(mIndex, map);
 }

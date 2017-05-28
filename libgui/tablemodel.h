@@ -32,6 +32,7 @@ namespace LibGUI {
 struct HeaderFilter {
     int type;
     int compare;
+    QVariant defValue;
 };
 
 class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::MessageHandler
@@ -39,7 +40,7 @@ class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::Mess
     Q_OBJECT
 public:
     enum PageStatus { None, Loading, Loaded };
-    enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1 };
+    enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1, FilterValueRole = Qt::UserRole + 2 };
     enum Filter { FilterEQ, FilterLike, FilterBetween, FilterLikeNative };
     TableModel(QObject *parent = nullptr, bool useStandartHeader = false);
     int rowCount(const QModelIndex &parent) const override;

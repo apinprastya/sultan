@@ -51,9 +51,9 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     model->addColumn("code", tr("Code"));
     model->addColumn("phone", tr("Phone"));
     model->addColumn("address", tr("Address"));
-    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
-    model->addHeaderFilter("code", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
-    model->addHeaderFilter("phone", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("code", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("phone", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);

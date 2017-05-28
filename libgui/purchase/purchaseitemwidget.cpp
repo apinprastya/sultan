@@ -52,8 +52,8 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     model->addColumn("count", tr("Count"));
     model->addColumnMoney("price", tr("price"));
     model->addColumnMoney("total", tr("total"));
-    model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
-    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
     model->setFilter("purchase_id", COMPARE::EQUAL, id);

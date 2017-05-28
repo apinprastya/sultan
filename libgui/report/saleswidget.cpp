@@ -26,6 +26,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "dbutil.h"
+#include "util.h"
 #include "tableitem.h"
 
 using namespace LibGUI;
@@ -53,8 +54,12 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     model->addColumnMoney("total", tr("Total"));
     model->addColumnMoney("buy_price", tr("Buy Price"));
     model->addColumnMoney("margin", tr("Margin"));
-    model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
-    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike});
+    QVariantMap defVal;
+    defVal.insert("start", Util::getBeginningOfMonth());
+    defVal.insert("end", Util::getEndOfMonth());
+    model->addHeaderFilter("created_at", HeaderFilter{HeaderWidget::DateStartEnd, TableModel::FilterBetween, defVal});
+    model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 70 << 100 << 100 << 100);

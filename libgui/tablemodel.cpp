@@ -84,6 +84,10 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
             if(mHeaderFilter.contains(mColumns[section]))
                 return mHeaderFilter[mColumns[section]].type;
             return QVariant(0);
+        } else if(role == FilterValueRole) {
+            if(mHeaderFilter.contains(mColumns[section]))
+                return mHeaderFilter[mColumns[section]].defValue;
+            return QVariant();
         }
     }
     return QVariant();

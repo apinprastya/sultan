@@ -25,6 +25,8 @@
 
 namespace LibGUI {
 
+class HeaderWidget;
+
 class GUISHARED_EXPORT HorizontalHeader : public QHeaderView
 {
     Q_OBJECT
@@ -33,10 +35,13 @@ public:
     void showEvent(QShowEvent *e) override;
     QSize sizeHint() const override;
     void fixWidgetPositions();
+    HeaderWidget *getHeaderWidget(int index);
 
 private:
     QMap<int, QWidget*> mBoxes;
     bool mUseStandartHeader;
+
+    void fillDefValue(int index);
 
 signals:
     void filterValueChanged(int index, const QVariant &value);

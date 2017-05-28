@@ -40,6 +40,10 @@ public:
     };
 
     HeaderWidget(int index, int type, const QString &title, QWidget *parent = nullptr);
+    inline QLineEdit *getLineEdit() { return mLineEdit; }
+    inline QComboBox *getComboBox() { return mComboBox; }
+    inline QDateEdit *getDateEdit() { return mDateEdit; }
+    inline QDateEdit *getDateEnd() { return mDateEnd; }
 
 signals:
     void filterValueChanged(int index, QVariant value);
@@ -55,6 +59,7 @@ private slots:
     void lineEditDone();
     void comboChanged();
     void dateChanged();
+    void dateStartEndChanged();
 };
 
 }

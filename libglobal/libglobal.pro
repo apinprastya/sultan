@@ -43,7 +43,8 @@ SOURCES += \
     messagehandler.cpp \
     messagebus.cpp \
     usersession.cpp \
-    permissionhelper.cpp
+    permissionhelper.cpp \
+    util.cpp
 
 HEADERS += \ 
     global_global.h \
@@ -55,4 +56,5 @@ HEADERS += \
     messagehandler.h \
     messagebus.h \
     usersession.h \
-    permissionhelper.h
+    permissionhelper.h \
+    util.h

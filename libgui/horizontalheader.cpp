@@ -47,6 +47,7 @@ void HorizontalHeader::showEvent(QShowEvent *e)
             auto *box = new HeaderWidget(i, type, title, this);
             mBoxes[i] = box;
             connect(box, SIGNAL(filterValueChanged(int,QVariant)), SIGNAL(filterValueChanged(int,QVariant)));
+            fillDefValue(i);
         }
         mBoxes[i]->setGeometry(sectionViewportPosition(i), 0, sectionSize(i) - 5, height());
         mBoxes[i]->show();
@@ -66,6 +67,30 @@ void HorizontalHeader::fixWidgetPositions()
     for(int i = 0; i < mBoxes.size(); i++)
         mBoxes[i]->setGeometry(sectionViewportPosition(i), 0,
                                sectionSize(i) - 5, height());
+}
+
+HeaderWidget *HorizontalHeader::getHeaderWidget(int index)
+{
+    if(index >= 0 && mBoxes.count() > index)
+        return static_cast<HeaderWidget*>(mBoxes[index]);
+    return nullptr;
+}
+
+void HorizontalHeader::fillDefValue(int index)
+{
+    auto widget = getHeaderWidget(index);
+    const QVariant &d = model()->headerData(index, Qt::Horizontal, TableModel::FilterValueRole);
+    int type = model()->headerData(index, Qt::Horizontal, TableModel::FilterRole).toInt();
+    if(d.isValid()) {
+        if(type == HeaderWidget::LineEdit) {
+            widget->getLineEdit()->setText(d.toString());
+        } else if(type == HeaderWidget::Date) {
+            widget->getDateEdit()->setDate(d.toDate());
+        } else if(type == HeaderWidget::DateStartEnd) {
+            widget->getDateEdit()->setDate(d.toMap()["start"].toDate());
+            widget->getDateEnd()->setDate(d.toMap()["end"].toDate());
+        }
+    }
 }
 
 void HorizontalHeader::handleSectionResized(int i)
