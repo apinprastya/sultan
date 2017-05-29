@@ -42,6 +42,8 @@ public:
     void set(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
     void fill(const QVariantMap &data);
     QVariantMap toMap();
+    CashierItem *clone();
+    void fill(CashierItem *another);
 };
 
 }

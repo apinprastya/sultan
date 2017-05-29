@@ -62,3 +62,23 @@ QVariantMap CashierItem::toMap()
     data.insert("total", total);
     return data;
 }
+
+CashierItem *CashierItem::clone()
+{
+    auto item = new CashierItem(name, barcode, count, price, total, type);
+    item->id = id;
+    item->parent = parent;
+    return item;
+}
+
+void CashierItem::fill(CashierItem *another)
+{
+    id = another->id;
+    parent = another->parent;
+    type = another->type;
+    count = another->count;
+    price = another->price;
+    total = another->total;
+    barcode = another->barcode;
+    name = another->name;
+}

@@ -91,23 +91,56 @@ QModelIndex CashierTableModel::index(int row, int column, const QModelIndex &/*p
 void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QVariantList &prices)
 {
     float totCount = getTotalCount(barcode) + count;
-    int row = rowOfBarcode(barcode);
+    const QList<int> &row = rowOfBarcode(barcode);
     if(!prices.isEmpty()) mPrices[barcode] = prices;
-    if(totCount <= 0 && row >= 0) {
-        beginRemoveRows(QModelIndex(), row, row);
-        mData.removeAt(row);
-        endRemoveRows();
+    if(totCount <= 0 && row.count() > 0) {
+        for(int r : row) {
+            beginRemoveRows(QModelIndex(), r, r);
+            mData.removeAt(r);
+            endRemoveRows();
+        }
     } else if(totCount > 0) {
-        if(row >= 0) {
-            mData[row]->count = totCount;
-            calculatePrices(mData[row]);
-            emit dataChanged(createIndex(row, 0), createIndex(row, mHeaders.size() - 1));
-            emit selectRow(createIndex(row, 0, mData[row]));
+        const QList<CashierItem*> &items = calculatePrices(barcode, name, totCount);
+        if(row.count() > 0) {
+            if(row.count() < items.count()) {
+                //adding more price
+                for(int i = 0; i < row.count(); i++) {
+                    mData[row[i]]->fill(items[i]);
+                    delete items[i];
+                }
+                emit dataChanged(createIndex(row.first(), 0), createIndex(row.last(), mHeaders.size() - 1));
+                beginInsertRows(QModelIndex(), row.last() + 1, row.last() + items.size() - row.size());
+                for(int i = row.count(); i < items.count(); i++) {
+                    mData.insert(row.last() + i - row.size() + 1, items[i]);
+                }
+                endInsertRows();
+                emit selectRow(createIndex(row.last() + items.size() - row.size(), 0, mData[row.last() + items.size() - row.size()]));
+            } else if(row.count() > items.count()) {
+                //remove some price
+                for(int i = 0; i < items.count(); i++) {
+                    mData[row[i]]->fill(items[i]);
+                    delete items[i];
+                }
+                emit dataChanged(createIndex(row.first(), 0), createIndex(row[items.size() - 1], mHeaders.size() - 1));
+                for(int i = items.size(); i < row.size(); i++) {
+                    beginRemoveRows(QModelIndex(), row[i], row[i]);
+                    mData.removeAt(row[i]);
+                    endRemoveRows();
+                }
+                emit selectRow(createIndex(row[items.size() - 1], 0, mData[items.size() - 1]));
+            } else {
+                for(int i = 0; i < items.count(); i++) {
+                    mData[row[i]]->fill(items[i]);
+                }
+                qDeleteAll(items);
+                emit dataChanged(createIndex(row.first(), 0), createIndex(row.last(), mHeaders.size() - 1));
+                emit selectRow(createIndex(row.last(), 0, mData[row.last()]));
+            }
         } else {
-            beginInsertRows(QModelIndex(), mData.size(), mData.size());
-            auto item = new CashierItem(name, barcode, totCount, 0, 0);
-            calculatePrices(item);
-            mData.append(item);
+            beginInsertRows(QModelIndex(), mData.size(), mData.size() + items.size() - 1);
+            for(auto item : items) {
+                mData.append(item);
+            }
             endInsertRows();
             emit selectRow(createIndex(mData.size() - 1, 0, mData[mData.size() - 1]));
         }
@@ -153,38 +186,44 @@ void CashierTableModel::calculateTotal()
     emit totalChanged(mTotal);
 }
 
-int CashierTableModel::rowOfBarcode(const QString &barcode)
+QList<int> CashierTableModel::rowOfBarcode(const QString &barcode)
 {
+    QList<int> retVal;
     for(int i = 0; i < mData.size(); i++)
         if(!mData[i]->barcode.compare(barcode))
-            return i;
-    return -1;
+            retVal << i;
+    return retVal;
 }
 
-void CashierTableModel::calculatePrices(CashierItem *item)
+QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count)
 {
-    const QVariantList &prices = mPrices[item->barcode];
-    float count = item->count;
-    item->total = 0;
+    QList<CashierItem*> retVal;
+    const QVariantList &prices = mPrices[barcode];
     if(prices.size() == 1) {
-        item->price = prices[0].toMap()["price"].toDouble();
-        item->total = item->count * item->price;
+        const double &price = prices[0].toMap()["price"].toDouble();
+        CashierItem *item = new CashierItem(name, barcode, count, price, price * count);
+        retVal << item;
     } else {
         for(int i = prices.count() - 1; i >= 0; i--) {
             const QVariantMap &p = prices[i].toMap();
-            double price = p["price"].toDouble();
-            float c = p["count"].toFloat();
+            const double &price = p["price"].toDouble();
+            const float &c = p["count"].toFloat();
+            auto item = new CashierItem(name, barcode, 0, price, 0);
             if(c <= count) {
                 if(i == 0) {
                     item->total += count * price;
+                    item->count = count;
+                    retVal << item;
                 } else {
                     float temp = std::fmod(count, c);
                     item->total += (count - temp) * price;
+                    item->count = (count - temp);
                     count -= (count - temp);
+                    retVal << item;
                     if(count <= 0.0f) break;
                 }
             }
         }
-        item->price = item->total / item->count;
     }
+    return retVal;
 }

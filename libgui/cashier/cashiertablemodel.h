@@ -51,8 +51,8 @@ private:
 
     float getTotalCount(const QString &barcode);
     void calculateTotal();
-    int rowOfBarcode(const QString &barcode);
-    void calculatePrices(CashierItem* item);
+    QList<int> rowOfBarcode(const QString &barcode);
+    QList<CashierItem *> calculatePrices(const QString &barcode, const QString &name, float count);
 
 signals:
     void totalChanged(double total);
