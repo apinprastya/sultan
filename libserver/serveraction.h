@@ -35,7 +35,7 @@ class SERVERSHARED_EXPORT ServerAction
 {
 public:
     ServerAction(const QString &tableName, const QString idfield);
-    ~ServerAction();
+    virtual ~ServerAction();
     LibG::Message exec(LibG::Message *msg);
 
 protected:

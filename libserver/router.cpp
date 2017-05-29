@@ -40,7 +40,7 @@ Router::Router()
 
 LibG::Message Router::handler(LibG::Message msg)
 {
-    auto action = getServerAction(msg.type());
+    QScopedPointer<ServerAction> action(getServerAction(msg.type()));
     if(action != nullptr)
         return action->exec(&msg);
     msg.setStatus(STATUS::ERROR);
