@@ -60,7 +60,9 @@ Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QSt
 Db *QueryHelper::sort(Db *db, const QVariantMap &data)
 {
     if(data.contains(QLatin1String("sort"))) {
-        db->sort(data[QLatin1String("sort")].toString());
+        const QString &sort = data["sort"].toString();
+        if(!sort.isEmpty())
+            db->sort(data[QLatin1String("sort")].toString());
     }
     return db;
 }
