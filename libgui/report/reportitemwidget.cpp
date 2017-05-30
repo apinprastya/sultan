@@ -24,7 +24,7 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
     model->addColumn("stock", tr("Stock"));
-    model->addColumn("sold", tr("Sold"));
+    model->addColumn("count", tr("Sold"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
