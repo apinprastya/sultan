@@ -30,6 +30,7 @@ SoldItemAction::SoldItemAction():
     ServerAction("solditems", "id")
 {
     mFunctionMap.insert(MSG_COMMAND::SOLD_SUMMARY, std::bind(&SoldItemAction::getSummary, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::SOLD_ITEM_REPORT, std::bind(&SoldItemAction::report, this, std::placeholders::_1));
 }
 
 void SoldItemAction::selectAndJoin()
@@ -44,5 +45,23 @@ Message SoldItemAction::getSummary(Message *msg)
     mDb->select("sum(total) as total, sum(total - buy_price) as margin");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     message.setData(mDb->exec().first());
+    return message;
+}
+
+Message SoldItemAction::report(Message *msg)
+{
+    LibG::Message message(msg);
+    mDb->table(mTableName);
+    mDb->select("sum(solditems.count), solditems.barcode, solditems.name, categories.name as category, supliers.name as suplier")->
+            join("LEFT JOIN items ON items.barcode = solditems.barcode")->
+            join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
+            join("LEFT JOIN categories ON categories.id = items.category_id")->group("solditems.barcode");
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
+        message.addData(QStringLiteral("total"), mDb->count());
+    setStart(&message, msg);
+    mDb = QueryHelper::limitOffset(mDb, msg->data());
+    mDb = QueryHelper::sort(mDb, msg->data());
+    message.addData(QStringLiteral("data"), mDb->exec().data());
     return message;
 }

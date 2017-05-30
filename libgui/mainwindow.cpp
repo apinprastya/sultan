@@ -30,6 +30,7 @@
 #include "purchase/purchaseitemwidget.h"
 #include "item/itemwidget.h"
 #include "report/saleswidget.h"
+#include "report/reportitemwidget.h"
 #include "statusbar/statusbarwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
@@ -105,6 +106,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Category, SIGNAL(triggered(bool)), SLOT(openCategory()));
     connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
     connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
+    connect(ui->actionItems, SIGNAL(triggered(bool)), SLOT(openItemReport()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -231,5 +233,15 @@ void MainWindow::openSalesReport()
     })) {
         auto widget = new SalesWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/baggage-cart.png");
+    }
+}
+
+void MainWindow::openItemReport()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<ReportItemWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new ReportItemWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/baggage-cart.png");
     }
 }

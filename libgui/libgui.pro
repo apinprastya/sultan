@@ -87,7 +87,8 @@ SOURCES += \
     cashier/paymentcashsuccessdialog.cpp \
     cashier/searchitemdialog.cpp \
     report/saleswidget.cpp \
-    statusbar/statusbarwidget.cpp
+    statusbar/statusbarwidget.cpp \
+    report/reportitemwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -126,7 +127,8 @@ HEADERS += \
     cashier/paymentcashsuccessdialog.h \
     cashier/searchitemdialog.h \
     report/saleswidget.h \
-    statusbar/statusbarwidget.h
+    statusbar/statusbarwidget.h \
+    report/reportitemwidget.h
 
 FORMS += \
     mainwindow.ui \

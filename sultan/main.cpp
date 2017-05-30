@@ -5,6 +5,7 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include <QTranslator>
+#include <QPalette>
 #include <QDebug>
 
 INITIALIZE_EASYLOGGINGPP
