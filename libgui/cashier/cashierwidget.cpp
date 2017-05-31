@@ -117,7 +117,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             const QVariantMap &data = msg->data();
             mPayCashDialog->hide();
             printBill(data);
-            PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(), data["total"].toDouble() - data["payment"].toDouble());
+            PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
             dialog.exec();
             mModel->reset();
         } else {

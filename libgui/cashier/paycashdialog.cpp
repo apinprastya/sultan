@@ -31,9 +31,6 @@ PayCashDialog::PayCashDialog(QWidget *parent) :
     ui(new Ui::PayCashDialog)
 {
     ui->setupUi(this);
-
-    ui->doubleSpinBox->setMaximum(std::numeric_limits<double>::max());
-    ui->doubleSpinBox->setMinimum(std::numeric_limits<double>::min());
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payClicked()));
 }
 
@@ -46,14 +43,14 @@ void PayCashDialog::fill(double total)
 {
     mTotal = total;
     ui->labelTotal->setText(Preference::toString(total));
-    ui->doubleSpinBox->setValue(total);
-    ui->doubleSpinBox->selectAll();
+    ui->lineEdit->setText(QString::number(total));
+    ui->lineEdit->selectAll();
     ui->pushPay->setEnabled(true);
 }
 
 void PayCashDialog::payClicked()
 {
-    double payment = ui->doubleSpinBox->value();
+    double payment = ui->lineEdit->value();
     if(payment < mTotal) {
         QMessageBox::critical(this, tr("Error Payment"), tr("Payment must bigger or equal to total"));
         return;
