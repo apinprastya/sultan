@@ -26,6 +26,9 @@ namespace Ui {
 class SettingDialog;
 }
 
+class QTimer;
+class SocketClient;
+
 class SettingDialog : public QDialog
 {
     Q_OBJECT
@@ -39,6 +42,8 @@ private:
     Ui::SettingDialog *ui;
     bool mMysqlOk;
     bool mConOk;
+    SocketClient *mSocket = nullptr;
+    QTimer *mTimer;
 
     void saveMysqlSetting();
 
@@ -50,6 +55,8 @@ private slots:
     void checkConnection();
     void cancel();
     void save();
+    void clientConnected();
+    void clientError();
 };
 
 #endif // SETTINGDIALOG_H

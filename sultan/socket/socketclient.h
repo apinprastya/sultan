@@ -32,7 +32,9 @@ class SocketClient : public QObject
 public:
     SocketClient(QObject *parent = nullptr);
     void connectToServer(const QString &address, int port);
+    void disconnectFromServer();
     QString lastError();
+    bool isConnected();
 
 public slots:
     void sendMessage(LibG::Message *msg);

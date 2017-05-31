@@ -42,9 +42,19 @@ void SocketClient::connectToServer(const QString &address, int port)
     QTimer::singleShot(TIMEOUT, this, SLOT(checkConnection()));
 }
 
+void SocketClient::disconnectFromServer()
+{
+    mSocket->close();
+}
+
 QString SocketClient::lastError()
 {
     return mSocket->errorString();
+}
+
+bool SocketClient::isConnected()
+{
+    return mSocket->state() == QAbstractSocket::ConnectedState;
 }
 
 void SocketClient::sendMessage(LibG::Message *msg)
@@ -64,6 +74,7 @@ void SocketClient::checkConnection()
 void SocketClient::errorOccure()
 {
     LOG(ERROR) << TAG << "Connection error :" << mSocket->errorString();
+    emit socketError();
 }
 
 void SocketClient::stateChanged(QAbstractSocket::SocketState state)

@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "socket/socketclient.h"
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QMessageBox>
@@ -109,6 +110,7 @@ void SettingDialog::checkType()
     ui->groupClient->setEnabled(type != APPLICATION_TYPE::SERVER);
     ui->groupMysql->setEnabled(type == APPLICATION_TYPE::SERVER);
     ui->groupServer->setEnabled(type == APPLICATION_TYPE::SERVER);
+    checkSetting();
 }
 
 void SettingDialog::checkMysql()
@@ -139,7 +141,13 @@ void SettingDialog::checkMysql()
 
 void SettingDialog::checkConnection()
 {
-
+    if(mSocket == nullptr) {
+        mSocket = new SocketClient(this);
+        connect(mSocket, SIGNAL(socketConnected()), SLOT(clientConnected()));
+        connect(mSocket, SIGNAL(socketError()), SLOT(clientError()));
+        connect(mSocket, SIGNAL(connectionTimeout()), SLOT(clientTimeOut()));
+    }
+    mSocket->connectToServer(ui->lineEditClientAddress->text(), ui->spinBoxClientPort->value());
 }
 
 void SettingDialog::cancel()
@@ -170,4 +178,20 @@ void SettingDialog::save()
         list.append(args[i]);
     }
     QProcess::startDetached(qApp->arguments()[0], list);
+    if(mSocket != nullptr) {
+        if(mSocket->isConnected()) mSocket->disconnectFromServer();
+        mSocket->deleteLater();
+    }
+}
+
+void SettingDialog::clientConnected()
+{
+    QMessageBox::information(this, tr("Connection Success"), tr("Connection to server success"));
+    mConOk = true;
+    checkSetting();
+}
+
+void SettingDialog::clientError()
+{
+    QMessageBox::critical(this, tr("Connection Error"), tr("Connection error : %1").arg(mSocket->lastError()));
 }
