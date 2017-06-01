@@ -177,7 +177,7 @@ void MainWindow::openCashier()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<CashierWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new CashierWidget(mMessageBus, this), tr("Cahsier"), ":/images/16x16/money-bag.png");
+        ui->tabWidget->tbnAddTab(new CashierWidget(mMessageBus, this), tr("Cahsier"), ":/images/16x16/computer-arrow.png");
 }
 
 void MainWindow::openAbout()
@@ -232,7 +232,7 @@ void MainWindow::openSalesReport()
         return (dynamic_cast<SalesWidget*>(widget) != nullptr);
     })) {
         auto widget = new SalesWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/baggage-cart.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/money-bag.png");
     }
 }
 
@@ -242,6 +242,6 @@ void MainWindow::openItemReport()
         return (dynamic_cast<ReportItemWidget*>(widget) != nullptr);
     })) {
         auto widget = new ReportItemWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/baggage-cart.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/money-bag.png");
     }
 }
