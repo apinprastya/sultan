@@ -64,6 +64,7 @@ QTreeWidgetItem *CategoryTreeWidget::addItem(const QVariantMap &data)
     int parent = data["parent_id"].toInt();
     auto p = getItemWithId(parent);
     auto item = new QTreeWidgetItem(QStringList() << data["name"].toString() << data["code"].toString());
+    item->setData(0, Qt::UserRole, data["id"].toInt());
     if(p != nullptr)
         p->addChild(item);
     else

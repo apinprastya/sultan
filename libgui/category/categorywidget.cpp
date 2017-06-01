@@ -152,7 +152,7 @@ void CategoryWidget::deleteClicked()
         if(ret == QMessageBox::Yes) {
             mDeletedId = item->data(0, Qt::UserRole).toInt();
             Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::DEL);
-            msg.addData("id", item->data(0, Qt::UserRole));
+            msg.addData("id", mDeletedId);
             sendMessage(&msg);
         }
     }
