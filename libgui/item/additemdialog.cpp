@@ -118,7 +118,7 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         populateSuplier(list);
     } else if(msg->isType(MSG_TYPE::CATEGORY)) {
         const QVariantList &list = msg->data("data").toList();
-        populateCategory(list);
+        GuiUtil::populateCategory(ui->comboCategory, list, mCUrrentCategory);
     }
 }
 
@@ -170,17 +170,6 @@ void AddItemDialog::populateSuplier(const QVariantList &list)
         ui->comboSuplier->addItem(m["name"].toString(), m["id"].toInt());
     }
     GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
-}
-
-void AddItemDialog::populateCategory(const QVariantList &list)
-{
-    ui->comboCategory->clear();
-    ui->comboCategory->addItem(tr("-- Select Category --"), 0);
-    for(auto &d : list) {
-        const QVariantMap &m = d.toMap();
-        ui->comboCategory->addItem(m["name"].toString(), m["id"].toInt());
-    }
-    GuiUtil::selectCombo(ui->comboCategory, mCUrrentCategory);
 }
 
 void AddItemDialog::barcodeDone()

@@ -90,3 +90,14 @@ void GuiUtil::enableWidget(bool enable, const QList<QWidget *> &lists)
         w->setEnabled(enable);
     }
 }
+
+void GuiUtil::populateCategory(QComboBox *combo, const QVariantList &list, const QVariant &currentSelected)
+{
+    combo->clear();
+    combo->addItem(QObject::tr("-- Select Category --"), 0);
+    for(auto &d : list) {
+        const QVariantMap &m = d.toMap();
+        combo->addItem(m["name"].toString(), m["id"].toInt());
+    }
+    GuiUtil::selectCombo(combo, currentSelected);
+}

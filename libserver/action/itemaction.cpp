@@ -107,5 +107,6 @@ QMap<QString, QString> ItemAction::fieldMap() const
     QMap<QString, QString> map;
     map.insert("name", "items.name");
     map.insert("suplier", "supliers.name");
+    map.insert("category", "items.category_id");
     return map;
 }

@@ -30,6 +30,8 @@
 #include "additemdialog.h"
 #include "addpricedialog.h"
 #include "headerwidget.h"
+#include "message.h"
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -58,6 +60,8 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("suplier", tr("Suplier"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("category", HeaderFilter{HeaderWidget::Combo, TableModel::FilterEQ, QVariant()});
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
     mMainTable->setupTable();
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);
@@ -85,6 +89,9 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mSecondTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePriceClicked(QModelIndex)));
     connect(mSecondTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
     connect(mPriceDialog, SIGNAL(success()), mSecondTable->getModel(), SLOT(refresh()));
+
+    Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 ItemWidget::~ItemWidget()
@@ -92,8 +99,13 @@ ItemWidget::~ItemWidget()
     delete ui;
 }
 
-void ItemWidget::messageReceived(LibG::Message */*msg*/)
+void ItemWidget::messageReceived(LibG::Message *msg)
 {
+    if(msg->isType(MSG_TYPE::CATEGORY) && msg->isSuccess()) {
+        auto combo = mMainTable->getTableView()->getHeaderWidget(mMainTable->getModel()->getIndex("category"))->getComboBox();
+        const QVariantList &list = msg->data("data").toList();
+        GuiUtil::populateCategory(combo, list);
+    }
 }
 
 void ItemWidget::mainTableSelectionChanges()

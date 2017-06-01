@@ -59,6 +59,7 @@ public:
     void clearFilter();
     inline void setIdKey(const QString &key) { mIdKey = key; }
     inline LibDB::QueryDB *getQuery() { return &mQuery; }
+    inline int getIndex(const QString &key) { mColumns.indexOf(key); }
 
 public slots:
     void refresh();

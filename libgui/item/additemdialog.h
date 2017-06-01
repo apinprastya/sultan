@@ -53,7 +53,6 @@ private:
 
     void saveData();
     void populateSuplier(const QVariantList &list);
-    void populateCategory(const QVariantList &list);
 
 private slots:
     void barcodeDone();
