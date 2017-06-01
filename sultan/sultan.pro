@@ -58,7 +58,8 @@ SOURCES += main.cpp \
     socket/socketclient.cpp \
     socket/sockethandler.cpp \
     gui/logindialog.cpp \
-    gui/restartconfirmationdialog.cpp
+    gui/restartconfirmationdialog.cpp \
+    gui/datesettingdialog.cpp
 
 HEADERS  += \
     core.h \
@@ -68,10 +69,12 @@ HEADERS  += \
     socket/socketclient.h \
     socket/sockethandler.h \
     gui/logindialog.h \
-    gui/restartconfirmationdialog.h
+    gui/restartconfirmationdialog.h \
+    gui/datesettingdialog.h
 
 FORMS += \
     gui/splash.ui \
     gui/settingdialog.ui \
     gui/logindialog.ui \
-    gui/restartconfirmationdialog.ui
+    gui/restartconfirmationdialog.ui \
+    gui/datesettingdialog.ui

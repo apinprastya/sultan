@@ -35,10 +35,14 @@
 #include "usersession.h"
 #include "mainwindow.h"
 #include "gui/restartconfirmationdialog.h"
+#ifdef USE_DATE_SETTING
+#include "gui/datesettingdialog.h"
+#endif
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
 #include <QStringBuilder>
+#include <QDate>
 #include <QDebug>
 
 using namespace LibG;
@@ -189,6 +193,13 @@ void Core::connectToServer()
 void Core::clientConnected()
 {
     mSplashUi->hide();
+#ifdef USE_DATE_SETTING
+    auto date = QDate::currentDate();
+    if(date.year() < 2017) {
+        DateSettingDialog dialog;
+        dialog.exec();
+    }
+#endif
     mLoginDialog->showDialog();
 }
 
