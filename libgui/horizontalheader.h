@@ -36,6 +36,7 @@ public:
     QSize sizeHint() const override;
     void fixWidgetPositions();
     HeaderWidget *getHeaderWidget(int index);
+    inline void setUseStandardHeader(bool val) { mUseStandartHeader = val; }
 
 private:
     QMap<int, QWidget*> mBoxes;

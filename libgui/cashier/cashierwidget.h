@@ -64,6 +64,7 @@ private slots:
     void payCashRequested(double value);
     void printBill(const QVariantMap &data);
     void openSearch();
+    void openPreviousTransaction();
 };
 
 }

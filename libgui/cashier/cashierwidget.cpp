@@ -34,11 +34,13 @@
 #include "escp.h"
 #include "paymentcashsuccessdialog.h"
 #include "searchitemdialog.h"
+#include "transactionlistdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QShortcut>
 #include <QDebug>
+#include <functional>
 
 using namespace LibG;
 using namespace LibGUI;
@@ -74,6 +76,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
+    new QShortcut(QKeySequence(Qt::Key_F6), this, SLOT(openPreviousTransaction()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
@@ -118,7 +121,6 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             mPayCashDialog->hide();
             openDrawer();
             printBill(data);
-            cutPaper();
             PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
             dialog.exec();
             mModel->reset();
@@ -225,7 +227,6 @@ void CashierWidget::payCashRequested(double value)
 
 void CashierWidget::printBill(const QVariantMap &data)
 {
-    //TODO: print bill here
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
     if(type < 0) {
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
@@ -260,6 +261,7 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->column(QList<int>())->doubleHeight(false)->line()->newLine()->leftText(footer, true)->newLine(3);
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;
+    cutPaper();
 }
 
 void CashierWidget::openSearch()
@@ -270,4 +272,11 @@ void CashierWidget::openSearch()
     if(barcode.isEmpty()) return;
     ui->lineBarcode->setText(barcode);
     barcodeEntered();
+}
+
+void CashierWidget::openPreviousTransaction()
+{
+    TransactionListDialog dialog(mMessageBus);
+    dialog.setPrintFunction(std::bind(&CashierWidget::printBill, this, std::placeholders::_1));
+    dialog.exec();
 }

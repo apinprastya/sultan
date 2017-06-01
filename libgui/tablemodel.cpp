@@ -141,6 +141,11 @@ void TableModel::clearFilter()
     mQuery.clearFilter();
 }
 
+void TableModel::setSort(const QString &sort)
+{
+    mQuery.setSort(sort);
+}
+
 void TableModel::refresh()
 {
     reset();

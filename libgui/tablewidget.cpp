@@ -41,6 +41,7 @@ TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     mModel(new TableModel(this, useStandartHeader))
 {
     auto mainLayout = new QVBoxLayout();
+    mainLayout->setMargin(0);
     mainLayout->addWidget(mTableView);
     mActionLayout = new QHBoxLayout();
     mActionLayout->addStretch();

@@ -37,6 +37,11 @@ HeaderWidget *TableView::getHeaderWidget(int index)
     mHeader->getHeaderWidget(index);
 }
 
+void TableView::setUseStandardHeader(bool value)
+{
+    mHeader->setUseStandardHeader(value);
+}
+
 void TableView::scrollContentsBy(int dx, int dy)
 {
     QTableView::scrollContentsBy(dx, dy);

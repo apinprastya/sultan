@@ -91,7 +91,8 @@ SOURCES += \
     report/reportitemwidget.cpp \
     moneylineedit.cpp \
     flashmessagemanager.cpp \
-    flashmessage.cpp
+    flashmessage.cpp \
+    cashier/transactionlistdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -134,7 +135,8 @@ HEADERS += \
     report/reportitemwidget.h \
     moneylineedit.h \
     flashmessagemanager.h \
-    flashmessage.h
+    flashmessage.h \
+    cashier/transactionlistdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -155,4 +157,5 @@ FORMS += \
     cashier/paymentcashsuccessdialog.ui \
     cashier/searchitemdialog.ui \
     statusbar/statusbarwidget.ui \
-    report/saleswidget.ui
+    report/saleswidget.ui \
+    cashier/transactionlistdialog.ui

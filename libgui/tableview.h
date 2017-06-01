@@ -34,6 +34,7 @@ class TableView : public QTableView
 public:
     TableView(QWidget *parent = 0, bool useStandartHeader = false);
     HeaderWidget *getHeaderWidget(int index);
+    void setUseStandardHeader(bool value);
 
 protected:
     void scrollContentsBy(int dx, int dy) override;
