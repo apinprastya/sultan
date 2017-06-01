@@ -21,7 +21,9 @@
 #include "global_constant.h"
 #include "db.h"
 #include "queryhelper.h"
+#include <QStringRef>
 #include <QStringBuilder>
+#include <QDataStream>
 #include <QDebug>
 
 using namespace LibServer;
@@ -32,6 +34,8 @@ ItemAction::ItemAction():
     ServerAction("items", "barcode")
 {
     mFunctionMap.insert(MSG_COMMAND::CASHIER_PRICE, std::bind(&ItemAction::prices, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));
 }
 
 Message ItemAction::insert(Message *msg)
@@ -90,6 +94,65 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
         } else {
             message.addData("prices", res.data());
         }
+    }
+    return message;
+}
+
+Message ItemAction::exportData(Message *msg)
+{
+    LibG::Message message(msg);
+    QString arr;
+    arr.append("barcode;name;buy_price;sell_price;stock;category;suplier;\n");
+    mDb->table(mTableName);
+    selectAndJoin();
+    const int limit = 500;
+    int start = 0;
+    while(true) {
+        DbResult res = mDb->clone()->start(start)->limit(limit)->exec();
+        if(res.isEmpty()) break;
+        for(int i = 0; i < res.size(); i++) {
+            const QVariantMap &d = res.data(i);
+            arr.append(d["barcode"].toString() % ";");
+            arr.append(d["name"].toString() % ";");
+            arr.append(d["buy_price"].toString() % ";");
+            arr.append(d["sell_price"].toString() % ";");
+            arr.append(d["stock"].toString() % ";");
+            arr.append(d["category"].toString() % ";");
+            arr.append(d["suplier"].toString() % ";\n");
+        }
+        start += limit;
+    }
+    message.addData("data", arr.toUtf8());
+    return message;
+}
+
+Message ItemAction::importData(Message *msg)
+{
+    LibG::Message message(msg);
+    const QString &d = msg->data("data").toString();
+    const QVector<QStringRef> &vec = d.splitRef("\n", QString::SkipEmptyParts);
+    bool headerOk = false;
+    if(mDb->isSupportTransaction()) mDb->beginTransaction();
+    for(int i = 0; i < vec.size(); i++) {
+        if(!headerOk) {
+            headerOk = true;
+            continue;
+        }
+        const QVector<QStringRef> &row = vec[i].split(";", QString::SkipEmptyParts);
+        int cat = 0;
+        int sup = 0;
+        //TODO: if categories or suplier not exist, sould create one
+        DbResult res = mDb->where("name = ", row[5].toString())->get("categories");
+        if(!res.isEmpty()) cat = res.first()["id"].toInt();
+        res = mDb->where("name = ", row[6].toString())->get("supliers");
+        if(!res.isEmpty()) sup = res.first()["id"].toInt();
+        const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
+                              {"name", row[1].toString()}, {"stock", row[4].toFloat()},
+                              {"buy_price", row[2].toDouble()}};
+        mDb->insert(mTableName, ins);
+    }
+    if(mDb->isSupportTransaction()) {
+        if(!mDb->commit()) mDb->roolback();
     }
     return message;
 }

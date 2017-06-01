@@ -60,6 +60,8 @@ private slots:
     void addPriceClicked();
     void updatePriceClicked(const QModelIndex &index);
     void deletePriceClicked(const QModelIndex &index);
+    void importClicked();
+    void exportClicked();
 };
 
 }

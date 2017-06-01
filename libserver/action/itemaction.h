@@ -31,6 +31,8 @@ public:
     LibG::Message insert(LibG::Message *msg) override;
     LibG::Message update(LibG::Message *msg) override;
     LibG::Message prices(LibG::Message *msg);
+    LibG::Message exportData(LibG::Message *msg);
+    LibG::Message importData(LibG::Message *msg);
 
 protected:
     void selectAndJoin() override;

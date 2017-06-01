@@ -79,6 +79,8 @@ namespace MSG_COMMAND {
     const int NEW_SOLD      = 7;
     const int SOLD_SUMMARY  = 8;
     const int SOLD_ITEM_REPORT  = 9;
+    const int EXPORT        = 10;
+    const int IMPORT        = 11;
 }
 
 namespace PRINT_TYPE {

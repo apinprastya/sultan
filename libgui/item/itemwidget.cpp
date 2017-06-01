@@ -32,7 +32,9 @@
 #include "headerwidget.h"
 #include "message.h"
 #include "flashmessagemanager.h"
+#include <QFileDialog>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -68,6 +70,14 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     mMainTable->setupTable();
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);
     mMainTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
+    auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
+    mMainTable->addActionButton(button);
+    button = new QPushButton(QIcon(":/images/16x16/drive-upload.png"), "");
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(importClicked()));
+    mMainTable->addActionButton(button);
     model->refresh();
     ui->verticalLayoutTop->addWidget(mMainTable);
 
@@ -109,12 +119,25 @@ void ItemWidget::messageReceived(LibG::Message *msg)
         auto combo = mMainTable->getTableView()->getHeaderWidget(mMainTable->getModel()->getIndex("category"))->getComboBox();
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCategory(combo, list);
-    } else if(msg->isTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL)) {
+    } else if(msg->isTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Price deleted successfully"));
         mSecondTable->getModel()->refresh();
-    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::DEL)) {
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Item deleted successfully"));
         mMainTable->getModel()->refresh();
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT)) {
+        const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
+        if(!fileName.isEmpty()) {
+            QFile file(fileName);
+            if(file.open(QFile::WriteOnly)) {
+                file.write(msg->data("data").toString().toUtf8());
+                file.close();
+            } else {
+                QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
+            }
+        }
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT) && msg->isSuccess()) {
+        FlashMessageManager::showMessage(tr("Item imported successfully"));
     }
 }
 
@@ -180,6 +203,23 @@ void ItemWidget::deletePriceClicked(const QModelIndex &index)
     auto item = static_cast<TableItem*>(index.internalPointer());
     Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL);
     msg.addData("id", item->id);
+    sendMessage(&msg);
+}
+
+void ItemWidget::importClicked()
+{
+    const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.csv");
+    if(fileName.isEmpty()) return;
+    QFile file(fileName);
+    if(!file.open(QFile::ReadOnly)) return;
+    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT);
+    msg.addData("data", QString::fromUtf8(file.readAll()));
+    sendMessage(&msg);
+}
+
+void ItemWidget::exportClicked()
+{
+    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT);
     sendMessage(&msg);
 }
 
