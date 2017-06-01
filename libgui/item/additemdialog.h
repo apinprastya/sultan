@@ -58,6 +58,9 @@ private slots:
     void barcodeDone();
     void saveClicked();
     void saveAndAgainClicked();
+
+signals:
+    void success();
 };
 
 }

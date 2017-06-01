@@ -56,6 +56,7 @@ private slots:
     void mainTableSelectionChanges();
     void addItemClicked();
     void updateItemClicked(const QModelIndex &index);
+    void deleteItemClicked(const QModelIndex &index);
     void addPriceClicked();
     void updatePriceClicked(const QModelIndex &index);
     void deletePriceClicked(const QModelIndex &index);

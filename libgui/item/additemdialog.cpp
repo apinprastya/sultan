@@ -105,6 +105,7 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             if(mIsUpdate) FlashMessageManager::showMessage(tr("Item updated successfully"));
             else FlashMessageManager::showMessage(tr("Item added successfully"));
+            emit success();
             if(!mIsAddAgain) {
                 hide();
             } else {

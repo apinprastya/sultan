@@ -31,6 +31,8 @@
 #include "addpricedialog.h"
 #include "headerwidget.h"
 #include "message.h"
+#include "flashmessagemanager.h"
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -85,9 +87,11 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mMainTable->getTableView(), SIGNAL(clicked(QModelIndex)), SLOT(mainTableSelectionChanges()));
     connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
+    connect(mMainTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteItemClicked(QModelIndex)));
     connect(mSecondTable, SIGNAL(addClicked()), SLOT(addPriceClicked()));
     connect(mSecondTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePriceClicked(QModelIndex)));
     connect(mSecondTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
+    connect(mAddDialog, SIGNAL(success()), mMainTable->getModel(), SLOT(refresh()));
     connect(mPriceDialog, SIGNAL(success()), mSecondTable->getModel(), SLOT(refresh()));
 
     Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
@@ -105,6 +109,12 @@ void ItemWidget::messageReceived(LibG::Message *msg)
         auto combo = mMainTable->getTableView()->getHeaderWidget(mMainTable->getModel()->getIndex("category"))->getComboBox();
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCategory(combo, list);
+    } else if(msg->isTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL)) {
+        FlashMessageManager::showMessage(tr("Price deleted successfully"));
+        mSecondTable->getModel()->refresh();
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::DEL)) {
+        FlashMessageManager::showMessage(tr("Item deleted successfully"));
+        mMainTable->getModel()->refresh();
     }
 }
 
@@ -135,6 +145,17 @@ void ItemWidget::updateItemClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
+void ItemWidget::deleteItemClicked(const QModelIndex &index)
+{
+    if(!index.isValid()) return;
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete item?"));
+    if(ret != QMessageBox::Yes) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::DEL);
+    msg.addData("id", item->id);
+    sendMessage(&msg);
+}
+
 void ItemWidget::addPriceClicked()
 {
     mPriceDialog->reset();
@@ -154,6 +175,11 @@ void ItemWidget::updatePriceClicked(const QModelIndex &index)
 void ItemWidget::deletePriceClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete price?"));
+    if(ret != QMessageBox::Yes) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
+    Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL);
+    msg.addData("id", item->id);
+    sendMessage(&msg);
 }
 
