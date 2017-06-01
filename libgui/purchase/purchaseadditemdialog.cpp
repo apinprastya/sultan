@@ -22,6 +22,7 @@
 #include "guiutil.h"
 #include "global_constant.h"
 #include "message.h"
+#include "flashmessagemanager.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -95,12 +96,14 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
     } else if(msg->isType(MSG_TYPE::PURCHASE_ITEM)) {
         if(msg->isSuccess()) {
             if(msg->isCommand(MSG_COMMAND::INSERT)) {
+                FlashMessageManager::showMessage(tr("Purchase item added successfully"));
                 emit addSuccess();
                 if(!mIsAgain) hide();
                 else {
                     reset();
                 }
             } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+                FlashMessageManager::showMessage(tr("Purchase item updated successfully"));
                 hide();
                 emit updateSuccess(mId);
             }

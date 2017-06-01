@@ -24,6 +24,7 @@
 #include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "flashmessagemanager.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -102,6 +103,8 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isType(MSG_TYPE::ITEM)) {
         if(msg->isSuccess()) {
+            if(mIsUpdate) FlashMessageManager::showMessage(tr("Item updated successfully"));
+            else FlashMessageManager::showMessage(tr("Item added successfully"));
             if(!mIsAddAgain) {
                 hide();
             } else {

@@ -23,6 +23,7 @@
 #include "message.h"
 #include "global_constant.h"
 #include "categotyadddialog.h"
+#include "flashmessagemanager.h"
 #include <QPushButton>
 #include <QTimer>
 #include <QMessageBox>
@@ -74,11 +75,14 @@ void CategoryWidget::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             mAddDialog->hide();
             if(msg->isCommand(MSG_COMMAND::INSERT)) {
+                FlashMessageManager::showMessage(tr("Category added successfully"));
                 auto item = mTreeWidget->addItem(msg->data());
                 mTreeWidget->setCurrentItem(item);
             } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+                FlashMessageManager::showMessage(tr("Category updated successfully"));
                 mTreeWidget->updateItem(msg->data());
             } else if(msg->isCommand(MSG_COMMAND::DEL)) {
+                FlashMessageManager::showMessage(tr("Category deleted successfully"));
                 mTreeWidget->deleteItem(mDeletedId);
             }
         } else {

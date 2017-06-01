@@ -32,6 +32,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "db_constant.h"
+#include "flashmessagemanager.h"
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -79,6 +80,7 @@ void UserWidget::messageReceived(Message *msg)
 {
     if(msg->isCommand(MSG_COMMAND::INSERT)) {
         if(msg->isSuccess()) {
+            FlashMessageManager::showMessage(tr("User added successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
         } else {
@@ -88,6 +90,7 @@ void UserWidget::messageReceived(Message *msg)
         }
     } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
         if(msg->isSuccess()) {
+            FlashMessageManager::showMessage(tr("User updated successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
         } else {
@@ -96,6 +99,7 @@ void UserWidget::messageReceived(Message *msg)
             return;
         }
     } else if(msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
+        FlashMessageManager::showMessage(tr("User deleted successfully"));
         mTableWidget->getModel()->refresh();
     }
 }
