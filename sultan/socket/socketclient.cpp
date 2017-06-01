@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #define TIMEOUT 30000 //in mili second
+#define PING_TIME 5000 //in mili second
 static std::string TAG = "[SOCKETCLIENT]";
 
 SocketClient::SocketClient(QObject *parent) :
@@ -30,6 +31,8 @@ SocketClient::SocketClient(QObject *parent) :
     mSocket(new QWebSocket(QStringLiteral("Sultan Client"), QWebSocketProtocol::VersionLatest, this))
 {
     connect(mSocket, SIGNAL(connected()), SIGNAL(socketConnected()));
+    connect(mSocket, SIGNAL(connected()), SLOT(pong()));
+    connect(mSocket, SIGNAL(pong(quint64,QByteArray)), SLOT(pong()));
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(socketDisconnected()));
     connect(mSocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(errorOccure()));
     connect(mSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(stateChanged(QAbstractSocket::SocketState)));
@@ -86,4 +89,15 @@ void SocketClient::binaryMessageReceived(const QByteArray &data)
 {
     LibG::Message msg(data);
     emit messageReceived(&msg);
+}
+
+void SocketClient::startPing()
+{
+    if(mSocket->state() == QAbstractSocket::ConnectedState)
+        mSocket->ping();
+}
+
+void SocketClient::pong()
+{
+    QTimer::singleShot(PING_TIME, this, SLOT(startPing()));
 }

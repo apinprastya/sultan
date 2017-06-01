@@ -54,6 +54,8 @@ private slots:
     void errorOccure();
     void stateChanged(QAbstractSocket::SocketState state);
     void binaryMessageReceived(const QByteArray &data);
+    void startPing();
+    void pong();
 };
 
 #endif // SOCKETCLIENT_H
