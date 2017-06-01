@@ -24,6 +24,11 @@
 #include "global_constant.h"
 #include "printer.h"
 #include "guiutil.h"
+#include "printtestdialog.h"
+
+#define TAB_APPLICATION     0
+#define TAB_LOCALE          1
+#define TAB_PRINT           2
 
 using namespace LibG;
 using namespace LibGUI;
@@ -39,6 +44,9 @@ SettingWidget::SettingWidget(QWidget *parent) :
     setupAppliaction();
     setupLocale();
     setupPrinter();
+    ui->pushPrintTest->hide();
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged()));
+    connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
 }
 
 SettingWidget::~SettingWidget()
@@ -132,4 +140,16 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_CPI12, ui->spinCashierCpi12->value());
     Preference::sync();
     Preference::applyApplicationSetting();
+}
+
+void SettingWidget::tabChanged()
+{
+    if(ui->tabWidget->currentIndex() == TAB_PRINT) ui->pushPrintTest->show();
+    else ui->pushPrintTest->hide();
+}
+
+void SettingWidget::printTestClicked()
+{
+    LibPrint::PrintTestDialog dialog(this);
+    dialog.exec();
 }

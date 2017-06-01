@@ -50,6 +50,8 @@ private:
     CashierTableModel *mModel;
     PayCashDialog *mPayCashDialog;
 
+    void cutPaper();
+
 private slots:
     void barcodeEntered();
     void totalChanged(double value);

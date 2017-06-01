@@ -24,6 +24,7 @@
 #include "global_setting_const.h"
 #include "global_constant.h"
 #include "preference.h"
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibPrint;
@@ -40,6 +41,7 @@ PrintTestDialog::PrintTestDialog(QWidget *parent) :
     ui->comboType->addItem(QLatin1String("Device"), PRINT_TYPE::DEVICE);
     ui->comboType->addItem(QLatin1String("Spool"), PRINT_TYPE::SPOOL);
     connect(ui->comboType, SIGNAL(currentIndexChanged(int)), SLOT(updateEnable()));
+    connect(ui->pushOpenDrawer, SIGNAL(clicked(bool)), SLOT(openDrawer()));
     updateEnable();
 }
 
@@ -72,23 +74,27 @@ void PrintTestDialog::printClicked()
     e.cpi10();
     e.leftText(str, true);
     e.newLine();
-    e.leftText(QLatin1String("-----"));
+    e.leftText(QLatin1String("----------"));
     e.newLine();
     e.cpi12();
     e.leftText(str2, true);
     e.newLine();
-    e.leftText(QLatin1String("-----"));
+    e.leftText(QLatin1String("----------"));
     e.newLine();
     e.cpi15();
     e.leftText(str3, true);
     e.newLine();
-    e.leftText(QLatin1String("-----"));
+    e.leftText(QLatin1String("----------"));
     e.newLine(3);
     int type = ui->comboType->currentData().toInt();
-    if(type == PRINT_TYPE::DEVICE)
-        Printer::instance()->print(ui->lineDevice->text(), e.data(), ui->comboType->currentData().toInt());
-    else
-        Printer::instance()->print(ui->comboPrint->currentText(), e.data(), ui->comboType->currentData().toInt());
+    QString printName = type == PRINT_TYPE::DEVICE ? ui->lineDevice->text() : ui->comboPrint->currentText();
+    if(printName.isEmpty()) {
+        QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
+        return;
+    }
+    if(ui->checkDrawer->isChecked()) Printer::instance()->print(printName, Escp::openDrawerCommand(), type);
+    Printer::instance()->print(printName, e.data(), type);
+    if(ui->checkCut->isChecked()) Printer::instance()->print(printName, Escp::cutPaperCommand());
 }
 
 void PrintTestDialog::updateEnable()
@@ -100,4 +106,15 @@ void PrintTestDialog::updateEnable()
         ui->comboPrint->setEnabled(true);
         ui->lineDevice->setEnabled(false);
     }
+}
+
+void PrintTestDialog::openDrawer()
+{
+    int type = ui->comboType->currentData().toInt();
+    QString printName = type == PRINT_TYPE::DEVICE ? ui->lineDevice->text() : ui->comboPrint->currentText();
+    if(printName.isEmpty()) {
+        QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
+        return;
+    }
+    Printer::instance()->print(printName, Escp::openDrawerCommand(), type);
 }

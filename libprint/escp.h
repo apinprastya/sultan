@@ -61,6 +61,7 @@ public:
     inline void append(const QString &data) { mData.append(data); }
     Escp *openDrawer();
     static QString openDrawerCommand();
+    static QString cutPaperCommand();
 
 private:
     int mType;

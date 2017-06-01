@@ -116,7 +116,9 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             const QVariantMap &data = msg->data();
             mPayCashDialog->hide();
+            openDrawer();
             printBill(data);
+            cutPaper();
             PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
             dialog.exec();
             mModel->reset();
@@ -124,6 +126,14 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
     }
+}
+
+void CashierWidget::cutPaper()
+{
+    const QString &command = Escp::cutPaperCommand();
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
+    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+                               command, type);
 }
 
 void CashierWidget::barcodeEntered()
@@ -183,7 +193,10 @@ void CashierWidget::payCashless()
 
 void CashierWidget::openDrawer()
 {
-
+    const QString &command = Escp::openDrawerCommand();
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
+    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+                               command, type);
 }
 
 void CashierWidget::updateLastInputed()

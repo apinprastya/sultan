@@ -49,6 +49,8 @@ private slots:
     void signChanged();
     void cashierPrintTypeChanged();
     void saveClicked();
+    void tabChanged();
+    void printTestClicked();
 };
 
 }

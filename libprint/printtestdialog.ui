@@ -111,6 +111,16 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="pushOpenDrawer">
+       <property name="text">
+        <string>Open Drawer</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushPrint">
        <property name="text">
         <string>Print</string>

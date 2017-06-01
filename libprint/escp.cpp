@@ -215,6 +215,17 @@ QString Escp::openDrawerCommand()
     return d;
 }
 
+QString Escp::cutPaperCommand()
+{
+    QString d;
+    d.append(QChar(0x1B));
+    d.append(QChar(0x70));
+    d.append(QChar(0x1D));
+    d.append(QChar(0x56));
+    d.append(QChar(0x01));
+    return d;
+}
+
 void Escp::init()
 {
     mData.append(QChar(0x1B));

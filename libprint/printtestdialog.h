@@ -43,6 +43,7 @@ private:
 private slots:
     void printClicked();
     void updateEnable();
+    void openDrawer();
 };
 
 }
