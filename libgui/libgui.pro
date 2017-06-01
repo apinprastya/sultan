@@ -89,7 +89,9 @@ SOURCES += \
     report/saleswidget.cpp \
     statusbar/statusbarwidget.cpp \
     report/reportitemwidget.cpp \
-    moneylineedit.cpp
+    moneylineedit.cpp \
+    flashmessagemanager.cpp \
+    flashmessage.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -130,7 +132,9 @@ HEADERS += \
     report/saleswidget.h \
     statusbar/statusbarwidget.h \
     report/reportitemwidget.h \
-    moneylineedit.h
+    moneylineedit.h \
+    flashmessagemanager.h \
+    flashmessage.h
 
 FORMS += \
     mainwindow.ui \
