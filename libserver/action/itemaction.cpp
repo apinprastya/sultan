@@ -141,11 +141,22 @@ Message ItemAction::importData(Message *msg)
         const QVector<QStringRef> &row = vec[i].split(";", QString::SkipEmptyParts);
         int cat = 0;
         int sup = 0;
-        //TODO: if categories or suplier not exist, sould create one
         DbResult res = mDb->where("name = ", row[5].toString())->get("categories");
-        if(!res.isEmpty()) cat = res.first()["id"].toInt();
+        if(!res.isEmpty()) {
+            cat = res.first()["id"].toInt();
+        } else {
+            QVariantMap catData{{"name", row[5].toString()}, {"code", row[5].toString()}};
+            mDb->insert("categories", catData);
+            cat = mDb->lastInsertedId().toInt();
+        }
         res = mDb->where("name = ", row[6].toString())->get("supliers");
-        if(!res.isEmpty()) sup = res.first()["id"].toInt();
+        if(!res.isEmpty()) {
+            sup = res.first()["id"].toInt();
+        } else {
+            QVariantMap supData{{"name", row[6].toString()}, {"code", row[6].toString()}};
+            mDb->insert("supliers", supData);
+            sup = mDb->lastInsertedId().toInt();
+        }
         const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
                               {"name", row[1].toString()}, {"stock", row[4].toFloat()},
                               {"buy_price", row[2].toDouble()}};
