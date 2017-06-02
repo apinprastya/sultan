@@ -35,6 +35,8 @@
 #include "paymentcashsuccessdialog.h"
 #include "searchitemdialog.h"
 #include "transactionlistdialog.h"
+#include "usersession.h"
+#include "dbutil.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -243,7 +245,8 @@ void CashierWidget::printBill(const QVariantMap &data)
     auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12()->
             centerText(subtitle)->newLine(2);
-    escp->column(QList<int>{50, 50})->leftText(data["number"].toString())->rightText(data["number"].toString());
+    escp->leftText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
+    escp->column(QList<int>{50, 50})->leftText(data["number"].toString())->rightText(UserSession::username());
     escp->newLine()->column(QList<int>())->line(QChar('='));
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
@@ -255,7 +258,7 @@ void CashierWidget::printBill(const QVariantMap &data)
         escp->rightText(Preference::toString(m["total"].toDouble()))->column(QList<int>())->newLine();
     }
     escp->line();
-    escp->column(QList<int>{50, 50})->doubleHeight(true)->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
+    escp->column(QList<int>{50, 50})->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
             leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
             leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
     escp->column(QList<int>())->doubleHeight(false)->line()->newLine()->leftText(footer, true)->newLine(3);
