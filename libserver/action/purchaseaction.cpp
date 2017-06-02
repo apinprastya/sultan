@@ -28,6 +28,21 @@ PurchaseAction::PurchaseAction():
 {
 }
 
+LibG::Message PurchaseAction::del(LibG::Message *msg)
+{
+    LibG::Message message(msg);
+    DbResult res = mDb->where("purchase_id = ", msg->data(mIdField))->get("purchaseitems");
+    if(!res.isEmpty()) {
+        message.setError("Purchase item must empty before deleted!");
+        return message;
+    }
+    mDb->where("id = ", msg->data(mIdField));
+    if(!mDb->del(mTableName)) {
+        message.setError(mDb->lastError().text());
+    }
+    return message;
+}
+
 void PurchaseAction::selectAndJoin()
 {
     mDb->table(mTableName)->select("purchases.*, supliers.name as suplier")->

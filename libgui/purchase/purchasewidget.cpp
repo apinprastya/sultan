@@ -29,6 +29,9 @@
 #include "dbutil.h"
 #include "headerwidget.h"
 #include "db_constant.h"
+#include "message.h"
+#include "flashmessagemanager.h"
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -75,9 +78,16 @@ PurchaseWidget::~PurchaseWidget()
 
 }
 
-void PurchaseWidget::messageReceived(LibG::Message */*msg*/)
+void PurchaseWidget::messageReceived(LibG::Message *msg)
 {
-
+    if(msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::DEL)) {
+        if(msg->isSuccess()) {
+            FlashMessageManager::showMessage(tr("Purchase deleted successfully"));
+            mTableWidget->getModel()->refresh();
+        } else {
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    }
 }
 
 void PurchaseWidget::addClicked()
@@ -93,9 +103,16 @@ void PurchaseWidget::updateClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
-void PurchaseWidget::deleteClicked(const QModelIndex &/*index*/)
+void PurchaseWidget::deleteClicked(const QModelIndex &index)
 {
-
+    if(index.isValid()) {
+        int res = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete the purchase?"));
+        if(res != QMessageBox::Yes) return;
+        auto item = static_cast<TableItem*>(index.internalPointer());
+        Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::DEL);
+        msg.addData("id", item->id);
+        sendMessage(&msg);
+    }
 }
 
 void PurchaseWidget::tableDoubleClicked(const QModelIndex &index)
