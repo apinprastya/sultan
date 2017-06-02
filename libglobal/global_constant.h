@@ -42,6 +42,7 @@ namespace PERMISSION {
     const int CASHIER           = 4;
     const int CATEGORY          = 5;
     const int PURCASHE          = 6;
+    const int REPORT            = 7;
 }
 
 namespace APPLICATION_TYPE {

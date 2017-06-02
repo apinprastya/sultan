@@ -73,6 +73,9 @@ void MainWindow::setup()
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
     ui->action_Cashier->setEnabled(UserSession::hasPermission(PERMISSION::CASHIER));
     ui->action_Purchase->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
+    ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
+    ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
+    ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
