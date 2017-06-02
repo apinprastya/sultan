@@ -59,7 +59,7 @@ public:
     void clearFilter();
     inline void setIdKey(const QString &key) { mIdKey = key; }
     inline LibDB::QueryDB *getQuery() { return &mQuery; }
-    inline int getIndex(const QString &key) { mColumns.indexOf(key); }
+    inline int getIndex(const QString &key) { return mColumns.indexOf(key); }
     void setSort(const QString &sort);
 
 public slots:

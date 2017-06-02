@@ -34,7 +34,7 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
 
 HeaderWidget *TableView::getHeaderWidget(int index)
 {
-    mHeader->getHeaderWidget(index);
+    return mHeader->getHeaderWidget(index);
 }
 
 void TableView::setUseStandardHeader(bool value)

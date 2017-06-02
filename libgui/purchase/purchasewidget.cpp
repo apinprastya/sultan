@@ -93,7 +93,7 @@ void PurchaseWidget::updateClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
-void PurchaseWidget::deleteClicked(const QModelIndex &index)
+void PurchaseWidget::deleteClicked(const QModelIndex &/*index*/)
 {
 
 }

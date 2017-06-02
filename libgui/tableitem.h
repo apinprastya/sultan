@@ -30,6 +30,7 @@ class GUISHARED_EXPORT TableItem
 public:
     QVariant id;
     TableItem();
+    virtual ~TableItem() {}
     virtual void fill(const QVariantMap &data);
     virtual QVariant data(const QString &key);
     QVariantMap data();
