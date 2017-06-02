@@ -87,6 +87,7 @@ public:
     void setStart(const int &start);
     void setLimit(const int &limit);
     void addFilter(const QString &key, int type, const QVariant &data);
+    QVariant getFilter(const QString &key);
 };
 
 }

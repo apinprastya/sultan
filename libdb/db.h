@@ -89,7 +89,7 @@ public:
     bool commit();
     bool roolback();
     inline bool isSupportTransaction() { return mSupportTransaction; }
-    inline void clearSelect() { return mSelect.clear(); }
+    inline Db *clearSelect() { mSelect.clear(); return this; }
 
 private:
     static QStringList mCreated;

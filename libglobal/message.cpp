@@ -201,3 +201,9 @@ void Message::addFilter(const QString &key, int type, const QVariant &data)
     filter.insert(key, m);
     mData[QStringLiteral("filter")] = filter;
 }
+
+QVariant Message::getFilter(const QString &key)
+{
+    const QVariantMap f = mData["filter"].toMap();
+    return f[key].toMap()["value"];
+}

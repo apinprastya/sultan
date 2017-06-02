@@ -21,6 +21,7 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
+#include <QDebug>
 
 using namespace LibServer;
 using namespace LibG;
@@ -51,14 +52,14 @@ Message SoldItemAction::getSummary(Message *msg)
 Message SoldItemAction::report(Message *msg)
 {
     LibG::Message message(msg);
-    mDb->table(mTableName);
-    mDb->select("sum(solditems.count) as count, solditems.barcode, solditems.name, items.stock, categories.name as category, supliers.name as suplier")->
+    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, solditems.name, items.stock, categories.name as category, supliers.name as suplier")->
             join("LEFT JOIN items ON items.barcode = solditems.barcode")->
             join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
             join("LEFT JOIN categories ON categories.id = items.category_id")->group("solditems.barcode")->sort("count DESC");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
-        message.addData(QStringLiteral("total"), mDb->count());
+        message.addData(QStringLiteral("total"),
+                        mDb->clone()->reset()->table("(" + mDb->clone()->clearSelect()->select("count(*)")->getSelectQuery() + ")")->count());
     setStart(&message, msg);
     mDb = QueryHelper::limitOffset(mDb, msg->data());
     mDb = QueryHelper::sort(mDb, msg->data());
