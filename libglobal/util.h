@@ -31,6 +31,7 @@ public:
     Util();
     static QDate getBeginningOfMonth();
     static QDate getEndOfMonth();
+    static int getIntVersion(QString version);
 };
 
 }

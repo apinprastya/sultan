@@ -29,6 +29,7 @@
 #include <QCryptographicHash>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QApplication>
 #include <QDebug>
 
 using namespace LibG;
@@ -41,6 +42,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
     connect(ui->pushLogin, SIGNAL(clicked(bool)), SLOT(loginClicked()));
     connect(ui->pushConfig, SIGNAL(clicked(bool)), SLOT(openSetting()));
+    ui->labelVersion->setText(QString("Sultan version %1").arg(qApp->applicationVersion()));
 }
 
 LoginDialog::~LoginDialog()

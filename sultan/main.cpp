@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
-    a.setApplicationVersion("0.1");
+    a.setApplicationVersion("17.05.00");
 
     LibG::Preference::createInstance();
     const QString &lang = LibG::Preference::getString(LibG::SETTING::APPLICATION_LANGUAGE, "id");

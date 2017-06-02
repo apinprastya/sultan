@@ -19,6 +19,7 @@
  */
 #include "restartconfirmationdialog.h"
 #include "ui_restartconfirmationdialog.h"
+#include "settingdialog.h"
 #include <QProcess>
 
 RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent) :
@@ -29,6 +30,7 @@ RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent) :
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     connect(ui->pushRestart, SIGNAL(clicked(bool)), SLOT(restartClicked()));
     connect(ui->pushExit, SIGNAL(clicked(bool)), SLOT(exitClicked()));
+    connect(ui->pushSetting, SIGNAL(clicked(bool)), SLOT(openSetting()));
 }
 
 RestartConfirmationDialog::~RestartConfirmationDialog()
@@ -56,5 +58,14 @@ void RestartConfirmationDialog::restartClicked()
 
 void RestartConfirmationDialog::exitClicked()
 {
+    qApp->quit();
+}
+
+void RestartConfirmationDialog::openSetting()
+{
+    close();
+    SettingDialog dialog;
+    dialog.showDialog();
+    dialog.exec();
     qApp->quit();
 }

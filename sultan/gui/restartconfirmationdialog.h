@@ -41,6 +41,7 @@ private:
 private slots:
     void restartClicked();
     void exitClicked();
+    void openSetting();
 };
 
 #endif // RESTARTCONFIRMATIONDIALOG_H

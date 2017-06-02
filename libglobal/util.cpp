@@ -41,3 +41,9 @@ QDate Util::getEndOfMonth()
     retVal = retVal.addDays(-1);
     return retVal;
 }
+
+int Util::getIntVersion(QString version)
+{
+    version = version.replace(".", "");
+    return version.toInt();
+}
