@@ -235,7 +235,7 @@ border: 1px solid #ababab;</string>
           <string notr="true">font-size: 12px;</string>
          </property>
          <property name="text">
-          <string>Search :</string>
+          <string>Help :</string>
          </property>
         </widget>
        </item>
@@ -245,67 +245,7 @@ border: 1px solid #ababab;</string>
           <string notr="true">font-size: 12px;</string>
          </property>
          <property name="text">
-          <string>F2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>Pay Cash :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_7">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>F4</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>Open Drawer :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_11">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>F5</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>Transaction List :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_5">
-         <property name="styleSheet">
-          <string notr="true">font-size: 12px;</string>
-         </property>
-         <property name="text">
-          <string>F6</string>
+          <string>F1</string>
          </property>
         </widget>
        </item>

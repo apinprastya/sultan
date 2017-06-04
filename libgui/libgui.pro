@@ -93,7 +93,8 @@ SOURCES += \
     flashmessagemanager.cpp \
     flashmessage.cpp \
     cashier/transactionlistdialog.cpp \
-    cashier/saveloadslotdialog.cpp
+    cashier/saveloadslotdialog.cpp \
+    cashier/cashierhelpdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -138,7 +139,8 @@ HEADERS += \
     flashmessagemanager.h \
     flashmessage.h \
     cashier/transactionlistdialog.h \
-    cashier/saveloadslotdialog.h
+    cashier/saveloadslotdialog.h \
+    cashier/cashierhelpdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -161,4 +163,5 @@ FORMS += \
     statusbar/statusbarwidget.ui \
     report/saleswidget.ui \
     cashier/transactionlistdialog.ui \
-    cashier/saveloadslotdialog.ui
+    cashier/saveloadslotdialog.ui \
+    cashier/cashierhelpdialog.ui

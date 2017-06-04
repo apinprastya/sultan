@@ -38,6 +38,7 @@
 #include "usersession.h"
 #include "dbutil.h"
 #include "saveloadslotdialog.h"
+#include "cashierhelpdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -88,6 +89,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
+    new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -375,4 +377,10 @@ void CashierWidget::loadCartTriggered()
     if(dialog.getSelectedSlot() < 0) return;
     loadFromSlot(dialog.getSelectedSlot());
     mSaveSlot = dialog.getSelectedSlot();
+}
+
+void CashierWidget::openHelp()
+{
+    CashierHelpDialog dialog(this);
+    dialog.exec();
 }

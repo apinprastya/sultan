@@ -72,6 +72,7 @@ private slots:
     void newTransaction();
     void saveCartTriggered();
     void loadCartTriggered();
+    void openHelp();
 };
 
 }
