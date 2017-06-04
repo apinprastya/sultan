@@ -37,10 +37,14 @@
 #include "transactionlistdialog.h"
 #include "usersession.h"
 #include "dbutil.h"
+#include "saveloadslotdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QShortcut>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 #include <functional>
 
@@ -63,7 +67,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 50 << 120 << 120);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 120 << 120);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);
@@ -80,6 +84,10 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F6), this, SLOT(openPreviousTransaction()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -126,6 +134,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
             dialog.exec();
             mModel->reset();
+            if(mSaveSlot >= 0) removeSlot(mSaveSlot);
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
@@ -138,6 +147,48 @@ void CashierWidget::cutPaper()
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
                                command, type);
+}
+
+void CashierWidget::saveToSlot(int slot)
+{
+    QFile file(QString("trans_%1.trans").arg(slot));
+    if(file.exists()) file.remove();
+    if(!file.open(QFile::WriteOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Unable to open save file"));
+        return;
+    }
+    const QJsonDocument &doc = QJsonDocument::fromVariant(mModel->getCart());
+    file.write(qCompress(doc.toJson(QJsonDocument::Compact)));
+    file.close();
+}
+
+void CashierWidget::loadFromSlot(int slot)
+{
+    QFile file(QString("trans_%1.trans").arg(slot));
+    if(!file.exists()) {
+        QMessageBox::critical(this, tr("Error"), tr("File not exists"));
+        return;
+    }
+    if(!file.open(QFile::ReadOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Unable to open file"));
+        return;
+    }
+    QJsonParseError err;
+    const QJsonDocument &doc = QJsonDocument::fromJson(qUncompress(file.readAll()), &err);
+    if(err.error != QJsonParseError::NoError) {
+        QMessageBox::critical(this, tr("Error"), tr("Error parsing json file"));
+        return;
+    }
+    mModel->loadCart(doc.array().toVariantList());
+    ui->tableView->selectRow(mModel->rowCount(QModelIndex()) - 1);
+    file.close();
+}
+
+void CashierWidget::removeSlot(int slot)
+{
+    QFile file(QString("trans_%1.trans").arg(slot));
+    if(file.exists()) file.remove();
+    mSaveSlot = -1;
 }
 
 void CashierWidget::barcodeEntered()
@@ -282,4 +333,46 @@ void CashierWidget::openPreviousTransaction()
     TransactionListDialog dialog(mMessageBus);
     dialog.setPrintFunction(std::bind(&CashierWidget::printBill, this, std::placeholders::_1));
     dialog.exec();
+}
+
+void CashierWidget::newTransaction()
+{
+    if(mModel->isEmpty()) return;
+    if(mSaveSlot >= 0) {
+        saveToSlot(mSaveSlot);
+    } else {
+        int res = QMessageBox::question(this, tr("New transaction confirmation"), tr("Are you sure want to ignore this transaction and start new one?"));
+        if(res != QMessageBox::Yes) return;
+    }
+    mModel->reset();
+    mSaveSlot = -1;
+}
+
+void CashierWidget::saveCartTriggered()
+{
+    if(mModel->isEmpty()) return;
+    if(mSaveSlot < 0) {
+        SaveLoadSlotDialog dialog(this);
+        dialog.exec();
+        if(dialog.getSelectedSlot() < 0) return;
+        saveToSlot(dialog.getSelectedSlot());
+        mSaveSlot = dialog.getSelectedSlot();
+    }
+}
+
+void CashierWidget::loadCartTriggered()
+{
+    if(!mModel->isEmpty() && mSaveSlot < 0) {
+        int ret = QMessageBox::question(this, tr("Confirmation"), tr("Your cart is not empty, do you want to ignore current cart?"));
+        if(ret != QMessageBox::Yes) {
+            return;
+        }
+    } else if(!mModel->isEmpty() && mSaveSlot >= 0) {
+        saveToSlot(mSaveSlot);
+    }
+    SaveLoadSlotDialog dialog(false, this);
+    dialog.exec();
+    if(dialog.getSelectedSlot() < 0) return;
+    loadFromSlot(dialog.getSelectedSlot());
+    mSaveSlot = dialog.getSelectedSlot();
 }

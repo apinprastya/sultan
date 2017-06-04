@@ -49,8 +49,12 @@ private:
     float mCount = 0.0f;
     CashierTableModel *mModel;
     PayCashDialog *mPayCashDialog;
+    int mSaveSlot = -1;
 
     void cutPaper();
+    void saveToSlot(int slot);
+    void loadFromSlot(int slot);
+    void removeSlot(int slot);
 
 private slots:
     void barcodeEntered();
@@ -65,6 +69,9 @@ private slots:
     void printBill(const QVariantMap &data);
     void openSearch();
     void openPreviousTransaction();
+    void newTransaction();
+    void saveCartTriggered();
+    void loadCartTriggered();
 };
 
 }

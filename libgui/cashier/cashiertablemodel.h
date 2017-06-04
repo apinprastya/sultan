@@ -42,6 +42,7 @@ public:
     inline double getTotal() { return mTotal; }
     inline bool isEmpty() { return mData.isEmpty(); }
     QVariantList getCart();
+    void loadCart(const QVariantList &cart);
 
 private:
     QList<CashierItem*> mData;

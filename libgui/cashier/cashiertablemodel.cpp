@@ -168,6 +168,19 @@ QVariantList CashierTableModel::getCart()
     return list;
 }
 
+void CashierTableModel::loadCart(const QVariantList &cart)
+{
+    reset();
+    beginInsertRows(QModelIndex(), 0, cart.size());
+    for(auto c : cart) {
+        auto item = new CashierItem();
+        item->fill(c.toMap());
+        mData.append(item);
+    }
+    endInsertRows();
+    calculateTotal();
+}
+
 float CashierTableModel::getTotalCount(const QString &barcode)
 {
     float retVal = 0;
