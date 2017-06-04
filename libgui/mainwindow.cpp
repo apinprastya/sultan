@@ -35,6 +35,7 @@
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
+#include "user/changepassworddialog.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -110,6 +111,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
     connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
     connect(ui->actionItems, SIGNAL(triggered(bool)), SLOT(openItemReport()));
+    connect(ui->action_Change_Password, SIGNAL(triggered(bool)), SLOT(openChangePassword()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -247,4 +249,10 @@ void MainWindow::openItemReport()
         auto widget = new ReportItemWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/money-bag.png");
     }
+}
+
+void MainWindow::openChangePassword()
+{
+    ChangePasswordDialog dialog(mMessageBus);
+    dialog.exec();
 }

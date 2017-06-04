@@ -30,6 +30,7 @@ UserAction::UserAction():
     ServerAction("users", "id")
 {
     mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::CHANGE_MY_PASSWORD, std::bind(&UserAction::changeMyPassword, this, std::placeholders::_1));
 }
 
 Message UserAction::login(Message *msg)
@@ -50,6 +51,27 @@ Message UserAction::login(Message *msg)
             message.addData("username", data["username"]);
             message.addData("name", data["name"]);
             message.addData("permission", data["permission"]);
+        }
+    }
+    return message;
+}
+
+Message UserAction::changeMyPassword(Message *msg)
+{
+    LibG::Message message(msg);
+    const QString &old = msg->data("current").toString();
+    const QString &newpass = msg->data("new").toString();
+    mDb->table(mTableName)->where("id = ", msg->data("id").toInt());
+    DbResult res = mDb->exec();
+    if(res.isEmpty()) {
+        message.setError("User not found");
+    } else {
+        const QVariantMap &data = res.first();
+        if(old.compare(data["password"].toString())) {
+            message.setError("Old password wrong");
+        } else {
+            QVariantMap d{{"password", newpass}};
+            mDb->where("id = ", msg->data("id").toInt())->update(mTableName, d);
         }
     }
     return message;

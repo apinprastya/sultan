@@ -1,5 +1,5 @@
 /*
- * useraction.h
+ * changepassworddialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
@@ -17,20 +17,35 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef USERACTION_H
-#define USERACTION_H
+#ifndef CHANGEPASSWORDDIALOG_H
+#define CHANGEPASSWORDDIALOG_H
 
-#include "serveraction.h"
+#include "messagehandler.h"
+#include <QDialog>
 
-namespace LibServer {
+namespace Ui {
+class ChangePasswordDialog;
+}
 
-class UserAction : public ServerAction
+namespace LibGUI {
+
+class ChangePasswordDialog : public QDialog, public LibG::MessageHandler
 {
+    Q_OBJECT
+
 public:
-    UserAction();
-    LibG::Message login(LibG::Message *msg);
-    LibG::Message changeMyPassword(LibG::Message *msg);
+    ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~ChangePasswordDialog();
+
+protected:
+    void messageReceived(LibG::Message *msg);
+
+private:
+    Ui::ChangePasswordDialog *ui;
+
+private slots:
+    void saveClicked();
 };
 
 }
-#endif // USERACTION_H
+#endif // CHANGEPASSWORDDIALOG_H

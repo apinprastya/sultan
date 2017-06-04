@@ -82,6 +82,7 @@ namespace MSG_COMMAND {
     const int SOLD_ITEM_REPORT  = 9;
     const int EXPORT        = 10;
     const int IMPORT        = 11;
+    const int CHANGE_MY_PASSWORD = 12;
 }
 
 namespace PRINT_TYPE {

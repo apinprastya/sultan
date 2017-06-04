@@ -78,6 +78,7 @@ private slots:
     void openPurchaseItem(int id, const QString &number);
     void openSalesReport();
     void openItemReport();
+    void openChangePassword();
 };
 
 }
