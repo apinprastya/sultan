@@ -39,6 +39,7 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->setupUi(this);
     setMessageBus(bus);
     ui->verticalLayout->addWidget(mTableWidget);
+    mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh);
     ui->labelTitle->setText(tr("Item sales"));
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
