@@ -2,21 +2,137 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="id_ID">
 <context>
+    <name>Core</name>
+    <message>
+        <location filename="core.cpp" line="142"/>
+        <location filename="core.cpp" line="157"/>
+        <source>Database Error</source>
+        <translation>Database Error</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="157"/>
+        <source>Migrate database failed</source>
+        <translation>Migrasi database gagal</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="167"/>
+        <source>Server Socket Error</source>
+        <translation>Socket Server Error</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="167"/>
+        <source>Port already in used</source>
+        <translation>Port sudah digunakan</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="208"/>
+        <source>Error Disconnect</source>
+        <translation>Error Disconnect</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="208"/>
+        <source>Connection to server lost. Please check your connectivity.</source>
+        <translation>Koneksi ke server terputus. Silakan cek koneksi Anda.</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="233"/>
+        <source>Error Timeout</source>
+        <translation>Error Timeout</translation>
+    </message>
+    <message>
+        <location filename="core.cpp" line="233"/>
+        <source>Connection to server timeout. Please check your connectivity.</source>
+        <translation>Koneksi ke server timeout. Silakan cek koneksi Anda.</translation>
+    </message>
+</context>
+<context>
+    <name>DateSettingDialog</name>
+    <message>
+        <location filename="gui/datesettingdialog.ui" line="14"/>
+        <source>Setting Date and Time</source>
+        <translation>Setting tanggal dan jam</translation>
+    </message>
+    <message>
+        <location filename="gui/datesettingdialog.ui" line="20"/>
+        <source>Your date time is too old. You have to set your current date and time manual.</source>
+        <translation>Tanggal dan jam sudah kadaluarsa. Tangal dan jam haus di set secara manual.</translation>
+    </message>
+    <message>
+        <location filename="gui/datesettingdialog.ui" line="68"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="gui/datesettingdialog.cpp" line="52"/>
+        <location filename="gui/datesettingdialog.cpp" line="57"/>
+        <source>Error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/datesettingdialog.cpp" line="52"/>
+        <source>Unable to set the date time</source>
+        <translation>Tidak dapat menset tanggal dan jam</translation>
+    </message>
+    <message>
+        <location filename="gui/datesettingdialog.cpp" line="57"/>
+        <source>Seems your date is not up to date. Please check again</source>
+        <translation>Sepertinya tanggal dan jam masih belum terupdate. Silakan cek ulang</translation>
+    </message>
+</context>
+<context>
     <name>LoginDialog</name>
     <message>
-        <location filename="gui/logindialog.ui" line="85"/>
+        <location filename="gui/logindialog.ui" line="88"/>
         <source>Sample</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="gui/logindialog.cpp" line="36"/>
+        <location filename="gui/logindialog.cpp" line="42"/>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="gui/logindialog.cpp" line="82"/>
+        <location filename="gui/logindialog.cpp" line="88"/>
+        <source>Close Confirmation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/logindialog.cpp" line="89"/>
+        <source>This is a server, any client will be disconnect. Are you sure to exit?</source>
+        <translation>Aplikasi ini adalah server, semua client yang terhubung ke server ini akan terputus. Yakin keluar?</translation>
+    </message>
+    <message>
+        <location filename="gui/logindialog.cpp" line="104"/>
         <source>fill all field</source>
-        <translation type="unfinished">Lengkapi semua form</translation>
+        <translation>Lengkapi semua form</translation>
+    </message>
+</context>
+<context>
+    <name>RestartConfirmationDialog</name>
+    <message>
+        <location filename="gui/restartconfirmationdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/restartconfirmationdialog.ui" line="20"/>
+        <source>TextLabel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/restartconfirmationdialog.ui" line="55"/>
+        <source>Exit App</source>
+        <translation>Tutup App</translation>
+    </message>
+    <message>
+        <location filename="gui/restartconfirmationdialog.ui" line="62"/>
+        <source>Restart App</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/restartconfirmationdialog.ui" line="69"/>
+        <source>Open Setting</source>
+        <translation>Buka Setting</translation>
     </message>
 </context>
 <context>
@@ -24,99 +140,118 @@
     <message>
         <location filename="gui/settingdialog.ui" line="14"/>
         <source>Application Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Setting Aplikasi</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="33"/>
         <source>Type</source>
-        <translation type="unfinished">Tipe</translation>
+        <translation>Tipe</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="45"/>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="101"/>
         <source>root</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="154"/>
         <source>Check Mysql</source>
-        <translation type="unfinished">Cek MySQL</translation>
+        <translation>Cek MySQL</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="200"/>
         <source>Server Setting</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="209"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="232"/>
         <source>Client Setting</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="241"/>
         <source>Address</source>
-        <translation type="unfinished">Alamat Server</translation>
+        <translation>Alamat Server</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="255"/>
         <source>Server address</source>
-        <translation type="unfinished">Alamat server
-</translation>
+        <translation>Alamat server</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="275"/>
         <source>Check Connection</source>
-        <translation type="unfinished">Cek koneksi</translation>
+        <translation>Cek koneksi</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="320"/>
         <source>Cancel</source>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.ui" line="330"/>
         <source>Save</source>
-        <translation type="unfinished">Simpan</translation>
-    </message>
-    <message>
-        <location filename="gui/settingdialog.cpp" line="40"/>
-        <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan</translation>
     </message>
     <message>
         <location filename="gui/settingdialog.cpp" line="41"/>
+        <source>Server</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="gui/settingdialog.cpp" line="42"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="gui/settingdialog.cpp" line="118"/>
-        <location filename="gui/settingdialog.cpp" line="133"/>
+        <location filename="gui/settingdialog.cpp" line="120"/>
+        <location filename="gui/settingdialog.cpp" line="135"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="gui/settingdialog.cpp" line="118"/>
+        <location filename="gui/settingdialog.cpp" line="120"/>
         <source>Please complete the setting</source>
-        <translation type="unfinished">Silakan setting dengan benar</translation>
+        <translation>Silakan setting dengan benar</translation>
     </message>
     <message>
-        <location filename="gui/settingdialog.cpp" line="128"/>
+        <location filename="gui/settingdialog.cpp" line="130"/>
         <source>Success</source>
-        <translation type="unfinished">Sukses</translation>
+        <translation>Sukses</translation>
     </message>
     <message>
-        <location filename="gui/settingdialog.cpp" line="128"/>
+        <location filename="gui/settingdialog.cpp" line="130"/>
         <source>Connection to Mysql OK!</source>
-        <translation type="unfinished">Koneksi MySQL OK!</translation>
+        <translation>Koneksi MySQL OK!</translation>
+    </message>
+    <message>
+        <location filename="gui/settingdialog.cpp" line="189"/>
+        <source>Connection Success</source>
+        <translation>Koneksi Sukses</translation>
+    </message>
+    <message>
+        <location filename="gui/settingdialog.cpp" line="189"/>
+        <source>Connection to server success</source>
+        <translation>Koneksi ke server sukses</translation>
+    </message>
+    <message>
+        <location filename="gui/settingdialog.cpp" line="196"/>
+        <source>Connection Error</source>
+        <translation>Koneksi Error</translation>
+    </message>
+    <message>
+        <location filename="gui/settingdialog.cpp" line="196"/>
+        <source>Connection error : %1</source>
+        <translation>Koneksi error : %1</translation>
     </message>
 </context>
 <context>
@@ -124,12 +259,12 @@
     <message>
         <location filename="gui/splash.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/splash.ui" line="69"/>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
