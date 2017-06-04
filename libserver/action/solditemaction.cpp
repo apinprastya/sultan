@@ -21,6 +21,7 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
+#include <QStringBuilder>
 #include <QDebug>
 
 using namespace LibServer;
@@ -32,6 +33,7 @@ SoldItemAction::SoldItemAction():
 {
     mFunctionMap.insert(MSG_COMMAND::SOLD_SUMMARY, std::bind(&SoldItemAction::getSummary, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SOLD_ITEM_REPORT, std::bind(&SoldItemAction::report, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&SoldItemAction::exportData, this, std::placeholders::_1));
 }
 
 void SoldItemAction::selectAndJoin()
@@ -64,5 +66,37 @@ Message SoldItemAction::report(Message *msg)
     mDb = QueryHelper::limitOffset(mDb, msg->data());
     mDb = QueryHelper::sort(mDb, msg->data());
     message.addData(QStringLiteral("data"), mDb->exec().data());
+    return message;
+}
+
+Message SoldItemAction::exportData(Message *msg)
+{
+    LibG::Message message(msg);
+    QString arr;
+    arr.append("date;barcode;name;count;price;total;buy_price;margin;\n");
+    mDb->table(mTableName);
+    selectAndJoin();
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    mDb = QueryHelper::sort(mDb, msg->data());
+    const int limit = 500;
+    int start = 0;
+    while(true) {
+        DbResult res = mDb->clone()->start(start)->limit(limit)->exec();
+        if(res.isEmpty()) break;
+        for(int i = 0; i < res.size(); i++) {
+            const QVariantMap &d = res.data(i);
+            double margin = d["total"].toDouble() - d["buy_price"].toDouble();
+            arr.append(d["created_at"].toString() % ";");
+            arr.append(d["barcode"].toString() % ";");
+            arr.append(d["name"].toString() % ";");
+            arr.append(d["count"].toString() % ";");
+            arr.append(d["price"].toString() % ";");
+            arr.append(d["total"].toString() % ";");
+            arr.append(d["buy_price"].toString() % ";");
+            arr.append(QString::number(margin) % ";\n");
+        }
+        start += limit;
+    }
+    message.addData("data", arr);
     return message;
 }

@@ -30,6 +30,7 @@ public:
     SoldItemAction();
     LibG::Message getSummary(LibG::Message *msg);
     LibG::Message report(LibG::Message *msg);
+    LibG::Message exportData(LibG::Message *msg);
 
 protected:
     void selectAndJoin() override;

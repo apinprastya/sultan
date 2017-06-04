@@ -46,6 +46,7 @@ private:
 
 private slots:
     void refreshSummary();
+    void exportClicked();
 };
 
 }

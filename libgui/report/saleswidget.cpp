@@ -31,6 +31,9 @@
 #include "message.h"
 #include "querydb.h"
 #include "preference.h"
+#include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -70,6 +73,10 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
+    auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
+    mTableWidget->addActionButton(button);
 }
 
 void SalesWidget::messageReceived(LibG::Message *msg)
@@ -77,12 +84,31 @@ void SalesWidget::messageReceived(LibG::Message *msg)
     if(msg->isTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_SUMMARY) && msg->isSuccess()) {
         ui->labelSales->setText(Preference::toString(msg->data("total").toDouble()));
         ui->labelMargin->setText(Preference::toString(msg->data("margin").toDouble()));
+    } else if(msg->isTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::EXPORT) && msg->isSuccess()) {
+        const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.csv");
+        if(!fileName.isEmpty()) {
+            QFile file(fileName);
+            if(file.open(QFile::WriteOnly)) {
+                file.write(msg->data("data").toString().toUtf8());
+                file.close();
+            } else {
+                QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
+            }
+        }
     }
 }
 
 void SalesWidget::refreshSummary()
 {
     Message msg(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_SUMMARY);
+    auto query = mTableWidget->getModel()->getQuery();
+    query->bind(&msg);
+    sendMessage(&msg);
+}
+
+void SalesWidget::exportClicked()
+{
+    Message msg(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::EXPORT);
     auto query = mTableWidget->getModel()->getQuery();
     query->bind(&msg);
     sendMessage(&msg);

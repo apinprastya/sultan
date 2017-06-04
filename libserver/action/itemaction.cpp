@@ -122,7 +122,7 @@ Message ItemAction::exportData(Message *msg)
         }
         start += limit;
     }
-    message.addData("data", arr.toUtf8());
+    message.addData("data", arr);
     return message;
 }
 
