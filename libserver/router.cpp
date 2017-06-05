@@ -30,12 +30,23 @@
 #include "action/purchaseitemaction.h"
 #include "action/soldaction.h"
 #include "action/solditemaction.h"
+#include "db.h"
+#include "queryhelper.h"
+#include <QStringBuilder>
+#include <QDebug>
 
 using namespace LibServer;
 using namespace LibG;
+using namespace LibDB;
 
 Router::Router()
 {
+    //define the user defined filter here
+    LibDB::QueryHelper::installUserDefinedFilter(FILTER::CATEGORY_IN, [](Db *db, const QString &key, int type, const QVariantMap &data) {
+       if(type == FILTER::CATEGORY_IN) {
+            db->where(key % " IN (SELECT child_id FROM category_childs WHERE category_id = " % data["value"].toString() % ")");
+       }
+    });
 }
 
 LibG::Message Router::handler(LibG::Message msg)

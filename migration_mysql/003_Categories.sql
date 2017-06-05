@@ -10,9 +10,17 @@ CREATE TABLE categories (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE category_childs (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`category_id` INT NOT NULL,
+	`child_id` INT NOT NULL
+) ENGINE = InnoDB;
+
 INSERT INTO categories(name, code, hierarchy) 
 VALUES ('Food', 'FD', 'Food');
 INSERT INTO categories(parent_id, code, hierarchy)
 VALUES
 (1, 'Snack', 'SN', 'Food - Snack'),
 (1, 'Drink', 'DN', 'Food - Drink');
+INSERT INTO category_childs (category_id, child_id)
+VALUES (1, 1), (1, 2), (1, 3), (2, 2), (3, 3);

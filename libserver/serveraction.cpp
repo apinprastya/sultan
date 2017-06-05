@@ -64,7 +64,9 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
-        message.setData(res.first());
+        const QVariantMap d = res.first();
+        if(hasFlag(AFTER_INSERT)) afterInsert(d);
+        message.setData(d);
     }
     return message;
 }
@@ -77,7 +79,9 @@ LibG::Message ServerAction::update(LibG::Message *msg)
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);
-        message.setData(res.first());
+        const QVariantMap d = res.first();
+        if(hasFlag(AFTER_UPDATE)) afterUpdate(d);
+        message.setData(d);
     }
     return message;
 }
@@ -130,4 +134,9 @@ void ServerAction::setStart(Message *msg, Message *src)
 QMap<QString, QString> ServerAction::fieldMap() const
 {
     return QMap<QString, QString>();
+}
+
+bool ServerAction::hasFlag(int flag)
+{
+    return (mFlag & flag) != 0;
 }

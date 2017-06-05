@@ -65,7 +65,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
-    model->addHeaderFilter("category", HeaderFilter{HeaderWidget::Combo, TableModel::FilterEQ, QVariant()});
+    model->addHeaderFilter("category", HeaderFilter{HeaderWidget::Combo, TableModel::FilterCategory, QVariant()});
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
     mMainTable->setupTable();
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);

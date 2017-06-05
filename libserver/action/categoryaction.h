@@ -28,6 +28,10 @@ class CategoryAction : public ServerAction
 {
 public:
     CategoryAction();
+
+protected:
+    void afterInsert(const QVariantMap &data) override;
+    void parentAddChild(int parent, int child);
 };
 
 }

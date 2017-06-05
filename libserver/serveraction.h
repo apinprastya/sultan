@@ -34,11 +34,17 @@ namespace LibServer {
 class SERVERSHARED_EXPORT ServerAction
 {
 public:
+    enum Flag {
+        AFTER_INSERT = 0x1,
+        AFTER_UPDATE = 0x2
+    };
+
     ServerAction(const QString &tableName, const QString idfield);
     virtual ~ServerAction();
     LibG::Message exec(LibG::Message *msg);
 
 protected:
+    int mFlag;
     LibDB::Db *mDb;
     QString mTableName;
     QString mIdField;
@@ -53,6 +59,10 @@ protected:
     void setStart(LibG::Message *msg, LibG::Message *src);
     virtual QMap<QString, QString> fieldMap() const;
     virtual void selectAndJoin() {}
+    virtual void afterInsert(const QVariantMap &/*data*/) {}
+    virtual void afterUpdate(const QVariantMap &/*data*/) {}
+
+    bool hasFlag(int flag);
 };
 
 }

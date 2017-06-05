@@ -23,6 +23,8 @@
 
 using namespace LibDB;
 
+static QMap<int, std::function<void(Db *db, const QString &, int, const QVariantMap &)>> USERDEFINED_FILTER;
+
 QueryHelper::QueryHelper()
 {
 }
@@ -49,6 +51,9 @@ Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QSt
                 db->like(key, option[QLatin1String("value")].toString());
             } else if(type == COMPARE::LIKE_NATIVE) {
                 db->likeNative(key, option[QLatin1String("value")].toString());
+            } else if(type >= COMPARE::USER_DEFINE) {
+                if(USERDEFINED_FILTER.contains(type))
+                    USERDEFINED_FILTER[type](db, key, type, option);
             } else {
                 db->where(key + getSign(type), option[QLatin1String("value")]);
             }
@@ -78,6 +83,11 @@ Db *QueryHelper::limitOffset(Db *db, const QVariantMap &data)
         db->start(data[QLatin1String("start")].toInt());
     }
     return db;
+}
+
+void QueryHelper::installUserDefinedFilter(int type, std::function<void(Db *db, const QString &, int, const QVariantMap &)> func)
+{
+    USERDEFINED_FILTER.insert(type, func);
 }
 
 QString QueryHelper::getSign(int type)

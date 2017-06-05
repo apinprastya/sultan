@@ -18,10 +18,29 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "categoryaction.h"
+#include "db.h"
 
 using namespace LibServer;
+using namespace LibDB;
 
 CategoryAction::CategoryAction():
     ServerAction("categories", "id")
 {
+    mFlag = AFTER_INSERT;
+}
+
+void CategoryAction::afterInsert(const QVariantMap &data)
+{
+    mDb->insert("category_childs", QVariantMap{{"category_id", data["id"]}, {"child_id", data["id"]}});
+    if(data["parent_id"].toInt() != 0) {
+        parentAddChild(data["parent_id"].toInt(), data["id"].toInt());
+    }
+}
+
+void CategoryAction::parentAddChild(int parent, int child)
+{
+    mDb->insert("category_childs", QVariantMap{{"category_id", parent}, {"child_id", child}});
+    DbResult res = mDb->where("id = ", parent)->get(mTableName);
+    if(res.first()["parent_id"].toInt() != 0)
+        parentAddChild(res.first()["parent_id"].toInt(), child);
 }

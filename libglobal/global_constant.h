@@ -90,6 +90,10 @@ namespace PRINT_TYPE {
     const int SPOOL     = 1;
 }
 
+namespace FILTER {
+    const int CATEGORY_IN = 100; //this value taken from DB COMPARE USER_DEFINED
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H

@@ -22,6 +22,7 @@
 #define QUERYHELPER_H
 
 #include "db.h"
+#include <functional>
 
 namespace LibDB {
 
@@ -32,6 +33,7 @@ public:
     static Db* filter(Db* db, const QVariantMap &data, const QMap<QString, QString> &fieldMap = QMap<QString, QString>());
     static Db* sort(Db* db, const QVariantMap &data);
     static Db* limitOffset(Db* db, const QVariantMap &data);
+    static void installUserDefinedFilter(int type, std::function<void(Db *db, const QString &, int,const QVariantMap &)> func);
 
 private:
     static QString getSign(int type);

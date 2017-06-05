@@ -41,7 +41,7 @@ class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::Mess
 public:
     enum PageStatus { None, Loading, Loaded };
     enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1, FilterValueRole = Qt::UserRole + 2 };
-    enum Filter { FilterEQ, FilterLike, FilterBetweenDate, FilterLikeNative };
+    enum Filter { FilterEQ, FilterLike, FilterBetweenDate, FilterLikeNative, FilterCategory };
     TableModel(QObject *parent = nullptr, bool useStandartHeader = false);
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
