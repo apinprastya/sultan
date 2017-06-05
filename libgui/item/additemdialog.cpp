@@ -41,6 +41,7 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAndAgainClicked()));
     connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
+    connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(returnPressed()));
 }
 
 AddItemDialog::~AddItemDialog()
@@ -98,9 +99,14 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             ui->labelError->setText(tr("Items with barcode already exist : %1").arg(msg->data("name").toString()));
             ui->labelError->show();
+            ui->lineBarcode->setFocus();
+            ui->lineBarcode->selectAll();
         } else {
             ui->labelError->hide();
+            mIsOk = true;
+            if(mIsReturnPressed) ui->lineName->setFocus(Qt::TabFocusReason);
         }
+        mIsReturnPressed = false;
     } else if(msg->isType(MSG_TYPE::ITEM)) {
         if(msg->isSuccess()) {
             if(mIsUpdate) FlashMessageManager::showMessage(tr("Item updated successfully"));
@@ -179,16 +185,25 @@ void AddItemDialog::barcodeDone()
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::GET);
     msg.addData("barcode", ui->lineBarcode->text());
     sendMessage(&msg);
+    mIsOk = false;
+}
+
+void AddItemDialog::returnPressed()
+{
+    mIsReturnPressed = true;
+    barcodeDone();
 }
 
 void AddItemDialog::saveClicked()
 {
+    if(!mIsOk) return;
     mIsAddAgain = false;
     saveData();
 }
 
 void AddItemDialog::saveAndAgainClicked()
 {
+    if(!mIsOk) return;
     mIsAddAgain = true;
     saveData();
 }

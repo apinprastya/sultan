@@ -50,12 +50,15 @@ private:
     bool mIsAddAgain = false;
     int mCurrentSuplier;
     int mCUrrentCategory;
+    bool mIsOk = false;
+    bool mIsReturnPressed = false;
 
     void saveData();
     void populateSuplier(const QVariantList &list);
 
 private slots:
     void barcodeDone();
+    void returnPressed();
     void saveClicked();
     void saveAndAgainClicked();
 
