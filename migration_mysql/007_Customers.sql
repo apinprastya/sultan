@@ -1,0 +1,28 @@
+CREATE TABLE customers (
+	`id` INT NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` TIMESTAMP NULL,
+    `number` VARCHAR(64) NOT NULL,
+    `name` VARCHAR(64) NOT NULL DEFAULT '',
+    `address` VARCHAR(255) NOT NULL DEFAULT '',
+    `phone` VARCHAR(64) NOT NULL DEFAULT '',
+    `point` INT NOT NULL DEFAULT 0,
+    UNIQUE INDEX `NUMBER` (`number` ASC),
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+-- link id : value is the sold id, when customer shop
+CREATE TABLE customer_point_histories (
+	`id` INT NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` TIMESTAMP NULL,
+    `customer_id` INT NOT NULL,
+    `link_id` INT NOT NULL DEFAULT 0,
+    `detail` VARCHAR(255) NOT NULL DEFAULT '',
+    `point` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;
