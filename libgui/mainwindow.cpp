@@ -32,6 +32,7 @@
 #include "report/saleswidget.h"
 #include "report/reportitemwidget.h"
 #include "statusbar/statusbarwidget.h"
+#include "customer/customerwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -112,6 +113,7 @@ void MainWindow::setupConnection()
     connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
     connect(ui->actionItems, SIGNAL(triggered(bool)), SLOT(openItemReport()));
     connect(ui->action_Change_Password, SIGNAL(triggered(bool)), SLOT(openChangePassword()));
+    connect(ui->actionC_ustomer, SIGNAL(triggered(bool)), SLOT(openCustomer()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -255,4 +257,14 @@ void MainWindow::openChangePassword()
 {
     ChangePasswordDialog dialog(mMessageBus);
     dialog.exec();
+}
+
+void MainWindow::openCustomer()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<CustomerWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new CustomerWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Customers"), ":/images/16x16/folder-open.png");
+    }
 }

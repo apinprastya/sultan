@@ -30,6 +30,9 @@
 #include "action/purchaseitemaction.h"
 #include "action/soldaction.h"
 #include "action/solditemaction.h"
+#include "action/customeraction.h"
+#include "action/customerpointaction.h"
+#include "action/cusomerdebtaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -79,6 +82,12 @@ ServerAction *Router::getServerAction(int type)
         return new SoldAction();
     case MSG_TYPE::SOLD_ITEM:
         return new SoldItemAction();
+    case MSG_TYPE::CUSTOMER:
+        return new CustomerAction();
+    case MSG_TYPE::CUSTOMER_POINT:
+        return new CustomerPointAction();
+    case MSG_TYPE::CUSTOMER_DEBT:
+        return new CusomerDebtAction();
     }
     return nullptr;
 }

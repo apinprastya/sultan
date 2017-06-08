@@ -79,6 +79,7 @@ private slots:
     void openSalesReport();
     void openItemReport();
     void openChangePassword();
+    void openCustomer();
 };
 
 }

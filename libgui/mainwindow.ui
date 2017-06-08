@@ -49,7 +49,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -66,6 +66,8 @@
     </property>
     <addaction name="action_User"/>
     <addaction name="action_Change_Password"/>
+    <addaction name="separator"/>
+    <addaction name="actionC_ustomer"/>
    </widget>
    <widget class="QMenu" name="menuInventory">
     <property name="title">
@@ -167,6 +169,11 @@
   <action name="action_Change_Password">
    <property name="text">
     <string>&amp;Change Password</string>
+   </property>
+  </action>
+  <action name="actionC_ustomer">
+   <property name="text">
+    <string>C&amp;ustomer</string>
    </property>
   </action>
  </widget>

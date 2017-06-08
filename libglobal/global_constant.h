@@ -56,16 +56,19 @@ namespace STATUS {
 }
 
 namespace MSG_TYPE {
-    const int INTERNAL      = 0;
-    const int USER          = 1;
-    const int SUPLIER       = 2;
-    const int ITEM          = 3;
-    const int SELLPRICE     = 4;
-    const int CATEGORY      = 5;
-    const int PURCHASE      = 6;
-    const int PURCHASE_ITEM = 7;
-    const int SOLD          = 8;
-    const int SOLD_ITEM     = 9;
+    const int INTERNAL          = 0;
+    const int USER              = 1;
+    const int SUPLIER           = 2;
+    const int ITEM              = 3;
+    const int SELLPRICE         = 4;
+    const int CATEGORY          = 5;
+    const int PURCHASE          = 6;
+    const int PURCHASE_ITEM     = 7;
+    const int SOLD              = 8;
+    const int SOLD_ITEM         = 9;
+    const int CUSTOMER          = 10;
+    const int CUSTOMER_POINT    = 11;
+    const int CUSTOMER_DEBT     = 12;
 }
 
 namespace MSG_COMMAND {

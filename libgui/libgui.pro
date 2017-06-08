@@ -95,7 +95,8 @@ SOURCES += \
     cashier/transactionlistdialog.cpp \
     cashier/saveloadslotdialog.cpp \
     cashier/cashierhelpdialog.cpp \
-    user/changepassworddialog.cpp
+    user/changepassworddialog.cpp \
+    customer/customerwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -142,7 +143,8 @@ HEADERS += \
     cashier/transactionlistdialog.h \
     cashier/saveloadslotdialog.h \
     cashier/cashierhelpdialog.h \
-    user/changepassworddialog.h
+    user/changepassworddialog.h \
+    customer/customerwidget.h
 
 FORMS += \
     mainwindow.ui \
