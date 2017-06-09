@@ -6,6 +6,7 @@
 #include "global_setting_const.h"
 #include <QTranslator>
 #include <QPalette>
+#include <QLocale>
 #include <QDebug>
 
 INITIALIZE_EASYLOGGINGPP
@@ -25,6 +26,12 @@ int main(int argc, char *argv[])
             tr[i].load(trans[i] + lang);
             a.installTranslator(&tr[i]);
         }
+    }
+
+    auto list = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
+    for(auto i : list) {
+        QMetaEnum meta = QMetaEnum::fromType<QLocale::Language>();
+        qDebug() << meta.valueToKey(i.language());
     }
 
     Core core;

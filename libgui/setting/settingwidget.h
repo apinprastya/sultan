@@ -21,6 +21,8 @@
 #define SETTINGWIDGET_H
 
 #include <QWidget>
+#include <QMap>
+#include <QLocale>
 
 class QComboBox;
 
@@ -40,6 +42,9 @@ public:
 
 private:
     Ui::SettingWidget *ui;
+    QMap<QString, QLocale::Language> mLocaleLanguage;
+    QMap<QString, QLocale::Country> mLocaleCountry;
+    QList<QLocale> mAllLocales;
     void setupAppliaction();
     void setupLocale();
     void setupPrinter();
@@ -51,6 +56,7 @@ private slots:
     void saveClicked();
     void tabChanged();
     void printTestClicked();
+    void localeLanguageChanged();
 };
 
 }

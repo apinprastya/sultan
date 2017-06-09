@@ -25,6 +25,8 @@
 #include "printer.h"
 #include "guiutil.h"
 #include "printtestdialog.h"
+#include <QMetaEnum>
+#include <QDebug>
 
 #define TAB_APPLICATION     0
 #define TAB_LOCALE          1
@@ -47,6 +49,8 @@ SettingWidget::SettingWidget(QWidget *parent) :
     ui->pushPrintTest->hide();
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged()));
     connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
+    connect(ui->comboLocale, SIGNAL(currentIndexChanged(int)), SLOT(localeLanguageChanged()));
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 SettingWidget::~SettingWidget()
@@ -65,13 +69,19 @@ void SettingWidget::setupLocale()
     ui->comboApplicationLanguage->addItem("English", "en");
     ui->comboApplicationLanguage->addItem("Bahasa Indonesia", "id");
     GuiUtil::selectCombo(ui->comboApplicationLanguage, Preference::getString(SETTING::APPLICATION_LANGUAGE, "id"));
-    //TODO : init this with QLocale::Language and QLocale::Country
-    ui->comboLocale->addItem("English", QLocale::English);
-    ui->comboLocale->addItem("Indonesian", QLocale::Indonesian);
-    ui->comboLocaleCounty->addItem("Indonesia", QLocale::Indonesia);
+    QMetaEnum meta = QMetaEnum::fromType<QLocale::Language>();
+    mAllLocales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
+    for(auto locale : mAllLocales)
+        mLocaleLanguage.insert(QLatin1String(meta.valueToKey(locale.language())), locale.language());
+    QMapIterator<QString, QLocale::Language> i(mLocaleLanguage);
+    while (i.hasNext()) {
+        i.next();
+        ui->comboLocale->addItem(i.key(), i.value());
+    }
     //Fill
     setCurrentCombo(ui->comboApplicationLanguage, Preference::getString(SETTING::APPLICATION_LANGUAGE, "EN"));
     setCurrentCombo(ui->comboLocale, Preference::getInt(SETTING::LOCALE_LANGUAGE, QLocale::Indonesian));
+    localeLanguageChanged();
     setCurrentCombo(ui->comboLocaleCounty, Preference::getInt(SETTING::LOCALE_COUNTRY, QLocale::Indonesia));
     ui->checkSign->setChecked(Preference::getBool(SETTING::LOCALE_USE_SIGN));
     ui->lineSign->setText(Preference::getString(SETTING::LOCALE_SIGN));
@@ -152,4 +162,22 @@ void SettingWidget::printTestClicked()
 {
     LibPrint::PrintTestDialog dialog(this);
     dialog.exec();
+}
+
+void SettingWidget::localeLanguageChanged()
+{
+    mLocaleCountry.clear();
+    ui->comboLocaleCounty->clear();
+    QLocale::Language curLang = (QLocale::Language)ui->comboLocale->currentData().toInt();
+    QMetaEnum meta = QMetaEnum::fromType<QLocale::Country>();
+    for(auto locale : mAllLocales) {
+        if(locale.language() == curLang) {
+            mLocaleCountry.insert(QLatin1String(meta.valueToKey(locale.country())), locale.country());
+        }
+    }
+    QMapIterator<QString, QLocale::Country> i(mLocaleCountry);
+    while (i.hasNext()) {
+        i.next();
+        ui->comboLocaleCounty->addItem(i.key(), i.value());
+    }
 }
