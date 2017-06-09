@@ -38,6 +38,8 @@ public:
 
 private:
     Ui::CashierHelpDialog *ui;
+
+    void addRow(const QString &key, const QString &detail);
 };
 
 }

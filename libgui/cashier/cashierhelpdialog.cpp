@@ -28,9 +28,33 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     ui(new Ui::CashierHelpDialog)
 {
     ui->setupUi(this);
+    ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->verticalHeader()->hide();
+    ui->tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Key")));
+    ui->tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem(tr("Detail")));
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    addRow("F1", tr("Open this help"));
+    addRow("F2", tr("Search items"));
+    addRow("F4", tr("Pay cash transaction"));
+    addRow("F5", tr("Open drawer"));
+    addRow("F6", tr("History transaction list"));
+    addRow("Ctrl + N", tr("Clear current cart and start new transaction"));
+    addRow("Ctrl + Del", tr("Clear current cart and start new transaction"));
+    addRow("Ctrl + S", tr("Save current cart to slot"));
+    addRow("Ctrl + O", tr("Load cart from slot"));
+    addRow("PgDn", tr("Edit last inserted item"));
+    //addRow("", tr(""));
 }
 
 CashierHelpDialog::~CashierHelpDialog()
 {
     delete ui;
+}
+
+void CashierHelpDialog::addRow(const QString &key, const QString &detail)
+{
+    int row = ui->tableWidget->rowCount();
+    ui->tableWidget->setRowCount(row + 1);
+    ui->tableWidget->setItem(row, 0, new QTableWidgetItem(key));
+    ui->tableWidget->setItem(row, 1, new QTableWidgetItem(detail));
 }
