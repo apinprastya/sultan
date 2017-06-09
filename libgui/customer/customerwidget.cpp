@@ -31,6 +31,8 @@
 #include "headerwidget.h"
 #include "db_constant.h"
 #include "flashmessagemanager.h"
+#include "customeradddialog.h"
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -38,7 +40,8 @@ using namespace LibG;
 CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this))
+    mTableWidget(new TableWidget(this)),
+    mAddDialog(new CustomerAddDialog(bus, this))
 {
     setMessageBus(bus);
     ui->setupUi(this);
@@ -63,24 +66,52 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mAddDialog, SIGNAL(customerAdded()), SLOT(customerAdded()));
+    connect(mAddDialog, SIGNAL(customerUpdated(int)), SLOT(customerUpdated(int)));
 }
 
 void CustomerWidget::messageReceived(LibG::Message *msg)
 {
-
+    if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL)) {
+        if(msg->isSuccess()) {
+            FlashMessageManager::showMessage(tr("Customer deleted successfully"));
+            mTableWidget->getModel()->refresh();
+        }
+    }
 }
 
 void CustomerWidget::addClicked()
 {
-
+    mAddDialog->reset();
+    mAddDialog->show();
 }
 
 void CustomerWidget::updateClicked(const QModelIndex &index)
 {
-
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    mAddDialog->fill(item->data());
+    mAddDialog->show();
 }
 
 void CustomerWidget::deleteClicked(const QModelIndex &index)
 {
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete the customer?"));
+    if(ret == QMessageBox::Yes) {
+        Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL);
+        msg.addData("id", item->id);
+        sendMessage(&msg);
+    }
+}
 
+void CustomerWidget::customerAdded()
+{
+    mTableWidget->getModel()->refresh();
+}
+
+void CustomerWidget::customerUpdated(int id)
+{
+    mTableWidget->getModel()->resfreshOne(id);
 }

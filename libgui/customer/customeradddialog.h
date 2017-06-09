@@ -1,5 +1,5 @@
 /*
- * customerwidget.h
+ * customeradddialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,42 +17,42 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMERWIDGET_H
-#define CUSTOMERWIDGET_H
+#ifndef CUSTOMERADDDIALOG_H
+#define CUSTOMERADDDIALOG_H
 
 #include "messagehandler.h"
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
-class NormalWidget;
+class CustomerAddDialog;
 }
 
 namespace LibGUI {
 
-class TableWidget;
-class CustomerAddDialog;
-
-class CustomerWidget : public QWidget, public LibG::MessageHandler
+class CustomerAddDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
+
 public:
-    CustomerWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~CustomerAddDialog();
+    void reset();
+    void fill(const QVariantMap &data);
 
 protected:
-    void messageReceived(LibG::Message *msg);
+    void messageReceived(LibG::Message *msg) override;
 
 private:
-    Ui::NormalWidget *ui;
-    TableWidget *mTableWidget;
-    CustomerAddDialog *mAddDialog;
+    Ui::CustomerAddDialog *ui;
+    int mId;
 
-private slots:
-    void addClicked();
-    void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+signals:
     void customerAdded();
     void customerUpdated(int id);
+
+private slots:
+    void saveClicked();
 };
 
 }
-#endif // CUSTOMERWIDGET_H
+#endif // CUSTOMERADDDIALOG_H
