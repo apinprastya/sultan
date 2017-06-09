@@ -113,7 +113,7 @@ void MainWindow::setupConnection()
     connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
     connect(ui->actionItems, SIGNAL(triggered(bool)), SLOT(openItemReport()));
     connect(ui->action_Change_Password, SIGNAL(triggered(bool)), SLOT(openChangePassword()));
-    connect(ui->actionC_ustomer, SIGNAL(triggered(bool)), SLOT(openCustomer()));
+    connect(ui->actionCustomer, SIGNAL(triggered(bool)), SLOT(openCustomer()));
 }
 
 void MainWindow::showWindowFullScreen()
