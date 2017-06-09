@@ -167,8 +167,12 @@ void CashierWidget::saveToSlot(int slot)
         QMessageBox::critical(this, tr("Error"), tr("Unable to open save file"));
         return;
     }
-    const QJsonDocument &doc = QJsonDocument::fromVariant(mModel->getCart());
+    QVariantMap obj;
+    obj.insert("customer", mCurrentCustomer.toMap());
+    obj.insert("cart", mModel->getCart());
+    const QJsonDocument &doc = QJsonDocument::fromVariant(obj);
     file.write(qCompress(doc.toJson(QJsonDocument::Compact)));
+    //file.write(doc.toJson());
     file.close();
 }
 
@@ -189,7 +193,10 @@ void CashierWidget::loadFromSlot(int slot)
         QMessageBox::critical(this, tr("Error"), tr("Error parsing json file"));
         return;
     }
-    mModel->loadCart(doc.array().toVariantList());
+    QJsonObject obj = doc.object();
+    mModel->loadCart(obj.value("cart").toArray().toVariantList());
+    mCurrentCustomer.fill(obj.value("customer").toObject().toVariantMap());
+    updateCustomerLabel();
     ui->tableView->selectRow(mModel->rowCount(QModelIndex()) - 1);
     file.close();
 }
@@ -363,6 +370,8 @@ void CashierWidget::newTransaction()
         if(res != QMessageBox::Yes) return;
     }
     mModel->reset();
+    mCurrentCustomer.reset();
+    updateCustomerLabel();
     mSaveSlot = -1;
 }
 

@@ -43,3 +43,14 @@ void Customer::reset()
     reward = 0;
     debt = 0;
 }
+
+QVariantMap Customer::toMap()
+{
+    QVariantMap m;
+    m.insert("id", id);
+    m.insert("name", name);
+    m.insert("number", number);
+    m.insert("reward", reward);
+    m.insert("debt", debt);
+    return m;
+}

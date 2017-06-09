@@ -37,6 +37,7 @@ public:
     void fill(const QVariantMap &data);
     inline bool isValid() { return id > 0; }
     void reset();
+    QVariantMap toMap();
 };
 
 }
