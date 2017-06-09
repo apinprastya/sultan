@@ -78,6 +78,7 @@ void MainWindow::setup()
     ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
     ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
+    ui->action_Cashier->setShortcut(Qt::ALT + Qt::Key_C);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
