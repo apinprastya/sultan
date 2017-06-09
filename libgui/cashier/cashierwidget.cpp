@@ -90,6 +90,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
+    new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -107,38 +108,45 @@ void CashierWidget::showEvent(QShowEvent *event)
 
 void CashierWidget::messageReceived(LibG::Message *msg)
 {
+    if(!msg->isSuccess()) {
+        QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        return;
+    }
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
         ui->lineBarcode->selectAll();
         ui->lineBarcode->setEnabled(true);
-        if(msg->isSuccess()) {
-            const QString &name = msg->data("item").toMap()["name"].toString();
-            const QString &barcode = msg->data("item").toMap()["barcode"].toString();
-            ui->labelName->setText(name);
-            const QVariantList &list = msg->data("prices").toList();
-            double price = list.first().toMap()["price"].toDouble();
-            for(int i = 1; i < list.size(); i++) {
-                if(list[i].toMap()["count"].toFloat() == 1.0f) {
-                    price = list[i].toMap()["price"].toDouble();
-                    break;
-                }
+        const QString &name = msg->data("item").toMap()["name"].toString();
+        const QString &barcode = msg->data("item").toMap()["barcode"].toString();
+        ui->labelName->setText(name);
+        const QVariantList &list = msg->data("prices").toList();
+        double price = list.first().toMap()["price"].toDouble();
+        for(int i = 1; i < list.size(); i++) {
+            if(list[i].toMap()["count"].toFloat() == 1.0f) {
+                price = list[i].toMap()["price"].toDouble();
+                break;
             }
-            ui->labelPrice->setText(Preference::toString(price));
-            mModel->addItem(mCount, name, barcode, list);
-        } else {
-            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
+        ui->labelPrice->setText(Preference::toString(price));
+        mModel->addItem(mCount, name, barcode, list);
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
-        if(msg->isSuccess()) {
-            const QVariantMap &data = msg->data();
-            mPayCashDialog->hide();
-            openDrawer();
-            printBill(data);
-            PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
-            dialog.exec();
-            mModel->reset();
-            if(mSaveSlot >= 0) removeSlot(mSaveSlot);
+        const QVariantMap &data = msg->data();
+        mPayCashDialog->hide();
+        openDrawer();
+        printBill(data);
+        PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
+        dialog.exec();
+        mModel->reset();
+        mCurrentCustomer.reset();
+        updateCustomerLabel();
+        if(mSaveSlot >= 0) removeSlot(mSaveSlot);
+    } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY)) {
+        const QList<QVariant> &list = msg->data("data").toList();
+        if(list.isEmpty()) {
+            QMessageBox::critical(this, tr("Error"), tr("Customer not found"));
         } else {
-            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+            const QVariantMap &d = list.first().toMap();
+            mCurrentCustomer.fill(d);
+            updateCustomerLabel();
         }
     }
 }
@@ -191,6 +199,13 @@ void CashierWidget::removeSlot(int slot)
     QFile file(QString("trans_%1.trans").arg(slot));
     if(file.exists()) file.remove();
     mSaveSlot = -1;
+}
+
+void CashierWidget::updateCustomerLabel()
+{
+    ui->labelCustomerNumber->setText(mCurrentCustomer.number.isEmpty() ? tr("None") : mCurrentCustomer.number);
+    ui->labelCustomerName->setText(mCurrentCustomer.name.isEmpty() ? tr("None") : mCurrentCustomer.name);
+    ui->labelCustomerPoin->setText(QString::number(mCurrentCustomer.reward));
 }
 
 void CashierWidget::barcodeEntered()
@@ -275,6 +290,7 @@ void CashierWidget::payCashRequested(double value)
     data.insert("machine_id", 1);
     data.insert("total", mModel->getTotal());
     data.insert("payment", value);
+    data.insert("customer_id", mCurrentCustomer.id);
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD);
     msg.setData(data);
     sendMessage(&msg);
@@ -383,4 +399,14 @@ void CashierWidget::openHelp()
 {
     CashierHelpDialog dialog(this);
     dialog.exec();
+}
+
+void CashierWidget::scanCustomer()
+{
+    const QString &str = QInputDialog::getText(this, tr("Input Customer"), tr("Scan customer ID"));
+    if(!str.isEmpty()) {
+        Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY);
+        msg.addFilter("number", COMPARE::EQUAL, str);
+        sendMessage(&msg);
+    }
 }

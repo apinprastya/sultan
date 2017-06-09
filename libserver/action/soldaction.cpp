@@ -56,6 +56,7 @@ Message SoldAction::insertSold(Message *msg)
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
         }
         msg->setData(QVariantMap{{"id", id}});
+        //TODO : calculate the customer reward
         if(mDb->isSupportTransaction()) {
             if(!mDb->commit()) {
                 message.setError(mDb->lastError().text());

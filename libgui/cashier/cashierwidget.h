@@ -21,6 +21,7 @@
 #define CASHIERWIDGET_H
 
 #include "messagehandler.h"
+#include "customer/customer.h"
 #include <QWidget>
 
 namespace Ui {
@@ -50,11 +51,13 @@ private:
     CashierTableModel *mModel;
     PayCashDialog *mPayCashDialog;
     int mSaveSlot = -1;
+    Customer mCurrentCustomer;
 
     void cutPaper();
     void saveToSlot(int slot);
     void loadFromSlot(int slot);
     void removeSlot(int slot);
+    void updateCustomerLabel();
 
 private slots:
     void barcodeEntered();
@@ -73,6 +76,7 @@ private slots:
     void saveCartTriggered();
     void loadCartTriggered();
     void openHelp();
+    void scanCustomer();
 };
 
 }

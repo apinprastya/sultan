@@ -97,7 +97,8 @@ SOURCES += \
     cashier/cashierhelpdialog.cpp \
     user/changepassworddialog.cpp \
     customer/customerwidget.cpp \
-    customer/customeradddialog.cpp
+    customer/customeradddialog.cpp \
+    customer/customer.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -146,7 +147,8 @@ HEADERS += \
     cashier/cashierhelpdialog.h \
     user/changepassworddialog.h \
     customer/customerwidget.h \
-    customer/customeradddialog.h
+    customer/customeradddialog.h \
+    customer/customer.h
 
 FORMS += \
     mainwindow.ui \
