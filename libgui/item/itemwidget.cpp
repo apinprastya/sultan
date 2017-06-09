@@ -71,10 +71,12 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);
     mMainTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
     auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
+    button->setToolTip(tr("Export"));
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
     mMainTable->addActionButton(button);
     button = new QPushButton(QIcon(":/images/16x16/drive-upload.png"), "");
+    button->setToolTip(tr("Import"));
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(importClicked()));
     mMainTable->addActionButton(button);

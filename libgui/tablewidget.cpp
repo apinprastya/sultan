@@ -28,11 +28,18 @@
 
 using namespace LibGUI;
 
-static QMap<int, QString> BTNICONS = {
+static QMap<int, QString> BTNICONS{
     {TableWidget::Refresh, QStringLiteral(":/images/16x16/refresh.png")},
     {TableWidget::Add, QStringLiteral(":/images/16x16/plus.png")},
     {TableWidget::Update, QStringLiteral(":/images/16x16/pencil.png")},
     {TableWidget::Delete, QStringLiteral(":/images/16x16/cross.png")}
+};
+
+static QMap<int, QString> BTNTOOLTIP{
+    {TableWidget::Refresh, QStringLiteral("Refresh")},
+    {TableWidget::Add, QStringLiteral("Add")},
+    {TableWidget::Update, QStringLiteral("Update")},
+    {TableWidget::Delete, QStringLiteral("Delete")}
 };
 
 TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
@@ -68,6 +75,7 @@ void TableWidget::initButton(const QList<ButtonType> buttons)
             if(i == Delete || i == Update) {
                 mEnableNoSelect.append(push);
             }
+            push->setToolTip(BTNTOOLTIP[i]);
         }
     }
     enableNoSelect(false);

@@ -75,6 +75,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
     button->setFlat(true);
+    button->setToolTip(tr("Export"));
     connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
     mTableWidget->addActionButton(button);
 }
