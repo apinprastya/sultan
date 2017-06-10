@@ -56,6 +56,7 @@ private slots:
     void addClicked();
     void refreshCustomer();
     void printClicked();
+    void print(const QVariantMap &data);
 };
 
 }

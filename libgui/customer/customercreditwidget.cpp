@@ -37,6 +37,7 @@
 #include "dbutil.h"
 #include "escp.h"
 #include "printer.h"
+#include "global_setting_const.h"
 #include <QMessageBox>
 #include <QPushButton>
 #include <QDebug>
@@ -124,5 +125,39 @@ void CustomerCreditWidget::printClicked()
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
     if(item->data("link_id").toInt() != 0) return;
-    //
+    print(item->data());
 }
+
+void CustomerCreditWidget::print(const QVariantMap &data)
+{
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    if(type < 0) {
+        QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
+        return;
+    }
+    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
+    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
+    const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
+    int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
+    int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
+
+    auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
+            centerText(tr("Credit Payment"))->
+            doubleHeight(false)->cpi12()->newLine(2);
+    escp->column(QList<int>())->line(QChar('='));
+    escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Name"))->rightText(uiSummary->labelName->text())->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Rest Credit"))->rightText(Preference::toString(mTotal))->newLine();
+    escp->column(QList<int>())->line(QChar('-'));
+    escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
+    escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
+    escp->leftText(tr("Payment"))->rightText(Preference::toString(-data["credit"].toDouble()))->newLine();
+    escp->column(QList<int>())->line(QChar('-'))->newLine(3);
+    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    delete escp;
+    const QString &command = LibPrint::Escp::cutPaperCommand();
+    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+                               command, type);
+}
+
