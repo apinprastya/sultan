@@ -162,7 +162,7 @@ void MainWindow::openSetting()
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
         return (dynamic_cast<SettingWidget*>(widget) != nullptr);
     }))
-        ui->tabWidget->tbnAddTab(new SettingWidget(this), tr("Setting"), ":/images/16x16/gear.png");
+        ui->tabWidget->tbnAddTab(new SettingWidget(mMessageBus, this), tr("Setting"), ":/images/16x16/gear.png");
 }
 
 void MainWindow::openUser()

@@ -40,6 +40,7 @@ namespace SETTING {
 
     const QString MARKET_NAME                   = QStringLiteral("application/market_name");
     const QString MARKET_SUBNAME                = QStringLiteral("application/market_subname");
+    const QString MACHINE_ID                    = QStringLiteral("application/machine_id");
 
     const QString APPLICATION_LANGUAGE          = QStringLiteral("application/language");
     const QString LOCALE_LANGUAGE               = QStringLiteral("application/locale_language");

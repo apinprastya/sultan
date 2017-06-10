@@ -56,7 +56,8 @@ SOURCES += \
     action/solditemaction.cpp \
     action/customeraction.cpp \
     action/customerpointaction.cpp \
-    action/cusomercreditaction.cpp
+    action/cusomercreditaction.cpp \
+    action/machineaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -74,4 +75,5 @@ HEADERS += \
     action/solditemaction.h \
     action/customeraction.h \
     action/customerpointaction.h \
-    action/cusomercreditaction.h
+    action/cusomercreditaction.h \
+    action/machineaction.h

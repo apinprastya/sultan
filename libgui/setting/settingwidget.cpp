@@ -25,6 +25,7 @@
 #include "printer.h"
 #include "guiutil.h"
 #include "printtestdialog.h"
+#include "message.h"
 #include <QMetaEnum>
 #include <QDebug>
 
@@ -36,11 +37,12 @@ using namespace LibG;
 using namespace LibGUI;
 using namespace LibPrint;
 
-SettingWidget::SettingWidget(QWidget *parent) :
+SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SettingWidget)
 {
     ui->setupUi(this);
+    setMessageBus(bus);
     connect(ui->checkSign, SIGNAL(toggled(bool)), SLOT(signChanged()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     setupAppliaction();
@@ -51,6 +53,8 @@ SettingWidget::SettingWidget(QWidget *parent) :
     connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
     connect(ui->comboLocale, SIGNAL(currentIndexChanged(int)), SLOT(localeLanguageChanged()));
     ui->tabWidget->setCurrentIndex(0);
+    Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 SettingWidget::~SettingWidget()
@@ -183,5 +187,18 @@ void SettingWidget::localeLanguageChanged()
     while (i.hasNext()) {
         i.next();
         ui->comboLocaleCounty->addItem(i.key(), i.value());
+    }
+}
+
+void SettingWidget::messageReceived(Message *msg)
+{
+    if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY)) {
+        ui->comboMachine->clear();
+        const QVariantList &list = msg->data("data").toList();
+        for(auto d : list) {
+            const QVariantMap &data = d.toMap();
+            ui->comboMachine->addItem(data["name"].toString(), data["id"].toInt());
+        }
+        GuiUtil::selectCombo(ui->comboMachine, Preference::getInt(SETTING::MACHINE_ID, 0));
     }
 }

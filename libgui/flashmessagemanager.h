@@ -31,6 +31,8 @@ class GUISHARED_EXPORT FlashMessageManager : public QObject
     Q_OBJECT
 public:
     static void showMessage(const QString &message, int type = FlashMessage::Info, int lifetime = FlashMessage::Short);
+    static void showError(const QString &message, int lifetime = FlashMessage::Short);
+    static void showWarning(const QString &message, int lifetime = FlashMessage::Short);
 
 private:
     FlashMessageManager(QObject *parent = 0);

@@ -40,6 +40,16 @@ void FlashMessageManager::showMessage(const QString &message, int type, int life
     connect(flash, SIGNAL(done(FlashMessage*)), sInstance, SLOT(flashMessageClosed(FlashMessage*)));
 }
 
+void FlashMessageManager::showError(const QString &message, int lifetime)
+{
+    showMessage(message, FlashMessage::Error, lifetime);
+}
+
+void FlashMessageManager::showWarning(const QString &message, int lifetime)
+{
+    showMessage(message, FlashMessage::Warning, lifetime);
+}
+
 FlashMessageManager::FlashMessageManager(QObject *parent) : QObject(parent)
 {
 }

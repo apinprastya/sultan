@@ -33,6 +33,7 @@
 #include "action/customeraction.h"
 #include "action/customerpointaction.h"
 #include "action/cusomercreditaction.h"
+#include "action/machineaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -88,6 +89,8 @@ ServerAction *Router::getServerAction(int type)
         return new CustomerPointAction();
     case MSG_TYPE::CUSTOMER_CREDIT:
         return new CusomerCreditAction();
+    case MSG_TYPE::MACHINE:
+        return new MachineAction();
     }
     return nullptr;
 }

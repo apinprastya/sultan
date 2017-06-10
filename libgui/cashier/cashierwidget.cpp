@@ -309,7 +309,7 @@ void CashierWidget::payRequested(int type, double value)
     QVariantMap data;
     data.insert("cart", mModel->getCart());
     data.insert("user_id", UserSession::id());
-    data.insert("machine_id", 1);
+    data.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
     data.insert("total", mModel->getTotal());
     data.insert("payment", value);
     data.insert("customer_id", mCurrentCustomer.id);

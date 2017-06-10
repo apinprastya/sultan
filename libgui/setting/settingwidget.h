@@ -20,6 +20,7 @@
 #ifndef SETTINGWIDGET_H
 #define SETTINGWIDGET_H
 
+#include "messagehandler.h"
 #include <QWidget>
 #include <QMap>
 #include <QLocale>
@@ -32,12 +33,12 @@ class SettingWidget;
 
 namespace LibGUI {
 
-class SettingWidget : public QWidget
+class SettingWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 
 public:
-    explicit SettingWidget(QWidget *parent = 0);
+    explicit SettingWidget(LibG::MessageBus *bus, QWidget *parent = 0);
     ~SettingWidget();
 
 private:
@@ -57,6 +58,9 @@ private slots:
     void tabChanged();
     void printTestClicked();
     void localeLanguageChanged();
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 };
 
 }
