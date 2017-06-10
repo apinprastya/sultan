@@ -24,4 +24,5 @@ using namespace LibServer;
 SuplierAction::SuplierAction():
     ServerAction("supliers", "id")
 {
+    mFlag = HAS_UPDATE_FIELD;
 }

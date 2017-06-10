@@ -24,5 +24,5 @@ using namespace LibServer;
 CustomerAction::CustomerAction():
     ServerAction("customers", "id")
 {
-
+    mFlag = HAS_UPDATE_FIELD;
 }

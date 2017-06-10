@@ -20,6 +20,7 @@
 #include "purchaseitemaction.h"
 #include "db.h"
 #include <QStringBuilder>
+#include <QDateTime>
 
 using namespace LibServer;
 using namespace LibDB;
@@ -27,6 +28,7 @@ using namespace LibDB;
 PurchaseItemAction::PurchaseItemAction():
     ServerAction(QStringLiteral("purchaseitems"), QStringLiteral("id"))
 {
+    mFlag = HAS_UPDATE_FIELD;
 }
 
 LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
@@ -37,6 +39,8 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         message.setError("Item with barcode already on the purchase");
         return message;
     }
+    if(hasFlag(HAS_UPDATE_FIELD))
+        msg->addData("updated_at", QDateTime::currentDateTime());
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
@@ -55,8 +59,11 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
 {
     LibG::Message message(msg);
     mDb->where("id = ", msg->data(mIdField));
+    QVariantMap d = msg->data("data").toMap();
+    if(hasFlag(HAS_UPDATE_FIELD))
+        d.insert("updated_at", QDateTime::currentDateTime());
     DbResult res = mDb->clone()->get(mTableName);
-    if(!mDb->update(mTableName, msg->data("data").toMap())) {
+    if(!mDb->update(mTableName, d)) {
         message.setError(mDb->lastError().text());
     } else {
         const QVariantMap n = msg->data("data").toMap();

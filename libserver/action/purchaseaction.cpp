@@ -26,6 +26,7 @@ using namespace LibDB;
 PurchaseAction::PurchaseAction():
     ServerAction("purchases", "id")
 {
+    mFlag = HAS_UPDATE_FIELD;
 }
 
 LibG::Message PurchaseAction::del(LibG::Message *msg)

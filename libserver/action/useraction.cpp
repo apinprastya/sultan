@@ -29,6 +29,7 @@ using namespace LibDB;
 UserAction::UserAction():
     ServerAction("users", "id")
 {
+    mFlag = HAS_UPDATE_FIELD;
     mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::CHANGE_MY_PASSWORD, std::bind(&UserAction::changeMyPassword, this, std::placeholders::_1));
 }

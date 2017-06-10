@@ -35,8 +35,9 @@ class SERVERSHARED_EXPORT ServerAction
 {
 public:
     enum Flag {
-        AFTER_INSERT = 0x1,
-        AFTER_UPDATE = 0x2
+        AFTER_INSERT        = 0x1,
+        AFTER_UPDATE        = 0x2,
+        HAS_UPDATE_FIELD    = (1 << 16),
     };
 
     ServerAction(const QString &tableName, const QString idfield);

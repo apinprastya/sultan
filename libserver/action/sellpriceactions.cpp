@@ -25,6 +25,7 @@ using namespace LibServer;
 SellPriceActions::SellPriceActions():
     ServerAction("sellprices", "id")
 {
+    mFlag = HAS_UPDATE_FIELD;
 }
 
 void SellPriceActions::selectAndJoin()

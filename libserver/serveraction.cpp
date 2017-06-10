@@ -23,6 +23,7 @@
 #include "queryhelper.h"
 #include "easylogging++.h"
 #include <QStringBuilder>
+#include <QDateTime>
 
 using namespace LibServer;
 using namespace LibG;
@@ -60,6 +61,8 @@ Message ServerAction::exec(Message *msg)
 LibG::Message ServerAction::insert(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    if(hasFlag(HAS_UPDATE_FIELD))
+        msg->addData("updated_at", QDateTime::currentDateTime());
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
@@ -75,7 +78,10 @@ LibG::Message ServerAction::update(LibG::Message *msg)
 {
     LibG::Message message(msg);
     mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(!mDb->update(mTableName, msg->data("data").toMap())) {
+    QVariantMap d = msg->data("data").toMap();
+    if(hasFlag(HAS_UPDATE_FIELD))
+        d.insert("updated_at", QDateTime::currentDateTime());
+    if(!mDb->update(mTableName, d)) {
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);

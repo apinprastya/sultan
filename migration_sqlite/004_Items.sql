@@ -12,6 +12,8 @@ CREATE TABLE items (
 -- separator
 CREATE TABLE sellprices (
 	`id` INTEGER PRIMARY KEY,
+    `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
+    `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
 	`barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT '1',
     `price` INT NOT NULL DEFAULT 0
