@@ -36,6 +36,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("F1", tr("Open this help"));
     addRow("F2", tr("Search items"));
     addRow("F3", tr("Scan customer"));
+    addRow("Ctrl + F3", tr("Reset customer"));
     addRow("F4", tr("Pay cash transaction"));
     addRow("F5", tr("Open drawer"));
     addRow("F6", tr("History transaction list"));

@@ -79,6 +79,7 @@ private slots:
     void loadCartTriggered();
     void openHelp();
     void scanCustomer();
+    void resetCustomer(bool dontShowMessage = false);
 };
 
 }

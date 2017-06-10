@@ -95,6 +95,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
@@ -142,8 +143,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
         dialog.exec();
         mModel->reset();
-        mCurrentCustomer.reset();
-        updateCustomerLabel();
+        resetCustomer(true);
         if(mSaveSlot >= 0) removeSlot(mSaveSlot);
     } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY)) {
         const QList<QVariant> &list = msg->data("data").toList();
@@ -384,8 +384,7 @@ void CashierWidget::newTransaction()
         if(res != QMessageBox::Yes) return;
     }
     mModel->reset();
-    mCurrentCustomer.reset();
-    updateCustomerLabel();
+    resetCustomer(true);
     mSaveSlot = -1;
 }
 
@@ -432,4 +431,12 @@ void CashierWidget::scanCustomer()
         msg.addFilter("number", COMPARE::EQUAL, str);
         sendMessage(&msg);
     }
+}
+
+void CashierWidget::resetCustomer(bool dontShowMessage)
+{
+    if(!dontShowMessage)
+        FlashMessageManager::showMessage(tr("Customer reseted"));
+    mCurrentCustomer.reset();
+    updateCustomerLabel();
 }
