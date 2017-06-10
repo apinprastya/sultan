@@ -1,5 +1,5 @@
 /*
- * cusomer.h
+ * advancepaymentdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,28 +17,44 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSOMER_H
-#define CUSOMER_H
+#ifndef ADVANCEPAYMENTDIALOG_H
+#define ADVANCEPAYMENTDIALOG_H
 
-#include <QString>
-#include <QVariantMap>
+#include "messagehandler.h"
+#include <QDialog>
+
+namespace Ui {
+class AdvancePaymentDialog;
+}
 
 namespace LibGUI {
 
-class Customer
+class Customer;
+
+class AdvancePaymentDialog : public QDialog, public LibG::MessageHandler
 {
+    Q_OBJECT
+
 public:
-    int id = 0;
-    int reward = 0;
-    double credit = 0;
-    QString number;
-    QString name;
-    Customer();
-    void fill(const QVariantMap &data);
-    inline bool isValid() { return id > 0; }
-    void reset();
-    QVariantMap toMap();
+    AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~AdvancePaymentDialog();
+    void setup(double total, Customer *cust);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+
+private:
+    Ui::AdvancePaymentDialog *ui;
+    double mTotal;
+    Customer *mCustomer;
+
+signals:
+    void payRequested(int type, double value);
+
+private slots:
+    void paymentValueChanged(const QString &value);
+    void payClicked();
 };
 
 }
-#endif // CUSOMER_H
+#endif // ADVANCEPAYMENTDIALOG_H

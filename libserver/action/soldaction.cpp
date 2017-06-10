@@ -41,8 +41,12 @@ Message SoldAction::insertSold(Message *msg)
     LibG::Message message(msg);
     const QVariantList &l = msg->data("cart").toList();
     auto now = QDateTime::currentMSecsSinceEpoch() / 10000;
+    double total = msg->data("total").toDouble();
+    double payment = msg->data("payment").toDouble();
+    int cust_id = msg->data("customer_id").toInt();
     msg->removeData("cart");
-    msg->addData("number", QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0')));
+    QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
+    msg->addData("number", number);
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(mDb->insert(mTableName, msg->data())) {
         //TODO: change it to insert batch
@@ -56,6 +60,17 @@ Message SoldAction::insertSold(Message *msg)
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
         }
         msg->setData(QVariantMap{{"id", id}});
+        //credit to customer
+        if(payment < total) {
+            QVariantMap cr;
+            cr.insert("customer_id", cust_id);
+            cr.insert("number", number);
+            cr.insert("link_id", id);
+            cr.insert("detail", QObject::tr("Credit from transaction %1").arg(number));
+            cr.insert("credit", total - payment);
+            mDb->insert("customer_credits", cr);
+            mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customer_credits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
+        }
         //TODO : calculate the customer reward
         if(mDb->isSupportTransaction()) {
             if(!mDb->commit()) {

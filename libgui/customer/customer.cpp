@@ -32,7 +32,7 @@ void Customer::fill(const QVariantMap &data)
     number = data["number"].toString();
     name = data["name"].toString();
     reward = data["reward"].toInt();
-    debt = data["debt"].toDouble();
+    credit = data["credit"].toDouble();
 }
 
 void Customer::reset()
@@ -41,7 +41,7 @@ void Customer::reset()
     number = QString();
     name = QString();
     reward = 0;
-    debt = 0;
+    credit = 0;
 }
 
 QVariantMap Customer::toMap()
@@ -51,6 +51,6 @@ QVariantMap Customer::toMap()
     m.insert("name", name);
     m.insert("number", number);
     m.insert("reward", reward);
-    m.insert("debt", debt);
+    m.insert("credit", credit);
     return m;
 }

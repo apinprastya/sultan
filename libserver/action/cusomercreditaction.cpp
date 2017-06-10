@@ -17,12 +17,12 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "cusomerdebtaction.h"
+#include "cusomercreditaction.h"
 
 using namespace LibServer;
 
-CusomerDebtAction::CusomerDebtAction():
-    ServerAction("customer_debts", "id")
+CusomerCreditAction::CusomerCreditAction():
+    ServerAction("customer_credits", "id")
 {
 
 }

@@ -55,7 +55,7 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("phone", tr("Phone"));
     model->addColumn("address", tr("Address"));
     model->addColumnMoney("reward", tr("Reward"));
-    model->addColumnMoney("debt", tr("Debt"));
+    model->addColumnMoney("credit", tr("Credit"));
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY);

@@ -39,6 +39,8 @@
 #include "dbutil.h"
 #include "saveloadslotdialog.h"
 #include "cashierhelpdialog.h"
+#include "advancepaymentdialog.h"
+#include "flashmessagemanager.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -57,7 +59,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CashierWidget),
     mModel(new CashierTableModel(this)),
-    mPayCashDialog(new PayCashDialog(this))
+    mPayCashDialog(new PayCashDialog(this)),
+    mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -79,7 +82,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mModel, SIGNAL(totalChanged(double)), SLOT(totalChanged(double)));
     connect(mModel, SIGNAL(selectRow(QModelIndex)), SLOT(selectRow(QModelIndex)));
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
-    connect(mPayCashDialog, SIGNAL(requestPay(double)), SLOT(payCashRequested(double)));
+    connect(mPayCashDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
+    connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double)), SLOT(payRequested(int,double)));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
@@ -91,6 +95,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
+    new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -131,6 +136,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
+        mAdvancePaymentDialog->hide();
         openDrawer();
         printBill(data);
         PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
@@ -266,8 +272,15 @@ void CashierWidget::payCash()
     mPayCashDialog->show();
 }
 
-void CashierWidget::payCashless()
+void CashierWidget::payAdvance()
 {
+    if(mModel->isEmpty()) return;
+    if(!mCurrentCustomer.isValid()) {
+        FlashMessageManager::showMessage(tr("Advance payment only for valid customer"), FlashMessage::Error);
+        return;
+    }
+    mAdvancePaymentDialog->setup(mModel->getTotal(), &mCurrentCustomer);
+    mAdvancePaymentDialog->show();
 }
 
 void CashierWidget::openDrawer()
@@ -289,7 +302,7 @@ void CashierWidget::updateLastInputed()
         mModel->addItem(count - item->count, item->name, item->barcode);
 }
 
-void CashierWidget::payCashRequested(double value)
+void CashierWidget::payRequested(int type, double value)
 {
     QVariantMap data;
     data.insert("cart", mModel->getCart());
@@ -298,6 +311,7 @@ void CashierWidget::payCashRequested(double value)
     data.insert("total", mModel->getTotal());
     data.insert("payment", value);
     data.insert("customer_id", mCurrentCustomer.id);
+    data.insert("payment_type", type);
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD);
     msg.setData(data);
     sendMessage(&msg);

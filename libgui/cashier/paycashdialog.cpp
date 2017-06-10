@@ -20,6 +20,7 @@
 #include "paycashdialog.h"
 #include "ui_paycashdialog.h"
 #include "preference.h"
+#include "global_constant.h"
 #include <QLocale>
 #include <QMessageBox>
 
@@ -56,5 +57,5 @@ void PayCashDialog::payClicked()
         return;
     }
     ui->pushPay->setEnabled(false);
-    emit requestPay(payment);
+    emit requestPay(PAYMENT::CASH, payment);
 }

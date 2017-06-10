@@ -68,7 +68,7 @@ namespace MSG_TYPE {
     const int SOLD_ITEM         = 9;
     const int CUSTOMER          = 10;
     const int CUSTOMER_POINT    = 11;
-    const int CUSTOMER_DEBT     = 12;
+    const int CUSTOMER_CREDIT   = 12;
 }
 
 namespace MSG_COMMAND {
@@ -95,6 +95,11 @@ namespace PRINT_TYPE {
 
 namespace FILTER {
     const int CATEGORY_IN = 100; //this value taken from DB COMPARE USER_DEFINED
+}
+
+namespace PAYMENT {
+    const int CASH      = 0;
+    const int NON_CASH  = 1;
 }
 
 }

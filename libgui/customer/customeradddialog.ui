@@ -135,6 +135,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineNumber</tabstop>
+  <tabstop>lineName</tabstop>
+  <tabstop>plainAddress</tabstop>
+  <tabstop>linePhone</tabstop>
+  <tabstop>pushSave</tabstop>
+  <tabstop>pushCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

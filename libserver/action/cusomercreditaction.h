@@ -24,10 +24,10 @@
 
 namespace LibServer {
 
-class CusomerDebtAction : public ServerAction
+class CusomerCreditAction : public ServerAction
 {
 public:
-    CusomerDebtAction();
+    CusomerCreditAction();
 };
 
 }

@@ -32,6 +32,7 @@ namespace LibGUI {
 
 class CashierTableModel;
 class PayCashDialog;
+class AdvancePaymentDialog;
 
 class CashierWidget : public QWidget, public LibG::MessageHandler
 {
@@ -52,6 +53,7 @@ private:
     PayCashDialog *mPayCashDialog;
     int mSaveSlot = -1;
     Customer mCurrentCustomer;
+    AdvancePaymentDialog *mAdvancePaymentDialog;
 
     void cutPaper();
     void saveToSlot(int slot);
@@ -65,10 +67,10 @@ private slots:
     void selectRow(const QModelIndex &index);
     void tableKeyPressed(QObject *sender, QKeyEvent *event);
     void payCash();
-    void payCashless();
+    void payAdvance();
     void openDrawer();
     void updateLastInputed();
-    void payCashRequested(double value);
+    void payRequested(int type, double value);
     void printBill(const QVariantMap &data);
     void openSearch();
     void openPreviousTransaction();
