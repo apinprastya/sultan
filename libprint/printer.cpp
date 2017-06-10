@@ -28,7 +28,7 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #else
-#ifndef Q_PROCESSOR_ARM
+#ifndef NO_PRINTER_SPOOL
 #include <cups/cups.h>
 #endif
 #endif
@@ -114,7 +114,7 @@ void Printer::print(const QString &printName, const QString &data, int type)
             file.write(data.toLocal8Bit());
         }
     } else {
-#ifndef Q_PROCESSOR_ARM
+#ifndef NO_PRINTER_SPOOL
         int jobId = 0;
         jobId = cupsCreateJob(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), "Sultan print", 0, NULL);
         if(jobId > 0) {

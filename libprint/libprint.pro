@@ -36,7 +36,11 @@ macx {
     LIBS += -lKernel32 -lwinspool
     LIBS += -L$$OUT_PWD/../bin/
 } else {
-    LIBS += -lcups
+    !contains(CONFIG, NO_PRINTER_SPOOL) {
+        LIBS += -lcups
+    } else {
+        DEFINES+=NO_PRINTER_SPOOL
+    }
     QMAKE_LIBDIR = $$OUT_PWD/../bin/ $$QMAKE_LIBDIR
 }
 
