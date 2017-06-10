@@ -8,7 +8,7 @@ CREATE TABLE customers (
     `address` VARCHAR(255) NOT NULL DEFAULT '',
     `phone` VARCHAR(64) NOT NULL DEFAULT '',
     `reward` INT NOT NULL DEFAULT 0,
-    `debt` DECIMAL(15, 2) NOT NULL DEFAULT 0
+    `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
 CREATE TABLE customer_points (
@@ -24,7 +24,7 @@ CREATE TABLE customer_points (
     `total_shop` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE TABLE customer_debts (
+CREATE TABLE customer_credits (
     `id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
@@ -33,7 +33,7 @@ CREATE TABLE customer_debts (
     `number` VARCHAR(64) NOT NULL,
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
-    `debt` DECIMAL(15, 2) NOT NULL DEFAULT 0
+    `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0
 )
 -- separator
 ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;
@@ -42,4 +42,4 @@ CREATE UNIQUE INDEX CUSTOMER_NUMBER ON customers (number);
 -- separator
 CREATE INDEX CUSTOMER_POINT_CUSTOMER_ID ON customer_points (customer_id);
 -- separator
-CREATE INDEX CUSTOMER_DEBT_CUSTOMER_ID ON customer_debts (customer_id);
+CREATE INDEX CUSTOMER_CREDIT_CUSTOMER_ID ON customer_credits (customer_id);
