@@ -11,6 +11,9 @@ Simple minimarket POS software writen in C++ with Qt Framework. The main target 
 * Sales report
 * Item sales report
 * Simple margin calculation
+* Customer database
+* Customer reward
+* Customer credit
 
 ## Compile
 * Please check [Wiki Compile](https://github.com/apinprastya/sultan/wiki/Compile)
@@ -19,7 +22,7 @@ Simple minimarket POS software writen in C++ with Qt Framework. The main target 
 * Please check [Wiki Screenshot](https://github.com/apinprastya/sultan/wiki/Screenshot)
 
 ## Contact
-Any question please contact me apin.klas@gmail.com
+Any question/support please contact me apin.klas@gmail.com
 
 ## License
 GPL. See [LICENSE](https://github.com/apinprastya/sultan/blob/master/LICENSE)
