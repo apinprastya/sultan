@@ -156,8 +156,10 @@ void CustomerCreditWidget::print(const QVariantMap &data)
     escp->column(QList<int>())->line(QChar('-'))->newLine(3);
     LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;
-    const QString &command = LibPrint::Escp::cutPaperCommand();
-    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+    if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
+        const QString &command = LibPrint::Escp::cutPaperCommand();
+        LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
                                command, type);
+    }
 }
 

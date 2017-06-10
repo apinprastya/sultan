@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
-    <height>551</height>
+    <width>689</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
@@ -77,8 +77,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>584</width>
-            <height>400</height>
+            <width>647</width>
+            <height>452</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -143,8 +143,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>584</width>
-            <height>400</height>
+            <width>647</width>
+            <height>452</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -318,8 +318,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>233</width>
-            <height>357</height>
+            <width>647</width>
+            <height>452</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -471,6 +471,34 @@
                   </property>
                  </widget>
                 </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>Auto Cut</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>Open Drawer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QCheckBox" name="checkPrintCashierDrawer">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QCheckBox" name="checkPrintCashierCut">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>
@@ -554,7 +582,10 @@
   <tabstop>linePrintCashierTitle</tabstop>
   <tabstop>linePrintCashierSubtitle</tabstop>
   <tabstop>plainPrintCashierFooter</tabstop>
+  <tabstop>checkPrintCashierDrawer</tabstop>
+  <tabstop>checkPrintCashierCut</tabstop>
   <tabstop>pushSave</tabstop>
+  <tabstop>pushPrintTest</tabstop>
  </tabstops>
  <resources>
   <include location="../../sultan/sultan.qrc"/>

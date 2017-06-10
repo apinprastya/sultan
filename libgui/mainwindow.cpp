@@ -79,7 +79,7 @@ void MainWindow::setup()
     ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
     ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
-    ui->action_Cashier->setShortcut(Qt::ALT + Qt::Key_C);
+    ui->action_Cashier->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -100,7 +100,7 @@ void MainWindow::setupConnection()
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab), this, SLOT(nextTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab), this, SLOT(prevTab()));
-    new QShortcut(QKeySequence(Qt::ALT + Qt::Key_C), this, SLOT(openCashier()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(openCashier()));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
     connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));

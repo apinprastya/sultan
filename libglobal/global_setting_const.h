@@ -56,6 +56,8 @@ namespace SETTING {
     const QString PRINTER_CASHIER_FOOTER        = QStringLiteral("printer/cashier_footer");
     const QString PRINTER_CASHIER_CPI10         = QStringLiteral("printer/cashier_cpi10");
     const QString PRINTER_CASHIER_CPI12         = QStringLiteral("printer/cashier_cpi12");
+    const QString PRINTER_CASHIER_AUTOCUT       = QStringLiteral("printer/cashier_autocut");
+    const QString PRINTER_CASHIER_KICK          = QStringLiteral("printer/cashier_kick");
 }
 
 }

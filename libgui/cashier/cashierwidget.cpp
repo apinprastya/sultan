@@ -159,6 +159,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
 
 void CashierWidget::cutPaper()
 {
+    if(!Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) return;
     const QString &command = Escp::cutPaperCommand();
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
@@ -285,6 +286,7 @@ void CashierWidget::payAdvance()
 
 void CashierWidget::openDrawer()
 {
+    if(!Preference::getBool(SETTING::PRINTER_CASHIER_KICK)) return;
     const QString &command = Escp::openDrawerCommand();
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
