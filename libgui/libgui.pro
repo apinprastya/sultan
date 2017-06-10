@@ -101,7 +101,8 @@ SOURCES += \
     customer/customer.cpp \
     cashier/advancepaymentdialog.cpp \
     customer/customercreditwidget.cpp \
-    customer/addcreditpaymentdialog.cpp
+    customer/addcreditpaymentdialog.cpp \
+    machine/machinewidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -154,7 +155,8 @@ HEADERS += \
     customer/customer.h \
     cashier/advancepaymentdialog.h \
     customer/customercreditwidget.h \
-    customer/addcreditpaymentdialog.h
+    customer/addcreditpaymentdialog.h \
+    machine/machinewidget.h
 
 FORMS += \
     mainwindow.ui \

@@ -65,8 +65,9 @@
      <string>&amp;Administration</string>
     </property>
     <addaction name="action_User"/>
-    <addaction name="action_Change_Password"/>
+    <addaction name="action_Machines"/>
     <addaction name="separator"/>
+    <addaction name="action_Change_Password"/>
    </widget>
    <widget class="QMenu" name="menuInventory">
     <property name="title">
@@ -180,6 +181,11 @@
   <action name="actionCustomer">
    <property name="text">
     <string>C&amp;ustomer</string>
+   </property>
+  </action>
+  <action name="action_Machines">
+   <property name="text">
+    <string>&amp;Machines</string>
    </property>
   </action>
  </widget>
