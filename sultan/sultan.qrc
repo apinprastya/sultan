@@ -30,5 +30,9 @@
 		<file>images/16x16/computer-arrow.png</file>
 		<file>images/16x16/drive-download.png</file>
 		<file>images/16x16/drive-upload.png</file>
+		<file>images/16x16/money-arrow.png</file>
+		<file>images/16x16/users.png</file>
+		<file>images/16x16/rosette-label.png</file>
+		<file>images/16x16/document-attribute-r.png</file>
     </qresource>
 </RCC>

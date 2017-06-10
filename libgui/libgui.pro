@@ -99,7 +99,8 @@ SOURCES += \
     customer/customerwidget.cpp \
     customer/customeradddialog.cpp \
     customer/customer.cpp \
-    cashier/advancepaymentdialog.cpp
+    cashier/advancepaymentdialog.cpp \
+    customer/customercreditwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -150,7 +151,8 @@ HEADERS += \
     customer/customerwidget.h \
     customer/customeradddialog.h \
     customer/customer.h \
-    cashier/advancepaymentdialog.h
+    cashier/advancepaymentdialog.h \
+    customer/customercreditwidget.h
 
 FORMS += \
     mainwindow.ui \
@@ -177,4 +179,5 @@ FORMS += \
     cashier/cashierhelpdialog.ui \
     user/changepassworddialog.ui \
     customer/customeradddialog.ui \
-    cashier/advancepaymentdialog.ui
+    cashier/advancepaymentdialog.ui \
+    customer/creditsummarywidget.ui

@@ -33,6 +33,7 @@
 #include "flashmessagemanager.h"
 #include "customeradddialog.h"
 #include <QMessageBox>
+#include <QPushButton>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -45,7 +46,7 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
 {
     setMessageBus(bus);
     ui->setupUi(this);
-    ui->labelTitle->setText(tr("User"));
+    ui->labelTitle->setText(tr("Customer"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
@@ -63,6 +64,16 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
+    auto button = new QPushButton(QIcon(":/images/16x16/money-arrow.png"), "");
+    button->setToolTip(tr("Credit"));
+    button->setFlat(true);
+    mTableWidget->addActionButton(button);
+    connect(button, SIGNAL(clicked(bool)), SLOT(creditClicked()));
+    button = new QPushButton(QIcon(":/images/16x16/rosette-label.png"), "");
+    button->setToolTip(tr("Reward"));
+    button->setFlat(true);
+    mTableWidget->addActionButton(button);
+    connect(button, SIGNAL(clicked(bool)), SLOT(rewardClicked()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
@@ -114,4 +125,20 @@ void CustomerWidget::customerAdded()
 void CustomerWidget::customerUpdated(int id)
 {
     mTableWidget->getModel()->resfreshOne(id);
+}
+
+void CustomerWidget::creditClicked()
+{
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    emit requestOpenCustomerCredit(item->id.toInt(), item->data("number").toString());
+}
+
+void CustomerWidget::rewardClicked()
+{
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    emit requestOpenCustomerReward(item->id.toInt(), item->data("number").toString());
 }

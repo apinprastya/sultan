@@ -33,6 +33,7 @@
 #include "report/reportitemwidget.h"
 #include "statusbar/statusbarwidget.h"
 #include "customer/customerwidget.h"
+#include "customer/customercreditwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -240,7 +241,7 @@ void MainWindow::openSalesReport()
         return (dynamic_cast<SalesWidget*>(widget) != nullptr);
     })) {
         auto widget = new SalesWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/money-bag.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Sales"), ":/images/16x16/document-attribute-r.png");
     }
 }
 
@@ -250,7 +251,7 @@ void MainWindow::openItemReport()
         return (dynamic_cast<ReportItemWidget*>(widget) != nullptr);
     })) {
         auto widget = new ReportItemWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/money-bag.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Items Sales"), ":/images/16x16/document-attribute-r.png");
     }
 }
 
@@ -266,6 +267,26 @@ void MainWindow::openCustomer()
         return (dynamic_cast<CustomerWidget*>(widget) != nullptr);
     })) {
         auto widget = new CustomerWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Customers"), ":/images/16x16/folder-open.png");
+        connect(widget, SIGNAL(requestOpenCustomerCredit(int,QString)), SLOT(openCustomerCredit(int,QString)));
+        connect(widget, SIGNAL(requestOpenCustomerReward(int,QString)), SLOT(openCustomerReward(int,QString)));
+        ui->tabWidget->tbnAddTab(widget, tr("Customers"), ":/images/16x16/users.png");
     }
+}
+
+void MainWindow::openCustomerCredit(int id, const QString &number)
+{
+    for(int i = 0; i < ui->tabWidget->count(); i++) {
+        auto widget = dynamic_cast<CustomerCreditWidget*>(ui->tabWidget->widget(i));
+        if(widget != nullptr && widget->getId() == id) {
+            ui->tabWidget->setCurrentIndex(i);
+            return;
+        }
+    }
+    auto w = new CustomerCreditWidget(id, number, mMessageBus, this);
+    ui->tabWidget->tbnAddTab(w, tr("Credit : %1").arg(number), ":/images/16x16/money-arrow.png");
+}
+
+void MainWindow::openCustomerReward(int id, const QString &number)
+{
+
 }
