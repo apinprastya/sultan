@@ -22,7 +22,7 @@ CREATE TABLE purchaseitems (
     `deleted_at` TIMESTAMP NULL,
     `purchase_id` INT NOT NULL,
     `barcode` VARCHAR(64) NOT NULL,
-    `count` FLOAT NOT NULL DEFAUL 0,
+    `count` FLOAT NOT NULL DEFAULT 0,
     `price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     INDEX `BARCODE` (`barcode` ASC),

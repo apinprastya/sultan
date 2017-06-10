@@ -22,7 +22,7 @@
 using namespace LibServer;
 
 CusomerCreditAction::CusomerCreditAction():
-    ServerAction("customer_credits", "id")
+    ServerAction("customercredits", "id")
 {
 
 }

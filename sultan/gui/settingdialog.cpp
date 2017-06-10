@@ -123,7 +123,7 @@ void SettingDialog::checkMysql()
     QSqlDatabase database = QSqlDatabase::database(QStringLiteral("settingtest"));
     database.setHostName(ui->lineEditHost->text());
     database.setPort(ui->spinBoxPort->value());
-    database.setDatabaseName(ui->lineEditDatabase->text());
+    //database.setDatabaseName(ui->lineEditDatabase->text());
     database.setUserName(ui->lineEditUsername->text());
     database.setPassword(ui->lineEditPassword->text());
     if(database.open()) {

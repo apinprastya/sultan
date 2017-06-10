@@ -57,10 +57,10 @@ Db::~Db()
     }
 }
 
-Db *Db::createInstance()
+Db *Db::createInstance(bool checkDBName)
 {
     Db* db = new Db();
-    if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName))
+    if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName, checkDBName))
         return db;
     LOG(ERROR) << TAG << "Error openning database connection :" << db->lastError().text();
     delete db;
@@ -70,15 +70,16 @@ Db *Db::createInstance()
 bool Db::setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
 {
     DBSETTING.set(host, port, username, password, dbname);
-    auto db = createInstance();
+    return true;
+    /*auto db = createInstance();
     bool ret = db != nullptr;
     if(db) delete db;
-    return ret;
+    return ret;*/
 }
 
 bool Db::checkConnection(QString &error)
 {
-    auto db = createInstance();
+    auto db = createInstance(true);
     if(db == nullptr) {
         error = db->lastError().text();
         return false;
@@ -418,22 +419,29 @@ QSqlDatabase Db::getDatabase()
     }
 }
 
-bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname, bool checkDBName)
 {
     auto database = getDatabase();
     if(database.isOpen()) return true;
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
     LOG(INFO) << TAG << "Database support transaction :" << mSupportTransaction;
+    bool ret = false;
     if(DBTYPE == "MYSQL") {
-        database.setDatabaseName(dbname);
         database.setPort(port);
         database.setHostName(host);
         database.setUserName(username);
         database.setPassword(password);
+        if(checkDBName) {
+            database.open();
+            database.exec(QString("CREATE DATABASE IF NOT EXISTS %1").arg(dbname));
+            database.close();
+        }
+        database.setDatabaseName(dbname);
+        ret = database.open();
     } else if(DBTYPE == "SQLITE") {
         database.setDatabaseName("sultan.db");
+        ret = database.open();
     }
-    bool ret = database.open();
     if(!ret) mLastError = database.lastError();
     reset();
     return ret;

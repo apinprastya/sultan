@@ -56,7 +56,7 @@ private:
     Db();
 public:
     ~Db();
-    static Db *createInstance();
+    static Db *createInstance(bool checkDBName = false);
     static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     static bool checkConnection(QString &error);
     static void setDatabaseType(const QString &db);
@@ -112,7 +112,7 @@ private:
     QSqlError mLastError;
 
     static QSqlDatabase getDatabase();
-    bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
+    bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname, bool checkDBName = false);
     void postQuery(QSqlQuery *query);
     QString dataToString(const QVariantMap &map);
 

@@ -11,7 +11,7 @@ CREATE TABLE customers (
     `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE TABLE customer_points (
+CREATE TABLE customerrewards (
 	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
@@ -24,7 +24,7 @@ CREATE TABLE customer_points (
     `total_shop` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
-CREATE TABLE customer_credits (
+CREATE TABLE customercredits (
     `id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
@@ -40,6 +40,6 @@ ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;
 -- separator
 CREATE UNIQUE INDEX CUSTOMER_NUMBER ON customers (number);
 -- separator
-CREATE INDEX CUSTOMER_POINT_CUSTOMER_ID ON customer_points (customer_id);
+CREATE INDEX CUSTOMER_REWARD_CUSTOMER_ID ON customerrewards (customer_id);
 -- separator
-CREATE INDEX CUSTOMER_CREDIT_CUSTOMER_ID ON customer_credits (customer_id);
+CREATE INDEX CUSTOMER_CREDIT_CUSTOMER_ID ON customercredits (customer_id);

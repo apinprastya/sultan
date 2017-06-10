@@ -14,7 +14,7 @@ CREATE TABLE customers (
 ) ENGINE = InnoDB;
 
 -- link id : value is the sold id, when customer shop
-CREATE TABLE customer_points (
+CREATE TABLE customerrewards (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -25,12 +25,12 @@ CREATE TABLE customer_points (
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
     `reward` INT NOT NULL DEFAULT 0,
     `total_shop` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    INDEX `CUSTOMER_POINT_CUSTOMER_ID` (`customer_id` ASC),
+    INDEX `CUSTOMER_REWARD_CUSTOMER_ID` (`customer_id` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
---number : solds number when adding credit and dedicated number when it payed
-CREATE TABLE customer_credits (
+-- number : solds number when adding credit and dedicated number when it payed
+CREATE TABLE customercredits (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -40,7 +40,7 @@ CREATE TABLE customer_credits (
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
     `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    INDEX `CUSTOMER_DEBT_CUSTOMER_ID` (`customer_id` ASC),
+    INDEX `CUSTOMER_CREDIT_CUSTOMER_ID` (`customer_id` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

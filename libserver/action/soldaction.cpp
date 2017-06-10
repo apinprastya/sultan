@@ -68,8 +68,8 @@ Message SoldAction::insertSold(Message *msg)
             cr.insert("link_id", id);
             cr.insert("detail", QObject::tr("Credit from transaction %1").arg(number));
             cr.insert("credit", total - payment);
-            mDb->insert("customer_credits", cr);
-            mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customer_credits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
+            mDb->insert("customercredits", cr);
+            mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
         }
         //TODO : calculate the customer reward
         if(mDb->isSupportTransaction()) {

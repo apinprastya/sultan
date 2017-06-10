@@ -47,7 +47,7 @@ Router::Router()
     //define the user defined filter here
     LibDB::QueryHelper::installUserDefinedFilter(FILTER::CATEGORY_IN, [](Db *db, const QString &key, int type, const QVariantMap &data) {
        if(type == FILTER::CATEGORY_IN) {
-            db->where(key % " IN (SELECT child_id FROM category_childs WHERE category_id = " % data["value"].toString() % ")");
+            db->where(key % " IN (SELECT child_id FROM categorychilds WHERE category_id = " % data["value"].toString() % ")");
        }
     });
 }

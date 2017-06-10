@@ -31,7 +31,7 @@ CategoryAction::CategoryAction():
 
 void CategoryAction::afterInsert(const QVariantMap &data)
 {
-    mDb->insert("category_childs", QVariantMap{{"category_id", data["id"]}, {"child_id", data["id"]}});
+    mDb->insert("categorychilds", QVariantMap{{"category_id", data["id"]}, {"child_id", data["id"]}});
     if(data["parent_id"].toInt() != 0) {
         parentAddChild(data["parent_id"].toInt(), data["id"].toInt());
     }
@@ -39,7 +39,7 @@ void CategoryAction::afterInsert(const QVariantMap &data)
 
 void CategoryAction::parentAddChild(int parent, int child)
 {
-    mDb->insert("category_childs", QVariantMap{{"category_id", parent}, {"child_id", child}});
+    mDb->insert("categorychilds", QVariantMap{{"category_id", parent}, {"child_id", child}});
     DbResult res = mDb->where("id = ", parent)->get(mTableName);
     if(res.first()["parent_id"].toInt() != 0)
         parentAddChild(res.first()["parent_id"].toInt(), child);

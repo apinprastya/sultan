@@ -10,10 +10,11 @@ CREATE TABLE categories (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE category_childs (
+CREATE TABLE categorychilds (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`category_id` INT NOT NULL,
-	`child_id` INT NOT NULL
+	`child_id` INT NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
 INSERT INTO categories(name, code, hierarchy) 

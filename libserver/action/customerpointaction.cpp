@@ -22,7 +22,7 @@
 using namespace LibServer;
 
 CustomerPointAction::CustomerPointAction():
-    ServerAction("customer_poins", "id")
+    ServerAction("customerrewards", "id")
 {
 
 }
