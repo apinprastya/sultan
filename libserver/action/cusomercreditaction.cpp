@@ -18,11 +18,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "cusomercreditaction.h"
+#include "db.h"
+#include "global_constant.h"
+#include "queryhelper.h"
 
 using namespace LibServer;
+using namespace LibDB;
 
 CusomerCreditAction::CusomerCreditAction():
     ServerAction("customercredits", "id")
 {
+    mFlag = AFTER_INSERT;
+}
 
+void CusomerCreditAction::afterInsert(const QVariantMap &data)
+{
+    auto cust_id = data["customer_id"].toInt();
+    mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").
+              arg(cust_id).arg(cust_id));
 }

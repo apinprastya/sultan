@@ -44,6 +44,7 @@ Message SoldAction::insertSold(Message *msg)
     double total = msg->data("total").toDouble();
     double payment = msg->data("payment").toDouble();
     int cust_id = msg->data("customer_id").toInt();
+    int user_id = msg->data("user_id").toInt();
     msg->removeData("cart");
     QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
     msg->addData("number", number);
@@ -68,6 +69,7 @@ Message SoldAction::insertSold(Message *msg)
             cr.insert("link_id", id);
             cr.insert("detail", QObject::tr("Credit from transaction %1").arg(number));
             cr.insert("credit", total - payment);
+            cr.insert("user_id", user_id);
             mDb->insert("customercredits", cr);
             mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
         }

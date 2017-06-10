@@ -33,7 +33,12 @@
 #include "db_constant.h"
 #include "flashmessagemanager.h"
 #include "preference.h"
+#include "addcreditpaymentdialog.h"
+#include "dbutil.h"
+#include "escp.h"
+#include "printer.h"
 #include <QMessageBox>
+#include <QPushButton>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -44,7 +49,8 @@ CustomerCreditWidget::CustomerCreditWidget(int id, const QString &number, LibG::
     ui(new Ui::NormalWidget),
     uiSummary(new Ui::CreditSummaryWidget),
     mTableWidget(new TableWidget(this)),
-    mId(id)
+    mId(id),
+    mAddDialog(new AddCreditPaymentDialog(bus, this))
 {
     setMessageBus(bus);
     ui->setupUi(this);
@@ -53,24 +59,31 @@ CustomerCreditWidget::CustomerCreditWidget(int id, const QString &number, LibG::
     ui->labelTitle->setText(tr("Customer Credit : %1").arg(number));
     ui->verticalLayout->addWidget(sumWidget);
     ui->verticalLayout->addWidget(mTableWidget);
-    mTableWidget->initCrudButton();
+    mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);
     auto model = mTableWidget->getModel();
+    auto dateFormater = [](TableItem *item, const QString &key) {
+        return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy hh:mm");
+    };
     model->setMessageBus(bus);
-    model->addColumn("created_at", tr("Date Time"));
+    model->addColumn("created_at", tr("Date Time"), Qt::AlignLeft, dateFormater);
     model->addColumn("number", tr("Number"));
     model->addColumn("detail", tr("Detail"));
-    model->addColumn("credit", tr("Credit"));
+    model->addColumnMoney("credit", tr("Credit"));
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::CUSTOMER_CREDIT, MSG_COMMAND::QUERY);
     model->setFilter("customer_id", COMPARE::EQUAL, id);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 300 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
+    auto button = new QPushButton(QIcon(":/images/16x16/printer.png"), "");
+    button->setToolTip(tr("Print"));
+    button->setFlat(true);
+    mTableWidget->addActionButton(button);
+    connect(button, SIGNAL(clicked(bool)), SLOT(printClicked()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
-    connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshCustomer()));
+    connect(mAddDialog, SIGNAL(paymentSuccess()), model, SLOT(refresh()));
 }
 
 CustomerCreditWidget::~CustomerCreditWidget()
@@ -81,29 +94,21 @@ void CustomerCreditWidget::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
+            mTotal = msg->data("credit").toDouble();
             uiSummary->labelNumber->setText(msg->data("number").toString());
             uiSummary->labelName->setText(msg->data("name").toString());
             uiSummary->labelPhone->setText(msg->data("phone").toString());
             uiSummary->labelAddress->setText(msg->data("address").toString());
             uiSummary->labelReward->setText(QString::number(msg->data("reward").toInt()));
-            uiSummary->labelCredit->setText(Preference::toString(msg->data("credit").toDouble()));
+            uiSummary->labelCredit->setText(Preference::toString(mTotal));
         }
     }
 }
 
 void CustomerCreditWidget::addClicked()
 {
-
-}
-
-void CustomerCreditWidget::updateClicked(const QModelIndex &index)
-{
-
-}
-
-void CustomerCreditWidget::deleteClicked(const QModelIndex &index)
-{
-
+    mAddDialog->fill(mId, mTotal);
+    mAddDialog->show();
 }
 
 void CustomerCreditWidget::refreshCustomer()
@@ -111,4 +116,13 @@ void CustomerCreditWidget::refreshCustomer()
     Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET);
     msg.addData("id", mId);
     sendMessage(&msg);
+}
+
+void CustomerCreditWidget::printClicked()
+{
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->data("link_id").toInt() != 0) return;
+    //
 }

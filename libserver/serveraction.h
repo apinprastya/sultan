@@ -44,7 +44,7 @@ public:
     LibG::Message exec(LibG::Message *msg);
 
 protected:
-    int mFlag;
+    int mFlag = 0;
     LibDB::Db *mDb;
     QString mTableName;
     QString mIdField;

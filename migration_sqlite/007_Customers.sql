@@ -21,7 +21,8 @@ CREATE TABLE customerrewards (
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
     `reward` INT NOT NULL DEFAULT 0, 
-    `total_shop` DECIMAL(15, 2) NOT NULL DEFAULT 0
+    `total_shop` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `user_id` INT NOT NULL
 );
 -- separator
 CREATE TABLE customercredits (
@@ -33,7 +34,8 @@ CREATE TABLE customercredits (
     `number` VARCHAR(64) NOT NULL,
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
-    `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0
+    `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `user_id` INT NOT NULL
 )
 -- separator
 ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;

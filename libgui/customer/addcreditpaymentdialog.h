@@ -1,5 +1,5 @@
 /*
- * customercredit.h
+ * addcreditpaymentdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,46 +17,40 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMERCREDIT_H
-#define CUSTOMERCREDIT_H
+#ifndef ADDCREDITPAYMENTDIALOG_H
+#define ADDCREDITPAYMENTDIALOG_H
 
 #include "messagehandler.h"
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
-class NormalWidget;
-class CreditSummaryWidget;
+class AddCreditPaymentDialog;
 }
 
 namespace LibGUI {
 
-class TableWidget;
-class AddCreditPaymentDialog;
-
-class CustomerCreditWidget : public QWidget, public LibG::MessageHandler
+class AddCreditPaymentDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
-public:
-    CustomerCreditWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = nullptr);
-    ~CustomerCreditWidget();
-    inline int getId() { return mId; }
 
-protected:
-    void messageReceived(LibG::Message *msg);
+public:
+    AddCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~AddCreditPaymentDialog();
+    void fill(int id, double total);
 
 private:
-    Ui::NormalWidget *ui;
-    Ui::CreditSummaryWidget *uiSummary;
-    TableWidget *mTableWidget;
+    Ui::AddCreditPaymentDialog *ui;
     int mId;
-    AddCreditPaymentDialog *mAddDialog;
-    double mTotal;
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 private slots:
-    void addClicked();
-    void refreshCustomer();
-    void printClicked();
+    void saveClicked();
+
+signals:
+    void paymentSuccess();
 };
 
 }
-#endif // CUSTOMERCREDIT_H
+#endif // ADDCREDITPAYMENTDIALOG_H

@@ -28,6 +28,9 @@ class CusomerCreditAction : public ServerAction
 {
 public:
     CusomerCreditAction();
+
+protected:
+    void afterInsert(const QVariantMap &data) override;
 };
 
 }
