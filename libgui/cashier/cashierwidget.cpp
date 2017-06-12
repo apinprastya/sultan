@@ -48,6 +48,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDir>
 #include <QDebug>
 #include <functional>
 
@@ -168,7 +169,8 @@ void CashierWidget::cutPaper()
 
 void CashierWidget::saveToSlot(int slot)
 {
-    QFile file(QString("trans_%1.trans").arg(slot));
+    QDir dir(qApp->applicationDirPath());
+    QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(file.exists()) file.remove();
     if(!file.open(QFile::WriteOnly)) {
         QMessageBox::critical(this, tr("Error"), tr("Unable to open save file"));
@@ -210,7 +212,8 @@ void CashierWidget::loadFromSlot(int slot)
 
 void CashierWidget::removeSlot(int slot)
 {
-    QFile file(QString("trans_%1.trans").arg(slot));
+    QDir dir(qApp->applicationDirPath());
+    QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(file.exists()) file.remove();
     mSaveSlot = -1;
 }
@@ -394,7 +397,7 @@ void CashierWidget::saveCartTriggered()
 {
     if(mModel->isEmpty()) return;
     if(mSaveSlot < 0) {
-        SaveLoadSlotDialog dialog(this);
+        SaveLoadSlotDialog dialog(true, this);
         dialog.exec();
         if(dialog.getSelectedSlot() < 0) return;
         saveToSlot(dialog.getSelectedSlot());

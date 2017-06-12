@@ -6,6 +6,7 @@
 #include "global_setting_const.h"
 #include <QTranslator>
 #include <QPalette>
+#include <QDir>
 #include <QDebug>
 
 INITIALIZE_EASYLOGGINGPP
@@ -16,13 +17,14 @@ int main(int argc, char *argv[])
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
     a.setApplicationVersion("17.06.00");
 
+    QDir appDir(a.applicationDirPath());
     LibG::Preference::createInstance();
     const QString &lang = LibG::Preference::getString(LibG::SETTING::APPLICATION_LANGUAGE, "id");
     QTranslator tr[2];
     if(lang.compare("en")) {
         QStringList trans{"sultan_", "libgui_"};
         for(int i = 0; i < trans.count(); i++) {
-            tr[i].load(trans[i] + lang);
+            tr[i].load(appDir.absoluteFilePath(trans[i] + lang));
             a.installTranslator(&tr[i]);
         }
     }
