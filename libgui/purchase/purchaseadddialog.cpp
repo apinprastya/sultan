@@ -23,6 +23,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "dbutil.h"
+#include "util.h"
 #include "flashmessagemanager.h"
 #include <QDebug>
 #include <QMessageBox>
@@ -38,7 +39,11 @@ PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
     setMessageBus(bus);
     ui->dateCreated->setCalendarPopup(true);
     ui->dateDeadline->setCalendarPopup(true);
+    ui->comboPaymentType->addItem(tr("Cash"), PAYMENT::CASH);
+    ui->comboPaymentType->addItem(tr("Non Cash"), PAYMENT::NON_CASH);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    connect(ui->comboPaymentType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged()));
+    typeChanged();
 }
 
 PurchaseAddDialog::~PurchaseAddDialog()
@@ -116,11 +121,22 @@ void PurchaseAddDialog::saveClicked()
         QMessageBox::critical(this, tr("Error"), tr("Please fill required field"));
         return;
     }
+    const QString &discFormula = ui->lineDiscount->text();
+    if(discFormula.contains(" ")) {
+        QMessageBox::critical(this, tr("Error"), tr("Discount formula can not consist space[s]"));
+        return;
+    }
+    if(!Util::isValidDiscountFormula(discFormula)) {
+        QMessageBox::critical(this, tr("Error"), tr("Discount formula not valid"));
+        return;
+    }
     QVariantMap d;
     d.insert("created_at", ui->dateCreated->date().toString("yyyy-MM-dd"));
     d.insert("number", ui->lineNumber->text());
     d.insert("suplier_id", ui->comboSuplier->currentData());
     d.insert("deadline", ui->dateDeadline->date().toString("yyyy-MM-dd"));
+    d.insert("payment_type", ui->comboPaymentType->currentData().toInt());
+    d.insert("discount_formula", ui->lineDiscount->text());
     Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::INSERT);
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
@@ -131,4 +147,9 @@ void PurchaseAddDialog::saveClicked()
     }
     sendMessage(&msg);
     ui->pushSave->setEnabled(false);
+}
+
+void PurchaseAddDialog::typeChanged()
+{
+    ui->dateDeadline->setEnabled(ui->comboPaymentType->currentData().toInt() == PAYMENT::NON_CASH);
 }

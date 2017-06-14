@@ -47,3 +47,21 @@ int Util::getIntVersion(QString version)
     version = version.replace(".", "");
     return version.toInt();
 }
+
+bool Util::isValidDiscountFormula(const QString &val)
+{
+    if(val.isEmpty()) return true;
+    const QStringList &l = val.split("+");
+    for(const QString &val : l) {
+        if(val.endsWith("%")) {
+            bool ok = false;
+            val.mid(0, val.size() - 1).toInt(&ok);
+            if(!ok) return false;
+        } else {
+            bool ok = false;
+            val.toDouble(&ok);
+            if(!ok) return false;
+        }
+    }
+    return true;
+}

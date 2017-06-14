@@ -56,6 +56,7 @@ signals:
 
 private slots:
     void saveClicked();
+    void typeChanged();
 };
 
 }

@@ -1,4 +1,4 @@
--- payment type : 1 = Cash; 2 = Non Cash
+-- payment type : 0 = Cash; 1 = Non Cash
 CREATE TABLE purchases (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -10,8 +10,10 @@ CREATE TABLE purchases (
     `payment_number` VARCHAR(64) NULL,
     `payment_date` DATE NULL,
     `deadline` DATE NULL,
-    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `discount_formula` VARCHAR(255) NOT NULL DEFAULT '',
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `final` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -24,7 +26,10 @@ CREATE TABLE purchaseitems (
     `barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT 0,
     `price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `discount_formula` VARCHAR(255) NOT NULL DEFAULT '',
+    `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `final` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     INDEX `BARCODE` (`barcode` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

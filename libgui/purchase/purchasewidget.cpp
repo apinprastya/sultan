@@ -56,13 +56,16 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("number", tr("Number"));
     model->addColumn("suplier", tr("Suplier"));
     model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
-    model->addColumnMoney("total", tr("Total"));
+    model->addColumnMoney("total", tr("Sub-total"));
+    model->addColumn("discount_formula", tr("Disc. Form"));
+    model->addColumnMoney("discount", tr("Discount"));
+    model->addColumnMoney("final", tr("Total"));
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE, MSG_COMMAND::GET);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 150 << 150);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));

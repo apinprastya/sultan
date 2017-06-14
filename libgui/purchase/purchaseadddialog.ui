@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>190</height>
+    <width>415</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Deadline</string>
@@ -58,15 +58,43 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineNumber"/>
+      <widget class="QLineEdit" name="lineNumber">
+       <property name="placeholderText">
+        <string>Purchase number</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="comboSuplier"/>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QDateEdit" name="dateDeadline">
        <property name="displayFormat">
         <string>dd-MM-yyyy</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Payment Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="comboPaymentType"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Discount</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="lineDiscount">
+       <property name="placeholderText">
+        <string>Discount total purchase</string>
        </property>
       </widget>
      </item>
@@ -124,6 +152,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>dateCreated</tabstop>
+  <tabstop>lineNumber</tabstop>
+  <tabstop>comboSuplier</tabstop>
+  <tabstop>comboPaymentType</tabstop>
+  <tabstop>dateDeadline</tabstop>
+  <tabstop>lineDiscount</tabstop>
+  <tabstop>pushSave</tabstop>
+  <tabstop>pushCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -56,7 +56,8 @@ void PurchaseAddItemDialog::reset()
                       ui->doubleBuyPrice << ui->doubleCount << ui->doublePrice <<
                       ui->doubleSellPrice << ui->doubleTotal);
     GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
-                          ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave << ui->pushSaveAgain);
+                          ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
+                          ui->pushSaveAgain << ui->lineDiscountFormula);
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->lineBarcode->setReadOnly(false);
     mId = 0;
@@ -74,6 +75,7 @@ void PurchaseAddItemDialog::fill(const QVariantMap &data)
     ui->doublePrice->setValue(data["price"].toDouble());
     ui->doubleSellPrice->setValue(data["sell_price"].toDouble());
     ui->doubleTotal->setValue(data["total"].toDouble());
+    ui->lineDiscountFormula->setText(data["discount_formula"].toString());
     ui->doubleCount->setFocus();
     ui->pushSaveAgain->hide();
 }
@@ -86,7 +88,8 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
             ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
             ui->doubleSellPrice->setValue(msg->data("sell_price").toDouble());
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
-                                  ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave << ui->pushSaveAgain);
+                                  ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
+                                  ui->pushSaveAgain << ui->lineDiscountFormula);
             ui->doubleCount->setFocus(Qt::TabFocusReason);
         } else {
             QMessageBox::critical(this, tr("Error"), tr("Item not found on the database. Please add first"));

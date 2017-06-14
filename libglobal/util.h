@@ -32,6 +32,9 @@ public:
     static QDate getBeginningOfMonth();
     static QDate getEndOfMonth();
     static int getIntVersion(QString version);
+    static bool isValidDiscountFormula(const QString &val);
+
+private:
 };
 
 }
