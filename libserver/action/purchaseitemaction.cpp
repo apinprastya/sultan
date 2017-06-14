@@ -19,16 +19,19 @@
  */
 #include "purchaseitemaction.h"
 #include "db.h"
+#include "global_constant.h"
 #include <QStringBuilder>
 #include <QDateTime>
 
 using namespace LibServer;
 using namespace LibDB;
+using namespace LibG;
 
 PurchaseItemAction::PurchaseItemAction():
     ServerAction(QStringLiteral("purchaseitems"), QStringLiteral("id"))
 {
     mFlag = HAS_UPDATE_FIELD;
+    mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseItemAction::summary, this, std::placeholders::_1));
 }
 
 LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
@@ -92,6 +95,15 @@ LibG::Message PurchaseItemAction::del(LibG::Message *msg)
     mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
               arg(QString::number(-old["count"].toFloat())).arg(old["barcode"].toString()));
     updatePurchaseTotal(old["puchase_id"].toInt());
+    return message;
+}
+
+LibG::Message PurchaseItemAction::summary(LibG::Message *msg)
+{
+    LibG::Message message(msg);
+    mDb->table("purchaseitems")->where("purchase_id = ", msg->data("purchase_id"));
+    DbResult res = mDb->select("SUM(total) as total, SUM(discount) as discount, SUM(final) as final")->exec();
+    message.setData(res.first());
     return message;
 }
 

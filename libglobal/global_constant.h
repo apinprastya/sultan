@@ -73,20 +73,21 @@ namespace MSG_TYPE {
 }
 
 namespace MSG_COMMAND {
-    const int INSERT        = 0;
-    const int UPDATE        = 1;
-    const int DEL           = 2;
-    const int GET           = 3;
-    const int QUERY         = 4;
+    const int INSERT                    = 0;
+    const int UPDATE                    = 1;
+    const int DEL                       = 2;
+    const int GET                       = 3;
+    const int QUERY                     = 4;
     //custom command
-    const int LOGIN         = 5;
-    const int CASHIER_PRICE = 6;
-    const int NEW_SOLD      = 7;
-    const int SOLD_SUMMARY  = 8;
-    const int SOLD_ITEM_REPORT  = 9;
-    const int EXPORT        = 10;
-    const int IMPORT        = 11;
-    const int CHANGE_MY_PASSWORD = 12;
+    const int LOGIN                     = 5;
+    const int CASHIER_PRICE             = 6;
+    const int NEW_SOLD                  = 7;
+    const int SOLD_SUMMARY              = 8;
+    const int SOLD_ITEM_REPORT          = 9;
+    const int EXPORT                    = 10;
+    const int IMPORT                    = 11;
+    const int CHANGE_MY_PASSWORD        = 12;
+    const int SUMMARY                   = 13;
 }
 
 namespace PRINT_TYPE {

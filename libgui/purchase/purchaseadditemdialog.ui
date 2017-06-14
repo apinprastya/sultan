@@ -112,6 +112,9 @@
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
+       <property name="prefix">
+        <string/>
+       </property>
        <property name="minimum">
         <double>-10000000.000000000000000</double>
        </property>
@@ -171,7 +174,7 @@
      <item row="10" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Total</string>
+        <string>Total - Discount</string>
        </property>
       </widget>
      </item>
@@ -276,6 +279,7 @@
   <tabstop>doubleCount</tabstop>
   <tabstop>doublePrice</tabstop>
   <tabstop>doubleTotal</tabstop>
+  <tabstop>lineDiscountFormula</tabstop>
   <tabstop>pushSaveAgain</tabstop>
   <tabstop>pushSave</tabstop>
   <tabstop>pushCancel</tabstop>

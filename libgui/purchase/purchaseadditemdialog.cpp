@@ -23,6 +23,8 @@
 #include "global_constant.h"
 #include "message.h"
 #include "flashmessagemanager.h"
+#include "util.h"
+#include "preference.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -43,6 +45,7 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAgainClicked()));
     connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateTotal()));
     connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(calculateTotal()));
+    connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateDiscount()));
 }
 
 PurchaseAddItemDialog::~PurchaseAddItemDialog()
@@ -141,6 +144,9 @@ void PurchaseAddItemDialog::save()
     data.insert("count", ui->doubleCount->value());
     data.insert("price", ui->doublePrice->value());
     data.insert("total", ui->doubleTotal->value());
+    data.insert("discount_formula", ui->lineDiscountFormula->text());
+    data.insert("discount", mDiscount);
+    data.insert("final", mTotal);
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);
@@ -179,4 +185,13 @@ void PurchaseAddItemDialog::saveClicked()
 void PurchaseAddItemDialog::calculateTotal()
 {
     ui->doubleTotal->setValue(ui->doubleCount->value() * ui->doublePrice->value());
+    calculateDiscount();
+}
+
+void PurchaseAddItemDialog::calculateDiscount()
+{
+    mDiscount = Util::calculateDiscount(ui->lineDiscountFormula->text(), ui->doubleTotal->value());
+    mTotal = ui->doubleTotal->value() - mDiscount;
+    ui->labelDiscount->setText(Preference::toString(mDiscount));
+    ui->labelTotal->setText(Preference::toString(mTotal));
 }

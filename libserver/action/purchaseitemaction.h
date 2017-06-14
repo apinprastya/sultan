@@ -31,6 +31,7 @@ public:
     LibG::Message insert(LibG::Message *msg) override;
     LibG::Message update(LibG::Message *msg) override;
     LibG::Message del(LibG::Message *msg) override;
+    LibG::Message summary(LibG::Message *msg);
 
 protected:
     QMap<QString, QString> fieldMap() const override;

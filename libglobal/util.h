@@ -33,6 +33,7 @@ public:
     static QDate getEndOfMonth();
     static int getIntVersion(QString version);
     static bool isValidDiscountFormula(const QString &val);
+    static double calculateDiscount(const QString &formula, double value);
 
 private:
 };

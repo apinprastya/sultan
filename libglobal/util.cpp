@@ -65,3 +65,27 @@ bool Util::isValidDiscountFormula(const QString &val)
     }
     return true;
 }
+
+double Util::calculateDiscount(const QString &formula, double value)
+{
+    if(formula.isEmpty()) return 0;
+    double retVal = 0;
+    const QStringList &l = formula.split("+");
+    for(const QString &val : l) {
+        if(val.endsWith("%")) {
+            bool ok = false;
+            double disc = val.mid(0, val.size() - 1).toInt(&ok);
+            if(ok) {
+                retVal += value * disc / 100;
+            }
+        } else {
+            bool ok = false;
+            double disc = val.toDouble(&ok);
+            if(ok) {
+                retVal += disc;
+            }
+        }
+        value -= retVal;
+    }
+    return retVal;
+}

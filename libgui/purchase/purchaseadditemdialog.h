@@ -51,6 +51,8 @@ private:
     int mId = 0;
     bool mIsAgain = false;
     bool mIsClosing = false;
+    double mDiscount;
+    double mTotal;
 
     void save();
 
@@ -63,6 +65,7 @@ private slots:
     void saveAgainClicked();
     void saveClicked();
     void calculateTotal();
+    void calculateDiscount();
 };
 
 }
