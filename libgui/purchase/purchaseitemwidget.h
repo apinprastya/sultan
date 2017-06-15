@@ -31,6 +31,7 @@ namespace LibGUI {
 
 class TableWidget;
 class PurchaseAddItemDialog;
+class TileWidget;
 
 class PurchaseItemWidget : public QWidget, public LibG::MessageHandler
 {
@@ -46,6 +47,9 @@ private:
     int mId;
     TableWidget *mTableWidget;
     PurchaseAddItemDialog *mAddDialog;
+    TileWidget *mTileTotal;
+    TileWidget *mTileDiscount;
+    TileWidget *mTileFinal;
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -54,6 +58,7 @@ private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
     void delClicked(const QModelIndex &index);
+    void refreshSummary();
 };
 
 }

@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>82</height>
+    <height>111</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>150</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="maximumSize">
    <size>
@@ -23,30 +29,48 @@
    <string notr="true">border: 1px solid #ababab;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QLabel" name="labelTitle">
-     <property name="styleSheet">
-      <string notr="true">font-size: 10px;border: none;</string>
-     </property>
-     <property name="text">
-      <string>Title</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelValue">
-     <property name="styleSheet">
-      <string notr="true">font-size: 20px;border: none;</string>
-     </property>
-     <property name="text">
-      <string>Value</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="margin">
-      <number>5</number>
-     </property>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="labelTitle">
+        <property name="styleSheet">
+         <string notr="true">font-size: 10px;border: none;</string>
+        </property>
+        <property name="text">
+         <string>Title</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelValue">
+        <property name="styleSheet">
+         <string notr="true">font-size: 20px;border: none;</string>
+        </property>
+        <property name="text">
+         <string>Value</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="margin">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

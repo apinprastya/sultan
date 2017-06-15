@@ -29,7 +29,12 @@
 #include "message.h"
 #include "purchaseadditemdialog.h"
 #include "headerwidget.h"
+#include "tilewidget.h"
+#include "message.h"
+#include "preference.h"
 #include <QMessageBox>
+#include <QHBoxLayout>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -39,27 +44,42 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     ui(new Ui::NormalWidget),
     mId(id),
     mTableWidget(new TableWidget(this)),
-    mAddDialog(new PurchaseAddItemDialog(bus, id, this))
+    mAddDialog(new PurchaseAddItemDialog(bus, id, this)),
+    mTileTotal(new TileWidget(this)),
+    mTileDiscount(new TileWidget(this)),
+    mTileFinal(new TileWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Purchase Item : %1").arg(number));
+
+    auto hor = new QHBoxLayout;
+    mTileTotal->setTitleValue(tr("Total"), "0");
+    hor->addWidget(mTileTotal);
+    mTileDiscount->setTitleValue(tr("Discount"), "0");
+    hor->addWidget(mTileDiscount);
+    mTileFinal->setTitleValue(tr("Total - Discount"), "0");
+    hor->addWidget(mTileFinal);
+    hor->addStretch();
+    ui->verticalLayout->addLayout(hor);
+
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
-    model->addColumn("count", tr("Count"));
-    model->addColumnMoney("price", tr("price"));
-    model->addColumnMoney("total", tr("total"));
+    model->addColumn("count", tr("Count"), Qt::AlignRight);
+    model->addColumnMoney("price", tr("Price"));
+    model->addColumnMoney("total", tr("Sub-total"));
+    model->addColumnMoney("discount", tr("Discount"));
+    model->addColumnMoney("final", tr("Total"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
     model->setFilter("purchase_id", COMPARE::EQUAL, id);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 150 << 150 << 150);
-    mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     model->refresh();
     ui->verticalLayout->addWidget(mTableWidget);
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
@@ -67,6 +87,8 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(delClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(addSuccess()), mTableWidget->getModel(), SLOT(refresh()));
     connect(mAddDialog, SIGNAL(updateSuccess(QVariant)), model, SLOT(resfreshOne(QVariant)));
+    connect(mAddDialog, SIGNAL(updateSuccess(QVariant)), SLOT(refreshSummary()));
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
 }
 
 PurchaseItemWidget::~PurchaseItemWidget()
@@ -82,6 +104,10 @@ void PurchaseItemWidget::messageReceived(LibG::Message *msg)
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::SUMMARY)) {
+        mTileTotal->setValue(Preference::toString(msg->data("total").toDouble()));
+        mTileDiscount->setValue(Preference::toString(msg->data("discount").toDouble()));
+        mTileFinal->setValue(Preference::toString(msg->data("final").toDouble()));
     }
 }
 
@@ -111,4 +137,14 @@ void PurchaseItemWidget::delClicked(const QModelIndex &index)
             sendMessage(&msg);
         }
     }
+}
+
+void PurchaseItemWidget::refreshSummary()
+{
+    mTileDiscount->setValue(tr("loading..."));
+    mTileFinal->setValue(tr("loading..."));
+    mTileTotal->setValue(tr("loading..."));
+    Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::SUMMARY);
+    msg.addData("purchase_id", mId);
+    sendMessage(&msg);
 }
