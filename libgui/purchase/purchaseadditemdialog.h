@@ -64,7 +64,6 @@ private slots:
     void barcodeDone();
     void saveAgainClicked();
     void saveClicked();
-    void calculateTotal();
     void calculateDiscount();
 };
 

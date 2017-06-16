@@ -104,6 +104,11 @@ namespace PAYMENT {
     const int NON_CASH  = 1;
 }
 
+namespace PURCHASEPAYMENT {
+    const int DIRECT   = 0;
+    const int TEMPO    = 1;
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H

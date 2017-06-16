@@ -20,8 +20,10 @@
 #include "purchaseitemaction.h"
 #include "db.h"
 #include "global_constant.h"
+#include "util.h"
 #include <QStringBuilder>
 #include <QDateTime>
+#include <QDebug>
 
 using namespace LibServer;
 using namespace LibDB;
@@ -71,12 +73,13 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
     } else {
         const QVariantMap n = msg->data("data").toMap();
         const QVariantMap old = res.first();
+        const int pid = old["purchase_id"].toInt();
         float diff = n["count"].toFloat() - old["count"].toFloat();
         if(n.contains("count") && diff != 0.0f) {
             mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
                       arg(QString::number(diff)).arg(old["barcode"].toString()));
         }
-        updatePurchaseTotal(old["puchase_id"].toInt());
+        updatePurchaseTotal(pid);
         res = mDb->where("id = ", msg->data("id"))->get(mTableName);
         message.setData(res.first());
     }
@@ -123,6 +126,10 @@ void PurchaseItemAction::selectAndJoin()
 
 void PurchaseItemAction::updatePurchaseTotal(int purchaseid)
 {
-    mDb->exec(QString("UPDATE purchases SET total = (SELECT sum(total) FROM purchaseitems WHERE purchase_id = %1) WHERE id = %2").
-              arg(purchaseid).arg(purchaseid));
+    DbResult res = mDb->table("purchases")->where("id = ", purchaseid)->exec();
+    const QString &discformula = res.first()["discount_formula"].toString();
+    res = mDb->table("purchaseitems")->where("purchase_id = ", purchaseid)->select("sum(final) as final")->exec();
+    double total = res.first()["final"].toDouble();
+    double discount = Util::calculateDiscount(discformula, total);
+    mDb->where("id = ", purchaseid)->update("purchases", QVariantMap{{"total", total}, {"discount", discount}, {"final", total - discount}});
 }

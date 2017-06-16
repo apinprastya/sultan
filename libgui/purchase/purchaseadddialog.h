@@ -47,6 +47,7 @@ private:
     Ui::PurchaseAddDialog *ui;
     int mCurrentSuplier = 0;
     int mId = 0;
+    double mTotal = 0;
 
     void populateSuplier(const QVariantList &list);
 
@@ -57,6 +58,7 @@ signals:
 private slots:
     void saveClicked();
     void typeChanged();
+    void calculateTotal();
 };
 
 }

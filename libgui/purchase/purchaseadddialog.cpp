@@ -25,6 +25,7 @@
 #include "dbutil.h"
 #include "util.h"
 #include "flashmessagemanager.h"
+#include "preference.h"
 #include <QDebug>
 #include <QMessageBox>
 
@@ -39,10 +40,11 @@ PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
     setMessageBus(bus);
     ui->dateCreated->setCalendarPopup(true);
     ui->dateDeadline->setCalendarPopup(true);
-    ui->comboPaymentType->addItem(tr("Cash"), PAYMENT::CASH);
-    ui->comboPaymentType->addItem(tr("Non Cash"), PAYMENT::NON_CASH);
+    ui->comboPaymentType->addItem(tr("Direct"), PURCHASEPAYMENT::DIRECT);
+    ui->comboPaymentType->addItem(tr("With Deadline"), PURCHASEPAYMENT::TEMPO);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->comboPaymentType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged()));
+    connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateTotal()));
     typeChanged();
 }
 
@@ -61,6 +63,8 @@ void PurchaseAddDialog::reset()
     ui->dateCreated->setFocus(Qt::TabFocusReason);
     mId = 0;
     ui->pushSave->setEnabled(true);
+    ui->groupBox->hide();
+    this->adjustSize();
 }
 
 void PurchaseAddDialog::fill(const QVariantMap &data)
@@ -72,7 +76,11 @@ void PurchaseAddDialog::fill(const QVariantMap &data)
     GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
     ui->dateCreated->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
+    mTotal = data["total"].toDouble();
+    ui->lineDiscountFormula->setText(data["discount_formula"].toString());
     mId = data["id"].toInt();
+    ui->groupBox->show();
+    this->adjustSize();
 }
 
 void PurchaseAddDialog::messageReceived(LibG::Message *msg)
@@ -121,7 +129,7 @@ void PurchaseAddDialog::saveClicked()
         QMessageBox::critical(this, tr("Error"), tr("Please fill required field"));
         return;
     }
-    const QString &discFormula = ui->lineDiscount->text();
+    const QString &discFormula = ui->lineDiscountFormula->text();
     if(discFormula.contains(" ")) {
         QMessageBox::critical(this, tr("Error"), tr("Discount formula can not consist space[s]"));
         return;
@@ -136,10 +144,13 @@ void PurchaseAddDialog::saveClicked()
     d.insert("suplier_id", ui->comboSuplier->currentData());
     d.insert("deadline", ui->dateDeadline->date().toString("yyyy-MM-dd"));
     d.insert("payment_type", ui->comboPaymentType->currentData().toInt());
-    d.insert("discount_formula", ui->lineDiscount->text());
+    d.insert("discount_formula", ui->lineDiscountFormula->text());
     Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::INSERT);
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
+        double discount = Util::calculateDiscount(ui->lineDiscountFormula->text(), mTotal);
+        d.insert("discount", discount);
+        d.insert("final", mTotal - discount);
         msg.addData("id", mId);
         msg.addData("data", d);
     } else {
@@ -152,4 +163,12 @@ void PurchaseAddDialog::saveClicked()
 void PurchaseAddDialog::typeChanged()
 {
     ui->dateDeadline->setEnabled(ui->comboPaymentType->currentData().toInt() == PAYMENT::NON_CASH);
+}
+
+void PurchaseAddDialog::calculateTotal()
+{
+    double disc = Util::calculateDiscount(ui->lineDiscountFormula->text(), mTotal);
+    ui->labelTotal->setText(Preference::toString(mTotal));
+    ui->labelDiscount->setText(Preference::toString(disc));
+    ui->labelFinal->setText(Preference::toString(mTotal - disc));
 }

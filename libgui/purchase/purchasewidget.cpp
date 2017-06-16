@@ -48,14 +48,18 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
-    auto dateFormater = [](TableItem *item, const QString &key) {
-        return LibDB::DBUtil::sqlDateToDate(item->data(key).toString()).toString("dd-MM-yyyy");
-    };
     model->setMessageBus(bus);
-    model->addColumn("created_at", tr("Date"), Qt::AlignLeft, dateFormater);
+    model->addColumn("created_at", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy");
+    });
     model->addColumn("number", tr("Number"));
     model->addColumn("suplier", tr("Suplier"));
-    model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, dateFormater);
+    model->addColumn("payment_type", tr("Type"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        return item->data(key).toInt() == PURCHASEPAYMENT::DIRECT ? tr("Direct") : tr("Deadline");
+    });
+    model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        return LibDB::DBUtil::sqlDateToDate(item->data(key).toString()).toString("dd-MM-yyyy");
+    });
     model->addColumnMoney("total", tr("Sub-total"));
     model->addColumn("discount_formula", tr("Disc. Form"));
     model->addColumnMoney("discount", tr("Discount"));

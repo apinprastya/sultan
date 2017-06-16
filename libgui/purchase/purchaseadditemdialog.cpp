@@ -38,13 +38,12 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
 {
     ui->setupUi(this);
     setMessageBus(bus);
-    ui->doubleTotal->setReadOnly(true);
     connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(barcodeDone()));
     connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAgainClicked()));
-    connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateTotal()));
-    connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(calculateTotal()));
+    connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
+    connect(ui->doubleTotal, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
     connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateDiscount()));
 }
 
@@ -56,10 +55,10 @@ PurchaseAddItemDialog::~PurchaseAddItemDialog()
 void PurchaseAddItemDialog::reset()
 {
     GuiUtil::clearAll(QList<QWidget*>() << ui->lineBarcode << ui->labelName <<
-                      ui->doubleBuyPrice << ui->doubleCount << ui->doublePrice <<
+                      ui->doubleBuyPrice << ui->doubleCount <<
                       ui->doubleSellPrice << ui->doubleTotal);
     GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
-                          ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
+                          ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
                           ui->pushSaveAgain << ui->lineDiscountFormula);
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->lineBarcode->setReadOnly(false);
@@ -75,7 +74,6 @@ void PurchaseAddItemDialog::fill(const QVariantMap &data)
     ui->labelName->setText(data["name"].toString());
     ui->doubleBuyPrice->setValue(data["buy_price"].toDouble());
     ui->doubleCount->setValue(data["count"].toDouble());
-    ui->doublePrice->setValue(data["price"].toDouble());
     ui->doubleSellPrice->setValue(data["sell_price"].toDouble());
     ui->doubleTotal->setValue(data["total"].toDouble());
     ui->lineDiscountFormula->setText(data["discount_formula"].toString());
@@ -91,7 +89,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
             ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
             ui->doubleSellPrice->setValue(msg->data("sell_price").toDouble());
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
-                                  ui->doublePrice << ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
+                                  ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
                                   ui->pushSaveAgain << ui->lineDiscountFormula);
             ui->doubleCount->setFocus(Qt::TabFocusReason);
         } else {
@@ -133,7 +131,7 @@ void PurchaseAddItemDialog::closeEvent(QCloseEvent *event)
 
 void PurchaseAddItemDialog::save()
 {
-    if(ui->doubleCount->value() == 0 || ui->doublePrice->value() == 0) {
+    if(ui->doubleCount->value() == 0) {
         QMessageBox::critical(this, tr("Error"), tr("Count and price can not zero value"));
         return;
     }
@@ -142,7 +140,6 @@ void PurchaseAddItemDialog::save()
     data.insert("barcode", ui->lineBarcode->text());
     data.insert("purchase_id", mPurchaseId);
     data.insert("count", ui->doubleCount->value());
-    data.insert("price", ui->doublePrice->value());
     data.insert("total", ui->doubleTotal->value());
     data.insert("discount_formula", ui->lineDiscountFormula->text());
     data.insert("discount", mDiscount);
@@ -182,16 +179,11 @@ void PurchaseAddItemDialog::saveClicked()
     save();
 }
 
-void PurchaseAddItemDialog::calculateTotal()
-{
-    ui->doubleTotal->setValue(ui->doubleCount->value() * ui->doublePrice->value());
-    calculateDiscount();
-}
-
 void PurchaseAddItemDialog::calculateDiscount()
 {
     mDiscount = Util::calculateDiscount(ui->lineDiscountFormula->text(), ui->doubleTotal->value());
     mTotal = ui->doubleTotal->value() - mDiscount;
     ui->labelDiscount->setText(Preference::toString(mDiscount));
     ui->labelTotal->setText(Preference::toString(mTotal));
+    ui->labelSinglePrice->setText(Preference::toString(mTotal / ui->doubleCount->value()));
 }
