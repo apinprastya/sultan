@@ -1,5 +1,5 @@
 /*
- * purchasewidget.h
+ * purchasepaymentdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,46 +17,37 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEWIDGET_H
-#define PURCHASEWIDGET_H
+#ifndef PURCHASEPAYMENTDIALOG_H
+#define PURCHASEPAYMENTDIALOG_H
 
 #include "messagehandler.h"
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
-class NormalWidget;
+class PurchasePaymentDialog;
 }
 
 namespace LibGUI {
 
-class TableWidget;
-class PurchaseAddDialog;
-
-class PurchaseWidget : public QWidget, public LibG::MessageHandler
+class PurchasePaymentDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
-public:
-    PurchaseWidget(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~PurchaseWidget();
 
-protected:
-    void messageReceived(LibG::Message *msg);
+public:
+    PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~PurchasePaymentDialog();
+    void fill(const QVariantMap &data);
 
 private:
-    Ui::NormalWidget *ui;
-    TableWidget *mTableWidget;
-    PurchaseAddDialog *mAddDialog;
+    Ui::PurchasePaymentDialog *ui;
+    int mId;
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 private slots:
-    void addClicked();
-    void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
-    void tableDoubleClicked(const QModelIndex &index);
-    void paymentClicked();
-
-signals:
-    void requestOpenPurchaseWidget(int id, const QString &number);
+    void saveClicked();
 };
 
 }
-#endif // PURCHASEWIDGET_H
+#endif // PURCHASEPAYMENTDIALOG_H

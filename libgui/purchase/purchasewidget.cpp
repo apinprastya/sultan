@@ -31,7 +31,10 @@
 #include "db_constant.h"
 #include "message.h"
 #include "flashmessagemanager.h"
+#include "purchasepaymentdialog.h"
 #include <QMessageBox>
+#include <QPushButton>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -71,6 +74,11 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
+    auto button = new QPushButton(QIcon(":/images/16x16/money-arrow.png"), "");
+    button->setToolTip(tr("Payment"));
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(paymentClicked()));
+    mTableWidget->addActionButton(button);
     model->refresh();
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
@@ -128,4 +136,17 @@ void PurchaseWidget::tableDoubleClicked(const QModelIndex &index)
         auto item = static_cast<TableItem*>(index.internalPointer());
         emit requestOpenPurchaseWidget(item->id.toInt(), item->data("number").toString());
     }
+}
+
+void PurchaseWidget::paymentClicked()
+{
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    qDebug() << item->data();
+    if(item->data("payment_type").toInt() == PURCHASEPAYMENT::DIRECT) return;
+    PurchasePaymentDialog dialog(mMessageBus, this);
+    dialog.fill(item->data());
+    dialog.exec();
+    mTableWidget->getModel()->resfreshOne(item->id);
 }
