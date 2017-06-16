@@ -77,7 +77,7 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
-    model->setFilter("purchase_id", COMPARE::EQUAL, data);
+    model->setFilter("purchase_id", COMPARE::EQUAL, data["id"].toInt());
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     model->refresh();
