@@ -39,19 +39,19 @@
 using namespace LibGUI;
 using namespace LibG;
 
-PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent) :
+PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
-    mId(id),
     mTableWidget(new TableWidget(this)),
-    mAddDialog(new PurchaseAddItemDialog(bus, id, this)),
+    mAddDialog(new PurchaseAddItemDialog(bus, data["id"].toInt(), this)),
     mTileTotal(new TileWidget(this)),
     mTileDiscount(new TileWidget(this)),
     mTileFinal(new TileWidget(this))
 {
+    mId = data["id"].toInt();
     ui->setupUi(this);
     setMessageBus(bus);
-    ui->labelTitle->setText(tr("Purchase Item : %1").arg(number));
+    ui->labelTitle->setText(tr("Purchase Item : %1 / %2").arg(data["number"].toString()).arg(data["suplier"].toString()));
 
     auto hor = new QHBoxLayout;
     mTileTotal->setTitleValue(tr("Total"), "0");
@@ -77,7 +77,7 @@ PurchaseItemWidget::PurchaseItemWidget(int id, const QString &number, LibG::Mess
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
-    model->setFilter("purchase_id", COMPARE::EQUAL, id);
+    model->setFilter("purchase_id", COMPARE::EQUAL, data);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     model->refresh();

@@ -55,7 +55,7 @@ private slots:
     void paymentClicked();
 
 signals:
-    void requestOpenPurchaseWidget(int id, const QString &number);
+    void requestOpenPurchaseWidget(const QVariantMap &data);
 };
 
 }

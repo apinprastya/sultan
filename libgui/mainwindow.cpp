@@ -220,12 +220,13 @@ void MainWindow::openPurchase()
     })) {
         auto widget = new PurchaseWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Purcase"), ":/images/16x16/baggage-cart.png");
-        connect(widget, SIGNAL(requestOpenPurchaseWidget(int,QString)), SLOT(openPurchaseItem(int,QString)));
+        connect(widget, SIGNAL(requestOpenPurchaseWidget(QVariantMap)), SLOT(openPurchaseItem(QVariantMap)));
     }
 }
 
-void MainWindow::openPurchaseItem(int id, const QString &number)
+void MainWindow::openPurchaseItem(const QVariantMap &data)
 {
+    int id = data["id"].toInt();
     for(int i = 0; i < ui->tabWidget->count(); i++) {
         auto widget = dynamic_cast<PurchaseItemWidget*>(ui->tabWidget->widget(i));
         if(widget != nullptr && widget->getId() == id) {
@@ -233,8 +234,8 @@ void MainWindow::openPurchaseItem(int id, const QString &number)
             return;
         }
     }
-    auto w = new PurchaseItemWidget(id, number, mMessageBus, this);
-    ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(number), ":/images/16x16/bagbox.png");
+    auto w = new PurchaseItemWidget(data, mMessageBus, this);
+    ui->tabWidget->tbnAddTab(w, tr("Pur : %1").arg(data["number"].toString()), ":/images/16x16/bagbox.png");
 }
 
 void MainWindow::openSalesReport()

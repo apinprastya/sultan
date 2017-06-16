@@ -75,7 +75,7 @@ private slots:
     void openCategory();
     void openItem();
     void openPurchase();
-    void openPurchaseItem(int id, const QString &number);
+    void openPurchaseItem(const QVariantMap &data);
     void openSalesReport();
     void openItemReport();
     void openChangePassword();

@@ -134,7 +134,7 @@ void PurchaseWidget::tableDoubleClicked(const QModelIndex &index)
 {
     if(index.isValid()) {
         auto item = static_cast<TableItem*>(index.internalPointer());
-        emit requestOpenPurchaseWidget(item->id.toInt(), item->data("number").toString());
+        emit requestOpenPurchaseWidget(item->data());
     }
 }
 
@@ -143,7 +143,6 @@ void PurchaseWidget::paymentClicked()
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    qDebug() << item->data();
     if(item->data("payment_type").toInt() == PURCHASEPAYMENT::DIRECT) return;
     PurchasePaymentDialog dialog(mMessageBus, this);
     dialog.fill(item->data());

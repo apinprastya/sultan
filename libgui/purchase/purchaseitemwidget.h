@@ -38,7 +38,7 @@ class PurchaseItemWidget : public QWidget, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    PurchaseItemWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = 0);
+    PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = 0);
     ~PurchaseItemWidget();
     inline int getId() { return mId; }
 
