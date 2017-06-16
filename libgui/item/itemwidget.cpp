@@ -90,13 +90,16 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("name", tr("Name"));
     model->addColumnMoney("count", tr("Count"));
     model->addColumnMoney("price", tr("Sell Price"));
+    model->addColumn("discount_formula", tr("Discount Formula"));
+    model->addColumn("discount", tr("Discount"));
+    model->addColumnMoney("final", tr("Price - Discount"));
     model->setTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::QUERY);
     mSecondTable->setupTable();
-    GuiUtil::setColumnWidth(mSecondTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
+    GuiUtil::setColumnWidth(mSecondTable->getTableView(), QList<int>() << 150 << 150 << 90 << 90 << 150 << 100 << 100);
     mSecondTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
     ui->verticalLayoutBottom->addWidget(mSecondTable);
 
-    connect(mMainTable->getTableView(), SIGNAL(clicked(QModelIndex)), SLOT(mainTableSelectionChanges()));
+    connect(mMainTable->getTableView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(mainTableSelectionChanges()));
     connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
     connect(mMainTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteItemClicked(QModelIndex)));
@@ -150,6 +153,7 @@ void ItemWidget::mainTableSelectionChanges()
         auto item = static_cast<TableItem*>(index.internalPointer());
         mCurrentBarcode = item->data("barcode").toString();
         mCurrentName = item->data("name").toString();
+        mCurrentBuyPrice = item->data("buy_price").toDouble();
         mSecondTable->getModel()->setFilter("barcode", COMPARE::EQUAL, item->data("barcode"));
         mSecondTable->getModel()->refresh();
     }
@@ -184,7 +188,7 @@ void ItemWidget::deleteItemClicked(const QModelIndex &index)
 void ItemWidget::addPriceClicked()
 {
     mPriceDialog->reset();
-    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName);
+    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName, mCurrentBuyPrice);
     mPriceDialog->show();
 }
 
@@ -192,7 +196,7 @@ void ItemWidget::updatePriceClicked(const QModelIndex &index)
 {
     if(!index.isValid() || mCurrentBarcode.isEmpty()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName);
+    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName, mCurrentBuyPrice);
     mPriceDialog->fill(item->data());
     mPriceDialog->show();
 }

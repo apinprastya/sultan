@@ -38,7 +38,7 @@ public:
     ~AddPriceDialog();
     void reset();
     void fill(const QVariantMap &data);
-    void setBarcodeName(const QString &barcode, const QString &name);
+    void setBarcodeName(const QString &barcode, const QString &name, double buyprice);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -52,6 +52,7 @@ signals:
 
 private slots:
     void saveClicked();
+    void updateDiscount();
 };
 
 }

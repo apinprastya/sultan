@@ -51,6 +51,7 @@ private:
     AddPriceDialog *mPriceDialog;
     QString mCurrentBarcode;
     QString mCurrentName;
+    double mCurrentBuyPrice;
 
 private slots:
     void mainTableSelectionChanges();

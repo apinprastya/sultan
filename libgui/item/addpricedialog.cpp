@@ -23,6 +23,7 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "message.h"
+#include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -36,6 +37,7 @@ AddPriceDialog::AddPriceDialog(LibG::MessageBus *bus, QWidget *parent) :
     setMessageBus(bus);
     ui->doublePrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    connect(ui->lineEdit, SIGNAL(textChanged(QString)), SLOT(updateDiscount()));
 }
 
 AddPriceDialog::~AddPriceDialog()
@@ -58,12 +60,16 @@ void AddPriceDialog::fill(const QVariantMap &data)
     ui->doubleCount->setValue(data["count"].toDouble());
     ui->doublePrice->setValue(data["price"].toDouble());
     ui->doubleCount->setFocus(Qt::TabFocusReason);
+    const QString &discFormula = data["discount_formula"].toString();
+    ui->lineEdit->setText(discFormula);
+    if(discFormula.isEmpty()) updateDiscount();
 }
 
-void AddPriceDialog::setBarcodeName(const QString &barcode, const QString &name)
+void AddPriceDialog::setBarcodeName(const QString &barcode, const QString &name, double buyprice)
 {
     ui->labelBarcode->setText(barcode);
     ui->labelName->setText(name);
+    ui->labelBuyPrice->setText(Preference::toString(buyprice));
 }
 
 void AddPriceDialog::messageReceived(LibG::Message *msg)
@@ -87,9 +93,13 @@ void AddPriceDialog::saveClicked()
         return;
     }
     QVariantMap data;
+    double discount = Util::calculateDiscount(ui->lineEdit->text(), ui->doublePrice->value());
     Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::INSERT);
     data.insert("count", count);
     data.insert("price", price);
+    data.insert("discount_formula", ui->lineEdit->text());
+    data.insert("discount", discount);
+    data.insert("final", ui->doublePrice->value() - discount);
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);
@@ -99,4 +109,11 @@ void AddPriceDialog::saveClicked()
         msg.setData(data);
     }
     sendMessage(&msg);
+}
+
+void AddPriceDialog::updateDiscount()
+{
+    double discount = Util::calculateDiscount(ui->lineEdit->text(), ui->doublePrice->value());
+    ui->labelDiscount->setText(Preference::toString(discount));
+    ui->labelFinal->setText(Preference::toString(ui->doublePrice->value() - discount));
 }
