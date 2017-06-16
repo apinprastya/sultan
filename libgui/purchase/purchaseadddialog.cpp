@@ -77,7 +77,9 @@ void PurchaseAddDialog::fill(const QVariantMap &data)
     ui->dateCreated->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
     mTotal = data["total"].toDouble();
-    ui->lineDiscountFormula->setText(data["discount_formula"].toString());
+    const QString &discFormula = data["discount_formula"].toString();
+    ui->lineDiscountFormula->setText(discFormula);
+    if(discFormula.isEmpty()) calculateTotal();
     mId = data["id"].toInt();
     ui->groupBox->show();
     this->adjustSize();

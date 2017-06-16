@@ -47,6 +47,7 @@ protected:
 
 private slots:
     void saveClicked();
+    void paidChanged();
 };
 
 }

@@ -63,23 +63,32 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("deadline", tr("Deadline"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
         return LibDB::DBUtil::sqlDateToDate(item->data(key).toString()).toString("dd-MM-yyyy");
     });
+    model->addColumn("status", tr("Status"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        int type = item->data("type").toInt();
+        if(type == PURCHASEPAYMENT::DIRECT) return tr("Paid");
+        return (item->data(key) == PAYMENT_STATUS::PAID ? tr("Paid") : tr("Unpaid"));
+    });
     model->addColumnMoney("total", tr("Sub-total"));
     model->addColumn("discount_formula", tr("Disc. Form"));
     model->addColumnMoney("discount", tr("Discount"));
     model->addColumnMoney("final", tr("Total"));
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("suplier", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("payment_type", HeaderFilter{HeaderWidget::Combo, TableModel::FilterEQ, QVariant()});
+    model->addHeaderFilter("status", HeaderFilter{HeaderWidget::Combo, TableModel::FilterEQ, QVariant()});
     model->setTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::PURCHASE, MSG_COMMAND::GET);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 100 << 100 << 100 << 100 << 100);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 100 << 100 << 100 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     auto button = new QPushButton(QIcon(":/images/16x16/money-arrow.png"), "");
     button->setToolTip(tr("Payment"));
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(paymentClicked()));
     mTableWidget->addActionButton(button);
+    model->setSort("created_at DESC");
     model->refresh();
+
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
@@ -91,6 +100,23 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
 PurchaseWidget::~PurchaseWidget()
 {
 
+}
+
+void PurchaseWidget::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+    if(isShowed) return;
+    isShowed = true;
+    auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("status"))->getComboBox();
+    combo->clear();
+    combo->addItem(tr("All"), 0);
+    combo->addItem(tr("Unpaid"), PAYMENT_STATUS::UNPAID);
+    combo->addItem(tr("Paid"), PAYMENT_STATUS::PAID);
+    combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("payment_type"))->getComboBox();
+    combo->clear();
+    combo->addItem(tr("All"), 0);
+    combo->addItem(tr("Direct"), PURCHASEPAYMENT::DIRECT);
+    combo->addItem(tr("Deadline"), PURCHASEPAYMENT::TEMPO);
 }
 
 void PurchaseWidget::messageReceived(LibG::Message *msg)

@@ -35,6 +35,8 @@ PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *par
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    connect(ui->checkPaid, SIGNAL(toggled(bool)), SLOT(paidChanged()));
+    paidChanged();
 }
 
 PurchasePaymentDialog::~PurchasePaymentDialog()
@@ -49,6 +51,7 @@ void PurchasePaymentDialog::fill(const QVariantMap &data)
     mId = data["id"].toInt();
     QDate date = data["payment_date"].toDate();
     ui->linePayment->setText(data["payment_number"].toString());
+    ui->checkPaid->setChecked(data["status"].toInt() != PAYMENT_STATUS::UNPAID);
     if(date.isValid())
         ui->datePayment->setDate(data["payment_date"].toDate());
     else
@@ -74,8 +77,15 @@ void PurchasePaymentDialog::saveClicked()
     QVariantMap data;
     data.insert("payment_number", ui->linePayment->text());
     data.insert("payment_date", ui->datePayment->date());
+    data.insert("status", ui->checkPaid->isChecked() ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID);
     msg.addData("id", mId);
     msg.addData("data", data);
     sendMessage(&msg);
     ui->pushSave->setEnabled(false);
+}
+
+void PurchasePaymentDialog::paidChanged()
+{
+    ui->linePayment->setEnabled(ui->checkPaid->isChecked());
+    ui->datePayment->setEnabled(ui->checkPaid->isChecked());
 }

@@ -100,13 +100,18 @@ namespace FILTER {
 }
 
 namespace PAYMENT {
-    const int CASH      = 0;
-    const int NON_CASH  = 1;
+    const int CASH      = 1;
+    const int NON_CASH  = 2;
 }
 
 namespace PURCHASEPAYMENT {
-    const int DIRECT   = 0;
-    const int TEMPO    = 1;
+    const int DIRECT   = 1;
+    const int TEMPO    = 2;
+}
+
+namespace PAYMENT_STATUS {
+    const int UNPAID = 1;
+    const int PAID   = 2;
 }
 
 }

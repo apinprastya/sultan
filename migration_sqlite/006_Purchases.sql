@@ -1,4 +1,3 @@
--- payment type : 1 = Cash; 2 = Non Cash
 CREATE TABLE purchases (
 	`id` INTEGER PRIMARY KEY,
     `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
@@ -14,7 +13,7 @@ CREATE TABLE purchases (
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `final` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `status` TINYINT NOT NULL DEFAULT 0
+    `status` TINYINT NOT NULL DEFAULT 1
 );
 -- separator
 CREATE TABLE purchaseitems (

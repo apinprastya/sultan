@@ -38,6 +38,7 @@ class PurchaseWidget : public QWidget, public LibG::MessageHandler
 public:
     PurchaseWidget(LibG::MessageBus *bus, QWidget *parent = 0);
     ~PurchaseWidget();
+    void showEvent(QShowEvent *e) override;
 
 protected:
     void messageReceived(LibG::Message *msg);
@@ -46,6 +47,7 @@ private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     PurchaseAddDialog *mAddDialog;
+    bool isShowed = false;
 
 private slots:
     void addClicked();
