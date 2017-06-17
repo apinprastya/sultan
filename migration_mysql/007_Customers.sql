@@ -44,4 +44,14 @@ CREATE TABLE customercredits (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE rewards (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NULL,
+    `deleted_at` TIMESTAMP NULL,
+    `count` INT NOT NULL DEFAULT 0,
+    `detail` VARCHAR(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
 ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;

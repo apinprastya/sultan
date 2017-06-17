@@ -83,6 +83,7 @@ private slots:
     void openCustomerCredit(int id, const QString &number);
     void openCustomerReward(int id, const QString &number);
     void openMachine();
+    void openReward();
 };
 
 }

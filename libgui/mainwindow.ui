@@ -78,6 +78,7 @@
     <addaction name="action_Items"/>
     <addaction name="separator"/>
     <addaction name="actionCustomer"/>
+    <addaction name="action_Reward"/>
    </widget>
    <widget class="QMenu" name="menuTransaction">
     <property name="title">
@@ -186,6 +187,11 @@
   <action name="action_Machines">
    <property name="text">
     <string>&amp;Machines</string>
+   </property>
+  </action>
+  <action name="action_Reward">
+   <property name="text">
+    <string>&amp;Reward</string>
    </property>
   </action>
  </widget>

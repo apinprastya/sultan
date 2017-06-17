@@ -61,7 +61,7 @@ Message SoldItemAction::report(Message *msg)
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"),
-                        mDb->clone()->reset()->table("(" + mDb->clone()->getSelectQuery() + ") d")->count());
+                        mDb->clone()->reset()->table("(" + mDb->getSelectQuery() + ") d")->count());
     setStart(&message, msg);
     mDb = QueryHelper::limitOffset(mDb, msg->data());
     mDb = QueryHelper::sort(mDb, msg->data());

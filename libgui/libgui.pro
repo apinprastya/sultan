@@ -104,7 +104,9 @@ SOURCES += \
     customer/addcreditpaymentdialog.cpp \
     machine/machinewidget.cpp \
     tilewidget.cpp \
-    purchase/purchasepaymentdialog.cpp
+    purchase/purchasepaymentdialog.cpp \
+    customer/rewardwidget.cpp \
+    customer/rewardadddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -160,7 +162,9 @@ HEADERS += \
     customer/addcreditpaymentdialog.h \
     machine/machinewidget.h \
     tilewidget.h \
-    purchase/purchasepaymentdialog.h
+    purchase/purchasepaymentdialog.h \
+    customer/rewardwidget.h \
+    customer/rewardadddialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -191,4 +195,5 @@ FORMS += \
     customer/creditsummarywidget.ui \
     customer/addcreditpaymentdialog.ui \
     tilewidget.ui \
-    purchase/purchasepaymentdialog.ui
+    purchase/purchasepaymentdialog.ui \
+    customer/rewardadddialog.ui
