@@ -28,18 +28,21 @@ namespace LibGUI {
 class CashierItem
 {
 public:
-    enum Type { Item, Discount };
+    enum Type { Item };
     int id = 0;
     int parent = 0;
     int type = Item;
     float count = 0;
     double price = 0;
+    double discount = 0;
     double total = 0;
+    double final = 0;
     QString barcode;
     QString name;
+    QString discount_formula;
     CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, int type = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type = Item);
+    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type = Item);
     void fill(const QVariantMap &data);
     QVariantMap toMap();
     CashierItem *clone();

@@ -28,13 +28,13 @@ CashierItem::CashierItem():
 {
 }
 
-CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double total, int type):
+CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double total,const QString &discformula, double discount, double final, int type):
     id(ID++)
 {
-    set(name, barcode, count, price, total, type);
+    set(name, barcode, count, price, total, discformula, discount, final, type);
 }
 
-void CashierItem::set(const QString &name, const QString &barcode, float count, double price, double total, int type)
+void CashierItem::set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type)
 {
     this->name = name;
     this->barcode = barcode;
@@ -42,6 +42,9 @@ void CashierItem::set(const QString &name, const QString &barcode, float count, 
     this->price = price;
     this->total = total;
     this->type = type;
+    this->discount_formula = discformula;
+    this->discount = discount;
+    this->final = final;
 }
 
 void CashierItem::fill(const QVariantMap &data)
@@ -51,6 +54,9 @@ void CashierItem::fill(const QVariantMap &data)
     price = data["price"].toDouble();
     total = data["total"].toDouble();
     barcode = data["barcode"].toString();
+    discount = data["discount"].toDouble();
+    discount_formula = data["discount_formula"].toString();
+    final = data["final"].toDouble();
     name = data["name"].toString();
 }
 
@@ -62,12 +68,15 @@ QVariantMap CashierItem::toMap()
     data.insert("count", count);
     data.insert("price", price);
     data.insert("total", total);
+    data.insert("discount", discount);
+    data.insert("discount_formula", discount_formula);
+    data.insert("final", final);
     return data;
 }
 
 CashierItem *CashierItem::clone()
 {
-    auto item = new CashierItem(name, barcode, count, price, total, type);
+    auto item = new CashierItem(name, barcode, count, price, total, discount_formula, discount, final, type);
     item->id = id;
     item->parent = parent;
     return item;
@@ -83,4 +92,7 @@ void CashierItem::fill(CashierItem *another)
     total = another->total;
     barcode = another->barcode;
     name = another->name;
+    discount_formula = another->discount_formula;
+    discount = another->discount;
+    final = another->final;
 }

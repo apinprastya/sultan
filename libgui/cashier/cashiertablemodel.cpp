@@ -20,6 +20,7 @@
 #include "cashiertablemodel.h"
 #include "cashieritem.h"
 #include "preference.h"
+#include "util.h"
 #include <cmath>
 #include <QLocale>
 
@@ -29,7 +30,7 @@ using namespace LibG;
 CashierTableModel::CashierTableModel(QObject *parent):
     QAbstractTableModel(parent)
 {
-    mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Total");
+    mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Discount") << tr("Total");
 }
 
 CashierTableModel::~CashierTableModel()
@@ -64,7 +65,8 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         case 2: return item->name;
         case 3: return QLocale().toString(item->count);
         case 4: return Preference::toString(item->price);
-        case 5: return Preference::toString(item->total);
+        case 5: return Preference::toString(item->discount);
+        case 6: return Preference::toString(item->final);
         }
     } else if(role == Qt::TextAlignmentRole) {
         switch (index.column()) {
@@ -72,6 +74,7 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         case 3:
         case 4:
         case 5:
+        case 6:
             return QVariant(Qt::AlignVCenter | Qt::AlignRight);
         default:
             return QVariant(Qt::AlignVCenter | Qt::AlignLeft);
@@ -195,7 +198,7 @@ void CashierTableModel::calculateTotal()
 {
     mTotal = 0;
     for(auto item : mData)
-        mTotal += item->total;
+        mTotal += item->final;
     emit totalChanged(mTotal);
 }
 
@@ -214,23 +217,30 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
     const QVariantList &prices = mPrices[barcode];
     if(prices.size() == 1) {
         const double &price = prices[0].toMap()["price"].toDouble();
-        CashierItem *item = new CashierItem(name, barcode, count, price, price * count);
+        const QString &discformula = prices[0].toMap()["discount_formula"].toString();
+        double disc = Util::calculateDiscount(discformula, price);
+        CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price * count) - (disc * count));
         retVal << item;
     } else {
         for(int i = prices.count() - 1; i >= 0; i--) {
             const QVariantMap &p = prices[i].toMap();
             const double &price = p["price"].toDouble();
             const float &c = p["count"].toFloat();
-            auto item = new CashierItem(name, barcode, 0, price, 0);
+            const QString &discformula = p["discount_formula"].toString();
+            auto item = new CashierItem(name, barcode, 0, price, 0, discformula, 0, 0);
             if(c <= count) {
                 if(i == 0) {
                     item->total += count * price;
                     item->count = count;
+                    item->discount = Util::calculateDiscount(discformula, price);
+                    item->final += (count * price) - (count * item->discount);
                     retVal << item;
                 } else {
                     float temp = std::fmod(count, c);
                     item->total += (count - temp) * price;
                     item->count = (count - temp);
+                    item->discount = Util::calculateDiscount(discformula, price);
+                    item->final += ((count - temp) * price) - ((count - temp) * item->discount);
                     count -= (count - temp);
                     retVal << item;
                     if(count <= 0.0f) break;

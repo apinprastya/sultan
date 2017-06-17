@@ -27,6 +27,9 @@ CREATE TABLE solditems (
 	`count` FLOAT NOT NULL,
 	`price` DECIMAL(15, 2) NOT NULL,
 	`total` DECIMAL(15, 2) NOT NULL,
+    `discount_formula` VARCHAR(255) NOT NULL DEFAULT '',
+    `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `final` DECIMAL(15, 2) NOT NULL,
     `buy_price` DECIMAL(15, 2) NOT NULL
 );
 -- separator

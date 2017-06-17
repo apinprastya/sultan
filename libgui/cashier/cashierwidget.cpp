@@ -49,6 +49,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDir>
+#include <QStringBuilder>
 #include <QDebug>
 #include <functional>
 
@@ -72,7 +73,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 120 << 120);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 100 << 90 << 120);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);
@@ -347,10 +348,14 @@ void CashierWidget::printBill(const QVariantMap &data)
     for(auto v : l) {
         QVariantMap m = v.toMap();
         escp->leftText(m["name"].toString())->newLine();
-        escp->column(QList<int>{50, 50})->leftText(QString("%1 x %2").
-                                                   arg(Preference::toString(m["count"].toFloat())).
-                                                    arg(Preference::toString(m["price"].toDouble())));
-        escp->rightText(Preference::toString(m["total"].toDouble()))->column(QList<int>())->newLine();
+        QString s = QString("%1 x %2").
+                arg(Preference::toString(m["count"].toFloat())).
+                 arg(Preference::toString(m["price"].toDouble()));
+        if(m["discount"].toDouble() != 0) {
+            s = s % " (" % Preference::toString(-m["discount"].toDouble()) % ")";
+        }
+        escp->column(QList<int>{70, 30})->leftText(s);
+        escp->rightText(Preference::toString(m["final"].toDouble()))->column(QList<int>())->newLine();
     }
     escp->line();
     escp->column(QList<int>{50, 50})->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
