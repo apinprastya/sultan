@@ -38,14 +38,14 @@ SoldItemAction::SoldItemAction():
 
 void SoldItemAction::selectAndJoin()
 {
-    mDb->select("*, (total - buy_price) as margin");
+    mDb->select("*, (final - buy_price) as margin");
 }
 
 Message SoldItemAction::getSummary(Message *msg)
 {
     LibG::Message message(msg);
     mDb->table(mTableName);
-    mDb->select("sum(total) as total, sum(total - buy_price) as margin");
+    mDb->select("sum(final) as total, sum(final - buy_price) as margin");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     message.setData(mDb->exec().first());
     return message;
@@ -54,14 +54,14 @@ Message SoldItemAction::getSummary(Message *msg)
 Message SoldItemAction::report(Message *msg)
 {
     LibG::Message message(msg);
-    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, solditems.name, items.stock, categories.name as category, supliers.name as suplier")->
+    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, items.name, items.stock, categories.name as category, supliers.name as suplier")->
             join("LEFT JOIN items ON items.barcode = solditems.barcode")->
             join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
             join("LEFT JOIN categories ON categories.id = items.category_id")->group("solditems.barcode")->sort("count DESC");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"),
-                        mDb->clone()->reset()->table("(" + mDb->clone()->clearSelect()->select("count(*)")->getSelectQuery() + ")")->count());
+                        mDb->clone()->reset()->table("(" + mDb->clone()->getSelectQuery() + ") d")->count());
     setStart(&message, msg);
     mDb = QueryHelper::limitOffset(mDb, msg->data());
     mDb = QueryHelper::sort(mDb, msg->data());
@@ -73,7 +73,7 @@ Message SoldItemAction::exportData(Message *msg)
 {
     LibG::Message message(msg);
     QString arr;
-    arr.append("date;barcode;name;count;price;total;buy_price;margin;\n");
+    arr.append("date;barcode;name;count;price;discount;total;buy_price;margin;\n");
     mDb->table(mTableName);
     selectAndJoin();
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
@@ -91,7 +91,8 @@ Message SoldItemAction::exportData(Message *msg)
             arr.append(d["name"].toString() % ";");
             arr.append(d["count"].toString() % ";");
             arr.append(d["price"].toString() % ";");
-            arr.append(d["total"].toString() % ";");
+            arr.append(d["discount"].toString() % ";");
+            arr.append(d["final"].toString() % ";");
             arr.append(d["buy_price"].toString() % ";");
             arr.append(QString::number(margin) % ";\n");
         }

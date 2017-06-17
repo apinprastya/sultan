@@ -58,7 +58,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
     model->addColumnMoney("count", tr("Count"));
-    model->addColumnMoney("total", tr("Total"));
+    model->addColumnMoney("final", tr("Total"));
     model->addColumnMoney("buy_price", tr("Buy Price"));
     model->addColumnMoney("margin", tr("Margin"));
     QVariantMap defVal;
