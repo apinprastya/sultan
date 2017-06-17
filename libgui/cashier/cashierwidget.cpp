@@ -361,7 +361,7 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->column(QList<int>{50, 50})->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
             leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
             leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
-    escp->column(QList<int>())->doubleHeight(false)->line()->newLine()->leftText(footer, true)->newLine(3);
+    escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;
     cutPaper();

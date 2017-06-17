@@ -110,6 +110,7 @@ void SettingWidget::setupPrinter()
     ui->spinCashierCpi12->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40));
     ui->checkPrintCashierCut->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT));
     ui->checkPrintCashierDrawer->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_KICK));
+    ui->spinCashierLinefeed->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
 }
 
 void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value)
@@ -156,6 +157,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_CPI12, ui->spinCashierCpi12->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_AUTOCUT, ui->checkPrintCashierCut->isChecked());
     Preference::setValue(SETTING::PRINTER_CASHIER_KICK, ui->checkPrintCashierDrawer->isChecked());
+    Preference::setValue(SETTING::PRINTER_CASHIER_LINEFEED, ui->spinCashierLinefeed->value());
     Preference::sync();
     Preference::applyApplicationSetting();
 }

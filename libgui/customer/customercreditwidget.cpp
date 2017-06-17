@@ -153,7 +153,7 @@ void CustomerCreditWidget::print(const QVariantMap &data)
     escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
     escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
     escp->leftText(tr("Payment"))->rightText(Preference::toString(-data["credit"].toDouble()))->newLine();
-    escp->column(QList<int>())->line(QChar('-'))->newLine(3);
+    escp->column(QList<int>())->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;
     if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
