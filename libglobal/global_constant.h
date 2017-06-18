@@ -71,6 +71,7 @@ namespace MSG_TYPE {
     const int CUSTOMER_CREDIT   = 12;
     const int MACHINE           = 13;
     const int REWARD            = 14;
+    const int REWARD_POIN       = 15;
 }
 
 namespace MSG_COMMAND {

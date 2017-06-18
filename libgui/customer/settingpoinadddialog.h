@@ -1,5 +1,5 @@
 /*
- * rewardwidget.h
+ * settingpoinadddialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,41 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef REWARDWIDGET_H
-#define REWARDWIDGET_H
+#ifndef SETTINGPOINADDDIALOG_H
+#define SETTINGPOINADDDIALOG_H
 
 #include "messagehandler.h"
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
-class RewardSetting;
+class SettingPoinAddDialog;
 }
 
 namespace LibGUI {
 
-class TableWidget;
-
-class RewardWidget : public QWidget, public LibG::MessageHandler
+class SettingPoinAddDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
+
 public:
-    RewardWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    SettingPoinAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~SettingPoinAddDialog();
+    void reset();
+    void fill(const QVariantMap &data);
 
 private:
-    Ui::RewardSetting *ui;
+    Ui::SettingPoinAddDialog *ui;
+    int mId;
 
 protected:
     void messageReceived(LibG::Message *msg) override;
 
 private slots:
-    void addExchangeClicked();
-    void updateExchangeClicked(const QModelIndex &index);
-    void deleteExchangeClicked(const QModelIndex &index);
-    void addPoinClicked();
-    void updatePoinClicked(const QModelIndex &index);
-    void deletePoinClicked(const QModelIndex &index);
+    void saveClicked();
 };
 
 }
-
-#endif // REWARDWIDGET_H
+#endif // SETTINGPOINADDDIALOG_H

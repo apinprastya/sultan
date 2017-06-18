@@ -73,12 +73,18 @@
     <property name="title">
      <string>&amp;Inventory</string>
     </property>
+    <widget class="QMenu" name="menuC_ustomer">
+     <property name="title">
+      <string>C&amp;ustomer</string>
+     </property>
+     <addaction name="action_Customer_List"/>
+     <addaction name="actionReward_Setting"/>
+    </widget>
     <addaction name="action_Category"/>
     <addaction name="action_Suplier"/>
     <addaction name="action_Items"/>
     <addaction name="separator"/>
-    <addaction name="actionCustomer"/>
-    <addaction name="action_Reward"/>
+    <addaction name="menuC_ustomer"/>
    </widget>
    <widget class="QMenu" name="menuTransaction">
     <property name="title">
@@ -179,11 +185,6 @@
     <string>C&amp;ustomer</string>
    </property>
   </action>
-  <action name="actionCustomer">
-   <property name="text">
-    <string>C&amp;ustomer</string>
-   </property>
-  </action>
   <action name="action_Machines">
    <property name="text">
     <string>&amp;Machines</string>
@@ -192,6 +193,16 @@
   <action name="action_Reward">
    <property name="text">
     <string>&amp;Reward</string>
+   </property>
+  </action>
+  <action name="action_Customer_List">
+   <property name="text">
+    <string>&amp;Customer List</string>
+   </property>
+  </action>
+  <action name="actionReward_Setting">
+   <property name="text">
+    <string>Reward Setting</string>
    </property>
   </action>
  </widget>

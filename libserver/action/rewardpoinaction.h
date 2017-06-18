@@ -1,5 +1,5 @@
 /*
- * rewardwidget.h
+ * rewardpoint.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,41 +17,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef REWARDWIDGET_H
-#define REWARDWIDGET_H
+#ifndef REWARDPOINT_H
+#define REWARDPOINT_H
 
-#include "messagehandler.h"
-#include <QWidget>
+#include "serveraction.h"
 
-namespace Ui {
-class RewardSetting;
-}
+namespace LibServer {
 
-namespace LibGUI {
-
-class TableWidget;
-
-class RewardWidget : public QWidget, public LibG::MessageHandler
+class RewardPoinAction : public ServerAction
 {
-    Q_OBJECT
 public:
-    RewardWidget(LibG::MessageBus *bus, QWidget *parent = 0);
-
-private:
-    Ui::RewardSetting *ui;
-
-protected:
-    void messageReceived(LibG::Message *msg) override;
-
-private slots:
-    void addExchangeClicked();
-    void updateExchangeClicked(const QModelIndex &index);
-    void deleteExchangeClicked(const QModelIndex &index);
-    void addPoinClicked();
-    void updatePoinClicked(const QModelIndex &index);
-    void deletePoinClicked(const QModelIndex &index);
+    RewardPoinAction();
 };
 
 }
-
-#endif // REWARDWIDGET_H
+#endif // REWARDPOINT_H

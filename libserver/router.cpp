@@ -35,6 +35,7 @@
 #include "action/cusomercreditaction.h"
 #include "action/machineaction.h"
 #include "action/rewardaction.h"
+#include "action/rewardpoinaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -94,6 +95,8 @@ ServerAction *Router::getServerAction(int type)
         return new MachineAction();
     case MSG_TYPE::REWARD:
         return new RewardAction();
+    case MSG_TYPE::REWARD_POIN:
+        return new RewardPoinAction();
     }
     return nullptr;
 }

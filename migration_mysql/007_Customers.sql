@@ -54,4 +54,14 @@ CREATE TABLE rewards (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+CREATE TABLE rewardpoins (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NULL,
+    `deleted_at` TIMESTAMP NULL,
+    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `poin` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
 ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;

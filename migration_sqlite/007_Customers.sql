@@ -45,6 +45,15 @@ CREATE TABLE rewards (
     `detail` VARCHAR(255) NOT NULL DEFAULT ''
 )
 -- separator
+CREATE TABLE rewardpoins (
+    `id` INTEGER PRIMARY KEY,
+    `created_at` DATETIME DEFAULT (datetime('now', 'localtime')),
+    `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
+    `deleted_at` DATETIME NULL,
+    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `poin` INT NOT NULL DEFAULT 0
+)
+-- separator
 ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;
 -- separator
 CREATE UNIQUE INDEX CUSTOMER_NUMBER ON customers (number);
