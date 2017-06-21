@@ -20,6 +20,7 @@
 #ifndef CASHIERTABLEMODEL_H
 #define CASHIERTABLEMODEL_H
 
+#include "customer/customer.h"
 #include <QAbstractTableModel>
 
 namespace LibGUI {
@@ -43,12 +44,14 @@ public:
     inline bool isEmpty() { return mData.isEmpty(); }
     QVariantList getCart();
     void loadCart(const QVariantList &cart);
+    inline Customer* getCustomer() { return &mCurrentCustomer; }
 
 private:
     QList<CashierItem*> mData;
     QStringList mHeaders;
     QMap<QString, QVariantList> mPrices;
     double mTotal = 0;
+    Customer mCurrentCustomer;
 
     float getTotalCount(const QString &barcode);
     void calculateTotal();

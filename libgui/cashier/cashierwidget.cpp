@@ -153,7 +153,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), tr("Customer not found"));
         } else {
             const QVariantMap &d = list.first().toMap();
-            mCurrentCustomer.fill(d);
+            mModel->getCustomer()->fill(d);
             updateCustomerLabel();
         }
     }
@@ -178,7 +178,7 @@ void CashierWidget::saveToSlot(int slot)
         return;
     }
     QVariantMap obj;
-    obj.insert("customer", mCurrentCustomer.toMap());
+    obj.insert("customer", mModel->getCustomer()->toMap());
     obj.insert("cart", mModel->getCart());
     const QJsonDocument &doc = QJsonDocument::fromVariant(obj);
     file.write(qCompress(doc.toJson(QJsonDocument::Compact)));
@@ -205,7 +205,7 @@ void CashierWidget::loadFromSlot(int slot)
     }
     QJsonObject obj = doc.object();
     mModel->loadCart(obj.value("cart").toArray().toVariantList());
-    mCurrentCustomer.fill(obj.value("customer").toObject().toVariantMap());
+    mModel->getCustomer()->fill(obj.value("customer").toObject().toVariantMap());
     updateCustomerLabel();
     ui->tableView->selectRow(mModel->rowCount(QModelIndex()) - 1);
     file.close();
@@ -221,9 +221,10 @@ void CashierWidget::removeSlot(int slot)
 
 void CashierWidget::updateCustomerLabel()
 {
-    ui->labelCustomerNumber->setText(mCurrentCustomer.number.isEmpty() ? tr("None") : mCurrentCustomer.number);
-    ui->labelCustomerName->setText(mCurrentCustomer.name.isEmpty() ? tr("None") : mCurrentCustomer.name);
-    ui->labelCustomerPoin->setText(QString::number(mCurrentCustomer.reward));
+    auto cust = mModel->getCustomer();
+    ui->labelCustomerNumber->setText(cust->number.isEmpty() ? tr("None") : cust->number);
+    ui->labelCustomerName->setText(cust->name.isEmpty() ? tr("None") : cust->name);
+    ui->labelCustomerPoin->setText(QString::number(cust->reward));
 }
 
 void CashierWidget::barcodeEntered()
@@ -280,11 +281,11 @@ void CashierWidget::payCash()
 void CashierWidget::payAdvance()
 {
     if(mModel->isEmpty()) return;
-    if(!mCurrentCustomer.isValid()) {
+    if(!mModel->getCustomer()->isValid()) {
         FlashMessageManager::showMessage(tr("Advance payment only for valid customer"), FlashMessage::Error);
         return;
     }
-    mAdvancePaymentDialog->setup(mModel->getTotal(), &mCurrentCustomer);
+    mAdvancePaymentDialog->setup(mModel->getTotal(), mModel->getCustomer());
     mAdvancePaymentDialog->show();
 }
 
@@ -316,7 +317,7 @@ void CashierWidget::payRequested(int type, double value)
     data.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
     data.insert("total", mModel->getTotal());
     data.insert("payment", value);
-    data.insert("customer_id", mCurrentCustomer.id);
+    data.insert("customer_id", mModel->getCustomer()->id);
     data.insert("payment_type", type);
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD);
     msg.setData(data);
@@ -447,6 +448,6 @@ void CashierWidget::resetCustomer(bool dontShowMessage)
 {
     if(!dontShowMessage)
         FlashMessageManager::showMessage(tr("Customer reseted"));
-    mCurrentCustomer.reset();
+    mModel->getCustomer()->reset();
     updateCustomerLabel();
 }

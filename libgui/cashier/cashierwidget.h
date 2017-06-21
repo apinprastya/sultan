@@ -52,7 +52,6 @@ private:
     CashierTableModel *mModel;
     PayCashDialog *mPayCashDialog;
     int mSaveSlot = -1;
-    Customer mCurrentCustomer;
     AdvancePaymentDialog *mAdvancePaymentDialog;
 
     void cutPaper();
