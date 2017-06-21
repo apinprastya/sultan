@@ -21,15 +21,19 @@
 #include "cashieritem.h"
 #include "preference.h"
 #include "util.h"
+#include "message.h"
+#include "global_constant.h"
 #include <cmath>
 #include <QLocale>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CashierTableModel::CashierTableModel(QObject *parent):
+CashierTableModel::CashierTableModel(MessageBus *bus, QObject *parent):
     QAbstractTableModel(parent)
 {
+    setMessageBus(bus);
     mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Discount") << tr("Total");
 }
 
@@ -184,6 +188,30 @@ void CashierTableModel::loadCart(const QVariantList &cart)
     calculateTotal();
 }
 
+void CashierTableModel::fillCustomer(const QVariantMap &data)
+{
+    mCurrentCustomer.fill(data);
+    //reload poin reward setting
+    Message msg(MSG_TYPE::REWARD_POIN, MSG_COMMAND::QUERY);
+    msg.setSort("total ASC");
+    sendMessage(&msg);
+}
+
+void CashierTableModel::messageReceived(Message *msg)
+{
+    if(msg->isTypeCommand(MSG_TYPE::REWARD_POIN, MSG_COMMAND::QUERY)) {
+        if(msg->isSuccess()) {
+            mRewardPoins.clear();
+            const QVariantList &l = msg->data("data").toList();
+            for(int i = 0; i < l.size(); i++) {
+                const QVariantMap &m = l[i].toMap();
+                mRewardPoins.insert(m["total"].toDouble(), m["poin"].toInt());
+                calculatePoin();
+            }
+        }
+    }
+}
+
 float CashierTableModel::getTotalCount(const QString &barcode)
 {
     float retVal = 0;
@@ -200,6 +228,7 @@ void CashierTableModel::calculateTotal()
     for(auto item : mData)
         mTotal += item->final;
     emit totalChanged(mTotal);
+    calculatePoin();
 }
 
 QList<int> CashierTableModel::rowOfBarcode(const QString &barcode)
@@ -249,4 +278,19 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
         }
     }
     return retVal;
+}
+
+void CashierTableModel::calculatePoin()
+{
+    mPoin = 0;
+    double total = mTotal;
+    const QList<double> &p = mRewardPoins.keys();
+    for(int i = p.count() - 1; i >= 0; i--) {
+        if(p[i] < total) {
+            int div = (int)(total / p[i]);
+            total = std::fmod(total, p[i]);
+            mPoin += (mRewardPoins[p[i]] * div);
+        }
+    }
+    emit poinChanged(mPoin);
 }

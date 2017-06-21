@@ -20,6 +20,7 @@
 #ifndef CASHIERTABLEMODEL_H
 #define CASHIERTABLEMODEL_H
 
+#include "messagehandler.h"
 #include "customer/customer.h"
 #include <QAbstractTableModel>
 
@@ -27,11 +28,11 @@ namespace LibGUI {
 
 class CashierItem;
 
-class CashierTableModel : public QAbstractTableModel
+class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CashierTableModel(QObject *parent = nullptr);
+    CashierTableModel(LibG::MessageBus *bus, QObject *parent = nullptr);
     ~CashierTableModel();
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -45,6 +46,10 @@ public:
     QVariantList getCart();
     void loadCart(const QVariantList &cart);
     inline Customer* getCustomer() { return &mCurrentCustomer; }
+    void fillCustomer(const QVariantMap &data);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 private:
     QList<CashierItem*> mData;
@@ -52,15 +57,19 @@ private:
     QMap<QString, QVariantList> mPrices;
     double mTotal = 0;
     Customer mCurrentCustomer;
+    QMap<double, int> mRewardPoins;
+    int mPoin = 0;
 
     float getTotalCount(const QString &barcode);
     void calculateTotal();
     QList<int> rowOfBarcode(const QString &barcode);
     QList<CashierItem *> calculatePrices(const QString &barcode, const QString &name, float count);
+    void calculatePoin();
 
 signals:
     void totalChanged(double total);
     void selectRow(const QModelIndex &index);
+    void poinChanged(int poin);
 };
 
 }

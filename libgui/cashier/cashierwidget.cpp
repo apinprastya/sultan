@@ -60,7 +60,7 @@ using namespace LibPrint;
 CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CashierWidget),
-    mModel(new CashierTableModel(this)),
+    mModel(new CashierTableModel(bus, this)),
     mPayCashDialog(new PayCashDialog(this)),
     mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this))
 {
@@ -153,7 +153,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), tr("Customer not found"));
         } else {
             const QVariantMap &d = list.first().toMap();
-            mModel->getCustomer()->fill(d);
+            mModel->fillCustomer(d);
             updateCustomerLabel();
         }
     }
@@ -205,7 +205,7 @@ void CashierWidget::loadFromSlot(int slot)
     }
     QJsonObject obj = doc.object();
     mModel->loadCart(obj.value("cart").toArray().toVariantList());
-    mModel->getCustomer()->fill(obj.value("customer").toObject().toVariantMap());
+    mModel->fillCustomer(obj.value("customer").toObject().toVariantMap());
     updateCustomerLabel();
     ui->tableView->selectRow(mModel->rowCount(QModelIndex()) - 1);
     file.close();
