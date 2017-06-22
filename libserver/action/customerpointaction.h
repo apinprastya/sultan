@@ -28,6 +28,9 @@ class CustomerPointAction: public ServerAction
 {
 public:
     CustomerPointAction();
+
+protected:
+    void afterInsert(const QVariantMap &data) override;
 };
 
 }

@@ -38,8 +38,10 @@
 #include "escp.h"
 #include "printer.h"
 #include "global_setting_const.h"
+#include "addpoindialog.h"
 #include <QMessageBox>
 #include <QPushButton>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -49,7 +51,8 @@ CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::
     ui(new Ui::NormalWidget),
     uiSummary(new Ui::CreditSummaryWidget),
     mTableWidget(new TableWidget(this)),
-    mId(id)
+    mId(id),
+    mNumber(number)
 {
     setMessageBus(bus);
     ui->setupUi(this);
@@ -71,6 +74,7 @@ CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::CUSTOMER_POINT, MSG_COMMAND::QUERY);
     model->setFilter("customer_id", COMPARE::EQUAL, id);
+    model->setSort("created_at DESC");
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 300 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
@@ -89,11 +93,12 @@ void CustomerRewardWidget::messageReceived(LibG::Message *msg)
     if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
             mTotal = msg->data("credit").toDouble();
+            mPoin = msg->data("reward").toInt();
             uiSummary->labelNumber->setText(msg->data("number").toString());
             uiSummary->labelName->setText(msg->data("name").toString());
             uiSummary->labelPhone->setText(msg->data("phone").toString());
             uiSummary->labelAddress->setText(msg->data("address").toString());
-            uiSummary->labelReward->setText(QString::number(msg->data("reward").toInt()));
+            uiSummary->labelReward->setText(QString::number(mPoin));
             uiSummary->labelCredit->setText(Preference::toString(mTotal));
         }
     }
@@ -101,7 +106,9 @@ void CustomerRewardWidget::messageReceived(LibG::Message *msg)
 
 void CustomerRewardWidget::addClicked()
 {
-
+    AddPoinDialog dialog(mMessageBus, mId, mNumber, mPoin, this);
+    dialog.exec();
+    mTableWidget->getModel()->refresh();
 }
 
 void CustomerRewardWidget::refreshCustomer()
@@ -113,10 +120,45 @@ void CustomerRewardWidget::refreshCustomer()
 
 void CustomerRewardWidget::printClicked()
 {
-
+    const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->data("link_id").toInt() != 0) return;
+    print(item->data());
 }
 
 void CustomerRewardWidget::print(const QVariantMap &data)
 {
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    if(type < 0) {
+        QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
+        return;
+    }
+    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
+    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
+    const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
+    int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
+    int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
+    auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
+            centerText(tr("Reward Exchange"))->
+            doubleHeight(false)->cpi12()->newLine(2);
+    escp->column(QList<int>())->line(QChar('='));
+    escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Name"))->rightText(uiSummary->labelName->text())->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Total Reward"))->rightText(Preference::toString(mTotal))->newLine();
+    escp->column(QList<int>())->line(QChar('-'));
+    escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
+    escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
+    escp->leftText(tr("Reward Exchange"))->rightText(Preference::toString(-data["reward"].toDouble()))->newLine();
+    escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(data["detail"].toString())->newLine();
+    escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
+    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    delete escp;
+    if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
+        const QString &command = LibPrint::Escp::cutPaperCommand();
+        LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+                               command, type);
+    }
 }

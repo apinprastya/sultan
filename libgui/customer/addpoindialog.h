@@ -1,5 +1,5 @@
 /*
- * customerpointaction.cpp
+ * addpoindialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,20 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "customerpointaction.h"
-#include "db.h"
+#ifndef ADDPOINDIALOG_H
+#define ADDPOINDIALOG_H
 
-using namespace LibServer;
+#include "messagehandler.h"
+#include <QDialog>
 
-CustomerPointAction::CustomerPointAction():
-    ServerAction("customerrewards", "id")
-{
-    mFlag = AFTER_INSERT;
+namespace Ui {
+class AddPoinDialog;
 }
 
-void CustomerPointAction::afterInsert(const QVariantMap &data)
+namespace LibGUI {
+
+class AddPoinDialog : public QDialog, public LibG::MessageHandler
 {
-    auto cust_id = data["customer_id"].toInt();
-    mDb->exec(QString("UPDATE customers SET reward = (SELECT SUM(reward) FROM customerrewards WHERE customer_id = %1) WHERE id = %2").
-              arg(cust_id).arg(cust_id));
+    Q_OBJECT
+
+public:
+    AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent = 0);
+    ~AddPoinDialog();
+
+private:
+    Ui::AddPoinDialog *ui;
+    int mId;
+    int mPoin;
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+
+private slots:
+    void typeChanged();
+    void saveClicked();
+};
+
 }
+#endif // ADDPOINDIALOG_H

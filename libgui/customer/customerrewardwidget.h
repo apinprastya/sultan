@@ -48,6 +48,8 @@ private:
     TableWidget *mTableWidget;
     int mId;
     double mTotal;
+    int mPoin;
+    QString mNumber;
 
 private slots:
     void addClicked();

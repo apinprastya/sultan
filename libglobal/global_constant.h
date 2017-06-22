@@ -116,6 +116,11 @@ namespace PAYMENT_STATUS {
     const int PAID   = 2;
 }
 
+namespace POIN_TYPE {
+    const int EXCHANGE  = 0;
+    const int MANUAL    = 1;
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H

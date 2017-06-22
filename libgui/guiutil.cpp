@@ -40,6 +40,9 @@ bool GuiUtil::anyEmpty(const QList<QWidget *> &lists)
         auto plain = qobject_cast<QPlainTextEdit*>(w);
         if(plain != nullptr && plain->toPlainText().isEmpty())
             return true;
+        auto spin =  qobject_cast<QSpinBox*>(w);
+        if(spin != nullptr && spin->value() == 0)
+            return true;
     }
     return false;
 }
