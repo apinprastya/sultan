@@ -18,13 +18,13 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "socketmanager.h"
-#include "easylogging++.h"
 #include "sockethandler.h"
 #include "message.h"
 #include <QWebSocket>
 #include <QWebSocketServer>
+#include <QDebug>
 
-static std::string TAG = "[SOCKETMANAGER]";
+static QString TAG{"[SOCKETMANAGER]"};
 
 SocketManager::SocketManager(QObject *parent):
     QObject(parent),
@@ -38,9 +38,9 @@ bool SocketManager::listen(int port)
 {
     bool ret = mServer->listen(QHostAddress::Any, port);
     if(!ret) {
-        LOG(ERROR) << TAG << "Unable to start socket server :" << mServer->errorString();
+        qCritical() << TAG << "Unable to start socket server :" << mServer->errorString();
     }
-    LOG(INFO) << TAG << "Server listening on port :" << port;
+    qDebug() << TAG << "Server listening on port :" << port;
     return ret;
 }
 
@@ -49,7 +49,7 @@ void SocketManager::newConnection()
     while(mServer->hasPendingConnections()) {
         auto socket = mServer->nextPendingConnection();
         auto handler = new SocketHandler(mLastId++, socket, this);
-        LOG(INFO) << TAG << "New socket connection" << socket->peerAddress().toString() << socket->peerPort();
+        qDebug() << TAG << "New socket connection" << socket->peerAddress().toString() << socket->peerPort();
         mHandlers.insert(handler->getId(), handler);
         connect(handler, SIGNAL(disconnect()), SLOT(clientDisconnect()));
         connect(handler, SIGNAL(newMessage(LibG::Message*)), SIGNAL(receivedMessage(LibG::Message*)));
@@ -60,7 +60,7 @@ void SocketManager::clientDisconnect()
 {
     auto handler = static_cast<SocketHandler*>(QObject::sender());
     mHandlers.remove(handler->getId());
-    LOG(INFO) << "Client disconnect" << handler->getSocket()->peerAddress().toString();
+    qDebug() << "Client disconnect" << handler->getSocket()->peerAddress().toString();
 }
 
 void SocketManager::sendToClient(LibG::Message *msg)

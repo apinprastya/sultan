@@ -22,7 +22,6 @@
 #include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
-#include "easylogging++.h"
 #include "db.h"
 #include "gui/splash.h"
 #include "gui/settingdialog.h"
@@ -47,7 +46,7 @@
 
 using namespace LibG;
 
-static std::string TAG = "CORE";
+static QString TAG{"CORE"};
 
 Core::Core(QObject *parent) :
     QObject(parent),
@@ -74,7 +73,7 @@ Core::Core(QObject *parent) :
 
 Core::~Core()
 {
-    LOG(INFO) << TAG << "Application Exited";
+    qDebug() << TAG << "Application Exited";
     Preference::destroy();
     if(mSplashUi) delete mSplashUi;
     if(mLoginDialog) delete mLoginDialog;
@@ -90,7 +89,7 @@ void Core::setup()
 
 void Core::initLogger()
 {
-    auto appDir = QDir(qApp->applicationDirPath());
+    /*auto appDir = QDir(qApp->applicationDirPath());
     el::Configurations conf(appDir.absoluteFilePath(QLatin1String("log.conf")).toStdString());
     if(!appDir.cd(QLatin1String("logs"))) {
         appDir.mkdir(appDir.absolutePath() + QLatin1String("/logs"));
@@ -101,11 +100,11 @@ void Core::initLogger()
     el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
     el::Loggers::reconfigureLogger("default", conf);
     el::Loggers::reconfigureAllLoggers(conf);
-    el::Helpers::installPreRollOutCallback([](const char* name, std::size_t /*size*/){
+    el::Helpers::installPreRollOutCallback([](const char* name, std::size_t size){
         const QString &newName = QLatin1String(name) + QDateTime::currentDateTime().toString(QLatin1String("yyyyMMdd-hhmmss"));
         QFile::rename(QLatin1String(name), newName);
         QProcess::startDetached("/bin/gzip", QStringList() << newName);
-    });
+    });*/
 }
 
 void Core::showRestartError(const QString &title, const QString &msg)
@@ -118,7 +117,7 @@ void Core::showRestartError(const QString &title, const QString &msg)
 void Core::init()
 {
     initLogger();
-    LOG(INFO) << TAG << "Initialize application";
+    qDebug() << TAG << "Initialize application";
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting
         mSplashUi->hide();
@@ -151,7 +150,7 @@ void Core::init()
 #else
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {
 #endif
-                LOG(ERROR) << TAG << "Error migration";
+                qCritical() << TAG << "Error migration";
                 mSplashUi->setMessage("Migrate database failed");
                 qApp->processEvents();
                 showRestartError(tr("Database Error"), tr("Migrate database failed"));

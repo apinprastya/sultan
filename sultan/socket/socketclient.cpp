@@ -18,13 +18,13 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "socketclient.h"
-#include "easylogging++.h"
 #include <QWebSocket>
 #include <QTimer>
+#include <QDebug>
 
 #define TIMEOUT 30000 //in mili second
 #define PING_TIME 5000 //in mili second
-static std::string TAG = "[SOCKETCLIENT]";
+static QString TAG{"[SOCKETCLIENT]"};
 
 SocketClient::SocketClient(QObject *parent) :
     QObject(parent),
@@ -68,7 +68,7 @@ void SocketClient::sendMessage(LibG::Message *msg)
 void SocketClient::checkConnection()
 {
     if(mSocket->state() != QAbstractSocket::ConnectedState) {
-        LOG(ERROR) << TAG << "Connection to server timeout";
+        qCritical() << TAG << "Connection to server timeout";
         mSocket->close();
         emit connectionTimeout();
     }
@@ -76,13 +76,13 @@ void SocketClient::checkConnection()
 
 void SocketClient::errorOccure()
 {
-    LOG(ERROR) << TAG << "Connection error :" << mSocket->errorString();
+    qCritical() << TAG << "Connection error :" << mSocket->errorString();
     emit socketError();
 }
 
 void SocketClient::stateChanged(QAbstractSocket::SocketState state)
 {
-    LOG(INFO) << TAG << "State change :" << state;
+    qDebug() << TAG << "State change :" << state;
 }
 
 void SocketClient::binaryMessageReceived(const QByteArray &data)

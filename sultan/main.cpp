@@ -1,21 +1,36 @@
 #include <QApplication>
 #include <QStyleFactory>
-#include "easylogging++.h"
 #include "core.h"
 #include "preference.h"
 #include "global_setting_const.h"
 #include <QTranslator>
 #include <QPalette>
 #include <QDir>
+#include <QTextStream>
 #include <QDebug>
 
-INITIALIZE_EASYLOGGINGPP
+static QTextStream logStream;
+
+void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QString formatted = qFormatLogMessage(type, context, msg);
+    logStream << formatted << "\n";
+    logStream.flush();
+}
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
     a.setApplicationVersion("17.06.00");
+
+#ifndef QT_DEBUG
+    qSetMessagePattern("%{time yyyy-MM-dd HH:mm:ss} %{type} %{message}");
+    qInstallMessageHandler(MessageHandler);
+    QFile file("log.log");
+    file.open(QFile::Append);
+    logStream.setDevice(&file);
+#endif
 
     QDir appDir(a.applicationDirPath());
     LibG::Preference::createInstance();

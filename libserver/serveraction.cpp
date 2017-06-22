@@ -21,15 +21,15 @@
 #include "global_constant.h"
 #include "db.h"
 #include "queryhelper.h"
-#include "easylogging++.h"
 #include <QStringBuilder>
 #include <QDateTime>
+#include <QDebug>
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-static std::string TAG = "[SERVERACTION]";
+static QString TAG{"[SERVERACTION]"};
 
 ServerAction::ServerAction(const QString &tableName, const QString idfield):
     mDb(Db::createInstance()),
@@ -52,7 +52,7 @@ Message ServerAction::exec(Message *msg)
 {
     if(mFunctionMap.contains(msg->command()))
         return mFunctionMap[msg->command()](msg);
-    LOG(ERROR) << TAG << "Command not available : " << msg->command() << " with type : " << msg->type();
+    qCritical() << TAG << "Command not available : " << msg->command() << " with type : " << msg->type();
     Message message = *msg;
     message.setError("Command not available");
     return message;

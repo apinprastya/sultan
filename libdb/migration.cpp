@@ -20,12 +20,11 @@
 
 #include "migration.h"
 #include "db.h"
-#include "easylogging++.h"
 #include <QDebug>
 
 using namespace LibDB;
 
-static std::string TAG = "MIGRATION";
+static QString TAG{"MIGRATION"};
 
 bool Migration::migrateAll(const QString &folder, const QString &dbtype)
 {
@@ -46,7 +45,7 @@ bool Migration::migrate()
 {
     auto files = mDir.entryList(QDir::NoFilter, QDir::Name);
     if(files.isEmpty()) {
-        LOG(INFO) << TAG << "No file on folder";
+        qDebug() << TAG << "No file on folder";
         return false;
     }
     bool started = false;
@@ -97,7 +96,7 @@ bool Migration::executeFile(const QString &filename)
 {
     QFile file(mDir.absoluteFilePath(filename));
     if(!file.open(QFile::ReadOnly)) {
-        LOG(ERROR) << TAG << "Can not open file" << file.fileName();
+        qCritical() << TAG << "Can not open file" << file.fileName();
         return false;
     }
     const QString sqlCommand(file.readAll());
@@ -106,7 +105,7 @@ bool Migration::executeFile(const QString &filename)
         for(const QString &cmd : sqllist) {
             bool ret = mDb->exec(cmd);
             if(!ret) {
-                LOG(ERROR) << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
+                qCritical() << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
                 return false;
             }
         }
@@ -114,7 +113,7 @@ bool Migration::executeFile(const QString &filename)
     } else {
         bool ret = mDb->exec(sqlCommand);
         if(!ret)
-            LOG(ERROR) << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
+            qCritical() << TAG << "Migration file" << filename << "error :" << mDb->lastError().text();
         return ret;
     }
 }

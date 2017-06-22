@@ -19,7 +19,6 @@
  */
 
 #include "db.h"
-#include "easylogging++.h"
 #include <QUuid>
 #include <QSqlRecord>
 #include <QDebug>
@@ -29,7 +28,7 @@
 
 using namespace LibDB;
 
-static std::string TAG = "[DB]";
+static QString TAG{"[DB]"};
 static DBSetting DBSETTING;
 static QString DBTYPE = "MYSQL";
 static QMap<QString, QString> SQLDRIVERNAME{{"MYSQL", "QMYSQL"}, {"SQLITE", "QSQLITE"}};
@@ -62,7 +61,7 @@ Db *Db::createInstance(bool checkDBName)
     Db* db = new Db();
     if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName, checkDBName))
         return db;
-    LOG(ERROR) << TAG << "Error openning database connection :" << db->lastError().text();
+    qCritical() << TAG << "Error openning database connection :" << db->lastError().text();
     delete db;
     return nullptr;
 }
@@ -284,8 +283,8 @@ bool Db::exec(const QString &sqlcommand)
     if(mDebug)
         qDebug() << sqlcommand;
     if(!ok) {
-        LOG(ERROR) << TAG << lastQuery();
-        LOG(ERROR) << TAG << mLastError.text();
+        qCritical() << TAG << lastQuery();
+        qCritical() << TAG << mLastError.text();
     }
     return ok;
 }
@@ -311,10 +310,10 @@ bool Db::insert(const QString &table, const QVariantMap &data)
         query.bindValue(i, data[keys.at(i)]);
     reset();
     bool res = query.exec();
-    LOG(INFO) << TAG << query.lastQuery() << dataToString(data);
+    qCritical() << TAG << query.lastQuery() << dataToString(data);
     postQuery(&query);
     if(!res) {
-        LOG(ERROR) << TAG << mLastError.text();
+        qCritical() << TAG << mLastError.text();
     }
     return res;
 }
@@ -342,10 +341,10 @@ bool Db::update(const QString &table, const QVariantMap &data)
         query.bindValue(i, data[keys.at(i)]);
     reset();
     bool res = query.exec();
-    LOG(INFO) << TAG << query.lastQuery() << dataToString(data);
+    qCritical() << TAG << query.lastQuery() << dataToString(data);
     postQuery(&query);
     if(!res) {
-        LOG(ERROR) << TAG << mLastError.text();
+        qCritical() << TAG << mLastError.text();
     }
     return res;
 }
@@ -362,10 +361,10 @@ bool Db::del(const QString &table)
         sql.append(table).append(QStringLiteral(" WHERE ")).append(mWhere);
         reset();
         bool res = query.exec(sql);
-        LOG(INFO) << TAG << query.lastQuery();
+        qDebug() << TAG << query.lastQuery();
         postQuery(&query);
         if(!res) {
-            LOG(ERROR) << TAG << mLastError.text();
+            qCritical() << TAG << mLastError.text();
         }
         return res;
     }
@@ -424,7 +423,7 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
     auto database = getDatabase();
     if(database.isOpen()) return true;
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
-    LOG(INFO) << TAG << "Database support transaction :" << mSupportTransaction;
+    qDebug() << TAG << "Database support transaction :" << mSupportTransaction;
     bool ret = false;
     if(DBTYPE == "MYSQL") {
         database.setPort(port);

@@ -1,4 +1,3 @@
-include(../external_library/easyloggingpp/easyloggingpp/easyloggingpp.pri)
 include(../libglobal/libglobal.pri)
 include(../libdb/libdb.pri)
 
