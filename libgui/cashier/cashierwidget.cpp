@@ -41,6 +41,7 @@
 #include "cashierhelpdialog.h"
 #include "advancepaymentdialog.h"
 #include "flashmessagemanager.h"
+#include "paycashlessdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -62,7 +63,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui(new Ui::CashierWidget),
     mModel(new CashierTableModel(bus, this)),
     mPayCashDialog(new PayCashDialog(this)),
-    mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this))
+    mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this)),
+    mPayCashlessDialog(new PayCashlessDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -86,6 +88,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
     connect(mPayCashDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
     connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double)), SLOT(payRequested(int,double)));
+    connect(mPayCashlessDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
@@ -99,6 +102,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
+    new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -140,9 +144,10 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
         mAdvancePaymentDialog->hide();
+        mPayCashlessDialog->hide();
         openDrawer();
         printBill(data);
-        PaymentCashSuccessDialog dialog(data["total"].toDouble(), data["payment"].toDouble(),  data["payment"].toDouble() - data["total"].toDouble());
+        PaymentCashSuccessDialog dialog(data, this);
         dialog.exec();
         mModel->reset();
         resetCustomer(true);
@@ -278,6 +283,12 @@ void CashierWidget::payCash()
     mPayCashDialog->show();
 }
 
+void CashierWidget::payCashless()
+{
+    if(mModel->isEmpty()) return;
+    mPayCashlessDialog->showDialog(mModel->getTotal());
+}
+
 void CashierWidget::payAdvance()
 {
     if(mModel->isEmpty()) return;
@@ -315,8 +326,18 @@ void CashierWidget::payRequested(int type, double value)
     data.insert("cart", mModel->getCart());
     data.insert("user_id", UserSession::id());
     data.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
-    data.insert("total", mModel->getTotal());
-    data.insert("payment", value);
+    data.insert("subtotal", mModel->getTotal());
+    if(type == PAYMENT::CASH) {
+        data.insert("payment", value);
+        data.insert("total", mModel->getTotal());
+    } else {
+        data.insert("payment", mModel->getTotal());
+        data.insert("additional_charge", value);
+        data.insert("total", mModel->getTotal() + value);
+        data.insert("card_number", mPayCashlessDialog->getCardNumber());
+        data.insert("bank_id", mPayCashlessDialog->getBank());
+        data.insert("card_type", mPayCashlessDialog->getCardType());
+    }
     data.insert("customer_id", mModel->getCustomer()->id);
     data.insert("payment_type", type);
     data.insert("reward", mModel->getRewardPoin());

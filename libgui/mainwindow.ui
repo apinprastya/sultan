@@ -85,6 +85,8 @@
     <addaction name="action_Items"/>
     <addaction name="separator"/>
     <addaction name="menuC_ustomer"/>
+    <addaction name="separator"/>
+    <addaction name="action_Banks"/>
    </widget>
    <widget class="QMenu" name="menuTransaction">
     <property name="title">
@@ -203,6 +205,11 @@
   <action name="actionReward_Setting">
    <property name="text">
     <string>Reward Setting</string>
+   </property>
+  </action>
+  <action name="action_Banks">
+   <property name="text">
+    <string>&amp;Banks</string>
    </property>
   </action>
  </widget>

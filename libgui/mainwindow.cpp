@@ -37,6 +37,7 @@
 #include "customer/customerrewardwidget.h"
 #include "machine/machinewidget.h"
 #include "customer/rewardwidget.h"
+#include "bank/bankwidget.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -121,6 +122,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Customer_List, SIGNAL(triggered(bool)), SLOT(openCustomer()));
     connect(ui->action_Machines, SIGNAL(triggered(bool)), SLOT(openMachine()));
     connect(ui->actionReward_Setting, SIGNAL(triggered(bool)), SLOT(openReward()));
+    connect(ui->action_Banks, SIGNAL(triggered(bool)), SLOT(openBank()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -322,5 +324,15 @@ void MainWindow::openReward()
     })) {
         auto widget = new RewardWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/rosette-label.png");
+    }
+}
+
+void MainWindow::openBank()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<BankWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new BankWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/building.png");
     }
 }

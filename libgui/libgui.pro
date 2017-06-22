@@ -108,7 +108,10 @@ SOURCES += \
     customer/rewardadddialog.cpp \
     customer/settingpoinadddialog.cpp \
     customer/customerrewardwidget.cpp \
-    customer/addpoindialog.cpp
+    customer/addpoindialog.cpp \
+    bank/bankwidget.cpp \
+    bank/bankadddialog.cpp \
+    cashier/paycashlessdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -169,7 +172,10 @@ HEADERS += \
     customer/rewardadddialog.h \
     customer/settingpoinadddialog.h \
     customer/customerrewardwidget.h \
-    customer/addpoindialog.h
+    customer/addpoindialog.h \
+    bank/bankwidget.h \
+    bank/bankadddialog.h \
+    cashier/paycashlessdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -204,4 +210,6 @@ FORMS += \
     customer/rewardadddialog.ui \
     customer/rewardsetting.ui \
     customer/settingpoinadddialog.ui \
-    customer/addpoindialog.ui
+    customer/addpoindialog.ui \
+    bank/bankadddialog.ui \
+    cashier/paycashlessdialog.ui

@@ -72,6 +72,7 @@ namespace MSG_TYPE {
     const int MACHINE           = 13;
     const int REWARD            = 14;
     const int REWARD_POIN       = 15;
+    const int BANK              = 16;
 }
 
 namespace MSG_COMMAND {
@@ -119,6 +120,11 @@ namespace PAYMENT_STATUS {
 namespace POIN_TYPE {
     const int EXCHANGE  = 0;
     const int MANUAL    = 1;
+}
+
+namespace CARD_TYPE {
+    const int DEBIT     = 0;
+    const int CREDIT    = 1;
 }
 
 }

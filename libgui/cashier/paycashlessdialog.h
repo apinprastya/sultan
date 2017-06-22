@@ -1,5 +1,5 @@
 /*
- * paymentcashsuccessdialog.h
+ * paycashlessdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,28 +17,47 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PAYMENTCASHSUCCESSDIALOG_H
-#define PAYMENTCASHSUCCESSDIALOG_H
+#ifndef PAYCASHLESSDIALOG_H
+#define PAYCASHLESSDIALOG_H
 
+#include "messagehandler.h"
 #include <QDialog>
+#include <QMap>
 
 namespace Ui {
-class PaymentCashSuccessDialog;
+class PayCashlessDialog;
 }
 
 namespace LibGUI {
 
-class PaymentCashSuccessDialog : public QDialog
+class PayCashlessDialog : public QDialog, public LibG::MessageHandler
 {
     Q_OBJECT
 
 public:
-    PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent = 0);
-    ~PaymentCashSuccessDialog();
+    PayCashlessDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~PayCashlessDialog();
+    void showDialog(const double &total);
+    int getBank();
+    int getCardType();
+    QString getCardNumber();
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 private:
-    Ui::PaymentCashSuccessDialog *ui;
+    Ui::PayCashlessDialog *ui;
+    double mTotal;
+    double mAdditonal;
+    QMap<int, std::tuple<QString, QString>> mAdditionalCharge;
+
+private slots:
+    void calculateTotal();
+    void payClicked();
+
+signals:
+    void requestPay(int type, double payment);
 };
 
 }
-#endif // PAYMENTCASHSUCCESSDIALOG_H
+#endif // PAYCASHLESSDIALOG_H

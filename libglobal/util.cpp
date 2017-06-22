@@ -48,6 +48,11 @@ int Util::getIntVersion(QString version)
     return version.toInt();
 }
 
+bool Util::isBetaVersion(QString version)
+{
+    return version.length() > 8;
+}
+
 bool Util::isValidDiscountFormula(const QString &val)
 {
     if(val.isEmpty()) return true;
@@ -55,7 +60,7 @@ bool Util::isValidDiscountFormula(const QString &val)
     for(const QString &val : l) {
         if(val.endsWith("%")) {
             bool ok = false;
-            val.mid(0, val.size() - 1).toInt(&ok);
+            val.mid(0, val.size() - 1).toDouble(&ok);
             if(!ok) return false;
         } else {
             bool ok = false;
@@ -74,7 +79,7 @@ double Util::calculateDiscount(const QString &formula, double value)
     for(const QString &val : l) {
         if(val.endsWith("%")) {
             bool ok = false;
-            double disc = val.mid(0, val.size() - 1).toInt(&ok);
+            double disc = val.mid(0, val.size() - 1).toDouble(&ok);
             if(ok) {
                 retVal += value * disc / 100;
             }

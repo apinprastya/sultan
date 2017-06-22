@@ -12,11 +12,16 @@ CREATE TABLE solds (
     `number` VARCHAR(64) NOT NULL DEFAULT '',
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
-    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `subtotal` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `payment_type` TINTYINT NOT NULL DEFAULT 0,
+    `bank_id` INT NOT NULL DEFAULT 0,
     `card_number` VARCHAR(16) NULL,
+    `card_type` TINYINT NOT NULL DEFAULT 0,
     `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `reward` INT NOT NULL DEFAULT 0
+    `reward` INT NOT NULL DEFAULT 0,
+    `customer_id` INT NOT NULL DEFAULT 0,
+    `additional_charge` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0
 );
 -- separator
 CREATE TABLE solditems (

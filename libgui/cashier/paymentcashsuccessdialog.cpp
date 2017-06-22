@@ -19,18 +19,33 @@
  */
 #include "paymentcashsuccessdialog.h"
 #include "ui_paymentcashsuccessdialog.h"
+#include "global_constant.h"
 #include "preference.h"
 
 using namespace LibGUI;
+using namespace LibG;
 
-PaymentCashSuccessDialog::PaymentCashSuccessDialog(const double &total, const double &payment, const double &change, QWidget *parent) :
+PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PaymentCashSuccessDialog)
 {
     ui->setupUi(this);
-    ui->labelTotal->setText(LibG::Preference::toString(total));
-    ui->labelPayment->setText(LibG::Preference::toString(payment));
-    ui->labelChange->setText(LibG::Preference::toString(change));
+    int type = data["payment_type"].toInt();
+    setWindowTitle(type == PAYMENT::CASH ? tr("Cash Payment Success") : tr("Cashless Payment Success"));
+    double total = data["total"].toDouble();
+    double payment = data["payment"].toDouble();
+    if(type == PAYMENT::CASH) {
+        ui->labelTotal->setText(LibG::Preference::toString(total));
+        ui->labelPayment->setText(LibG::Preference::toString(payment));
+        ui->labelChange->setText(LibG::Preference::toString(total - payment));
+    } else {
+        ui->labelTotal_2->setText(tr("Sub Total"));
+        ui->labelTotal->setText(Preference::toString(data["subtotal"].toDouble()));
+        ui->labelPayment_2->setText(tr("Additional Charge"));
+        ui->labelPayment->setText(Preference::toString(data["additional_charge"].toDouble()));
+        ui->labelChange_2->setText(tr("Total"));
+        ui->labelChange->setText(Preference::toString(total));
+    }
 }
 
 PaymentCashSuccessDialog::~PaymentCashSuccessDialog()

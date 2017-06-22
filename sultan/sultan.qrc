@@ -34,5 +34,6 @@
 		<file>images/16x16/users.png</file>
 		<file>images/16x16/rosette-label.png</file>
 		<file>images/16x16/document-attribute-r.png</file>
+		<file>images/16x16/building.png</file>
     </qresource>
 </RCC>

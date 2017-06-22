@@ -1,8 +1,8 @@
 /*
- * util.h
+ * bankwidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,27 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef BANKWIDGET_H
+#define BANKWIDGET_H
 
-#include "global_global.h"
-#include <QDate>
+#include "messagehandler.h"
+#include <QWidget>
 
-namespace LibG {
+namespace Ui {
+class NormalWidget;
+}
 
-class GLOBALSHARED_EXPORT Util
+namespace LibGUI {
+
+class TableWidget;
+
+class BankWidget : public QWidget, public LibG::MessageHandler
 {
+    Q_OBJECT
 public:
-    Util();
-    static QDate getBeginningOfMonth();
-    static QDate getEndOfMonth();
-    static int getIntVersion(QString version);
-    static bool isBetaVersion(QString version);
-    static bool isValidDiscountFormula(const QString &val);
-    static double calculateDiscount(const QString &formula, double value);
+    BankWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
 
 private:
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
+
+private slots:
+    void addClicked();
+    void updateClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndex &index);
 };
 
 }
-#endif // UTIL_H
+#endif // BANKWIDGET_H

@@ -54,8 +54,6 @@ CREATE TABLE rewardpoins (
     `poin` INT NOT NULL DEFAULT 0
 )
 -- separator
-ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;
--- separator
 CREATE UNIQUE INDEX CUSTOMER_NUMBER ON customers (number);
 -- separator
 CREATE INDEX CUSTOMER_REWARD_CUSTOMER_ID ON customerrewards (customer_id);

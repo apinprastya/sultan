@@ -63,5 +63,3 @@ CREATE TABLE rewardpoins (
     `poin` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
-
-ALTER TABLE solds ADD COLUMN customer_id INT NOT NULL DEFAULT 0;

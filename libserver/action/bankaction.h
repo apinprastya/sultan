@@ -1,8 +1,8 @@
 /*
- * util.h
+ * bankaction.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Sultan.
+ * This file is part of Turbin.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,27 +17,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef BANKACTION_H
+#define BANKACTION_H
 
-#include "global_global.h"
-#include <QDate>
+#include "serveraction.h"
 
-namespace LibG {
+namespace LibServer {
 
-class GLOBALSHARED_EXPORT Util
+class BankAction: public ServerAction
 {
 public:
-    Util();
-    static QDate getBeginningOfMonth();
-    static QDate getEndOfMonth();
-    static int getIntVersion(QString version);
-    static bool isBetaVersion(QString version);
-    static bool isValidDiscountFormula(const QString &val);
-    static double calculateDiscount(const QString &formula, double value);
-
-private:
+    BankAction();
 };
 
 }
-#endif // UTIL_H
+#endif // BANKACTION_H
