@@ -18,6 +18,7 @@ CREATE TABLE solds (
     `payment_type` TINYINT NOT NULL DEFAULT 1,
     `card_number` VARCHAR(16) NULL,
     `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `reward` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

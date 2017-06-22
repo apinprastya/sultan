@@ -15,7 +15,8 @@ CREATE TABLE solds (
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `payment_type` TINTYINT NOT NULL DEFAULT 0,
     `card_number` VARCHAR(16) NULL,
-    `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0
+    `payment` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `reward` INT NOT NULL DEFAULT 0
 );
 -- separator
 CREATE TABLE solditems (
