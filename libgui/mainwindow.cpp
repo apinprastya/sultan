@@ -34,6 +34,7 @@
 #include "statusbar/statusbarwidget.h"
 #include "customer/customerwidget.h"
 #include "customer/customercreditwidget.h"
+#include "customer/customerrewardwidget.h"
 #include "machine/machinewidget.h"
 #include "customer/rewardwidget.h"
 #include "usersession.h"
@@ -293,7 +294,15 @@ void MainWindow::openCustomerCredit(int id, const QString &number)
 
 void MainWindow::openCustomerReward(int id, const QString &number)
 {
-
+    for(int i = 0; i < ui->tabWidget->count(); i++) {
+        auto widget = dynamic_cast<CustomerRewardWidget*>(ui->tabWidget->widget(i));
+        if(widget != nullptr && widget->getId() == id) {
+            ui->tabWidget->setCurrentIndex(i);
+            return;
+        }
+    }
+    auto w = new CustomerRewardWidget(id, number, mMessageBus, this);
+    ui->tabWidget->tbnAddTab(w, tr("Reward : %1").arg(number), ":/images/16x16/rosette-label.png");
 }
 
 void MainWindow::openMachine()

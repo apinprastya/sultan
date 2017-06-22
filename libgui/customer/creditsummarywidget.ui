@@ -66,6 +66,9 @@
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Number</string>
              </property>
@@ -80,6 +83,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_5">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Name</string>
              </property>
@@ -94,6 +100,9 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_6">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Phone</string>
              </property>
@@ -108,6 +117,9 @@
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_7">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Address</string>
              </property>
@@ -157,6 +169,9 @@
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_3">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Reward</string>
              </property>
@@ -174,6 +189,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_11">
+             <property name="styleSheet">
+              <string notr="true">font: italic;</string>
+             </property>
              <property name="text">
               <string>Credit</string>
              </property>

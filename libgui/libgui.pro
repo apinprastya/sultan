@@ -107,7 +107,8 @@ SOURCES += \
     purchase/purchasepaymentdialog.cpp \
     customer/rewardwidget.cpp \
     customer/rewardadddialog.cpp \
-    customer/settingpoinadddialog.cpp
+    customer/settingpoinadddialog.cpp \
+    customer/customerrewardwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -166,7 +167,8 @@ HEADERS += \
     purchase/purchasepaymentdialog.h \
     customer/rewardwidget.h \
     customer/rewardadddialog.h \
-    customer/settingpoinadddialog.h
+    customer/settingpoinadddialog.h \
+    customer/customerrewardwidget.h
 
 FORMS += \
     mainwindow.ui \

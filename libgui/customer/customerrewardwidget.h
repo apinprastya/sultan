@@ -1,5 +1,5 @@
 /*
- * customerwidget.h
+ * customerrewardwidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,48 +17,44 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CUSTOMERWIDGET_H
-#define CUSTOMERWIDGET_H
+#ifndef CUSTOMERREWARDWIDGET_H
+#define CUSTOMERREWARDWIDGET_H
 
 #include "messagehandler.h"
 #include <QWidget>
 
 namespace Ui {
 class NormalWidget;
+class CreditSummaryWidget;
 }
 
 namespace LibGUI {
 
 class TableWidget;
-class CustomerAddDialog;
 
-class CustomerWidget : public QWidget, public LibG::MessageHandler
+class CustomerRewardWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CustomerWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = 0);
+    inline int getId() { return mId; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;
 
 private:
     Ui::NormalWidget *ui;
+    Ui::CreditSummaryWidget *uiSummary;
     TableWidget *mTableWidget;
-    CustomerAddDialog *mAddDialog;
+    int mId;
+    double mTotal;
 
 private slots:
     void addClicked();
-    void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
-    void customerAdded();
-    void customerUpdated(int id);
-    void creditClicked();
-    void rewardClicked();
-
-signals:
-    void requestOpenCustomerCredit(int id, const QString &number);
-    void requestOpenCustomerReward(int id, const QString &number);
+    void refreshCustomer();
+    void printClicked();
+    void print(const QVariantMap &data);
 };
 
 }
-#endif // CUSTOMERWIDGET_H
+#endif // CUSTOMERREWARDWIDGET_H

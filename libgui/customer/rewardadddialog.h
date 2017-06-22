@@ -44,7 +44,7 @@ private:
     int mId;
 
 protected:
-    void messageReceived(LibG::Message *msg);
+    void messageReceived(LibG::Message *msg) override;
 
 private slots:
     void saveClicked();

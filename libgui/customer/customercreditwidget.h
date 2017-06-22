@@ -42,7 +42,7 @@ public:
     inline int getId() { return mId; }
 
 protected:
-    void messageReceived(LibG::Message *msg);
+    void messageReceived(LibG::Message *msg) override;
 
 private:
     Ui::NormalWidget *ui;
