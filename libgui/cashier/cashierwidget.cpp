@@ -319,6 +319,7 @@ void CashierWidget::payRequested(int type, double value)
     data.insert("payment", value);
     data.insert("customer_id", mModel->getCustomer()->id);
     data.insert("payment_type", type);
+    data.insert("reward", mModel->getRewardPoin());
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD);
     msg.setData(data);
     sendMessage(&msg);
@@ -362,6 +363,18 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->column(QList<int>{50, 50})->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
             leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
             leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
+    escp->column(QList<int>())->doubleHeight(false);
+    if(data.contains("customer")) {
+        const QVariantMap &cust = data["customer"].toMap();
+        escp->line('=')->column(QList<int>{50, 50})->leftText(tr("Cust Number"))->rightText(cust["number"].toString())->newLine();
+        escp->leftText(tr("Reward Poin"))->rightText(QString::number(cust["reward"].toInt()))->newLine();
+        double credit = cust["credit"].toDouble();
+        if(credit > 0) {
+            escp->leftText(tr("Credit"))->rightText(Preference::toString(cust["credit"].toDouble()))->newLine();
+        }
+    } else {
+        escp->line();
+    }
     escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;

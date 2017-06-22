@@ -47,6 +47,7 @@ public:
     void loadCart(const QVariantList &cart);
     inline Customer* getCustomer() { return &mCurrentCustomer; }
     void fillCustomer(const QVariantMap &data);
+    inline int getRewardPoin() { return mPoin; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;

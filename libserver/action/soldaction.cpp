@@ -45,6 +45,7 @@ Message SoldAction::insertSold(Message *msg)
     double payment = msg->data("payment").toDouble();
     int cust_id = msg->data("customer_id").toInt();
     int user_id = msg->data("user_id").toInt();
+    int poin = msg->data("reward").toInt();
     msg->removeData("cart");
     QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
     msg->addData("number", number);
@@ -73,7 +74,19 @@ Message SoldAction::insertSold(Message *msg)
             mDb->insert("customercredits", cr);
             mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
         }
-        //TODO : calculate the customer reward
+        //Reward poin
+        if(cust_id > 0) {
+            QVariantMap p;
+            p.insert("customer_id", cust_id);
+            p.insert("number", number);
+            p.insert("link_id", id);
+            p.insert("detail", QObject::tr("Poin from transaction %1").arg(number));
+            p.insert("reward", poin);
+            p.insert("total_shop", total);
+            p.insert("user_id", user_id);
+            mDb->insert("customerrewards", p);
+            mDb->exec(QString("UPDATE customers SET reward = (SELECT SUM(reward) FROM customerrewards WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));
+        }
         if(mDb->isSupportTransaction()) {
             if(!mDb->commit()) {
                 message.setError(mDb->lastError().text());
@@ -93,8 +106,14 @@ Message SoldAction::get(Message *msg)
     DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);
     if(!res.isEmpty()) {
         message.setData(res.first());
+        int cust_id = message.data("customer_id").toInt();
         res = mDb->where("sold_id = ", msg->data("id"))->get("solditems");
         message.addData("cart", res.data());
+        if(cust_id > 0) {
+            res = mDb->where("id = ", cust_id)->get("customers");
+            if(!res.isEmpty())
+                message.addData("customer", res.first());
+        }
     } else {
         message.setError("Data not found");
     }
