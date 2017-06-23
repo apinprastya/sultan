@@ -27,6 +27,8 @@ PurchaseAction::PurchaseAction():
     ServerAction("purchases", "id")
 {
     mFlag = HAS_UPDATE_FIELD;
+    //TODO: transaction
+    //TODO: money
 }
 
 LibG::Message PurchaseAction::del(LibG::Message *msg)

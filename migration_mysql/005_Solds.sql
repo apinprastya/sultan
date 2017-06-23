@@ -7,7 +7,7 @@ CREATE TABLE machines (
     PRIMARY KEY(`id`)
 ) ENGINE = InnoDB;
 
--- payment_type : 1 = Cash; 2 = Card
+-- payment_type : 0 = Cash; 1 = Card
 -- card_type : 0 = Debit card, 1 = Credit Card
 CREATE TABLE solds (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -16,7 +16,7 @@ CREATE TABLE solds (
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
     `subtotal` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `payment_type` TINYINT NOT NULL DEFAULT 1,
+    `payment_type` TINYINT NOT NULL DEFAULT 0,
     `bank_id` INT NOT NULL DEFAULT 0,
     `card_number` VARCHAR(16) NULL,
     `card_type` TINYINT NOT NULL DEFAULT 0,

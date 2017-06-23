@@ -330,6 +330,7 @@ void CashierWidget::payRequested(int type, double value)
     if(type == PAYMENT::CASH) {
         data.insert("payment", value);
         data.insert("total", mModel->getTotal());
+        data.insert("bank_id", 0);
     } else {
         data.insert("payment", mModel->getTotal());
         data.insert("additional_charge", value);

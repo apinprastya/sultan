@@ -73,6 +73,8 @@ namespace MSG_TYPE {
     const int REWARD            = 14;
     const int REWARD_POIN       = 15;
     const int BANK              = 16;
+    const int TRANSACTION       = 17;
+    const int MONEY             = 18;
 }
 
 namespace MSG_COMMAND {
@@ -103,18 +105,18 @@ namespace FILTER {
 }
 
 namespace PAYMENT {
-    const int CASH      = 1;
-    const int NON_CASH  = 2;
+    const int CASH      = 0;
+    const int NON_CASH  = 1;
 }
 
 namespace PURCHASEPAYMENT {
-    const int DIRECT   = 1;
-    const int TEMPO    = 2;
+    const int DIRECT   = 0;
+    const int TEMPO    = 1;
 }
 
 namespace PAYMENT_STATUS {
-    const int UNPAID = 1;
-    const int PAID   = 2;
+    const int UNPAID = 0;
+    const int PAID   = 1;
 }
 
 namespace POIN_TYPE {
@@ -125,6 +127,28 @@ namespace POIN_TYPE {
 namespace CARD_TYPE {
     const int DEBIT     = 0;
     const int CREDIT    = 1;
+}
+
+namespace TRANSACTION_TYPE {
+    const int INCOME        = 0;
+    const int EXPENSE       = 1;
+}
+
+namespace TRANSACTION_LINK_TYPE {
+    const int SOLD          = 0;
+    const int PURCHASE      = 1;
+}
+
+namespace MONEY_TYPE {
+    const int INCOME        = 0;
+    const int EXPENSE       = 1;
+}
+
+namespace MONEY_LINK_TYPE {
+    const int SOLD              = 0;
+    const int PURCHASE          = 1;
+    const int TRANSACTION       = 2;
+    const int CUSTOMER_CREDIT   = 3;
 }
 
 }

@@ -1,5 +1,5 @@
--- payment type : 1 = direct, 2 = deadline
--- status : 1 = unpaid, 2 = paid
+-- payment type : 0 = direct, 1 = deadline
+-- status : 0 = unpaid, 1 = paid
 CREATE TABLE purchases (
 	`id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -7,7 +7,7 @@ CREATE TABLE purchases (
     `deleted_at` TIMESTAMP NULL,
     `suplier_id` INT NOT NULL,
     `number` VARCHAR(64) NOT NULL DEFAULT '',
-    `payment_type` TINYINT NOT NULL DEFAULT 1,
+    `payment_type` TINYINT NOT NULL DEFAULT 0,
     `payment_number` VARCHAR(64) NULL,
     `payment_date` DATE NULL,
     `deadline` DATE NULL,
@@ -15,7 +15,7 @@ CREATE TABLE purchases (
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `final` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `status` TINYINT NOT NULL DEFAULT 1,
+    `status` TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

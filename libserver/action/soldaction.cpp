@@ -60,8 +60,23 @@ Message SoldAction::insertSold(Message *msg)
             m["buy_price"] = m["count"].toFloat() * res.first()["buy_price"].toDouble();
             mDb->insert("solditems", m);
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
+        }        
+        //transaction
+        QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", number},
+                       {"type", TRANSACTION_TYPE::INCOME}, {"link_id", id},
+                       {"link_type", TRANSACTION_LINK_TYPE::SOLD}, {"user_id", user_id},
+                       {"machine_id", msg->data("machine_id")}, {"total", msg->data("total")},
+                       {"detail", QObject::tr("Sold : %1").arg(number)}};
+        mDb->insert("transactions", tr);
+        //money
+        if(payment > 0) {
+            QVariantMap mn{{"date", QDateTime::currentDateTime()}, {"number", number},
+                           {"type", MONEY_TYPE::INCOME}, {"link_id", id},
+                           {"link_type", MONEY_LINK_TYPE::SOLD}, {"user_id", user_id},
+                           {"machine_id", msg->data("machine_id")}, {"detail", QObject::tr("Sold : %1").arg(number)},
+                           {"bank_id", msg->data("bank_id")}, {"total", payment}};
+            mDb->insert("monies", mn);
         }
-        msg->setData(QVariantMap{{"id", id}});
         //credit to customer
         if(payment < total) {
             QVariantMap cr;
@@ -93,6 +108,7 @@ Message SoldAction::insertSold(Message *msg)
                 return message;
             }
         }
+        msg->setData(QVariantMap{{"id", id}});
         return get(msg);
     } else {
         message.setError(mDb->lastError().text());

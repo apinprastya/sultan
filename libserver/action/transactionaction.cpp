@@ -1,5 +1,5 @@
 /*
- * cusomerdebtaction.cpp
+ * transactionaction.cpp
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,25 +17,12 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "cusomercreditaction.h"
-#include "db.h"
-#include "global_constant.h"
-#include "queryhelper.h"
+#include "transactionaction.h"
 
 using namespace LibServer;
-using namespace LibDB;
 
-CusomerCreditAction::CusomerCreditAction():
-    ServerAction("customercredits", "id")
+TransactionAction::TransactionAction():
+    ServerAction("transactions", "id")
 {
-    mFlag = AFTER_INSERT;
-}
 
-void CusomerCreditAction::afterInsert(const QVariantMap &data)
-{
-    auto cust_id = data["customer_id"].toInt();
-    mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").
-              arg(cust_id).arg(cust_id));
-    //TODO: transactions
-    //TODO: money
 }
