@@ -74,7 +74,6 @@ namespace MSG_TYPE {
     const int REWARD_POIN       = 15;
     const int BANK              = 16;
     const int TRANSACTION       = 17;
-    const int MONEY             = 18;
 }
 
 namespace MSG_COMMAND {
@@ -93,6 +92,8 @@ namespace MSG_COMMAND {
     const int IMPORT                    = 11;
     const int CHANGE_MY_PASSWORD        = 12;
     const int SUMMARY                   = 13;
+    const int SUMMARY_TRANSACTION       = 14;
+    const int SUMMARY_MONEY             = 15;
 }
 
 namespace PRINT_TYPE {
@@ -135,8 +136,10 @@ namespace TRANSACTION_TYPE {
 }
 
 namespace TRANSACTION_LINK_TYPE {
-    const int SOLD          = 0;
-    const int PURCHASE      = 1;
+    const int TRANSACTION       = 0;
+    const int SOLD              = 1;
+    const int PURCHASE          = 2;
+    const int CUSTOMER_CREDIT   = 16;
 }
 
 namespace MONEY_TYPE {

@@ -97,7 +97,7 @@ void GuiUtil::enableWidget(bool enable, const QList<QWidget *> &lists)
 void GuiUtil::populateCategory(QComboBox *combo, const QVariantList &list, const QVariant &currentSelected)
 {
     combo->clear();
-    combo->addItem(QObject::tr("-- Select Category --"), 0);
+    combo->addItem(QObject::tr("-- Select Category --"), -1);
     for(auto &d : list) {
         const QVariantMap &m = d.toMap();
         combo->addItem(m["name"].toString(), m["id"].toInt());

@@ -10,8 +10,10 @@ CREATE TABLE transactions (
     `type` TINYINT NOT NULL DEFAULT 0,
     `link_id` INT NOT NULL DEFAULT 0,
     `link_type` TINYINT NOT NULL DEFAULT 0,
+    `bank_id` INT NOT NULL,
     `detail` VARCHAR(255) NOT NULL,
-    `total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `transaction_total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `money_total` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
     PRIMARY KEY (`id`)

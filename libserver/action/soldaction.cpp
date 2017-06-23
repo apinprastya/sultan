@@ -60,23 +60,15 @@ Message SoldAction::insertSold(Message *msg)
             m["buy_price"] = m["count"].toFloat() * res.first()["buy_price"].toDouble();
             mDb->insert("solditems", m);
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
-        }        
+        }
         //transaction
         QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", number},
                        {"type", TRANSACTION_TYPE::INCOME}, {"link_id", id},
                        {"link_type", TRANSACTION_LINK_TYPE::SOLD}, {"user_id", user_id},
-                       {"machine_id", msg->data("machine_id")}, {"total", msg->data("total")},
+                       {"machine_id", msg->data("machine_id")}, {"transaction_total", msg->data("total")},
+                       {"bank_id", msg->data("bank_id")}, {"money_total", payment},
                        {"detail", QObject::tr("Sold : %1").arg(number)}};
         mDb->insert("transactions", tr);
-        //money
-        if(payment > 0) {
-            QVariantMap mn{{"date", QDateTime::currentDateTime()}, {"number", number},
-                           {"type", MONEY_TYPE::INCOME}, {"link_id", id},
-                           {"link_type", MONEY_LINK_TYPE::SOLD}, {"user_id", user_id},
-                           {"machine_id", msg->data("machine_id")}, {"detail", QObject::tr("Sold : %1").arg(number)},
-                           {"bank_id", msg->data("bank_id")}, {"total", payment}};
-            mDb->insert("monies", mn);
-        }
         //credit to customer
         if(payment < total) {
             QVariantMap cr;
@@ -85,6 +77,7 @@ Message SoldAction::insertSold(Message *msg)
             cr.insert("link_id", id);
             cr.insert("detail", QObject::tr("Credit from transaction %1").arg(number));
             cr.insert("credit", total - payment);
+            cr.insert("machine_id", msg->data("machine_id"));
             cr.insert("user_id", user_id);
             mDb->insert("customercredits", cr);
             mDb->exec(QString("UPDATE customers SET credit = (SELECT SUM(credit) FROM customercredits WHERE customer_id = %1) WHERE id = %2").arg(cust_id).arg(cust_id));

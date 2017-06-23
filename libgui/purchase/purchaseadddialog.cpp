@@ -26,6 +26,9 @@
 #include "util.h"
 #include "flashmessagemanager.h"
 #include "preference.h"
+#include "global_setting_const.h"
+#include "usersession.h"
+#include "guiutil.h"
 #include <QDebug>
 #include <QMessageBox>
 
@@ -46,6 +49,8 @@ PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->comboPaymentType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged()));
     connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateTotal()));
     typeChanged();
+    Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 PurchaseAddDialog::~PurchaseAddDialog()
@@ -77,6 +82,7 @@ void PurchaseAddDialog::fill(const QVariantMap &data)
     ui->dateCreated->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
     mTotal = data["total"].toDouble();
+    mBankId = data["bank_id"].toInt();
     const QString &discFormula = data["discount_formula"].toString();
     ui->lineDiscountFormula->setText(discFormula);
     if(discFormula.isEmpty()) calculateTotal();
@@ -102,6 +108,17 @@ void PurchaseAddDialog::messageReceived(LibG::Message *msg)
             }
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if(msg->isSuccess()) {
+            const QVariantList &l = msg->data("data").toList();
+            ui->comboBank->addItem(tr("Cash"), 0);
+            for(int i = 0; i < l.size(); i++) {
+                const QVariantMap &data = l[i].toMap();
+                int id = data["id"].toInt();
+                ui->comboBank->addItem(data["name"].toString(), id);
+            }
+            GuiUtil::selectCombo(ui->comboBank, mBankId);
         }
     }
 }
@@ -147,6 +164,10 @@ void PurchaseAddDialog::saveClicked()
     d.insert("deadline", ui->dateDeadline->date().toString("yyyy-MM-dd"));
     d.insert("payment_type", ui->comboPaymentType->currentData().toInt());
     d.insert("discount_formula", ui->lineDiscountFormula->text());
+    d.insert("user_id", UserSession::id());
+    d.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
+    if(ui->comboPaymentType->currentData().toInt() == PURCHASEPAYMENT::DIRECT)
+        d.insert("bank_id", ui->comboBank->currentData());
     Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::INSERT);
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
@@ -164,7 +185,8 @@ void PurchaseAddDialog::saveClicked()
 
 void PurchaseAddDialog::typeChanged()
 {
-    ui->dateDeadline->setEnabled(ui->comboPaymentType->currentData().toInt() == PAYMENT::NON_CASH);
+    ui->dateDeadline->setEnabled(ui->comboPaymentType->currentData().toInt() != PURCHASEPAYMENT::DIRECT);
+    ui->comboBank->setEnabled(ui->comboPaymentType->currentData().toInt() == PURCHASEPAYMENT::DIRECT);
 }
 
 void PurchaseAddDialog::calculateTotal()

@@ -1,5 +1,5 @@
 /*
- * moneyaction.cpp
+ * moneywidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,12 +17,41 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "moneyaction.h"
+#ifndef MONEYWIDGET_H
+#define MONEYWIDGET_H
 
-using namespace LibServer;
+#include "messagehandler.h"
+#include <QWidget>
 
-MoneyAction::MoneyAction():
-    ServerAction("monies", "id")
+namespace Ui {
+class NormalWidget;
+}
+
+namespace LibGUI {
+
+class TableWidget;
+class TileWidget;
+
+class MoneyWidget : public QWidget, public LibG::MessageHandler
 {
+    Q_OBJECT
+public:
+    MoneyWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+    void showEvent(QShowEvent *e) override;
+
+private:
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
+    TileWidget *mTileTotal;
+    bool isShowed = false;
+
+private slots:
+    void refreshSummary();
+};
 
 }
+
+#endif // MONEYWIDGET_H

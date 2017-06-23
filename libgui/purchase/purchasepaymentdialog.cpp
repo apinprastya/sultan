@@ -23,6 +23,7 @@
 #include "message.h"
 #include "global_constant.h"
 #include "flashmessagemanager.h"
+#include "guiutil.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -37,6 +38,8 @@ PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *par
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->checkPaid, SIGNAL(toggled(bool)), SLOT(paidChanged()));
     paidChanged();
+    Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 PurchasePaymentDialog::~PurchasePaymentDialog()
@@ -49,6 +52,7 @@ void PurchasePaymentDialog::fill(const QVariantMap &data)
     ui->labelSuplier->setText(data["suplier"].toString());
     ui->labelTotal->setText(Preference::toString(data["final"].toDouble()));
     mId = data["id"].toInt();
+    mBankId = data["bank_id"].toInt();
     QDate date = data["payment_date"].toDate();
     ui->linePayment->setText(data["payment_number"].toString());
     ui->checkPaid->setChecked(data["status"].toInt() != PAYMENT_STATUS::UNPAID);
@@ -68,6 +72,17 @@ void PurchasePaymentDialog::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if(msg->isSuccess()) {
+            const QVariantList &l = msg->data("data").toList();
+            ui->comboBank->addItem(tr("Cash"), 0);
+            for(int i = 0; i < l.size(); i++) {
+                const QVariantMap &data = l[i].toMap();
+                int id = data["id"].toInt();
+                ui->comboBank->addItem(data["name"].toString(), id);
+            }
+            GuiUtil::selectCombo(ui->comboBank, mBankId);
+        }
     }
 }
 
@@ -78,6 +93,7 @@ void PurchasePaymentDialog::saveClicked()
     data.insert("payment_number", ui->linePayment->text());
     data.insert("payment_date", ui->datePayment->date());
     data.insert("status", ui->checkPaid->isChecked() ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID);
+    data.insert("bank_id", ui->comboBank->currentData());
     msg.addData("id", mId);
     msg.addData("data", data);
     sendMessage(&msg);

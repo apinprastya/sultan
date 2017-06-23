@@ -127,9 +127,17 @@ void PurchaseItemAction::selectAndJoin()
 void PurchaseItemAction::updatePurchaseTotal(int purchaseid)
 {
     DbResult res = mDb->table("purchases")->where("id = ", purchaseid)->exec();
-    const QString &discformula = res.first()["discount_formula"].toString();
+    const QVariantMap &purchase = res.first();
+    int ptype = purchase["payment_type"].toInt();
+    int status = purchase["status"].toInt();
+    const QString &discformula = purchase["discount_formula"].toString();
     res = mDb->table("purchaseitems")->where("purchase_id = ", purchaseid)->select("sum(final) as final")->exec();
     double total = res.first()["final"].toDouble();
     double discount = Util::calculateDiscount(discformula, total);
     mDb->where("id = ", purchaseid)->update("purchases", QVariantMap{{"total", total}, {"discount", discount}, {"final", total - discount}});
+    if(ptype == PURCHASEPAYMENT::DIRECT || (ptype == PURCHASEPAYMENT::TEMPO && status == PAYMENT_STATUS::PAID)) {
+        mDb->where("link_type = ", TRANSACTION_LINK_TYPE::PURCHASE)->where("link_id = ", purchaseid);
+        QVariantMap d{{"transaction_total", total - discount}, {"money_total", total - discount}};
+        mDb->update("transactions", d);
+    }
 }

@@ -25,6 +25,9 @@
 #include "flashmessagemanager.h"
 #include "usersession.h"
 #include "message.h"
+#include "preference.h"
+#include "global_setting_const.h"
+#include "message.h"
 #include <QMessageBox>
 #include <QDateTime>
 
@@ -38,6 +41,8 @@ AddCreditPaymentDialog::AddCreditPaymentDialog(LibG::MessageBus *bus, QWidget *p
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 AddCreditPaymentDialog::~AddCreditPaymentDialog()
@@ -64,6 +69,16 @@ void AddCreditPaymentDialog::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if(msg->isSuccess()) {
+            const QVariantList &l = msg->data("data").toList();
+            ui->comboBank->addItem(tr("Cash"), 0);
+            for(int i = 0; i < l.size(); i++) {
+                const QVariantMap &data = l[i].toMap();
+                int id = data["id"].toInt();
+                ui->comboBank->addItem(data["name"].toString(), id);
+            }
+        }
     }
 }
 
@@ -80,6 +95,8 @@ void AddCreditPaymentDialog::saveClicked()
     d.insert("user_id", UserSession::id());
     d.insert("detail", ui->plainDetail->toPlainText());
     d.insert("credit", -ui->linePayment->value());
+    d.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
+    d.insert("bank_id", ui->comboBank->currentData().toInt());
     Message msg(MSG_TYPE::CUSTOMER_CREDIT, MSG_COMMAND::INSERT);
     msg.setData(d);
     sendMessage(&msg);

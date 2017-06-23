@@ -28,6 +28,12 @@ class TransactionAction: public ServerAction
 {
 public:
     TransactionAction();
+    LibG::Message summaryTransaction(LibG::Message *msg);
+    LibG::Message summaryMoney(LibG::Message *msg);
+
+protected:
+    QMap<QString, QString> fieldMap() const override;
+    void selectAndJoin() override;
 };
 
 }

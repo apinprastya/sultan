@@ -33,7 +33,9 @@ CREATE TABLE customercredits (
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
     `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `user_id` INT NOT NULL
+    `bank_id` INT NOT NULL DEFAULT 0,
+    `user_id` INT NOT NULL,
+    `machine_id` INT NOT NULL
 )
 -- separator
 CREATE TABLE rewards (
@@ -59,3 +61,5 @@ CREATE UNIQUE INDEX CUSTOMER_NUMBER ON customers (number);
 CREATE INDEX CUSTOMER_REWARD_CUSTOMER_ID ON customerrewards (customer_id);
 -- separator
 CREATE INDEX CUSTOMER_CREDIT_CUSTOMER_ID ON customercredits (customer_id);
+-- separator
+INSERT INTO customers (number, name) VALUES ('123', 'Johan');

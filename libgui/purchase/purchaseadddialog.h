@@ -48,6 +48,7 @@ private:
     int mCurrentSuplier = 0;
     int mId = 0;
     double mTotal = 0;
+    int mBankId = 0;
 
     void populateSuplier(const QVariantList &list);
 

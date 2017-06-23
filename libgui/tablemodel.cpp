@@ -170,7 +170,7 @@ void TableModel::filterChanged(int index, const QVariant &value)
             mQuery.setFilter(key, COMPARE::LIKE, value);
     } else if(filter.compare == FilterEQ) {
         if((value.canConvert(QVariant::String) && value.toString().isEmpty()) ||
-                (value.canConvert(QVariant::Int) && value.toInt() == 0))
+                (value.canConvert(QVariant::Int) && value.toInt() < 0))
             mQuery.removeFilter(key);
         else
             mQuery.setFilter(key, COMPARE::EQUAL, value);

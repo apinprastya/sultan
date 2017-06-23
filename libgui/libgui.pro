@@ -111,7 +111,9 @@ SOURCES += \
     customer/addpoindialog.cpp \
     bank/bankwidget.cpp \
     bank/bankadddialog.cpp \
-    cashier/paycashlessdialog.cpp
+    cashier/paycashlessdialog.cpp \
+    report/transactionwidget.cpp \
+    report/moneywidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -175,7 +177,9 @@ HEADERS += \
     customer/addpoindialog.h \
     bank/bankwidget.h \
     bank/bankadddialog.h \
-    cashier/paycashlessdialog.h
+    cashier/paycashlessdialog.h \
+    report/transactionwidget.h \
+    report/moneywidget.h
 
 FORMS += \
     mainwindow.ui \

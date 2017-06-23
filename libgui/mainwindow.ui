@@ -108,6 +108,9 @@
     </property>
     <addaction name="actionSales"/>
     <addaction name="actionItems"/>
+    <addaction name="separator"/>
+    <addaction name="action_Transaction"/>
+    <addaction name="action_MOney"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAdministration"/>
@@ -210,6 +213,16 @@
   <action name="action_Banks">
    <property name="text">
     <string>&amp;Banks</string>
+   </property>
+  </action>
+  <action name="action_Transaction">
+   <property name="text">
+    <string>&amp;Transaction</string>
+   </property>
+  </action>
+  <action name="action_MOney">
+   <property name="text">
+    <string>&amp;Money</string>
    </property>
   </action>
  </widget>

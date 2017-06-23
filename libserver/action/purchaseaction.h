@@ -31,8 +31,12 @@ public:
     LibG::Message del(LibG::Message *msg) override;
 
 protected:
+    void afterInsert(const QVariantMap &data) override;
+    void afterUpdate(const QVariantMap &data) override;
     void selectAndJoin() override;
     QMap<QString, QString> fieldMap() const override;
+    void insertTransaction(const QVariantMap &data);
+    void updateTransaction(const QVariantMap &data);
 };
 
 }

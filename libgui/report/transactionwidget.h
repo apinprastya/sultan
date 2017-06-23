@@ -1,5 +1,5 @@
 /*
- * moneyaction.h
+ * transactionwidget.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,18 +17,42 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MONEYACTION_H
-#define MONEYACTION_H
+#ifndef TRANSACTIONWIDGET_H
+#define TRANSACTIONWIDGET_H
 
-#include "serveraction.h"
+#include "messagehandler.h"
+#include <QWidget>
 
-namespace LibServer {
+namespace Ui {
+class NormalWidget;
+}
 
-class MoneyAction : public ServerAction
+namespace LibGUI {
+
+class TableWidget;
+class TileWidget;
+
+class TransactionWidget : public QWidget, public LibG::MessageHandler
 {
+    Q_OBJECT
 public:
-    MoneyAction();
+    TransactionWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+
+protected:
+    void messageReceived(LibG::Message *msg) override;
+    void showEvent(QShowEvent *e) override;
+
+private:
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
+    TileWidget *mTileIncome;
+    TileWidget *mTileExpense;
+    TileWidget *mTileDifference;
+    bool isShowed = false;
+
+private slots:
+    void refreshSummary();
 };
 
 }
-#endif // MONEYACTION_H
+#endif // TRANSACTIONWIDGET_H

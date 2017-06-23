@@ -64,7 +64,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
         return LibDB::DBUtil::sqlDateToDate(item->data(key).toString()).toString("dd-MM-yyyy");
     });
     model->addColumn("status", tr("Status"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
-        int type = item->data("type").toInt();
+        int type = item->data("payment_type").toInt();
         if(type == PURCHASEPAYMENT::DIRECT) return tr("Paid");
         return (item->data(key) == PAYMENT_STATUS::PAID ? tr("Paid") : tr("Unpaid"));
     });
@@ -109,12 +109,12 @@ void PurchaseWidget::showEvent(QShowEvent *e)
     isShowed = true;
     auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("status"))->getComboBox();
     combo->clear();
-    combo->addItem(tr("All"), 0);
+    combo->addItem(tr("All"), -1);
     combo->addItem(tr("Unpaid"), PAYMENT_STATUS::UNPAID);
     combo->addItem(tr("Paid"), PAYMENT_STATUS::PAID);
     combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("payment_type"))->getComboBox();
     combo->clear();
-    combo->addItem(tr("All"), 0);
+    combo->addItem(tr("All"), -1);
     combo->addItem(tr("Direct"), PURCHASEPAYMENT::DIRECT);
     combo->addItem(tr("Deadline"), PURCHASEPAYMENT::TEMPO);
 }

@@ -85,6 +85,8 @@ private slots:
     void openMachine();
     void openReward();
     void openBank();
+    void openTransaction();
+    void openMoney();
 };
 
 }

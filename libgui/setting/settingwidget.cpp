@@ -139,6 +139,7 @@ void SettingWidget::saveClicked()
     //market name
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
+    Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toInt());
     //locale
     Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());
@@ -196,6 +197,7 @@ void SettingWidget::messageReceived(Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY)) {
         ui->comboMachine->clear();
+        ui->comboMachine->addItem(tr("-- Select Machine --"), 0);
         const QVariantList &list = msg->data("data").toList();
         for(auto d : list) {
             const QVariantMap &data = d.toMap();

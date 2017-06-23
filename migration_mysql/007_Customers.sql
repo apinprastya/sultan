@@ -39,7 +39,9 @@ CREATE TABLE customercredits (
     `link_id` INT NOT NULL DEFAULT 0,
     `detail` VARCHAR(255) NOT NULL DEFAULT '',
     `credit` DECIMAL(15, 2) NOT NULL DEFAULT 0,
+    `bank_id` INT NOT NULL DEFAULT 0,
     `user_id` INT NOT NULL,
+    `machine_id` INT NOT NULL,
     INDEX `CUSTOMER_CREDIT_CUSTOMER_ID` (`customer_id` ASC),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -63,3 +65,5 @@ CREATE TABLE rewardpoins (
     `poin` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
+
+INSERT INTO customers (number, name) VALUES ('123', 'Johan');
