@@ -28,6 +28,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDebug>
+#include <QProcess>
 
 using namespace LibGUI;
 
@@ -52,7 +53,7 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget *parent) :
 #elif defined (Q_PROCESSOR_ARM)
         mArc = "raspberry";
 #endif
-        QNetworkRequest request(QUrl(LibG::CONSTANT::URL_UPDATE.arg(mArc)));
+        QNetworkRequest request(QUrl(LibG::CONSTANT::URL_UPDATE.arg(mArc).arg(qVersion())));
         auto reply = mNetworkManager->get(request);
         connect(reply, SIGNAL(finished()), SLOT(checkDone()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
@@ -91,7 +92,7 @@ void AutoUpdateDialog::httpError(QNetworkReply::NetworkError /*error*/)
 
 void AutoUpdateDialog::updateClicked()
 {
-    QNetworkRequest request(QUrl(LibG::CONSTANT::URL_DOWNLOAD.arg(mNewVersion).arg(mArc)));
+    QNetworkRequest request(QUrl(LibG::CONSTANT::URL_DOWNLOAD.arg(mNewVersion).arg(mArc).arg(qVersion())));
     auto reply = mNetworkManager->get(request);
     connect(reply, SIGNAL(finished()), SLOT(downloadDone()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
@@ -112,6 +113,16 @@ void AutoUpdateDialog::downloadDone()
     }
     file.write(reply->readAll());
     file.close();
+    int ret = QMessageBox::question(this, tr("Downloaded"), tr("New update downloaded successfully. Retart application to update?"));
+    if(ret == QMessageBox::Yes) {
+        QDir dir(qApp->applicationDirPath());
+#ifdef Q_OS_WIN32
+        QProcess::startDetached(dir.absoluteFilePath("zipextractor.exe"));
+#else
+        QProcess::startDetached(dir.absoluteFilePath("zipextractor"));
+#endif
+        qApp->quit();
+    }
 }
 
 void AutoUpdateDialog::downloadProgress(qint64 receive, qint64 total)
