@@ -86,6 +86,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
             ui->labelName->setText(msg->data("name").toString());
+            ui->labelName->setStyleSheet("color: black");
             ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
             ui->doubleSellPrice->setValue(msg->data("sell_price").toDouble());
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
@@ -93,8 +94,8 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
                                   ui->pushSaveAgain << ui->lineDiscountFormula);
             ui->doubleCount->setFocus(Qt::TabFocusReason);
         } else {
-            QMessageBox::critical(this, tr("Error"), tr("Item not found on the database. Please add first"));
-            ui->lineBarcode->setFocus();
+            ui->labelName->setText(tr("Item with barcode not found"));
+            ui->labelName->setStyleSheet("color: red");
             return;
         }
     } else if(msg->isType(MSG_TYPE::PURCHASE_ITEM)) {
