@@ -1,5 +1,5 @@
 /*
- * transactionlistdialog.h
+ * returnitemadddialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,41 +17,38 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TRANSACTIONLISTDIALOG_H
-#define TRANSACTIONLISTDIALOG_H
+#ifndef RETURNITEMADDDIALOG_H
+#define RETURNITEMADDDIALOG_H
 
-#include "messagehandler.h"
 #include <QDialog>
-#include <functional>
 
 namespace Ui {
-class TransactionListDialog;
+class ReturnItemAddDialog;
 }
 
 namespace LibGUI {
 
-class TransactionListDialog : public QDialog, public LibG::MessageHandler
+class ReturnItemAddDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    TransactionListDialog(LibG::MessageBus *bus, QWidget *parent = 0);
-    ~TransactionListDialog();
-    inline void setPrintFunction(std::function<void(QVariantMap)> func) { mPrintFunction = func; }
-
-protected:
-    void messageReceived(LibG::Message *msg) override;
+    ReturnItemAddDialog(QWidget *parent = 0);
+    ~ReturnItemAddDialog();
+    void fill(const QVariantMap &d);
 
 private:
-    Ui::TransactionListDialog *ui;
-    std::function<void(QVariantMap)> mPrintFunction;
+    Ui::ReturnItemAddDialog *ui;
+    int mId;
+    double mPrice;
+    double mDiscount;
+    int mFlag;
+    double mBuyPrice;
 
 private slots:
-    void focusAndSelectTable();
-    void printTransaction();
-    void search();
-    void showItems();
+    void calculateTotal();
+    void saveClicked();
 };
 
 }
-#endif // TRANSACTIONLISTDIALOG_H
+#endif // RETURNITEMADDDIALOG_H

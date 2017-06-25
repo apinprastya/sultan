@@ -266,13 +266,17 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
     const QModelIndex &index = ui->tableView->currentIndex();
     if(!index.isValid()) return;
     auto item = static_cast<CashierItem*>(index.internalPointer());
-    if(event->key() == Qt::Key_Return) {
+    if(event->key() == Qt::Key_Return && !item->isReturn()) {
         bool ok = false;
         double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
         if(ok)
             mModel->addItem(count - item->count, item->name, item->barcode);
     } else if(event->key() == Qt::Key_Delete){
-        mModel->addItem(-item->count, item->name, item->barcode);
+        if(item->isReturn()) {
+            mModel->removeReturn(item);
+        } else {
+            mModel->addItem(-item->count, item->name, item->barcode);
+        }
     }
 }
 
@@ -314,6 +318,7 @@ void CashierWidget::updateLastInputed()
     const QModelIndex &index = ui->tableView->currentIndex();
     if(!index.isValid()) return;
     auto item = static_cast<CashierItem*>(index.internalPointer());
+    if(item->isReturn()) return;
     bool ok = false;
     double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
     if(ok)

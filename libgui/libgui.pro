@@ -113,7 +113,9 @@ SOURCES += \
     bank/bankadddialog.cpp \
     cashier/paycashlessdialog.cpp \
     report/transactionwidget.cpp \
-    report/moneywidget.cpp
+    report/moneywidget.cpp \
+    cashier/solditemlistdialog.cpp \
+    cashier/returnitemadddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -179,7 +181,9 @@ HEADERS += \
     bank/bankadddialog.h \
     cashier/paycashlessdialog.h \
     report/transactionwidget.h \
-    report/moneywidget.h
+    report/moneywidget.h \
+    cashier/solditemlistdialog.h \
+    cashier/returnitemadddialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -216,4 +220,6 @@ FORMS += \
     customer/settingpoinadddialog.ui \
     customer/addpoindialog.ui \
     bank/bankadddialog.ui \
-    cashier/paycashlessdialog.ui
+    cashier/paycashlessdialog.ui \
+    cashier/solditemlistdialog.ui \
+    cashier/returnitemadddialog.ui

@@ -28,25 +28,36 @@ namespace LibGUI {
 class CashierItem
 {
 public:
-    enum Type { Item };
+    enum Flag {
+        Item        = 0x1,
+        Service     = 0x2,
+        Return      = 1 << 8,
+        Returned    = 1 << 9
+    };
     int id = 0;
     int parent = 0;
-    int type = Item;
+    int flag = Item;
     float count = 0;
     double price = 0;
     double discount = 0;
     double total = 0;
     double final = 0;
+    int linkId = 0;
+    double buyPrice;
     QString barcode;
     QString name;
     QString discount_formula;
     CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type = Item);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int flag = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double discount, int flag);
+    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int flag = Item);
     void fill(const QVariantMap &data);
     QVariantMap toMap();
     CashierItem *clone();
     void fill(CashierItem *another);
+    inline bool hasFlag(int flag) { return (this->flag & flag) != 0; }
+    inline bool isReturn() { return hasFlag(Return); }
+    inline bool isReturned() { return hasFlag(Returned); }
 };
 
 }

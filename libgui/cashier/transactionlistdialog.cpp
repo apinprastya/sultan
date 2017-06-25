@@ -26,6 +26,9 @@
 #include "dbutil.h"
 #include "global_constant.h"
 #include "message.h"
+#include "db_constant.h"
+#include "keyevent.h"
+#include "solditemlistdialog.h"
 #include <QShortcut>
 
 using namespace LibGUI;
@@ -54,6 +57,11 @@ TransactionListDialog::TransactionListDialog(LibG::MessageBus *bus, QWidget *par
     model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(focusAndSelectTable()));
     new QShortcut(QKeySequence(Qt::Key_P), this, SLOT(printTransaction()));
+    connect(ui->lineNumber, SIGNAL(returnPressed()), SLOT(search()));
+    auto key = new KeyEvent(ui->tableWidget->getTableView());
+    key->addConsumeKey(Qt::Key_Return);
+    ui->tableWidget->getTableView()->installEventFilter(key);
+    connect(key, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(showItems()));
 }
 
 TransactionListDialog::~TransactionListDialog()
@@ -83,4 +91,19 @@ void TransactionListDialog::printTransaction()
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::GET);
     msg.addData("id", item->id);
     sendMessage(&msg);
+}
+
+void TransactionListDialog::search()
+{
+    ui->tableWidget->getModel()->setFilter("number", COMPARE::LIKE, ui->lineNumber->text());
+    ui->tableWidget->getModel()->refresh();
+}
+
+void TransactionListDialog::showItems()
+{
+    const QModelIndex &index = ui->tableWidget->getTableView()->currentIndex();
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    SoldItemListDialog dialog(item->data(), mMessageBus, this);
+    dialog.exec();
 }

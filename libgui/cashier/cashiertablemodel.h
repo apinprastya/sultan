@@ -34,12 +34,14 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
 public:
     CashierTableModel(LibG::MessageBus *bus, QObject *parent = nullptr);
     ~CashierTableModel();
+    static CashierTableModel *instance();
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     void addItem(float count, const QString &name, const QString &barcode, const QVariantList &prices = QVariantList());
+    CashierItem *addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, int flag);
     void reset();
     inline double getTotal() { return mTotal; }
     inline bool isEmpty() { return mData.isEmpty(); }
@@ -48,6 +50,8 @@ public:
     inline Customer* getCustomer() { return &mCurrentCustomer; }
     void fillCustomer(const QVariantMap &data);
     inline int getRewardPoin() { return mPoin; }
+    CashierItem *getItemWithFlag(const QString &barcode, int flag);
+    void removeReturn(CashierItem *item);
 
 protected:
     void messageReceived(LibG::Message *msg) override;

@@ -36,7 +36,9 @@ CREATE TABLE solditems (
     `discount_formula` VARCHAR(255) NOT NULL DEFAULT '',
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `final` DECIMAL(15, 2) NOT NULL,
-    `buy_price` DECIMAL(15, 2) NOT NULL
+    `buy_price` DECIMAL(15, 2) NOT NULL,
+    `flag` SMALLINT NOT NULL DEFAULT 0,
+    `link_id` INT NOT NULL DEFAULT 0
 );
 -- separator
 CREATE INDEX SOLDITEM ON solditems (barcode);

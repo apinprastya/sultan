@@ -41,6 +41,8 @@ CREATE TABLE solditems (
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `final` DECIMAL(15, 2) NOT NULL,
     `buy_price` DECIMAL(15, 2) NOT NULL,
+    `flag` SMALLINT NOT NULL DEFAULT 0,
+    `link_id` INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 

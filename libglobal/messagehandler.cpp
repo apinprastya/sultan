@@ -33,7 +33,8 @@ MessageHandler::MessageHandler():
 
 MessageHandler::~MessageHandler()
 {
-    mMessageBus->removeHandler(this);
+    if(mMessageBus != nullptr)
+        mMessageBus->removeHandler(this);
 }
 
 void MessageHandler::setMessageBus(MessageBus *bus)

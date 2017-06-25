@@ -9,13 +9,15 @@
 #include <QTextStream>
 #include <QDebug>
 
-static QTextStream logStream;
+static QTextStream sLogStream;
+static int sCounter;
 
 void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QString formatted = qFormatLogMessage(type, context, msg);
-    logStream << formatted << "\n";
-    logStream.flush();
+    sLogStream << formatted << "\n";
+    if(sCounter++ % 10 == 0)
+        sLogStream.flush();
 }
 
 int main(int argc, char *argv[])

@@ -30,16 +30,24 @@
 using namespace LibGUI;
 using namespace LibG;
 
+static CashierTableModel *sInstance = nullptr;
+
 CashierTableModel::CashierTableModel(MessageBus *bus, QObject *parent):
     QAbstractTableModel(parent)
 {
     setMessageBus(bus);
     mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Discount") << tr("Total");
+    sInstance = this;
 }
 
 CashierTableModel::~CashierTableModel()
 {
     qDeleteAll(mData);
+}
+
+CashierTableModel *CashierTableModel::instance()
+{
+    return sInstance;
 }
 
 int CashierTableModel::rowCount(const QModelIndex &/*parent*/) const
@@ -66,7 +74,11 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         switch(index.column()) {
         case 0: return index.row() + 1;
         case 1: return item->barcode;
-        case 2: return item->name;
+        case 2: {
+            if(item->isReturn())
+                return tr("(Return) %1").arg(item->name);
+            return item->name;
+        }
         case 3: return QLocale().toString(item->count);
         case 4: return Preference::toString(item->price);
         case 5: return Preference::toString(item->discount);
@@ -155,6 +167,17 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
     calculateTotal();
 }
 
+CashierItem *CashierTableModel::addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, int flag)
+{
+    beginInsertRows(QModelIndex(), mData.size() - 1, mData.size() - 1);
+    auto item = new CashierItem(name, barcode, -count, price, discount, flag);
+    mData.append(item);
+    endInsertRows();
+    emit selectRow(createIndex(mData.size() - 1, 0, mData[mData.size() - 1]));
+    calculateTotal();
+    return item;
+}
+
 void CashierTableModel::reset()
 {
     beginResetModel();
@@ -197,6 +220,24 @@ void CashierTableModel::fillCustomer(const QVariantMap &data)
     sendMessage(&msg);
 }
 
+CashierItem *CashierTableModel::getItemWithFlag(const QString &barcode, int flag)
+{
+    for(auto item : mData) {
+        if(!item->barcode.compare(barcode) && item->hasFlag(flag))
+            return item;
+    }
+    return nullptr;
+}
+
+void CashierTableModel::removeReturn(CashierItem *item)
+{
+    int index = mData.indexOf(item);
+    beginRemoveRows(QModelIndex(), index, index);
+    mData.removeOne(item);
+    endRemoveRows();
+    calculateTotal();
+}
+
 void CashierTableModel::messageReceived(Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::REWARD_POIN, MSG_COMMAND::QUERY)) {
@@ -216,7 +257,7 @@ float CashierTableModel::getTotalCount(const QString &barcode)
 {
     float retVal = 0;
     for(auto item : mData) {
-        if(item->type == CashierItem::Item && !item->barcode.compare(barcode))
+        if(item->hasFlag(CashierItem::Item) && !item->barcode.compare(barcode) && !item->isReturn())
             retVal += item->count;
     }
     return retVal;
@@ -248,7 +289,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
         const double &price = prices[0].toMap()["price"].toDouble();
         const QString &discformula = prices[0].toMap()["discount_formula"].toString();
         double disc = Util::calculateDiscount(discformula, price);
-        CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price * count) - (disc * count));
+        CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price - disc) * count);
         retVal << item;
     } else {
         for(int i = prices.count() - 1; i >= 0; i--) {

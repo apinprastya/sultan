@@ -30,6 +30,12 @@ using namespace LibDB;
 
 static int NEXT_VAL = 0;
 
+//NOTE : this flag is taken from CashierItem::Flag
+#define ITEM (0x1)
+#define SERVICE (0x2)
+#define RETURN (1 << 8)
+#define RETURNED (1 << 9)
+
 SoldAction::SoldAction():
     ServerAction("solds", "id")
 {
@@ -55,9 +61,18 @@ Message SoldAction::insertSold(Message *msg)
         QVariant id = mDb->lastInsertedId();
         for(auto v : l) {
             QVariantMap m = v.toMap();
+            int flag = m["flag"].toInt();
             m["sold_id"] = id;
             DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
-            m["buy_price"] = m["count"].toFloat() * res.first()["buy_price"].toDouble();
+            const QVariantMap &item = res.first();
+            if((flag & RETURN) != 0) {
+                mDb->exec(QString("UPDATE solditems SET flag = flag | %1 WHERE id = %2").arg(RETURNED).arg(m["link_id"].toInt()));
+                //TODO: need to check if it a FIFO operation in the future
+                mDb->exec(QString("UPDATE items SET buy_price = (buy_price + %1) / (stock - %2) WHERE barcode = %3").
+                          arg(m["buy_price"].toDouble()).arg(m["count"].toFloat()).arg(m["barcode"].toString()));
+            } else {
+                m["buy_price"] = m["count"].toFloat() * item["buy_price"].toDouble();
+            }
             mDb->insert("solditems", m);
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
         }
