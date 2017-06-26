@@ -10,10 +10,11 @@ Simple minimarket POS software writen in C++ with Qt Framework. The main target 
 * Databases SQLite / MySQL
 * Sales report
 * Item sales report
-* Simple margin calculation
+* Simple margin calculation (use average)
 * Customer database
 * Customer reward
 * Customer credit
+* Return items from customer
 
 ## Compile
 * Please check [Wiki Compile](https://github.com/apinprastya/sultan/wiki/Compile)
