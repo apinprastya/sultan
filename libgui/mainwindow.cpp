@@ -40,6 +40,7 @@
 #include "bank/bankwidget.h"
 #include "report/transactionwidget.h"
 #include "report/moneywidget.h"
+#include "about/autoupdatedialog.h"
 #include "usersession.h"
 #include "global_constant.h"
 #include "printer.h"
@@ -127,6 +128,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Banks, SIGNAL(triggered(bool)), SLOT(openBank()));
     connect(ui->action_Transaction, SIGNAL(triggered(bool)), SLOT(openTransaction()));
     connect(ui->action_MOney, SIGNAL(triggered(bool)), SLOT(openMoney()));
+    connect(ui->actionCheck_Update, SIGNAL(triggered(bool)), SLOT(openAutoUpdate()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -359,4 +361,10 @@ void MainWindow::openMoney()
         auto widget = new MoneyWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/building.png");
     }
+}
+
+void MainWindow::openAutoUpdate()
+{
+    AutoUpdateDialog dialog(this);
+    dialog.exec();
 }

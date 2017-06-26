@@ -99,6 +99,8 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionCheck_Update"/>
+    <addaction name="separator"/>
     <addaction name="action_About"/>
     <addaction name="actionAbout_Qt"/>
    </widget>
@@ -223,6 +225,11 @@
   <action name="action_MOney">
    <property name="text">
     <string>&amp;Money</string>
+   </property>
+  </action>
+  <action name="actionCheck_Update">
+   <property name="text">
+    <string>&amp;Check Update</string>
    </property>
   </action>
  </widget>

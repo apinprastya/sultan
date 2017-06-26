@@ -7,7 +7,7 @@ TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets
+QT += core gui widgets network
 
 CONFIG(static) {
     CONFIG += staticlib
@@ -115,7 +115,8 @@ SOURCES += \
     report/transactionwidget.cpp \
     report/moneywidget.cpp \
     cashier/solditemlistdialog.cpp \
-    cashier/returnitemadddialog.cpp
+    cashier/returnitemadddialog.cpp \
+    about/autoupdatedialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -183,7 +184,8 @@ HEADERS += \
     report/transactionwidget.h \
     report/moneywidget.h \
     cashier/solditemlistdialog.h \
-    cashier/returnitemadddialog.h
+    cashier/returnitemadddialog.h \
+    about/autoupdatedialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -222,4 +224,5 @@ FORMS += \
     bank/bankadddialog.ui \
     cashier/paycashlessdialog.ui \
     cashier/solditemlistdialog.ui \
-    cashier/returnitemadddialog.ui
+    cashier/returnitemadddialog.ui \
+    about/autoupdatedialog.ui

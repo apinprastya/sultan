@@ -32,6 +32,8 @@ namespace CONSTANT {
     const QString APP_NAME          = QStringLiteral("Sultan");
     const QString WINDOW_TITLE      = QStringLiteral("%1 - Sultan");
     const QString ABOUT_APP_NAME    = QStringLiteral("Sultan %1");
+    const QString URL_UPDATE        = QStringLiteral("https://sultanupdate.lekapin.com/check?build=%1");
+    const QString URL_DOWNLOAD      = QStringLiteral("https://sultanupdate.lekapin.com/download/%1_%2.zip");
 }
 
 namespace PERMISSION {
