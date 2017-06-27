@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
-    a.setApplicationVersion("17.06.00");
+    a.setApplicationVersion("17.07.00.01");
 
 #ifndef QT_DEBUG
     qSetMessagePattern("%{time yyyy-MM-dd HH:mm:ss} %{type} %{message}");
@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
     QDir appDir(a.applicationDirPath());
     LibG::Preference::createInstance();
     const QString &lang = LibG::Preference::getString(LibG::SETTING::APPLICATION_LANGUAGE, "id");
-    QTranslator tr[2];
+    QTranslator tr[3];
     if(lang.compare("en")) {
-        QStringList trans{"sultan_", "libgui_"};
+        QStringList trans{"sultan_", "libgui_", "libserver_"};
         for(int i = 0; i < trans.count(); i++) {
             tr[i].load(appDir.absoluteFilePath(trans[i] + lang));
             a.installTranslator(&tr[i]);

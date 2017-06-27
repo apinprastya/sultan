@@ -4,43 +4,43 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="core.cpp" line="142"/>
-        <location filename="core.cpp" line="157"/>
+        <location filename="core.cpp" line="141"/>
+        <location filename="core.cpp" line="156"/>
         <source>Database Error</source>
         <translation>Database Error</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="157"/>
+        <location filename="core.cpp" line="156"/>
         <source>Migrate database failed</source>
         <translation>Migrasi database gagal</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="167"/>
+        <location filename="core.cpp" line="166"/>
         <source>Server Socket Error</source>
         <translation>Socket Server Error</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="167"/>
+        <location filename="core.cpp" line="166"/>
         <source>Port already in used</source>
         <translation>Port sudah digunakan</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="208"/>
+        <location filename="core.cpp" line="207"/>
         <source>Error Disconnect</source>
         <translation>Error Disconnect</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="208"/>
+        <location filename="core.cpp" line="207"/>
         <source>Connection to server lost. Please check your connectivity.</source>
         <translation>Koneksi ke server terputus. Silakan cek koneksi Anda.</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="233"/>
+        <location filename="core.cpp" line="232"/>
         <source>Error Timeout</source>
         <translation>Error Timeout</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="233"/>
+        <location filename="core.cpp" line="232"/>
         <source>Connection to server timeout. Please check your connectivity.</source>
         <translation>Koneksi ke server timeout. Silakan cek koneksi Anda.</translation>
     </message>
@@ -150,11 +150,6 @@
     <message>
         <location filename="gui/settingdialog.ui" line="45"/>
         <source>Database</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="gui/settingdialog.ui" line="101"/>
-        <source>root</source>
         <translation></translation>
     </message>
     <message>
