@@ -35,5 +35,7 @@
 		<file>images/16x16/rosette-label.png</file>
 		<file>images/16x16/document-attribute-r.png</file>
 		<file>images/16x16/building.png</file>
+		<file>images/16x16/receipt-invoice.png</file>
+		<file>images/16x16/report.png</file>
     </qresource>
 </RCC>

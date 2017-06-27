@@ -5,7 +5,7 @@ CREATE TABLE banks (
     `deleted_at` DATETIME NULL,
     `name` VARCHAR(64) NOT NULL,
     `debit_charge_formula` VARCHAR(256) NOT NULL DEFAULT '',
-    `credit_charge_formula` VARCHAR(256) NOT NULL DEFAULT '',
+    `credit_charge_formula` VARCHAR(256) NOT NULL DEFAULT ''
 );
 -- separator
 INSERT INTO banks (name, credit_charge_formula)

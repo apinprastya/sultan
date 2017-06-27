@@ -79,6 +79,7 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     model->setTypeCommandOne(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::GET);
     model->setFilter("purchase_id", COMPARE::EQUAL, data["id"].toInt());
     mTableWidget->setupTable();
+    mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     model->refresh();
     ui->verticalLayout->addWidget(mTableWidget);

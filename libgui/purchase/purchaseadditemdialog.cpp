@@ -26,6 +26,7 @@
 #include "util.h"
 #include "preference.h"
 #include "item/additemdialog.h"
+#include "db_constant.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -99,6 +100,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
                                   ui->doubleSellPrice << ui->doubleTotal << ui->pushSave <<
                                   ui->pushSaveAgain << ui->lineDiscountFormula);
             ui->doubleCount->setFocus(Qt::TabFocusReason);
+            getPurchaseItem(ui->lineBarcode->text());
         } else {
             ui->labelName->setText(tr("Item with barcode not found"));
             ui->labelName->setStyleSheet("color: red");
@@ -119,6 +121,17 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
                 FlashMessageManager::showMessage(tr("Purchase item updated successfully"));
                 hide();
                 emit updateSuccess(mId);
+            } else if(msg->isCommand(MSG_COMMAND::QUERY)) {
+                const QVariantList &l = msg->data("data").toList();
+                if(!l.isEmpty()) {
+                    const QVariantMap &d = l[0].toMap();
+                    mId = d["id"].toInt();
+                    ui->doubleCount->setValue(d["count"].toFloat());
+                    ui->doubleTotal->setValue(d["total"].toDouble());
+                    ui->lineDiscountFormula->setText(d["discount_formula"].toString());
+                    calculateDiscount();
+                    ui->doubleCount->selectAll();
+                }
             }
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
@@ -160,6 +173,14 @@ void PurchaseAddItemDialog::save()
     } else {
         msg.setData(data);
     }
+    sendMessage(&msg);
+}
+
+void PurchaseAddItemDialog::getPurchaseItem(const QString &barcode)
+{
+    Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::QUERY);
+    msg.addFilter("purchase_id", COMPARE::EQUAL, mPurchaseId);
+    msg.addFilter("barcode", COMPARE::EQUAL, barcode);
     sendMessage(&msg);
 }
 

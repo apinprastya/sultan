@@ -16,7 +16,7 @@ CREATE TABLE purchases (
     `status` TINYINT NOT NULL DEFAULT 0,
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
-    `bank_id` INT NOT NULL DEFAULT 0,
+    `bank_id` INT NOT NULL DEFAULT 0
 );
 -- separator
 CREATE TABLE purchaseitems (

@@ -57,6 +57,7 @@ private:
     double mBuyPrice;
 
     void save();
+    void getPurchaseItem(const QString &barcode);
 
 signals:
     void addSuccess();

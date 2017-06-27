@@ -339,7 +339,7 @@ void MainWindow::openBank()
         return (dynamic_cast<BankWidget*>(widget) != nullptr);
     })) {
         auto widget = new BankWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/building.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Bank"), ":/images/16x16/building.png");
     }
 }
 
@@ -349,7 +349,7 @@ void MainWindow::openTransaction()
         return (dynamic_cast<TransactionWidget*>(widget) != nullptr);
     })) {
         auto widget = new TransactionWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/building.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Transaction"), ":/images/16x16/report.png");
     }
 }
 
@@ -359,7 +359,7 @@ void MainWindow::openMoney()
         return (dynamic_cast<MoneyWidget*>(widget) != nullptr);
     })) {
         auto widget = new MoneyWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Reward"), ":/images/16x16/building.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Money"), ":/images/16x16/report.png");
     }
 }
 

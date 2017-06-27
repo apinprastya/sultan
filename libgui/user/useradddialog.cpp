@@ -51,6 +51,7 @@ void UserAddDialog::reset()
     ui->linePassword->setEnabled(true);
     ui->lineRepassword->setEnabled(true);
     setWindowTitle(tr("Add new user"));
+    mId = -1;
 }
 
 void UserAddDialog::fill(const QVariantMap &data)
