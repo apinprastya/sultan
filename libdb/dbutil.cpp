@@ -23,7 +23,7 @@
 
 using namespace LibDB;
 
-static QStringList format{"yyyy-MM-dd", "yyyy-MM-ddThh:mm:ss", "yyyy-MM-dd hh:mm:ss"};
+static QStringList format{"yyyy-MM-dd", "yyyy-MM-ddThh:mm:ss", "yyyy-MM-dd hh:mm:ss", "yyyy-MM-ddThh:mm:ss.zzz"};
 
 DBUtil::DBUtil()
 {
