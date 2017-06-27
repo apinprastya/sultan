@@ -53,6 +53,8 @@ private:
     bool mIsClosing = false;
     double mDiscount;
     double mTotal;
+    float mCurrentStock;
+    double mBuyPrice;
 
     void save();
 
@@ -65,6 +67,8 @@ private slots:
     void saveAgainClicked();
     void saveClicked();
     void calculateDiscount();
+    void calculateBuyPriceSuggestion();
+    void addNewItemClicked();
 };
 
 }

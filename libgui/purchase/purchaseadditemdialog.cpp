@@ -25,6 +25,7 @@
 #include "flashmessagemanager.h"
 #include "util.h"
 #include "preference.h"
+#include "item/additemdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -45,6 +46,7 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
     connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
     connect(ui->doubleTotal, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
     connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateDiscount()));
+    connect(ui->pushAddNewItem, SIGNAL(clicked(bool)), SLOT(addNewItemClicked()));
 }
 
 PurchaseAddItemDialog::~PurchaseAddItemDialog()
@@ -64,11 +66,14 @@ void PurchaseAddItemDialog::reset()
     ui->lineBarcode->setReadOnly(false);
     mId = 0;
     ui->pushSaveAgain->show();
+    ui->pushAddNewItem->hide();
 }
 
 void PurchaseAddItemDialog::fill(const QVariantMap &data)
 {
     mId = data["id"].toInt();
+    mCurrentStock = data["stock"].toFloat();
+    mBuyPrice = data["buy_price"].toDouble();
     ui->lineBarcode->setText(data["barcode"].toString());
     ui->lineBarcode->setReadOnly(true);
     ui->labelName->setText(data["name"].toString());
@@ -79,6 +84,7 @@ void PurchaseAddItemDialog::fill(const QVariantMap &data)
     ui->lineDiscountFormula->setText(data["discount_formula"].toString());
     ui->doubleCount->setFocus();
     ui->pushSaveAgain->hide();
+    ui->pushAddNewItem->hide();
 }
 
 void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
@@ -96,6 +102,8 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
         } else {
             ui->labelName->setText(tr("Item with barcode not found"));
             ui->labelName->setStyleSheet("color: red");
+            ui->pushAddNewItem->show();
+            ui->pushAddNewItem->setFocus(Qt::TabFocusReason);
             return;
         }
     } else if(msg->isType(MSG_TYPE::PURCHASE_ITEM)) {
@@ -187,4 +195,32 @@ void PurchaseAddItemDialog::calculateDiscount()
     ui->labelDiscount->setText(Preference::toString(mDiscount));
     ui->labelTotal->setText(Preference::toString(mTotal));
     ui->labelSinglePrice->setText(Preference::toString(mTotal / ui->doubleCount->value()));
+    calculateBuyPriceSuggestion();
+}
+
+void PurchaseAddItemDialog::calculateBuyPriceSuggestion()
+{
+    if(mId <= 0) {
+        double single = mTotal / ui->doubleCount->value();
+        if(mCurrentStock == 0) {
+            ui->labelBuyPrice->setText(Preference::toString(single));
+        } else {
+            double val = (single + mBuyPrice) / (mCurrentStock + ui->doubleCount->value());
+            ui->labelBuyPrice->setText(Preference::toString(val));
+        }
+    } else {
+        ui->labelBuyPrice->setText("-");
+    }
+}
+
+void PurchaseAddItemDialog::addNewItemClicked()
+{
+    AddItemDialog dialog(mMessageBus, this);
+    dialog.reset(false);
+    dialog.disableAddAgain();
+    dialog.setBarcode(ui->lineBarcode->text());
+    dialog.exec();
+    if(dialog.isSuccess()) {
+        barcodeDone();
+    }
 }

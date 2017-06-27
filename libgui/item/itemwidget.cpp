@@ -207,6 +207,10 @@ void ItemWidget::deletePriceClicked(const QModelIndex &index)
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete price?"));
     if(ret != QMessageBox::Yes) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->data("stock").toFloat() != 0) {
+        FlashMessageManager::showError(tr("Only item with 0 stock can be deleted"));
+        return;
+    }
     Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL);
     msg.addData("id", item->id);
     sendMessage(&msg);

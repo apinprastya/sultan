@@ -39,6 +39,9 @@ public:
     void reset(bool isAddAgain = false);
     void fill(const QVariantMap &data);
     void setAsUpdate();
+    void disableAddAgain();
+    void setBarcode(const QString &barcode);
+    inline bool isSuccess() { return mIsSuccess; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -52,6 +55,7 @@ private:
     int mCUrrentCategory;
     bool mIsOk = false;
     bool mIsReturnPressed = false;
+    bool mIsSuccess = false;
 
     void saveData();
     void populateSuplier(const QVariantList &list);

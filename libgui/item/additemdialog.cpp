@@ -93,6 +93,18 @@ void AddItemDialog::setAsUpdate()
     ui->pushSave->setEnabled(true);
 }
 
+void AddItemDialog::disableAddAgain()
+{
+    ui->pushSaveAgain->hide();
+}
+
+void AddItemDialog::setBarcode(const QString &barcode)
+{
+    ui->lineBarcode->setText(barcode);
+    barcodeDone();
+    ui->lineName->setFocus(Qt::TabFocusReason);
+}
+
 void AddItemDialog::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
@@ -111,6 +123,7 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             if(mIsUpdate) FlashMessageManager::showMessage(tr("Item updated successfully"));
             else FlashMessageManager::showMessage(tr("Item added successfully"));
+            mIsSuccess = true;
             emit success();
             if(!mIsAddAgain) {
                 hide();
