@@ -193,7 +193,8 @@ void CashierWidget::saveToSlot(int slot)
 
 void CashierWidget::loadFromSlot(int slot)
 {
-    QFile file(QString("trans_%1.trans").arg(slot));
+    QDir dir(qApp->applicationDirPath());
+    QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(!file.exists()) {
         QMessageBox::critical(this, tr("Error"), tr("File not exists"));
         return;

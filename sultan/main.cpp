@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     qInstallMessageHandler(MessageHandler);
     QFile file("log.log");
     file.open(QFile::Append);
-    logStream.setDevice(&file);
+    sLogStream.setDevice(&file);
 #endif
 
     QDir appDir(a.applicationDirPath());
