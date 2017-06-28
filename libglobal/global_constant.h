@@ -45,6 +45,10 @@ namespace PERMISSION {
     const int CATEGORY          = 5;
     const int PURCASHE          = 6;
     const int REPORT            = 7;
+    const int CUSTOMER          = 8;
+    const int BANK              = 9;
+    const int REPORT_MONEY      = 10;
+    const int REPORT_TRANS      = 11;
 }
 
 namespace APPLICATION_TYPE {

@@ -90,6 +90,10 @@ void MainWindow::setup()
     ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
     ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
+    ui->action_Banks->setEnabled(UserSession::hasPermission(PERMISSION::BANK));
+    ui->actionC_ustomer->setEnabled(UserSession::hasPermission(PERMISSION::CUSTOMER));
+    ui->action_MOney->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_MONEY));
+    ui->action_Transaction->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_TRANS));
     ui->action_Cashier->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
 }
 
