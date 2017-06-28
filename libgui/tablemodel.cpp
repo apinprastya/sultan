@@ -187,7 +187,7 @@ void TableModel::filterChanged(int index, const QVariant &value)
         }
     } else if(filter.compare == FilterCategory) {
         if((value.canConvert(QVariant::String) && value.toString().isEmpty()) ||
-                (value.canConvert(QVariant::Int) && value.toInt() == 0))
+                (value.canConvert(QVariant::Int) && value.toInt() < 0))
             mQuery.removeFilter(key);
         else
             mQuery.setFilter(key, FILTER::CATEGORY_IN, value);

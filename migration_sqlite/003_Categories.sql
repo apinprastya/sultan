@@ -9,7 +9,7 @@ CREATE TABLE categories (
     `hierarchy` TEXT NULL
 );
 -- separator
-CREATE TABLE category_childs (
+CREATE TABLE categorychilds (
 	`id` INTEGER PRIMARY KEY,
 	`category_id` INT NOT NULL,
 	`child_id` INT NOT NULL
@@ -23,5 +23,5 @@ VALUES
 (1, 'Snack', 'SN', 'Food - Snack'),
 (1, 'Drink', 'DN', 'Food - Drink');
 -- separator
-INSERT INTO category_childs (category_id, child_id)
+INSERT INTO categorychilds (category_id, child_id)
 VALUES (1, 1), (1, 2), (1, 3), (2, 2), (3, 3);

@@ -19,9 +19,11 @@ CREATE TABLE categorychilds (
 
 INSERT INTO categories(name, code, hierarchy) 
 VALUES ('Food', 'FD', 'Food');
-INSERT INTO categories(parent_id, code, hierarchy)
+
+INSERT INTO categories(parent_id, name, code, hierarchy)
 VALUES
 (1, 'Snack', 'SN', 'Food - Snack'),
 (1, 'Drink', 'DN', 'Food - Drink');
-INSERT INTO category_childs (category_id, child_id)
+
+INSERT INTO categorychilds (category_id, child_id)
 VALUES (1, 1), (1, 2), (1, 3), (2, 2), (3, 3);
