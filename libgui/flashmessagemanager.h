@@ -33,11 +33,13 @@ public:
     static void showMessage(const QString &message, int type = FlashMessage::Info, int lifetime = FlashMessage::Short);
     static void showError(const QString &message, int lifetime = FlashMessage::Short);
     static void showWarning(const QString &message, int lifetime = FlashMessage::Short);
+    static void setParent(QWidget *parent);
 
 private:
     FlashMessageManager(QObject *parent = 0);
 
     QList<FlashMessage*> mFlashMessages;
+    QWidget *mParent = nullptr;
 
 private slots:
     void flashMessageClosed(FlashMessage *flashmessage);

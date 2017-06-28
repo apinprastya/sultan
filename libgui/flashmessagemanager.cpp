@@ -34,7 +34,7 @@ void FlashMessageManager::showMessage(const QString &message, int type, int life
     if(sInstance == nullptr) {
         sInstance = new FlashMessageManager(qApp);
     }
-    auto flash = new FlashMessage(message, type, lifetime);
+    auto flash = new FlashMessage(message, type, lifetime, sInstance->mParent);
     sInstance->mFlashMessages.append(flash);
     sInstance->rearrangeMessage();
     connect(flash, SIGNAL(done(FlashMessage*)), sInstance, SLOT(flashMessageClosed(FlashMessage*)));
@@ -48,6 +48,13 @@ void FlashMessageManager::showError(const QString &message, int lifetime)
 void FlashMessageManager::showWarning(const QString &message, int lifetime)
 {
     showMessage(message, FlashMessage::Warning, lifetime);
+}
+
+void FlashMessageManager::setParent(QWidget *parent)
+{
+    if(sInstance == nullptr)
+        sInstance = new FlashMessageManager(qApp);
+    sInstance->mParent = parent;
 }
 
 FlashMessageManager::FlashMessageManager(QObject *parent) : QObject(parent)

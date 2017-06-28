@@ -45,6 +45,7 @@
 #include "global_constant.h"
 #include "printer.h"
 #include "user/changepassworddialog.h"
+#include "flashmessagemanager.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -66,6 +67,9 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     ui->tabWidget->clear();
     setupConnection();
     LibPrint::Printer::instance();
+#ifdef FLASHMESSAGE_USE_PARENT
+    FlashMessageManager::setParent(this);
+#endif
 }
 
 MainWindow::~MainWindow()
