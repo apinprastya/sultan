@@ -27,9 +27,16 @@ int main(int argc, char *argv[])
     a.setApplicationVersion("17.07.00.01");
 
 #ifndef QT_DEBUG
+    QDir dir = QDir::home();
+    dir.mkdir(".sultan");
+    dir.cd(".sultan");
     qSetMessagePattern("%{time yyyy-MM-dd HH:mm:ss} %{type} %{message}");
     qInstallMessageHandler(MessageHandler);
+#ifdef Q_OS_WIN32
     QFile file("log.log");
+#else
+    QFile file(dir.absoluteFilePath("log.log"));
+#endif
     file.open(QFile::Append);
     sLogStream.setDevice(&file);
 #endif

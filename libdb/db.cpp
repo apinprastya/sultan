@@ -25,6 +25,7 @@
 #include <QSqlDriver>
 #include <QStringBuilder>
 #include <QThreadStorage>
+#include <QDir>
 
 using namespace LibDB;
 
@@ -438,7 +439,14 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
         database.setDatabaseName(dbname);
         ret = database.open();
     } else if(DBTYPE == "SQLITE") {
+#ifdef Q_OS_WIN32
         database.setDatabaseName("sultan.db");
+#else
+        QDir dir = QDir::home();
+        dir.mkdir(".sultan");
+        dir.cd(".sultan");
+        database.setDatabaseName(dir.absoluteFilePath("sultan.db"));
+#endif
         ret = database.open();
     }
     if(!ret) mLastError = database.lastError();

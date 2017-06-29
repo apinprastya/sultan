@@ -175,7 +175,9 @@ void CashierWidget::cutPaper()
 
 void CashierWidget::saveToSlot(int slot)
 {
-    QDir dir(qApp->applicationDirPath());
+    QDir dir = QDir::home();
+    dir.mkdir(".sultan");
+    dir.cd(".sultan");
     QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(file.exists()) file.remove();
     if(!file.open(QFile::WriteOnly)) {
@@ -193,7 +195,9 @@ void CashierWidget::saveToSlot(int slot)
 
 void CashierWidget::loadFromSlot(int slot)
 {
-    QDir dir(qApp->applicationDirPath());
+    QDir dir = QDir::home();
+    dir.mkdir(".sultan");
+    dir.cd(".sultan");
     QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(!file.exists()) {
         QMessageBox::critical(this, tr("Error"), tr("File not exists"));
