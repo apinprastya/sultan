@@ -73,10 +73,10 @@ bool TabWidget::isTabAvailable(std::function<bool(QWidget*)> func)
 
 void TabWidget::closeAllTabAndFree()
 {
-    for(int i = 0; i < count(); i++) {
+    for(int i = count() - 1; i >= 0; i--) {
         auto w = widget(i);
         w->deleteLater();
-        removeTab(i);
+        tbnRemoveTab(i);
     }
 }
 

@@ -80,8 +80,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup()
 {
-    if(mLastIdLogin != UserSession::id())
-        ui->tabWidget->closeAllTabAndFree();
+    ui->tabWidget->closeAllTabAndFree();
     ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::USER));
     ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
@@ -94,7 +93,7 @@ void MainWindow::setup()
     ui->actionC_ustomer->setEnabled(UserSession::hasPermission(PERMISSION::CUSTOMER));
     ui->action_MOney->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_MONEY));
     ui->action_Transaction->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_TRANS));
-    ui->action_Cashier->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    ui->action_Cashier->setShortcut(Qt::CTRL + Qt::Key_D);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -115,7 +114,6 @@ void MainWindow::setupConnection()
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab), this, SLOT(nextTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab), this, SLOT(prevTab()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C), this, SLOT(openCashier()));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
     connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
