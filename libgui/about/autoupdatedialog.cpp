@@ -43,21 +43,17 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget *parent) :
     for(auto widget : mGroupWidget)
         widget->hide();
     adjustSize();
-    if(LibG::Util::isBetaVersion(qApp->applicationVersion())) {
-        ui->labelChecking->setText(tr("Beta version has no auto update"));
-    } else {
 #ifdef Q_OS_WIN32
-        mArc = "win32";
+    mArc = "win32";
 #elif defined (Q_OS_LINUX)
-        mArc = "linux";
+    mArc = "linux";
 #elif defined (Q_PROCESSOR_ARM)
-        mArc = "raspberry";
+    mArc = "raspberry";
 #endif
-        QNetworkRequest request(QUrl(LibG::CONSTANT::URL_UPDATE.arg(mArc).arg(qVersion())));
-        auto reply = mNetworkManager->get(request);
-        connect(reply, SIGNAL(finished()), SLOT(checkDone()));
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
-    }
+    QNetworkRequest request(QUrl(LibG::CONSTANT::URL_UPDATE.arg(mArc).arg(qVersion())));
+    auto reply = mNetworkManager->get(request);
+    connect(reply, SIGNAL(finished()), SLOT(checkDone()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
     connect(ui->pushUpdate, SIGNAL(clicked(bool)), SLOT(updateClicked()));
 }
 
@@ -78,8 +74,13 @@ void AutoUpdateDialog::checkDone()
     int version = LibG::Util::getIntVersion(mNewVersion);
     int curVersion = LibG::Util::getIntVersion(qApp->applicationVersion());
     if(version > curVersion) {
+        ui->labelChecking->hide();
         for(auto widget : mGroupWidget)
             widget->show();
+        ui->labelCurrentVersion->setText(qApp->applicationVersion());
+        ui->labelNewVersion->setText(mNewVersion);
+    } else {
+        ui->labelChecking->setText(tr("No update found"));
     }
     adjustSize();
 }

@@ -20,8 +20,8 @@ func main() {
         c := exec.Command(dir + "/Sultan.exe")
         c.Start()
     } else {
-    	if _, err := os.Stat(usr.HomeDir + "/update/sultan.zip"); !os.IsNotExist(err) {
-	        Unzip(usr.HomeDir + "/update/sultan.zip", dir)      
+    	if _, err := os.Stat(usr.HomeDir + "/.sultan/sultan.zip"); !os.IsNotExist(err) {
+	        Unzip(usr.HomeDir + "/.sultan/sultan.zip", dir)
 	    }
         c := exec.Command(dir + "/Sultan.sh")
         c.Start()
