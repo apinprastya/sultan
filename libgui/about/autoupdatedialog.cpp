@@ -102,9 +102,14 @@ void AutoUpdateDialog::updateClicked()
 void AutoUpdateDialog::downloadDone()
 {
     auto reply = static_cast<QNetworkReply*>(QObject::sender());
+#ifdef Q_OS_WIN32
     QDir dir(qApp->applicationDirPath());
     dir.mkdir("update");
     dir.cd("update");
+#else
+    QDir dir = QDir::home();
+    dir.cd(".sultan");
+#endif
     QFile file(dir.absoluteFilePath("sultan.zip"));
     if(file.exists()) file.remove();
     if(!file.open(QFile::WriteOnly)) {
