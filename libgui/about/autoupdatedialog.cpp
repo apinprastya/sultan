@@ -45,10 +45,20 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget *parent) :
     adjustSize();
 #ifdef Q_OS_WIN32
     mArc = "win32";
-#elif defined (Q_OS_LINUX)
-    mArc = "linux";
+#elif defined (Q_OS_WIN64)
+    mArc = "win64";
 #elif defined (Q_PROCESSOR_ARM)
+#ifdef __aarch64__
+    mArc = "raspberry64";
+#else
     mArc = "raspberry";
+#endif
+#elif defined (Q_OS_LINUX)
+#ifdef Q_PROCESSOR_X86
+    mArc = "linux";
+#elif defined (Q_PROCESSOR_X86_64)
+    mArc = "linux64"
+#endif
 #endif
     QNetworkRequest request(QUrl(LibG::CONSTANT::URL_UPDATE.arg(mArc).arg(qVersion())));
     auto reply = mNetworkManager->get(request);
