@@ -22,6 +22,7 @@
 #include "keyevent.h"
 #include <QFile>
 #include <QMessageBox>
+#include <QDir>
 
 using namespace LibGUI;
 
@@ -43,6 +44,9 @@ SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent) :
     headerItem = new QTableWidgetItem(tr("Available"));
     ui->tableWidget->setHorizontalHeaderItem(1, headerItem);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    QDir dir = QDir::home();
+    dir.mkdir(".sultan");
+    dir.cd(".sultan");
     for(int i = 0; i < 10; i++) {
         auto item = new QTableWidgetItem(QString::number(i + 1));
         item->setTextAlignment(Qt::AlignCenter);
@@ -50,7 +54,7 @@ SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent) :
         item = new QTableWidgetItem(isSave ? tr("YES") : tr("NO"));
         item->setData(Qt::UserRole, 1);
         item->setTextAlignment(Qt::AlignCenter);
-        QFile file(QString("trans_%1.trans").arg(i));
+        QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(i)));
         if(file.exists()){
             item->setText(isSave ? tr("NO") : tr("YES"));
             item->setData(Qt::UserRole, 0);
