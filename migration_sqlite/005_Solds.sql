@@ -13,7 +13,7 @@ CREATE TABLE solds (
     `user_id` INT NOT NULL,
     `machine_id` INT NOT NULL,
     `subtotal` DECIMAL(15, 2) NOT NULL DEFAULT 0,
-    `payment_type` TINTYINT NOT NULL DEFAULT 0,
+    `payment_type` TINYINT NOT NULL DEFAULT 0,
     `bank_id` INT NOT NULL DEFAULT 0,
     `card_number` VARCHAR(16) NULL,
     `card_type` TINYINT NOT NULL DEFAULT 0,
