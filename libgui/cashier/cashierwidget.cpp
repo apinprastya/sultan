@@ -415,7 +415,7 @@ void CashierWidget::printBill(const QVariantMap &data)
 
 void CashierWidget::openSearch()
 {
-    SearchItemDialog dialog(mMessageBus);
+    SearchItemDialog dialog(mMessageBus, this);
     dialog.exec();
     const QString &barcode = dialog.getSelectedBarcode();
     if(barcode.isEmpty()) return;
@@ -425,7 +425,7 @@ void CashierWidget::openSearch()
 
 void CashierWidget::openPreviousTransaction()
 {
-    TransactionListDialog dialog(mMessageBus);
+    TransactionListDialog dialog(mMessageBus, this);
     dialog.setPrintFunction(std::bind(&CashierWidget::printBill, this, std::placeholders::_1));
     dialog.exec();
 }
