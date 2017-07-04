@@ -38,8 +38,8 @@
 #include "machine/machinewidget.h"
 #include "customer/rewardwidget.h"
 #include "bank/bankwidget.h"
-#include "report/transactionwidget.h"
-#include "report/moneywidget.h"
+#include "transaction/transactionwidget.h"
+#include "transaction/moneywidget.h"
 #include "about/autoupdatedialog.h"
 #include "usersession.h"
 #include "global_constant.h"
@@ -81,6 +81,7 @@ MainWindow::~MainWindow()
 void MainWindow::setup()
 {
     ui->tabWidget->closeAllTabAndFree();
+    ui->actionSetting->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
     ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::USER));
     ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
