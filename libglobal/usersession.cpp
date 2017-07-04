@@ -19,6 +19,7 @@
  */
 #include "usersession.h"
 #include "global_constant.h"
+#include <QDebug>
 
 using namespace LibG;
 
@@ -35,6 +36,7 @@ LibG::UserSession *LibG::UserSession::init(const QVariantMap &data)
     sInstance->mName = data["name"].toString();
     sInstance->mUsername = data["username"].toString();
     sInstance->mId = data["id"].toInt();
+    sInstance->mPermission.clear();
     QStringList per = data["permission"].toString().split(",");
     for(const QString &str : per) {
         const QString &s = str.trimmed();

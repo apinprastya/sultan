@@ -87,26 +87,6 @@ void Core::setup()
     QTimer::singleShot(1000, this, SLOT(init()));
 }
 
-void Core::initLogger()
-{
-    /*auto appDir = QDir(qApp->applicationDirPath());
-    el::Configurations conf(appDir.absoluteFilePath(QLatin1String("log.conf")).toStdString());
-    if(!appDir.cd(QLatin1String("logs"))) {
-        appDir.mkdir(appDir.absolutePath() + QLatin1String("/logs"));
-        appDir.cd(QLatin1String("logs"));
-    }
-    conf.setGlobally(el::ConfigurationType::Filename, appDir.absoluteFilePath(QLatin1String("log.log")).toStdString());
-    el::Loggers::addFlag(el::LoggingFlag::AutoSpacing);
-    el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
-    el::Loggers::reconfigureLogger("default", conf);
-    el::Loggers::reconfigureAllLoggers(conf);
-    el::Helpers::installPreRollOutCallback([](const char* name, std::size_t size){
-        const QString &newName = QLatin1String(name) + QDateTime::currentDateTime().toString(QLatin1String("yyyyMMdd-hhmmss"));
-        QFile::rename(QLatin1String(name), newName);
-        QProcess::startDetached("/bin/gzip", QStringList() << newName);
-    });*/
-}
-
 void Core::showRestartError(const QString &title, const QString &msg)
 {
     RestartConfirmationDialog dialog;
@@ -116,7 +96,6 @@ void Core::showRestartError(const QString &title, const QString &msg)
 
 void Core::init()
 {
-    initLogger();
     qDebug() << TAG << "Initialize application";
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting

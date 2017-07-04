@@ -47,7 +47,6 @@ public:
     Core(QObject *parent = 0);
     ~Core();
     void setup();
-    void initLogger();
 
 private:
     Splash *mSplashUi;
