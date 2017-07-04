@@ -37,6 +37,8 @@
 #include "flashmessagemanager.h"
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QFileDialog>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -91,6 +93,11 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 100 << 200 << 300 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
+    auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
+    button->setToolTip(tr("Export"));
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
+    mTableWidget->addActionButton(button);
     model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
@@ -109,6 +116,19 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
         FlashMessageManager::showMessage(tr("Suplier deleted successfully"));
         mTableWidget->getModel()->refresh();
+    } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::EXPORT)) {
+        if(msg->isSuccess()) {
+            const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
+            if(!fileName.isEmpty()) {
+                QFile file(fileName);
+                if(file.open(QFile::WriteOnly)) {
+                    file.write(msg->data("data").toString().toUtf8());
+                    file.close();
+                } else {
+                    QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
+                }
+            }
+        }
     }
 }
 
@@ -161,4 +181,10 @@ void TransactionWidget::deleteClicked(const QModelIndex &index)
         msg.addData("id", item->id);
         sendMessage(&msg);
     }
+}
+
+void TransactionWidget::exportClicked()
+{
+    Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::EXPORT);
+    sendMessage(&msg);
 }

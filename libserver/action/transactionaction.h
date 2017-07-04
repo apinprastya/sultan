@@ -30,6 +30,7 @@ public:
     TransactionAction();
     LibG::Message summaryTransaction(LibG::Message *msg);
     LibG::Message summaryMoney(LibG::Message *msg);
+    LibG::Message exportData(LibG::Message *msg);
 
 protected:
     QMap<QString, QString> fieldMap() const override;

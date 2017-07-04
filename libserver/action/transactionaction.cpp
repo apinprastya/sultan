@@ -23,6 +23,8 @@
 #include "db.h"
 #include "queryhelper.h"
 #include "dbresult.h"
+#include "preference.h"
+#include <QStringBuilder>
 #include <QDebug>
 
 using namespace LibServer;
@@ -34,6 +36,7 @@ TransactionAction::TransactionAction():
 {
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_TRANSACTION, std::bind(&TransactionAction::summaryTransaction, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_MONEY, std::bind(&TransactionAction::summaryMoney, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&TransactionAction::exportData, this, std::placeholders::_1));
 }
 
 LibG::Message TransactionAction::summaryTransaction(LibG::Message *msg)
@@ -57,6 +60,34 @@ LibG::Message TransactionAction::summaryMoney(LibG::Message *msg)
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     DbResult res = mDb->clone()->select("sum(money_total) as total")->exec();
     message.addData("total", res.first()["total"].toDouble());
+    return message;
+}
+
+Message TransactionAction::exportData(Message *msg)
+{
+    LibG::Message message(msg);
+    QString arr;
+    arr.append("date;number;type;detail;total\n");
+    mDb->table(mTableName);
+    selectAndJoin();
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    mDb = QueryHelper::sort(mDb, msg->data());
+    const int limit = 500;
+    int start = 0;
+    while(true) {
+        DbResult res = mDb->clone()->start(start)->limit(limit)->exec();
+        if(res.isEmpty()) break;
+        for(int i = 0; i < res.size(); i++) {
+            const QVariantMap &d = res.data(i);
+            arr.append(d["date"].toString() % ";");
+            arr.append(d["number"].toString() % ";");
+            arr.append((d["type"].toInt() == TRANSACTION_TYPE::INCOME ? QObject::tr("Income") : QObject::tr("Expense")) % ";");
+            arr.append(d["detail"].toString() % ";");
+            arr.append(Preference::toString(d["transaction_total"].toDouble()) % ";\n");
+        }
+        start += limit;
+    }
+    message.addData("data", arr);
     return message;
 }
 
