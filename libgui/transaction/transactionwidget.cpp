@@ -33,7 +33,10 @@
 #include "preference.h"
 #include "dbutil.h"
 #include "util.h"
+#include "addtransactiondialog.h"
+#include "flashmessagemanager.h"
 #include <QHBoxLayout>
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -62,7 +65,8 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayout->addLayout(hor);
     ui->verticalLayout->addWidget(mTableWidget);
 
-    mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh);
+    //mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);
+    mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
     model->addColumn("date", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
@@ -89,6 +93,9 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
+    connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
+    connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
 }
 
 void TransactionWidget::messageReceived(LibG::Message *msg)
@@ -99,6 +106,9 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
             mTileExpense->setValue(Preference::toString(msg->data("expense").toDouble()));
             mTileDifference->setValue(Preference::toString(msg->data("total").toDouble()));
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
+        FlashMessageManager::showMessage(tr("Suplier deleted successfully"));
+        mTableWidget->getModel()->refresh();
     }
 }
 
@@ -120,4 +130,35 @@ void TransactionWidget::refreshSummary()
     auto query = mTableWidget->getModel()->getQuery();
     query->bind(&msg);
     sendMessage(&msg);
+}
+
+void TransactionWidget::addClicked()
+{
+    AddTransactionDialog dialog(mMessageBus, this);
+    dialog.exec();
+    mTableWidget->getModel()->refresh();
+}
+
+void TransactionWidget::editClicked(const QModelIndex &index)
+{
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) return;
+    AddTransactionDialog dialog(mMessageBus, this);
+    dialog.fill(item->data());
+    dialog.exec();
+    mTableWidget->getModel()->refresh();
+}
+
+void TransactionWidget::deleteClicked(const QModelIndex &index)
+{
+    if(!index.isValid()) return;
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) return;
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove transaction?"));
+    if(ret == QMessageBox::Yes) {
+        Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL);
+        msg.addData("id", item->id);
+        sendMessage(&msg);
+    }
 }

@@ -52,6 +52,9 @@ private:
 
 private slots:
     void refreshSummary();
+    void addClicked();
+    void editClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndex &index);
 };
 
 }
