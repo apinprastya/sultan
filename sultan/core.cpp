@@ -105,7 +105,7 @@ void Core::init()
         dialog.exec();
     } else {
         if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
-
+            qDebug() << "[CORE]" << "database type :" << Preference::getString(SETTING::DATABASE);
             mSplashUi->setMessage("Setting SQL connection ...");
             qApp->processEvents();
             LibDB::Db::setDatabaseType(Preference::getString(SETTING::DATABASE));

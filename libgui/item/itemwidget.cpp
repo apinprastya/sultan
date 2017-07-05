@@ -32,9 +32,15 @@
 #include "headerwidget.h"
 #include "message.h"
 #include "flashmessagemanager.h"
+#include "keyevent.h"
+#include "preference.h"
+#include "escp.h"
+#include "printer.h"
+#include "global_setting_const.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QKeyEvent>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -108,6 +114,11 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mSecondTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(success()), mMainTable->getModel(), SLOT(refresh()));
     connect(mPriceDialog, SIGNAL(success()), mSecondTable->getModel(), SLOT(refresh()));
+
+    auto key = new KeyEvent(this);
+    key->addConsumeKey(Qt::Key_P);
+    mMainTable->getTableView()->installEventFilter(key);
+    connect(key, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(mainTableKeyPressed(QObject*,QKeyEvent*)));
 
     Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
     sendMessage(&msg);
@@ -231,5 +242,42 @@ void ItemWidget::exportClicked()
 {
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT);
     sendMessage(&msg);
+}
+
+void ItemWidget::mainTableKeyPressed(QObject */*sender*/, QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_P) {
+        const QModelIndex &index = mMainTable->getTableView()->currentIndex();
+        if(index.isValid()) {
+            auto item = static_cast<TableItem*>(index.internalPointer());
+            printPrice(item);
+        }
+    }
+}
+
+void ItemWidget::printPrice(TableItem *item)
+{
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    if(type < 0) {
+        QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
+        return;
+    }
+    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
+    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
+    int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
+    int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
+
+    auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->cpi10()->line(QChar('='))->newLine()->
+            centerText(item->data("name").toString())->newLine()->
+            centerText(Preference::toString(item->data("sell_price").toDouble()))->newLine()->
+            line(QChar('='))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, 2));
+    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    delete escp;
+    if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
+        const QString &command = LibPrint::Escp::cutPaperCommand();
+        LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
+                               command, type);
+    }
 }
 

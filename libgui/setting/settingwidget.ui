@@ -77,8 +77,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>647</width>
-            <height>452</height>
+            <width>645</width>
+            <height>459</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -156,8 +156,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>647</width>
-            <height>452</height>
+            <width>645</width>
+            <height>459</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -331,15 +331,15 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>647</width>
-            <height>452</height>
+            <width>645</width>
+            <height>459</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
             <widget class="QGroupBox" name="groupBox_4">
              <property name="title">
-              <string>Cashier Printer</string>
+              <string>Cashier Print</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
@@ -523,6 +523,28 @@
                  <widget class="QSpinBox" name="spinCashierLinefeed"/>
                 </item>
                </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Cashier Price Print</string>
+             </property>
+             <layout class="QFormLayout" name="formLayout_6">
+              <property name="labelAlignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_24">
+                <property name="text">
+                 <string>Line Feed After</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="spinCashierPriceLinefeed"/>
               </item>
              </layout>
             </widget>

@@ -30,6 +30,7 @@ class ItemWidget;
 namespace LibGUI {
 
 class TableWidget;
+class TableItem;
 class AddItemDialog;
 class AddPriceDialog;
 
@@ -63,6 +64,10 @@ private slots:
     void deletePriceClicked(const QModelIndex &index);
     void importClicked();
     void exportClicked();
+    void mainTableKeyPressed(QObject *, QKeyEvent *event);
+
+private:
+    void printPrice(TableItem *item);
 };
 
 }
