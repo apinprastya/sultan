@@ -21,6 +21,7 @@
 #include "global_constant.h"
 #include "db.h"
 #include "queryhelper.h"
+#include "util.h"
 #include <QStringRef>
 #include <QStringBuilder>
 #include <QDataStream>
@@ -102,9 +103,20 @@ Message ItemAction::exportData(Message *msg)
 {
     LibG::Message message(msg);
     QString arr;
-    arr.append("barcode;name;buy_price;sell_price;stock;category;suplier;\n");
+    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;\n");
     mDb->table(mTableName);
-    selectAndJoin();
+    mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
+                (select count from sellprices where barcode = items.barcode limit 1) as count1, \
+                (select price from sellprices where barcode = items.barcode limit 1) as price1, \
+                (select discount_formula from sellprices where barcode = items.barcode limit 1) as discform1, \
+                (select count from sellprices where barcode = items.barcode limit 1 offset 1) as count2, \
+                (select price from sellprices where barcode = items.barcode limit 1 offset 1) as price2, \
+                (select discount_formula from sellprices where barcode = items.barcode limit 1 offset 1) as discform2, \
+                (select count from sellprices where barcode = items.barcode limit 1 offset 2) as count3, \
+                (select price from sellprices where barcode = items.barcode limit 1 offset 2) as price3, \
+                (select discount_formula from sellprices where barcode = items.barcode limit 1 offset 2) as discform3")->
+            join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
+            join("LEFT JOIN categories ON categories.id = items.category_id");
     const int limit = 500;
     int start = 0;
     while(true) {
@@ -114,11 +126,19 @@ Message ItemAction::exportData(Message *msg)
             const QVariantMap &d = res.data(i);
             arr.append(d["barcode"].toString() % ";");
             arr.append(d["name"].toString() % ";");
-            arr.append(d["buy_price"].toString() % ";");
-            arr.append(d["sell_price"].toString() % ";");
-            arr.append(d["stock"].toString() % ";");
             arr.append(d["category"].toString() % ";");
-            arr.append(d["suplier"].toString() % ";\n");
+            arr.append(d["suplier"].toString() % ";");
+            arr.append(d["stock"].toString() % ";");
+            arr.append(d["buy_price"].toString() % ";");
+            arr.append(d["count1"].toString() % ";");
+            arr.append(d["price1"].toString() % ";");
+            arr.append(d["discform1"].toString() % ";");
+            arr.append(d["count2"].toString() % ";");
+            arr.append(d["price2"].toString() % ";");
+            arr.append(d["discform2"].toString() % ";");
+            arr.append(d["count3"].toString() % ";");
+            arr.append(d["price3"].toString() % ";");
+            arr.append(d["discform3"].toString() % ";\n");
         }
         start += limit;
     }
@@ -141,26 +161,43 @@ Message ItemAction::importData(Message *msg)
         const QVector<QStringRef> &row = vec[i].split(";", QString::SkipEmptyParts);
         int cat = 0;
         int sup = 0;
-        DbResult res = mDb->where("name = ", row[5].toString())->get("categories");
+        DbResult res = mDb->where("name = ", row[2].toString())->get("categories");
         if(!res.isEmpty()) {
             cat = res.first()["id"].toInt();
         } else {
-            QVariantMap catData{{"name", row[5].toString()}, {"code", row[5].toString()}};
+            QVariantMap catData{{"name", row[2].toString()}, {"code", row[2].toString()}};
             mDb->insert("categories", catData);
             cat = mDb->lastInsertedId().toInt();
         }
-        res = mDb->where("name = ", row[6].toString())->get("supliers");
+        res = mDb->where("name = ", row[3].toString())->get("supliers");
         if(!res.isEmpty()) {
             sup = res.first()["id"].toInt();
         } else {
-            QVariantMap supData{{"name", row[6].toString()}, {"code", row[6].toString()}};
+            QVariantMap supData{{"name", row[3].toString()}, {"code", row[3].toString()}};
             mDb->insert("supliers", supData);
             sup = mDb->lastInsertedId().toInt();
         }
         const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
                               {"name", row[1].toString()}, {"stock", row[4].toFloat()},
-                              {"buy_price", row[2].toDouble()}};
-        mDb->insert(mTableName, ins);
+                              {"buy_price", row[5].toDouble()}};
+        if(mDb->insert(mTableName, ins)) {
+            for(int i = 0; i < 3; i++) {
+                if(row.size() <= (8 + (3 * i))) continue;
+                if(row[6 + (3 * i)].isEmpty()) continue;
+                bool ok = false;
+                float count = row[6 + (3 * i)].toFloat(&ok);
+                if(!ok) continue;
+                ok = false;
+                double price = row[7 + (3 * i)].toDouble(&ok);
+                if(!ok) continue;
+                const QString &discForm = row[8 + (3 * i)].trimmed().toString();
+                double disc = Util::calculateDiscount(discForm, price);
+                QVariantMap sellprice{{"barcode", row[0].toString()}, {"count", count},
+                                 {"discount_formula", discForm}, {"discount", disc},
+                                 {"price", price}, {"final", price - disc}};
+                mDb->insert("sellprices", sellprice);
+            }
+        }
     }
     if(mDb->isSupportTransaction()) {
         if(!mDb->commit()) mDb->roolback();
