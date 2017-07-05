@@ -16,7 +16,7 @@ CREATE TABLE sellprices (
     `updated_at` DATETIME DEFAULT (datetime('now', 'localtime')),
 	`barcode` VARCHAR(64) NOT NULL,
     `count` FLOAT NOT NULL DEFAULT '1',
-    `price` INT NOT NULL DEFAULT 0,
+    `price` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `discount_formula` VARCHAR(256) NOT NULL DEFAULT '',
     `discount` DECIMAL(15, 2) NOT NULL DEFAULT 0,
     `final` DECIMAL(15, 2) NOT NULL DEFAULT 0
