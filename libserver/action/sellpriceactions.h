@@ -28,6 +28,8 @@ class SellPriceActions : public ServerAction
 {
 public:
     SellPriceActions();
+    LibG::Message insert(LibG::Message *msg) override;
+    LibG::Message update(LibG::Message *msg) override;
 
 protected:
     void selectAndJoin() override;

@@ -37,6 +37,7 @@ AddPriceDialog::AddPriceDialog(LibG::MessageBus *bus, QWidget *parent) :
     setMessageBus(bus);
     ui->doublePrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(updateDiscount()));
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), SLOT(updateDiscount()));
 }
 
@@ -51,6 +52,7 @@ void AddPriceDialog::reset()
     ui->doublePrice->setValue(0);
     ui->pushSave->setEnabled(true);
     ui->doubleCount->setFocus(Qt::TabFocusReason);
+    ui->lineEdit->clear();
     mId = 0;
 }
 
