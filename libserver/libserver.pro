@@ -33,23 +33,13 @@ DLLDESTDIR = ../
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
-    copytr.commands = $$quote(cp -R $${PWD}/libserver_id.qm $${OUT_PWD}/../bin/)
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
-    PWD_WIN = $${PWD}
-    DESTDIR_WIN = $$OUT_PWD/../bin/
-    PWD_WIN ~= s,/,\\,g
-    DESTDIR_WIN ~= s,/,\\,g
-    copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\libserver_id.qm $${DESTDIR_WIN})
 } else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
-    copytr.commands = $$quote(cp -R $${PWD}/libserver_id.qm $${OUT_PWD}/../bin/)
 }
 
-TRANSLATIONS = libserver_id.ts
-
-QMAKE_EXTRA_TARGETS += copytr
-POST_TARGETDEPS += copytr
+TRANSLATIONS = ../translation/libserver_id.ts
 
 SOURCES += \
     serveraction.cpp \

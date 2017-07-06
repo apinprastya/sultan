@@ -30,25 +30,15 @@ macx {
     QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
-    copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
 } else:win32 {
     DESTDIR = ../bin
     LIBS += -L$$OUT_PWD/../bin
-    PWD_WIN = $${PWD}
-    DESTDIR_WIN = $$OUT_PWD/../bin/
-    PWD_WIN ~= s,/,\\,g
-    DESTDIR_WIN ~= s,/,\\,g
-    copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\libgui_id.qm $${DESTDIR_WIN})
 } else {
     DESTDIR = ../bin
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
-    copytr.commands = $$quote(cp -R $${PWD}/libgui_id.qm $${OUT_PWD}/../bin/)
 }
 
-TRANSLATIONS = libgui_id.ts
-
-QMAKE_EXTRA_TARGETS += copytr
-POST_TARGETDEPS += copytr
+TRANSLATIONS = ../translation/libgui_id.ts
 
 SOURCES += \
     mainwindow.cpp \

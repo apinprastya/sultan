@@ -4,43 +4,43 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="core.cpp" line="141"/>
-        <location filename="core.cpp" line="156"/>
+        <location filename="core.cpp" line="120"/>
+        <location filename="core.cpp" line="135"/>
         <source>Database Error</source>
         <translation>Database Error</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="156"/>
+        <location filename="core.cpp" line="135"/>
         <source>Migrate database failed</source>
         <translation>Migrasi database gagal</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="166"/>
+        <location filename="core.cpp" line="145"/>
         <source>Server Socket Error</source>
         <translation>Socket Server Error</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="166"/>
+        <location filename="core.cpp" line="145"/>
         <source>Port already in used</source>
         <translation>Port sudah digunakan</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="207"/>
+        <location filename="core.cpp" line="186"/>
         <source>Error Disconnect</source>
         <translation>Error Disconnect</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="207"/>
+        <location filename="core.cpp" line="186"/>
         <source>Connection to server lost. Please check your connectivity.</source>
         <translation>Koneksi ke server terputus. Silakan cek koneksi Anda.</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="232"/>
+        <location filename="core.cpp" line="211"/>
         <source>Error Timeout</source>
         <translation>Error Timeout</translation>
     </message>
     <message>
-        <location filename="core.cpp" line="232"/>
+        <location filename="core.cpp" line="211"/>
         <source>Connection to server timeout. Please check your connectivity.</source>
         <translation>Koneksi ke server timeout. Silakan cek koneksi Anda.</translation>
     </message>

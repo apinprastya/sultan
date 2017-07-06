@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     if(lang.compare("en")) {
         QStringList trans{"sultan_", "libgui_", "libserver_"};
         for(int i = 0; i < trans.count(); i++) {
-            tr[i].load(appDir.absoluteFilePath(trans[i] + lang));
-            a.installTranslator(&tr[i]);
+            if(tr[i].load(appDir.absoluteFilePath(trans[i] + lang)))
+                a.installTranslator(&tr[i]);
         }
     }
 
