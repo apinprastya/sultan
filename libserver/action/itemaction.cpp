@@ -53,6 +53,7 @@ Message ItemAction::insert(Message *msg)
         d.insert("barcode", msg->data("barcode"));
         d.insert("count", 1);
         d.insert("price", sellprice);
+        d.insert("final", sellprice);
         mDb->insert("sellprices", d);
     }
     return message;
