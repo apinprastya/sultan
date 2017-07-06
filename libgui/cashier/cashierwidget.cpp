@@ -125,7 +125,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         return;
     }
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
-        ui->lineBarcode->selectAll();
+        ui->lineBarcode->clear();
         ui->lineBarcode->setEnabled(true);
         const QString &name = msg->data("item").toMap()["name"].toString();
         const QString &barcode = msg->data("item").toMap()["barcode"].toString();

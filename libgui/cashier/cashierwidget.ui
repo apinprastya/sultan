@@ -341,26 +341,46 @@ border: 1px solid #ababab;</string>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="labelName">
+        <widget class="QWidget" name="widget_2" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
          <property name="styleSheet">
-          <string notr="true">font-size: 16px;</string>
+          <string notr="true">background-color: white;
+border: 1px solid #ababab;</string>
          </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelPrice">
-         <property name="styleSheet">
-          <string notr="true">font-size: 16px;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="labelName">
+            <property name="styleSheet">
+             <string notr="true">font-size: 16px; border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelPrice">
+            <property name="styleSheet">
+             <string notr="true">font-size: 16px; border: none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+         <zorder>labelName</zorder>
+         <zorder>labelName</zorder>
+         <zorder>labelName</zorder>
+         <zorder>labelPrice</zorder>
         </widget>
        </item>
       </layout>
