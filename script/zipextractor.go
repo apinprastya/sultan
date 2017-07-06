@@ -23,7 +23,7 @@ func main() {
     	if _, err := os.Stat(usr.HomeDir + "/.sultan/sultan.zip"); !os.IsNotExist(err) {
 	        Unzip(usr.HomeDir + "/.sultan/sultan.zip", dir)
 	    }
-        c := exec.Command(dir + "/Sultan.sh")
+        c := exec.Command(dir + "/Sultan")
         c.Start()
     }
 }
