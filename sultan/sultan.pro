@@ -1,25 +1,43 @@
-include(../libglobal/libglobal.pri)
-include(../libprint/libprint.pri)
-include(../libdb/libdb.pri)
-include(../libserver/libserver.pri)
-include(../libgui/libgui.pri)
-
 QT       += core gui widgets sql websockets
+
+contains(CONFIG, SINGLEBIN) {
+    QT += concurrent printsupport
+}
 
 TARGET = Sultan
 TEMPLATE = app
 
 CONFIG += c++11
 
+contains(CONFIG, SINGLEBIN) {
+    include(../libglobal/libglobal_src.pri)
+    include(../libprint/libprint_src.pri)
+    include(../libdb/libdb_src.pri)
+    include(../libserver/libserver_src.pri)
+    include(../libgui/libgui_src.pri)
+} else {
+    include(../libglobal/libglobal.pri)
+    include(../libprint/libprint.pri)
+    include(../libdb/libdb.pri)
+    include(../libserver/libserver.pri)
+    include(../libgui/libgui.pri)
+}
+
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
+    contains(CONFIG, SINGLEBIN) {
+        LIBS += -lcups
+    }
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
     copytr.commands = $$quote(cp -R $${PWD}/translation/*.qm $${OUT_PWD}/../bin/)
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
+    contains(CONFIG, SINGLEBIN) {
+        LIBS += -lKernel32 -lwinspool
+    }
     RC_FILE = sultan.rc
     DESTDIR = ../bin/
     PWD_WIN = $${PWD}
@@ -32,6 +50,9 @@ macx {
 } else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
+    contains(CONFIG, SINGLEBIN) {
+        LIBS += -lcups
+    }
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $${OUT_PWD}/../bin/)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $${OUT_PWD}/../bin/)

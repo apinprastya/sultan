@@ -1,10 +1,13 @@
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-SUBDIRS = \
+!contains(CONFIG, SINGLEBIN) {
+    SUBDIRS = \
         libglobal \
         libdb \
         libserver \
         libprint \
         libgui \
-        sultan
+}
+
+SUBDIRS += sultan
