@@ -32,6 +32,8 @@
 #include "message.h"
 #include "flashmessagemanager.h"
 #include "purchasepaymentdialog.h"
+#include "tilewidget.h"
+#include "preference.h"
 #include <QMessageBox>
 #include <QPushButton>
 #include <QDebug>
@@ -43,11 +45,14 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
     mTableWidget(new TableWidget(this)),
-    mAddDialog(new PurchaseAddDialog(bus, this))
+    mAddDialog(new PurchaseAddDialog(bus, this)),
+    mTotalDebit(new TileWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Purchase"));
+    mTotalDebit->setTitleValue(tr("Total Debit"), tr("loading..."));
+    ui->verticalLayout->addWidget(mTotalDebit);
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
@@ -95,6 +100,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mAddDialog, SIGNAL(successAdd()), mTableWidget->getModel(), SLOT(refresh()));
     connect(mAddDialog, SIGNAL(successUpdate(QVariant)), mTableWidget->getModel(), SLOT(resfreshOne(QVariant)));
     connect(mTableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(getSummary()));
 }
 
 PurchaseWidget::~PurchaseWidget()
@@ -127,6 +133,10 @@ void PurchaseWidget::messageReceived(LibG::Message *msg)
             mTableWidget->getModel()->refresh();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::SUMMARY)) {
+        if(msg->isSuccess()) {
+            mTotalDebit->setValue(Preference::toString(msg->data("total").toDouble()));
         }
     }
 }
@@ -174,4 +184,10 @@ void PurchaseWidget::paymentClicked()
     dialog.fill(item->data());
     dialog.exec();
     mTableWidget->getModel()->resfreshOne(item->id);
+}
+
+void PurchaseWidget::getSummary()
+{
+    Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::SUMMARY);
+    sendMessage(&msg);
 }

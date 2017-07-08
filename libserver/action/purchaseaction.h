@@ -29,6 +29,7 @@ class PurchaseAction: public ServerAction
 public:
     PurchaseAction();
     LibG::Message del(LibG::Message *msg) override;
+    LibG::Message summary(LibG::Message *msg);
 
 protected:
     void afterInsert(const QVariantMap &data) override;

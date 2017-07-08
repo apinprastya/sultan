@@ -30,6 +30,7 @@ PurchaseAction::PurchaseAction():
     ServerAction("purchases", "id")
 {
     mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE;
+    mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseAction::summary, this, std::placeholders::_1));
 }
 
 LibG::Message PurchaseAction::del(LibG::Message *msg)
@@ -44,6 +45,15 @@ LibG::Message PurchaseAction::del(LibG::Message *msg)
     if(!mDb->del(mTableName)) {
         message.setError(mDb->lastError().text());
     }
+    return message;
+}
+
+Message PurchaseAction::summary(Message *msg)
+{
+    LibG::Message message(msg);
+    DbResult res = mDb->select("sum(final) as total")->where("payment_type = ", PURCHASEPAYMENT::TEMPO)->
+            where("status = ", PAYMENT_STATUS::UNPAID)->get(mTableName);
+    message.setData(res.first());
     return message;
 }
 

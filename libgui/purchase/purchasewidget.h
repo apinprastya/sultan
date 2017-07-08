@@ -31,6 +31,7 @@ namespace LibGUI {
 
 class TableWidget;
 class PurchaseAddDialog;
+class TileWidget;
 
 class PurchaseWidget : public QWidget, public LibG::MessageHandler
 {
@@ -47,6 +48,7 @@ private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     PurchaseAddDialog *mAddDialog;
+    TileWidget *mTotalDebit;
     bool isShowed = false;
 
 private slots:
@@ -55,6 +57,7 @@ private slots:
     void deleteClicked(const QModelIndex &index);
     void tableDoubleClicked(const QModelIndex &index);
     void paymentClicked();
+    void getSummary();
 
 signals:
     void requestOpenPurchaseWidget(const QVariantMap &data);
