@@ -225,24 +225,24 @@
         <translation>Harga Akhir</translation>
     </message>
     <message>
-        <location filename="../libgui/item/addpricedialog.ui" line="108"/>
-        <location filename="../libgui/item/addpricedialog.ui" line="118"/>
-        <location filename="../libgui/item/addpricedialog.ui" line="135"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="112"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="122"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="139"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/addpricedialog.ui" line="128"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="132"/>
         <source>Buy Price</source>
         <translation>Harga Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/item/addpricedialog.ui" line="175"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="179"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../libgui/item/addpricedialog.ui" line="185"/>
+        <location filename="../libgui/item/addpricedialog.ui" line="189"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
@@ -897,13 +897,13 @@
 <context>
     <name>LibGUI::AddPriceDialog</name>
     <message>
-        <location filename="../libgui/item/addpricedialog.cpp" line="82"/>
-        <location filename="../libgui/item/addpricedialog.cpp" line="92"/>
+        <location filename="../libgui/item/addpricedialog.cpp" line="84"/>
+        <location filename="../libgui/item/addpricedialog.cpp" line="94"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/addpricedialog.cpp" line="92"/>
+        <location filename="../libgui/item/addpricedialog.cpp" line="94"/>
         <source>Make sure value is greater than 0</source>
         <translation>Nilai harus lebih besar dari nol</translation>
     </message>
@@ -1821,94 +1821,99 @@
 <context>
     <name>LibGUI::MainWindow</name>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="187"/>
+        <location filename="../libgui/mainwindow.cpp" line="190"/>
         <source>Setting</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="195"/>
+        <location filename="../libgui/mainwindow.cpp" line="198"/>
         <source>User</source>
         <translation>Pengguna</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="203"/>
+        <location filename="../libgui/mainwindow.cpp" line="206"/>
         <source>Suplier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="211"/>
+        <location filename="../libgui/mainwindow.cpp" line="214"/>
         <source>Cahsier</source>
         <translation>Kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="225"/>
+        <location filename="../libgui/mainwindow.cpp" line="228"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="233"/>
+        <location filename="../libgui/mainwindow.cpp" line="236"/>
         <source>Item</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="242"/>
+        <location filename="../libgui/mainwindow.cpp" line="245"/>
         <source>Purcase</source>
         <translation>Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="258"/>
+        <location filename="../libgui/mainwindow.cpp" line="261"/>
         <source>Pur : %1</source>
         <translation>Beli : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="267"/>
+        <location filename="../libgui/mainwindow.cpp" line="270"/>
         <source>Sales</source>
         <translation>Penjualan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="277"/>
+        <location filename="../libgui/mainwindow.cpp" line="280"/>
         <source>Items Sales</source>
         <translation>Penjualan Item</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="295"/>
+        <location filename="../libgui/mainwindow.cpp" line="298"/>
         <source>Customers</source>
         <translation>Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="309"/>
+        <location filename="../libgui/mainwindow.cpp" line="312"/>
         <source>Credit : %1</source>
         <translation>Piutang : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="322"/>
+        <location filename="../libgui/mainwindow.cpp" line="325"/>
         <source>Reward : %1</source>
         <translation>Poin : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="331"/>
+        <location filename="../libgui/mainwindow.cpp" line="334"/>
         <source>Machine</source>
         <translation>Mesin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="341"/>
+        <location filename="../libgui/mainwindow.cpp" line="344"/>
         <source>Reward</source>
         <translation>Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="351"/>
+        <location filename="../libgui/mainwindow.cpp" line="354"/>
         <source>Bank</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="361"/>
+        <location filename="../libgui/mainwindow.cpp" line="364"/>
         <source>Transaction</source>
         <translation>Transaksi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="371"/>
+        <location filename="../libgui/mainwindow.cpp" line="374"/>
         <source>Money</source>
         <translation>Keuangan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/mainwindow.cpp" line="390"/>
+        <source>Purchase Return</source>
+        <translation>Retur Penbelian</translation>
     </message>
 </context>
 <context>
@@ -2115,9 +2120,9 @@
 <context>
     <name>LibGUI::PurchaseAddItemDialog</name>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="137"/>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="157"/>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="191"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="138"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="158"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="193"/>
         <source>Error</source>
         <translation></translation>
     </message>
@@ -2126,29 +2131,67 @@
         <translation type="vanished">Item tidak ditemukan di database. Silakan tambah terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="105"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="106"/>
         <source>Item with barcode not found</source>
         <translation>Barang dengan barcode tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="114"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="115"/>
         <source>Purchase item added successfully</source>
         <translation>Pembelian item berhasil ditambah</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="121"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="122"/>
         <source>Purchase item updated successfully</source>
         <translation>Pembelian item berhasil diubah</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="157"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="158"/>
         <source>Count and price can not zero value</source>
         <translation>Jumlah dan harga tidak boleh nol</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="191"/>
+        <location filename="../libgui/purchase/purchaseadditemdialog.cpp" line="193"/>
         <source>Make sure barcode is filled</source>
         <translation>Silakan isi barcode dengan benar</translation>
+    </message>
+</context>
+<context>
+    <name>LibGUI::PurchaseItemSelectionDialog</name>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="42"/>
+        <source>Date</source>
+        <translation>Tanggal</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="45"/>
+        <source>Barcode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="46"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="47"/>
+        <source>Count</source>
+        <translation>Qty</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="48"/>
+        <source>Price</source>
+        <translation>Harga</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="49"/>
+        <source>Discount</source>
+        <translation>Diskon</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.cpp" line="50"/>
+        <source>Total</source>
+        <translation>Total</translation>
     </message>
 </context>
 <context>
@@ -2164,13 +2207,13 @@
     </message>
     <message>
         <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="57"/>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="75"/>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="74"/>
         <source>Total</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="59"/>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="74"/>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="73"/>
         <source>Discount</source>
         <translation>Diskon</translation>
     </message>
@@ -2200,14 +2243,9 @@
         <translation>Harga</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="73"/>
-        <source>Sub-total</source>
-        <translation></translation>
-    </message>
-    <message>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="144"/>
         <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="145"/>
         <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="146"/>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="147"/>
         <source>loading...</source>
         <translation></translation>
     </message>
@@ -2216,17 +2254,17 @@
         <translation type="vanished">Harga</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="106"/>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="105"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="134"/>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="133"/>
         <source>Confirmation remove</source>
         <translation>Konfirmasi Hapus</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="134"/>
+        <location filename="../libgui/purchase/purchaseitemwidget.cpp" line="133"/>
         <source>Are you sure to delete the item?</source>
         <translation>Yakin hapus item?</translation>
     </message>
@@ -2250,111 +2288,241 @@
     </message>
 </context>
 <context>
-    <name>LibGUI::PurchaseWidget</name>
+    <name>LibGUI::PurchaseReturnWidget</name>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="50"/>
-        <source>Purchase</source>
-        <translation>Pembelian</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="51"/>
+        <source>Purchase return</source>
+        <translation>Retur Pembelian</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="55"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="52"/>
+        <source>Total Credit</source>
+        <translation>Total Piutang</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="52"/>
+        <source>loading...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="58"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="58"/>
-        <source>Number</source>
-        <translation>Nomor</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="61"/>
+        <source>Barcode</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="59"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="62"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="63"/>
         <source>Suplier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="60"/>
-        <source>Type</source>
-        <translation>Tipe</translation>
-    </message>
-    <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="61"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="63"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="119"/>
-        <source>Deadline</source>
-        <translation>Jatuh Tempo</translation>
-    </message>
-    <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="61"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="118"/>
-        <source>Direct</source>
-        <translation>Langsung</translation>
-    </message>
-    <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="66"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="64"/>
         <source>Status</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="68"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="69"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="114"/>
-        <source>Paid</source>
-        <translation>Terbayar</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="65"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="121"/>
+        <source>Unreturn</source>
+        <translation>Belum Balik</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="69"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="113"/>
-        <source>Unpaid</source>
-        <translation>Hutang</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="65"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="122"/>
+        <source>Returned</source>
+        <translation>Sudah Balik</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="71"/>
-        <source>Sub-total</source>
-        <translation></translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="67"/>
+        <source>Count</source>
+        <translation>Qty</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="72"/>
-        <source>Disc. Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="73"/>
-        <source>Discount</source>
-        <translation>Diskon</translation>
-    </message>
-    <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="74"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="68"/>
         <source>Total</source>
+        <translation>Total</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="69"/>
+        <source>Return Date</source>
+        <translation>Tanggal Balik</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="70"/>
+        <source>-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="85"/>
-        <source>Payment</source>
-        <translation>Bayar</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="73"/>
+        <source>Item&lt;br&gt;Returned</source>
+        <translation>Item&lt;br&gt;Dikembalikan</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="112"/>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="117"/>
-        <source>All</source>
-        <translation>Semua</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="74"/>
+        <source>Money&lt;br&gt;Returned</source>
+        <translation>Uang&lt;br&gt;Dikembalikan</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="126"/>
-        <source>Purchase deleted successfully</source>
-        <translation>Pembelian berhasil dihapus</translation>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="75"/>
+        <source>Note</source>
+        <translation>Catatan</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="129"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="87"/>
+        <source>Return resolution</source>
+        <translation>Resolusi Retur</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="104"/>
+        <source>Item deleted successfully</source>
+        <translation>Item berhasil dihapus</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="107"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="150"/>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="120"/>
+        <source>All</source>
+        <translation>Semua</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="147"/>
+        <source>Confirmation remove</source>
+        <translation>Konfirmasi Hapus</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasereturnwidget.cpp" line="147"/>
+        <source>Are you sure to delete the item?</source>
+        <translation>Yakin hapus item?</translation>
+    </message>
+</context>
+<context>
+    <name>LibGUI::PurchaseWidget</name>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="53"/>
+        <source>Purchase</source>
+        <translation>Pembelian</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="54"/>
+        <source>Total Debit</source>
+        <translation>Total Hutang</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="54"/>
+        <source>loading...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="60"/>
+        <source>Date</source>
+        <translation>Tanggal</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="63"/>
+        <source>Number</source>
+        <translation>Nomor</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="64"/>
+        <source>Suplier</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="65"/>
+        <source>Type</source>
+        <translation>Tipe</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="66"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="68"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="128"/>
+        <source>Deadline</source>
+        <translation>Jatuh Tempo</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="66"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="127"/>
+        <source>Direct</source>
+        <translation>Langsung</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="71"/>
+        <source>Status</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="73"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="74"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="121"/>
+        <source>Paid</source>
+        <translation>Terbayar</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="74"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="120"/>
+        <source>Unpaid</source>
+        <translation>Hutang</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="76"/>
+        <source>Sub-total</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="77"/>
+        <source>Disc. Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="78"/>
+        <source>Discount</source>
+        <translation>Diskon</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="79"/>
+        <source>Total</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="90"/>
+        <source>Payment</source>
+        <translation>Bayar</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="119"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="126"/>
+        <source>All</source>
+        <translation>Semua</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="136"/>
+        <source>Purchase deleted successfully</source>
+        <translation>Pembelian berhasil dihapus</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="139"/>
+        <source>Error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="164"/>
         <source>Delete Confirmation</source>
         <translation>Konfirmasi menghapus</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchasewidget.cpp" line="150"/>
+        <location filename="../libgui/purchase/purchasewidget.cpp" line="164"/>
         <source>Are you sure to delete the purchase?</source>
         <translation>Yakin menghapus pembelian?</translation>
     </message>
@@ -2398,6 +2566,35 @@
     </message>
 </context>
 <context>
+    <name>LibGUI::ReturnAddDialog</name>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="98"/>
+        <source>Return added successfully</source>
+        <translation>Retur berhasil ditambah</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="100"/>
+        <source>Return updated successfully</source>
+        <translation>Retur berhasil diubah</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="106"/>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="150"/>
+        <source>Error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="116"/>
+        <source>-- Select Suplier --</source>
+        <translation>-- Pilih Suplier --</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.cpp" line="150"/>
+        <source>Please fill correctly</source>
+        <translation>Silakan isi dengan benar</translation>
+    </message>
+</context>
+<context>
     <name>LibGUI::ReturnItemAddDialog</name>
     <message>
         <location filename="../libgui/cashier/returnitemadddialog.cpp" line="72"/>
@@ -2408,6 +2605,19 @@
         <location filename="../libgui/cashier/returnitemadddialog.cpp" line="72"/>
         <source>Return item with barcode already exists</source>
         <translation>Retur dengan barcode sudah ada</translation>
+    </message>
+</context>
+<context>
+    <name>LibGUI::ReturnResolutionDialog</name>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.cpp" line="68"/>
+        <source>Return item updated successfully</source>
+        <translation>Return berhasil diubah</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.cpp" line="71"/>
+        <source>Error</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2794,14 +3004,14 @@
     <message>
         <location filename="../libgui/transaction/transactionwidget.cpp" line="60"/>
         <location filename="../libgui/transaction/transactionwidget.cpp" line="78"/>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="143"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="144"/>
         <source>Income</source>
         <translation>Pendapatan</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/transactionwidget.cpp" line="62"/>
         <location filename="../libgui/transaction/transactionwidget.cpp" line="78"/>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="144"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="145"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
     </message>
@@ -2861,17 +3071,17 @@
         <translation>Tidak dapat menyimpan file</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="142"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="143"/>
         <source>All</source>
         <translation>Semua</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="178"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="180"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="178"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="180"/>
         <source>Are you sure want to remove transaction?</source>
         <translation>Yakin menghapus transaksi?</translation>
     </message>
@@ -3004,18 +3214,18 @@
     </message>
     <message>
         <location filename="../libgui/mainwindow.ui" line="78"/>
-        <location filename="../libgui/mainwindow.ui" line="192"/>
+        <location filename="../libgui/mainwindow.ui" line="189"/>
         <source>C&amp;ustomer</source>
         <translation>&amp;Pelanggan</translation>
     </message>
     <message>
         <location filename="../libgui/mainwindow.ui" line="93"/>
-        <location filename="../libgui/mainwindow.ui" line="222"/>
+        <location filename="../libgui/mainwindow.ui" line="219"/>
         <source>&amp;Transaction</source>
         <translation>&amp;Transaksi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="100"/>
+        <location filename="../libgui/mainwindow.ui" line="102"/>
         <source>&amp;Help</source>
         <translation>&amp;Bantuan</translation>
     </message>
@@ -3024,105 +3234,114 @@
         <translation type="vanished">Laporan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="109"/>
+        <location filename="../libgui/mainwindow.ui" line="111"/>
         <source>&amp;Report</source>
         <translation>&amp;Laporan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="127"/>
+        <location filename="../libgui/mainwindow.ui" line="129"/>
         <source>&amp;Setting</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="132"/>
+        <location filename="../libgui/mainwindow.ui" line="134"/>
         <source>&amp;Logout</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="137"/>
+        <location filename="../libgui/mainwindow.ui" line="139"/>
         <source>&amp;User</source>
         <translation>&amp;Pengguna</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="142"/>
+        <location filename="../libgui/mainwindow.ui" line="144"/>
         <source>&amp;Suplier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="147"/>
-        <location filename="../libgui/mainwindow.ui" line="182"/>
+        <location filename="../libgui/mainwindow.ui" line="149"/>
+        <location filename="../libgui/mainwindow.ui" line="179"/>
         <source>&amp;Items</source>
         <translation>&amp;Item</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="152"/>
+        <location filename="../libgui/mainwindow.ui" line="154"/>
         <source>&amp;Cashier</source>
         <translation>&amp;Kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="157"/>
         <source>&amp;Purchase</source>
-        <translation>&amp;Beli</translation>
+        <translation type="vanished">&amp;Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="162"/>
+        <location filename="../libgui/mainwindow.ui" line="159"/>
         <source>&amp;About</source>
         <translation>&amp;Tentang</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="167"/>
+        <location filename="../libgui/mainwindow.ui" line="164"/>
         <source>About &amp;Qt</source>
         <translation>Tentang &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="172"/>
+        <location filename="../libgui/mainwindow.ui" line="169"/>
         <source>&amp;Category</source>
         <translation>&amp;Kategori</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="177"/>
+        <location filename="../libgui/mainwindow.ui" line="174"/>
         <source>&amp;Sales</source>
         <translation>&amp;Penjualan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="187"/>
+        <location filename="../libgui/mainwindow.ui" line="184"/>
         <source>&amp;Change Password</source>
         <translation>&amp;Ganti Password</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="197"/>
+        <location filename="../libgui/mainwindow.ui" line="194"/>
         <source>&amp;Machines</source>
         <translation>&amp;Mesin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="202"/>
+        <location filename="../libgui/mainwindow.ui" line="199"/>
         <source>&amp;Reward</source>
         <translation>P&amp;oin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="207"/>
+        <location filename="../libgui/mainwindow.ui" line="204"/>
         <source>&amp;Customer List</source>
         <translation>&amp;Daftar Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="212"/>
+        <location filename="../libgui/mainwindow.ui" line="209"/>
         <source>Reward Setting</source>
         <translation>Setting Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="217"/>
+        <location filename="../libgui/mainwindow.ui" line="214"/>
         <source>&amp;Banks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="227"/>
+        <location filename="../libgui/mainwindow.ui" line="224"/>
         <source>&amp;Money</source>
         <translation>&amp;Keuangan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.ui" line="232"/>
+        <location filename="../libgui/mainwindow.ui" line="229"/>
         <source>&amp;Check Update</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/mainwindow.ui" line="234"/>
+        <source>Purchase</source>
+        <translation>Pembelian</translation>
+    </message>
+    <message>
+        <location filename="../libgui/mainwindow.ui" line="239"/>
+        <source>Purchase &amp;Return</source>
+        <translation>&amp;Return Pembelian</translation>
     </message>
     <message>
         <source>Sales</source>
@@ -3395,20 +3614,34 @@
         <translation>Qty</translation>
     </message>
     <message>
+        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="174"/>
+        <source>Price - Discount</source>
+        <translation>Harga - Diskon</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="191"/>
+        <source>Total</source>
+        <translation>Total</translation>
+    </message>
+    <message>
         <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="53"/>
         <source>Buy Price</source>
         <oldsource>Price</oldsource>
         <translation>Harga Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="120"/>
         <source>Total Price</source>
-        <translation>Total</translation>
+        <translation type="vanished">Total</translation>
     </message>
     <message>
         <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="46"/>
         <source>TextLabel</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="120"/>
+        <source>Unit Price</source>
+        <translation>Harga Satuan</translation>
     </message>
     <message>
         <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="143"/>
@@ -3429,14 +3662,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="174"/>
         <source>Total - Discount</source>
-        <translation>Total - Diskon</translation>
+        <translation type="vanished">Total - Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="191"/>
         <source>Single Price</source>
-        <translation>Harga Satuan</translation>
+        <translation type="vanished">Harga Satuan</translation>
     </message>
     <message>
         <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="225"/>
@@ -3462,6 +3693,14 @@
         <location filename="../libgui/purchase/purchaseadditemdialog.ui" line="292"/>
         <source>Save And Again</source>
         <translation>Simpan dan Lagi</translation>
+    </message>
+</context>
+<context>
+    <name>PurchaseItemSelectionDialog</name>
+    <message>
+        <location filename="../libgui/purchase/purchaseitemselectiondialog.ui" line="14"/>
+        <source>Select Purchase Item</source>
+        <translation>Pilih item pembelian</translation>
     </message>
 </context>
 <context>
@@ -3527,6 +3766,64 @@
     </message>
 </context>
 <context>
+    <name>ReturnAddDialog</name>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="14"/>
+        <source>Add new return item</source>
+        <translation>Tambah item retur</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="25"/>
+        <source>Suplier</source>
+        <translation>Suplier</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="32"/>
+        <source>Purchase Item</source>
+        <translation>Item Pembelian</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="39"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="46"/>
+        <source>Count</source>
+        <translation>Qty</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="53"/>
+        <source>Price</source>
+        <translation>Harga</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="60"/>
+        <source>Total</source>
+        <translation>Total</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="114"/>
+        <source>Note</source>
+        <translation>Catatan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="161"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="168"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnadddialog.ui" line="175"/>
+        <source>Save and Again</source>
+        <translation>Simpan dan Lagi</translation>
+    </message>
+</context>
+<context>
     <name>ReturnItemAddDialog</name>
     <message>
         <location filename="../libgui/cashier/returnitemadddialog.ui" line="14"/>
@@ -3579,6 +3876,84 @@
     </message>
     <message>
         <location filename="../libgui/cashier/returnitemadddialog.ui" line="154"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+</context>
+<context>
+    <name>ReturnResolutionDialog</name>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="14"/>
+        <source>Return resolution</source>
+        <translation>Resolusi Retur</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="25"/>
+        <source>Suplier</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="32"/>
+        <source>Barcode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="39"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="46"/>
+        <source>Count</source>
+        <translation>Qty</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="53"/>
+        <source>Price</source>
+        <translation>Harga</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="60"/>
+        <source>Total</source>
+        <translation>Total</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="67"/>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="74"/>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="81"/>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="88"/>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="98"/>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="108"/>
+        <source>TextLabel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="118"/>
+        <source>Item Returned</source>
+        <translation>Item Dikembalikan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="125"/>
+        <source>Money Returned</source>
+        <translation>Uang Dikembalikan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="132"/>
+        <source>Set as Returned</source>
+        <translation>Tandai sudah selesai</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="139"/>
+        <source>Date Returned</source>
+        <translation>Tanggal pengembalian</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="200"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../libgui/purchase/returnresolutiondialog.ui" line="207"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>

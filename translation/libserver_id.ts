@@ -9,8 +9,8 @@
         <translation>Piutang Pelanggan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/purchaseaction.cpp" line="94"/>
         <location filename="../libserver/action/purchaseaction.cpp" line="104"/>
+        <location filename="../libserver/action/purchaseaction.cpp" line="114"/>
         <source>Purchase : %1</source>
         <translation>Pembelian : %1</translation>
     </message>
@@ -38,6 +38,17 @@
         <location filename="../libserver/action/transactionaction.cpp" line="84"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/sellpriceactions.cpp" line="41"/>
+        <location filename="../libserver/action/sellpriceactions.cpp" line="60"/>
+        <source>Item with count already exist</source>
+        <translation>Item dengan jumlah tersebut telah ada</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/sellpriceactions.cpp" line="52"/>
+        <source>Item with id not found</source>
+        <translation>Item dengan id tidak ditemukan</translation>
     </message>
 </context>
 </TS>
