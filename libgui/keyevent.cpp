@@ -52,6 +52,9 @@ bool KeyEvent::eventFilter(QObject *obj, QEvent *event)
                 return true;
             }
         }
+    } else if(mFocusEvent && event->type() == QEvent::FocusIn) {
+        emit focused(obj);
+        return true;
     }
     return QObject::eventFilter(obj, event);
 }

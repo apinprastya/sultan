@@ -114,15 +114,19 @@ void PurchaseWidget::showEvent(QShowEvent *e)
     if(isShowed) return;
     isShowed = true;
     auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("status"))->getComboBox();
+    combo->blockSignals(true);
     combo->clear();
     combo->addItem(tr("All"), -1);
     combo->addItem(tr("Unpaid"), PAYMENT_STATUS::UNPAID);
     combo->addItem(tr("Paid"), PAYMENT_STATUS::PAID);
+    combo->blockSignals(false);
     combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("payment_type"))->getComboBox();
+    combo->blockSignals(true);
     combo->clear();
     combo->addItem(tr("All"), -1);
     combo->addItem(tr("Direct"), PURCHASEPAYMENT::DIRECT);
     combo->addItem(tr("Deadline"), PURCHASEPAYMENT::TEMPO);
+    combo->blockSignals(false);
 }
 
 void PurchaseWidget::messageReceived(LibG::Message *msg)

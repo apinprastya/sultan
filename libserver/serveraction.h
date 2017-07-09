@@ -61,7 +61,7 @@ protected:
     virtual QMap<QString, QString> fieldMap() const;
     virtual void selectAndJoin() {}
     virtual void afterInsert(const QVariantMap &/*data*/) {}
-    virtual void afterUpdate(const QVariantMap &/*data*/) {}
+    virtual void afterUpdate(const QVariantMap &/*oldData*/, const QVariantMap &/*newData*/) {}
 
     bool hasFlag(int flag);
 };

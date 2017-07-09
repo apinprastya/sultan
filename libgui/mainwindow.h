@@ -88,6 +88,7 @@ private slots:
     void openTransaction();
     void openMoney();
     void openAutoUpdate();
+    void openPurchaseReturn();
 };
 
 }

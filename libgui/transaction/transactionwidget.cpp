@@ -138,10 +138,12 @@ void TransactionWidget::showEvent(QShowEvent *e)
     if(isShowed) return;
     isShowed = true;
     auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("type"))->getComboBox();
+    combo->blockSignals(true);
     combo->clear();
     combo->addItem(tr("All"), -1);
     combo->addItem(tr("Income"), TRANSACTION_TYPE::INCOME);
     combo->addItem(tr("Expense"), TRANSACTION_TYPE::EXPENSE);
+    combo->blockSignals(false);
 }
 
 void TransactionWidget::refreshSummary()

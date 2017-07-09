@@ -93,7 +93,9 @@
      <string>&amp;Transaction</string>
     </property>
     <addaction name="action_Cashier"/>
-    <addaction name="action_Purchase"/>
+    <addaction name="separator"/>
+    <addaction name="actionPurchase"/>
+    <addaction name="actionPurchaseReturn"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -150,11 +152,6 @@
   <action name="action_Cashier">
    <property name="text">
     <string>&amp;Cashier</string>
-   </property>
-  </action>
-  <action name="action_Purchase">
-   <property name="text">
-    <string>&amp;Purchase</string>
    </property>
   </action>
   <action name="action_About">
@@ -230,6 +227,16 @@
   <action name="actionCheck_Update">
    <property name="text">
     <string>&amp;Check Update</string>
+   </property>
+  </action>
+  <action name="actionPurchase">
+   <property name="text">
+    <string>Purchase</string>
+   </property>
+  </action>
+  <action name="actionPurchaseReturn">
+   <property name="text">
+    <string>Purchase &amp;Return</string>
    </property>
   </action>
  </widget>

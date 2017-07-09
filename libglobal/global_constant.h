@@ -80,6 +80,7 @@ namespace MSG_TYPE {
     const int REWARD_POIN       = 15;
     const int BANK              = 16;
     const int TRANSACTION       = 17;
+    const int PURCHASE_RETURN   = 18;
 }
 
 namespace MSG_COMMAND {
@@ -158,6 +159,16 @@ namespace MONEY_LINK_TYPE {
     const int PURCHASE          = 1;
     const int TRANSACTION       = 2;
     const int CUSTOMER_CREDIT   = 3;
+}
+
+namespace PURCHASE_RETURN_TYPE {
+    const int ITEM      = 0;
+    const int MONEY     = 1;
+}
+
+namespace PURCHASE_RETURN_STATUS {
+    const int UNRETURN      = 0;
+    const int RETURNED      = 1;
 }
 
 }

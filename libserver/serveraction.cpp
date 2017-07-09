@@ -81,12 +81,14 @@ LibG::Message ServerAction::update(LibG::Message *msg)
     QVariantMap d = msg->data("data").toMap();
     if(hasFlag(HAS_UPDATE_FIELD))
         d.insert("updated_at", QDateTime::currentDateTime());
-    if(!mDb->update(mTableName, d)) {
+    DbResult oldRes = mDb->clone()->get(mTableName);
+    QVariantMap oldData = oldRes.first();
+    if(!mDb->clone()->update(mTableName, d)) {
         message.setError(mDb->lastError().text());
     } else {
-        DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);
+        DbResult res = mDb->clone()->where("id = ", msg->data("id"))->get(mTableName);
         const QVariantMap d = res.first();
-        if(hasFlag(AFTER_UPDATE)) afterUpdate(d);
+        if(hasFlag(AFTER_UPDATE)) afterUpdate(oldData, d);
         message.setData(d);
     }
     return message;

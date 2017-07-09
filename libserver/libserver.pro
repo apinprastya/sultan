@@ -61,7 +61,8 @@ SOURCES += \
     action/rewardaction.cpp \
     action/rewardpoinaction.cpp \
     action/bankaction.cpp \
-    action/transactionaction.cpp
+    action/transactionaction.cpp \
+    action/purchasereturnaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -84,4 +85,5 @@ HEADERS += \
     action/rewardaction.h \
     action/rewardpoinaction.h \
     action/bankaction.h \
-    action/transactionaction.h
+    action/transactionaction.h \
+    action/purchasereturnaction.h

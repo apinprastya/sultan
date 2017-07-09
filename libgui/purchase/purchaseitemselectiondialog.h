@@ -1,5 +1,5 @@
 /*
- * purchaseaction.h
+ * purchaseitemselectiondialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,28 +17,34 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEACTION_H
-#define PURCHASEACTION_H
+#ifndef PURCHASEITEMSELECTIONDIALOG_H
+#define PURCHASEITEMSELECTIONDIALOG_H
 
-#include "serveraction.h"
+#include "messagebus.h"
+#include "purchaseitem.h"
+#include <QDialog>
 
-namespace LibServer {
+namespace Ui {
+class PurchaseItemSelectionDialog;
+}
 
-class PurchaseAction: public ServerAction
+namespace LibGUI {
+
+class PurchaseItemSelectionDialog : public QDialog
 {
-public:
-    PurchaseAction();
-    LibG::Message del(LibG::Message *msg) override;
-    LibG::Message summary(LibG::Message *msg);
+    Q_OBJECT
 
-protected:
-    void afterInsert(const QVariantMap &data) override;
-    void afterUpdate(const QVariantMap &oldData, const QVariantMap &data) override;
-    void selectAndJoin() override;
-    QMap<QString, QString> fieldMap() const override;
-    void insertTransaction(const QVariantMap &data);
-    void updateTransaction(const QVariantMap &data);
+public:
+    PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item, QWidget *parent = 0);
+    ~PurchaseItemSelectionDialog();
+
+private:
+    Ui::PurchaseItemSelectionDialog *ui;
+    PurchaseItem *mItem;
+
+private slots:
+    void tableDoubleClicked(const QModelIndex &index);
 };
 
 }
-#endif // PURCHASEACTION_H
+#endif // PURCHASEITEMSELECTIONDIALOG_H

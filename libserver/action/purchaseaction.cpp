@@ -64,7 +64,7 @@ void PurchaseAction::afterInsert(const QVariantMap &data)
     }
 }
 
-void PurchaseAction::afterUpdate(const QVariantMap &data)
+void PurchaseAction::afterUpdate(const QVariantMap &/*oldData*/, const QVariantMap &data)
 {
     DbResult res = mDb->where("link_type = ", TRANSACTION_LINK_TYPE::PURCHASE)->where("link_id = ", data["id"])->get("transactions");
     if(res.isEmpty()) {

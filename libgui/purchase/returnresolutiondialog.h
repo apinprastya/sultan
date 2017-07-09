@@ -1,5 +1,5 @@
 /*
- * purchaseaction.h
+ * returnresolutiondialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Turbin.
@@ -17,28 +17,37 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEACTION_H
-#define PURCHASEACTION_H
+#ifndef RETURNRESOLUTIONDIALOG_H
+#define RETURNRESOLUTIONDIALOG_H
 
-#include "serveraction.h"
+#include "messagehandler.h"
+#include <QDialog>
 
-namespace LibServer {
+namespace Ui {
+class ReturnResolutionDialog;
+}
 
-class PurchaseAction: public ServerAction
+namespace LibGUI {
+
+class ReturnResolutionDialog : public QDialog, public LibG::MessageHandler
 {
+    Q_OBJECT
+
 public:
-    PurchaseAction();
-    LibG::Message del(LibG::Message *msg) override;
-    LibG::Message summary(LibG::Message *msg);
+    ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ~ReturnResolutionDialog();
+    void fill(const QVariantMap &data);
 
 protected:
-    void afterInsert(const QVariantMap &data) override;
-    void afterUpdate(const QVariantMap &oldData, const QVariantMap &data) override;
-    void selectAndJoin() override;
-    QMap<QString, QString> fieldMap() const override;
-    void insertTransaction(const QVariantMap &data);
-    void updateTransaction(const QVariantMap &data);
+    void messageReceived(LibG::Message *msg) override;
+
+private:
+    Ui::ReturnResolutionDialog *ui;
+    int mId;
+
+private slots:
+    void saveClicked();
 };
 
 }
-#endif // PURCHASEACTION_H
+#endif // RETURNRESOLUTIONDIALOG_H

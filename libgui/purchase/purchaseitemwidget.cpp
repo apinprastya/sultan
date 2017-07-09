@@ -70,7 +70,6 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     model->addColumn("name", tr("Name"));
     model->addColumn("count", tr("Count"), Qt::AlignRight);
     model->addColumnMoney("price", tr("Price"));
-    model->addColumnMoney("total", tr("Sub-total"));
     model->addColumnMoney("discount", tr("Discount"));
     model->addColumnMoney("final", tr("Total"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});

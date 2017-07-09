@@ -46,6 +46,7 @@
 #include "printer.h"
 #include "user/changepassworddialog.h"
 #include "flashmessagemanager.h"
+#include "purchase/purchasereturnwidget.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -86,7 +87,8 @@ void MainWindow::setup()
     ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
     ui->action_Cashier->setEnabled(UserSession::hasPermission(PERMISSION::CASHIER));
-    ui->action_Purchase->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
+    ui->actionPurchase->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
+    ui->actionPurchaseReturn->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
     ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
     ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
@@ -127,7 +129,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Cashier, SIGNAL(triggered(bool)), SLOT(openCashier()));
     connect(ui->action_Items, SIGNAL(triggered(bool)), SLOT(openItem()));
     connect(ui->action_Category, SIGNAL(triggered(bool)), SLOT(openCategory()));
-    connect(ui->action_Purchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
+    connect(ui->actionPurchase, SIGNAL(triggered(bool)), SLOT(openPurchase()));
     connect(ui->actionSales, SIGNAL(triggered(bool)), SLOT(openSalesReport()));
     connect(ui->actionItems, SIGNAL(triggered(bool)), SLOT(openItemReport()));
     connect(ui->action_Change_Password, SIGNAL(triggered(bool)), SLOT(openChangePassword()));
@@ -138,6 +140,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Transaction, SIGNAL(triggered(bool)), SLOT(openTransaction()));
     connect(ui->action_MOney, SIGNAL(triggered(bool)), SLOT(openMoney()));
     connect(ui->actionCheck_Update, SIGNAL(triggered(bool)), SLOT(openAutoUpdate()));
+    connect(ui->actionPurchaseReturn, SIGNAL(triggered(bool)), SLOT(openPurchaseReturn()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -376,4 +379,14 @@ void MainWindow::openAutoUpdate()
 {
     AutoUpdateDialog dialog(this);
     dialog.exec();
+}
+
+void MainWindow::openPurchaseReturn()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<PurchaseReturnWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new PurchaseReturnWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/bagbox.png");
+    }
 }
