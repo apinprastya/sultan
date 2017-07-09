@@ -19,7 +19,8 @@ SOURCES += \
     $$PWD/action/rewardaction.cpp \
     $$PWD/action/rewardpoinaction.cpp \
     $$PWD/action/bankaction.cpp \
-    $$PWD/action/transactionaction.cpp
+    $$PWD/action/transactionaction.cpp \
+    $$PWD/action/purchasereturnaction.cpp
 
 HEADERS += \ 
     $$PWD/server_global.h \
@@ -42,4 +43,5 @@ HEADERS += \
     $$PWD/action/rewardaction.h \
     $$PWD/action/rewardpoinaction.h \
     $$PWD/action/bankaction.h \
-    $$PWD/action/transactionaction.h
+    $$PWD/action/transactionaction.h \
+    $$PWD/action/purchasereturnaction.h

@@ -66,7 +66,12 @@ SOURCES += \
     $$PWD/cashier/solditemlistdialog.cpp \
     $$PWD/cashier/returnitemadddialog.cpp \
     $$PWD/about/autoupdatedialog.cpp \
-    $$PWD/transaction/addtransactiondialog.cpp
+    $$PWD/transaction/addtransactiondialog.cpp \
+    $$PWD/purchase/purchasereturnwidget.cpp \
+    $$PWD/purchase/returnadddialog.cpp \
+    $$PWD/purchase/purchaseitemselectiondialog.cpp \
+    $$PWD/purchase/purchaseitem.cpp \
+    $$PWD/purchase/returnresolutiondialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -136,7 +141,12 @@ HEADERS += \
     $$PWD/cashier/solditemlistdialog.h \
     $$PWD/cashier/returnitemadddialog.h \
     $$PWD/about/autoupdatedialog.h \
-    $$PWD/transaction/addtransactiondialog.h
+    $$PWD/transaction/addtransactiondialog.h \
+    $$PWD/purchase/purchasereturnwidget.h \
+    $$PWD/purchase/returnadddialog.h \
+    $$PWD/purchase/purchaseitemselectiondialog.h \
+    $$PWD/purchase/purchaseitem.h \
+    $$PWD/purchase/returnresolutiondialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -177,4 +187,7 @@ FORMS += \
     $$PWD/cashier/solditemlistdialog.ui \
     $$PWD/cashier/returnitemadddialog.ui \
     $$PWD/about/autoupdatedialog.ui \
-    $$PWD/transaction/addtransactiondialog.ui
+    $$PWD/transaction/addtransactiondialog.ui \
+    $$PWD/purchase/returnadddialog.ui \
+    $$PWD/purchase/purchaseitemselectiondialog.ui \
+    $$PWD/purchase/returnresolutiondialog.ui
