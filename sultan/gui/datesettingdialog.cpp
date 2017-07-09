@@ -28,7 +28,10 @@ DateSettingDialog::DateSettingDialog(QWidget *parent) :
     ui(new Ui::DateSettingDialog)
 {
     ui->setupUi(this);
-    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+    QDateTime dt = QDateTime::currentDateTime();
+    if(dt.date().year() < 2000)
+        dt = dt.fromString("2000-01-01 07:00:00", "yyyy-MM-dd hh:mm:ss");
+    ui->dateTimeEdit->setDateTime(dt);
     connect(ui->pushButton, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
