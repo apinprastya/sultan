@@ -36,7 +36,11 @@ macx {
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
-        LIBS += -lKernel32 -lwinspool
+        !contains(CONFIG, NO_PRINTER_SPOOL) {
+            LIBS += -lKernel32 -lwinspool
+        } else {
+            DEFINES+=NO_PRINTER_SPOOL
+        }
     }
     RC_FILE = sultan.rc
     DESTDIR = ../bin/
@@ -51,7 +55,11 @@ macx {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
-        LIBS += -lcups
+        !contains(CONFIG, NO_PRINTER_SPOOL) {
+            LIBS += -lcups
+        } else {
+            DEFINES+=NO_PRINTER_SPOOL
+        }
     }
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $${OUT_PWD}/../bin/)
