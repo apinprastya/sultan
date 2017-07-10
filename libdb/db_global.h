@@ -29,7 +29,11 @@
     #if defined(DB_LIBRARY)
         #define DBSHARED_EXPORT Q_DECL_EXPORT
     #else
-        #define DBSHARED_EXPORT Q_DECL_IMPORT
+        #if defined(SINGLEBIN)
+            #define DBSHARED_EXPORT
+        #else
+            #define DBSHARED_EXPORT Q_DECL_IMPORT
+        #endif
     #endif
 #endif
 

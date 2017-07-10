@@ -9,7 +9,11 @@
     #if defined(GLOBAL_LIBRARY)
         #define GLOBALSHARED_EXPORT Q_DECL_EXPORT
     #else
-        #define GLOBALSHARED_EXPORT Q_DECL_IMPORT
+        #if defined(SINGLEBIN)
+            #define GLOBALSHARED_EXPORT
+        #else
+            #define GLOBALSHARED_EXPORT Q_DECL_IMPORT
+        #endif
     #endif
 #endif
 

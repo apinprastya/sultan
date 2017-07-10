@@ -9,7 +9,11 @@
     #if defined(SERVER_LIBRARY)
         #define SERVERSHARED_EXPORT Q_DECL_EXPORT
     #else
-        #define SERVERSHARED_EXPORT Q_DECL_IMPORT
+        #if defined(SINGLEBIN)
+            #define SERVERSHARED_EXPORT
+        #else
+            #define SERVERSHARED_EXPORT Q_DECL_IMPORT
+        #endif
     #endif
 #endif
 

@@ -9,7 +9,11 @@
     #if defined(GUI_LIBRARY)
         #define GUISHARED_EXPORT Q_DECL_EXPORT
     #else
-        #define GUISHARED_EXPORT Q_DECL_IMPORT
+        #if defined(SINGLEBIN)
+            #define GUISHARED_EXPORT
+        #else
+            #define GUISHARED_EXPORT Q_DECL_IMPORT
+        #endif
     #endif
 #endif
 

@@ -27,6 +27,7 @@ macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation
     contains(CONFIG, SINGLEBIN) {
+        DEFINES+=SINGLEBIN
         LIBS += -lcups
     }
     DESTDIR = ../bin
@@ -36,6 +37,7 @@ macx {
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
+        DEFINES+=SINGLEBIN
         !contains(CONFIG, NO_PRINTER_SPOOL) {
             LIBS += -lKernel32 -lwinspool
         } else {
@@ -55,6 +57,7 @@ macx {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
+        DEFINES+=SINGLEBIN
         !contains(CONFIG, NO_PRINTER_SPOOL) {
             LIBS += -lcups
         } else {

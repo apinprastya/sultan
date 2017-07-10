@@ -28,7 +28,11 @@
     #if defined(PRINT_LIBRARY)
         #define PRINTSHARED_EXPORT Q_DECL_EXPORT
     #else
-        #define PRINTSHARED_EXPORT Q_DECL_IMPORT
+        #if defined(SINGLEBIN)
+            #define PRINTSHARED_EXPORT
+        #else
+            #define PRINTSHARED_EXPORT Q_DECL_IMPORT
+        #endif
     #endif
 #endif
 
