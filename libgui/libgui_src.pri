@@ -71,7 +71,8 @@ SOURCES += \
     $$PWD/purchase/returnadddialog.cpp \
     $$PWD/purchase/purchaseitemselectiondialog.cpp \
     $$PWD/purchase/purchaseitem.cpp \
-    $$PWD/purchase/returnresolutiondialog.cpp
+    $$PWD/purchase/returnresolutiondialog.cpp \
+    $$PWD/cashier/checkpricedialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -146,7 +147,8 @@ HEADERS += \
     $$PWD/purchase/returnadddialog.h \
     $$PWD/purchase/purchaseitemselectiondialog.h \
     $$PWD/purchase/purchaseitem.h \
-    $$PWD/purchase/returnresolutiondialog.h
+    $$PWD/purchase/returnresolutiondialog.h \
+    $$PWD/cashier/checkpricedialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -190,4 +192,5 @@ FORMS += \
     $$PWD/transaction/addtransactiondialog.ui \
     $$PWD/purchase/returnadddialog.ui \
     $$PWD/purchase/purchaseitemselectiondialog.ui \
-    $$PWD/purchase/returnresolutiondialog.ui
+    $$PWD/purchase/returnresolutiondialog.ui \
+    $$PWD/cashier/checkpricedialog.ui
