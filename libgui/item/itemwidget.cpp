@@ -97,7 +97,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumnMoney("count", tr("Count"));
     model->addColumnMoney("price", tr("Sell Price"));
     model->addColumn("discount_formula", tr("Discount Formula"));
-    model->addColumn("discount", tr("Discount"));
+    model->addColumnMoney("discount", tr("Discount"));
     model->addColumnMoney("final", tr("Price - Discount"));
     model->setTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::QUERY);
     mSecondTable->setupTable();

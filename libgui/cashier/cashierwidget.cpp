@@ -42,6 +42,7 @@
 #include "advancepaymentdialog.h"
 #include "flashmessagemanager.h"
 #include "paycashlessdialog.h"
+#include "checkpricedialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -103,6 +104,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -495,4 +497,16 @@ void CashierWidget::resetCustomer(bool dontShowMessage)
         FlashMessageManager::showMessage(tr("Customer reseted"));
     mModel->getCustomer()->reset();
     updateCustomerLabel();
+}
+
+void CashierWidget::openCheckPrice()
+{
+    QString barcode = "";
+    const QModelIndex &index = ui->tableView->currentIndex();
+    if(index.isValid() && GuiUtil::isWidgetFocused(ui->tableView)) {
+        auto item = static_cast<CashierItem*>(index.internalPointer());
+        barcode = item->barcode;
+    }
+    CheckPriceDialog dialog(mMessageBus, barcode, this);
+    dialog.exec();
 }

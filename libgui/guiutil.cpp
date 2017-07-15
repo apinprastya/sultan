@@ -25,6 +25,7 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QLabel>
+#include <QApplication>
 
 using namespace LibGUI;
 
@@ -103,4 +104,9 @@ void GuiUtil::populateCategory(QComboBox *combo, const QVariantList &list, const
         combo->addItem(m["name"].toString(), m["id"].toInt());
     }
     GuiUtil::selectCombo(combo, currentSelected);
+}
+
+bool GuiUtil::isWidgetFocused(QWidget *widget)
+{
+    return qApp->focusWidget() == widget;
 }

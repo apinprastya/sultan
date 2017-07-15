@@ -112,7 +112,8 @@ SOURCES += \
     purchase/returnadddialog.cpp \
     purchase/purchaseitemselectiondialog.cpp \
     purchase/purchaseitem.cpp \
-    purchase/returnresolutiondialog.cpp
+    purchase/returnresolutiondialog.cpp \
+    cashier/checkpricedialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -187,7 +188,8 @@ HEADERS += \
     purchase/returnadddialog.h \
     purchase/purchaseitemselectiondialog.h \
     purchase/purchaseitem.h \
-    purchase/returnresolutiondialog.h
+    purchase/returnresolutiondialog.h \
+    cashier/checkpricedialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -231,4 +233,5 @@ FORMS += \
     transaction/addtransactiondialog.ui \
     purchase/returnadddialog.ui \
     purchase/purchaseitemselectiondialog.ui \
-    purchase/returnresolutiondialog.ui
+    purchase/returnresolutiondialog.ui \
+    cashier/checkpricedialog.ui
