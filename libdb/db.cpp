@@ -270,6 +270,24 @@ DbResult Db::exec()
     return DbResult(result);
 }
 
+DbResult Db::execResult(const QString &sql)
+{
+    QList<QVariant> result;
+    QSqlQuery query(getDatabase());
+    if (query.exec(sql)) {
+        QSqlRecord record = query.record();
+        while(query.next()) {
+            QVariantMap map;
+            for(int i = 0; i < record.count(); i++)
+                map.insert(record.fieldName(i), query.value(i));
+            result.append(map);
+        }
+    }
+    reset();
+    postQuery(&query);
+    return DbResult(result);
+}
+
 DbResult Db::get(const QString &tableName)
 {
     return table(tableName)->exec();

@@ -1,3 +1,4 @@
+include(../external_library/o2/src/src.pri)
 include(../libglobal/libglobal.pri)
 include(../libprint/libprint.pri)
 include(../libdb/libdb.pri)
@@ -8,6 +9,13 @@ target.path = $${LIBDIR}
 INSTALLS += target
 
 QT += core gui widgets network
+
+CONFIG(USE_WEBENGINE) {
+    QT += webenginewidgets
+    DEFINES += USE_WEBENGINE
+} else {
+    QT += webkitwidgets
+}
 
 CONFIG(static) {
     CONFIG += staticlib
@@ -113,7 +121,11 @@ SOURCES += \
     purchase/purchaseitemselectiondialog.cpp \
     purchase/purchaseitem.cpp \
     purchase/returnresolutiondialog.cpp \
-    cashier/checkpricedialog.cpp
+    cashier/checkpricedialog.cpp \
+    admin/importexportdatabasedialog.cpp \
+    admin/browserdialog.cpp \
+    googledrive.cpp \
+    admin/listdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -189,7 +201,11 @@ HEADERS += \
     purchase/purchaseitemselectiondialog.h \
     purchase/purchaseitem.h \
     purchase/returnresolutiondialog.h \
-    cashier/checkpricedialog.h
+    cashier/checkpricedialog.h \
+    admin/importexportdatabasedialog.h \
+    admin/browserdialog.h \
+    googledrive.h \
+    admin/listdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -234,4 +250,7 @@ FORMS += \
     purchase/returnadddialog.ui \
     purchase/purchaseitemselectiondialog.ui \
     purchase/returnresolutiondialog.ui \
-    cashier/checkpricedialog.ui
+    cashier/checkpricedialog.ui \
+    admin/importexportdatabasedialog.ui \
+    admin/browserdialog.ui \
+    admin/listdialog.ui

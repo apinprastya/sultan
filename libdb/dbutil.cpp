@@ -19,7 +19,9 @@
  */
 
 #include "dbutil.h"
+#include "dbresult.h"
 #include <QDateTime>
+#include <QStringBuilder>
 
 using namespace LibDB;
 
@@ -57,4 +59,13 @@ QDateTime DBUtil::sqlDateToDateTime(const QString &value)
             return date;
     }
     return QDateTime();
+}
+
+QString DBUtil::DBResultToString(DbResult *result)
+{
+    QString str;
+    for(int i = 0; i < result->size(); i++) {
+        //str = str %
+    }
+    return str;
 }

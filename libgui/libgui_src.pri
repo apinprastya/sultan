@@ -72,7 +72,11 @@ SOURCES += \
     $$PWD/purchase/purchaseitemselectiondialog.cpp \
     $$PWD/purchase/purchaseitem.cpp \
     $$PWD/purchase/returnresolutiondialog.cpp \
-    $$PWD/cashier/checkpricedialog.cpp
+    $$PWD/cashier/checkpricedialog.cpp \
+    $$PWD/admin/importexportdatabasedialog.cpp \
+    $$PWD/admin/browserdialog.cpp \
+    $$PWD/googledrive.cpp \
+    $$PWD/admin/listdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -148,7 +152,11 @@ HEADERS += \
     $$PWD/purchase/purchaseitemselectiondialog.h \
     $$PWD/purchase/purchaseitem.h \
     $$PWD/purchase/returnresolutiondialog.h \
-    $$PWD/cashier/checkpricedialog.h
+    $$PWD/cashier/checkpricedialog.h \
+    $$PWD/admin/importexportdatabasedialog.h \
+    $$PWD/admin/browserdialog.h \
+    $$PWD/googledrive.h \
+    $$PWD/admin/listdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -193,4 +201,7 @@ FORMS += \
     $$PWD/purchase/returnadddialog.ui \
     $$PWD/purchase/purchaseitemselectiondialog.ui \
     $$PWD/purchase/returnresolutiondialog.ui \
-    $$PWD/cashier/checkpricedialog.ui
+    $$PWD/cashier/checkpricedialog.ui \
+    $$PWD/admin/importexportdatabasedialog.ui \
+    $$PWD/admin/browserdialog.ui \
+    $$PWD/admin/listdialog.ui

@@ -47,6 +47,7 @@
 #include "user/changepassworddialog.h"
 #include "flashmessagemanager.h"
 #include "purchase/purchasereturnwidget.h"
+#include "admin/importexportdatabasedialog.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -141,6 +142,7 @@ void MainWindow::setupConnection()
     connect(ui->action_MOney, SIGNAL(triggered(bool)), SLOT(openMoney()));
     connect(ui->actionCheck_Update, SIGNAL(triggered(bool)), SLOT(openAutoUpdate()));
     connect(ui->actionPurchaseReturn, SIGNAL(triggered(bool)), SLOT(openPurchaseReturn()));
+    connect(ui->actionImport_Export_Database, SIGNAL(triggered(bool)), SLOT(openExportImport()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -389,4 +391,10 @@ void MainWindow::openPurchaseReturn()
         auto widget = new PurchaseReturnWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/bagbox.png");
     }
+}
+
+void MainWindow::openExportImport()
+{
+    ImportExportDatabaseDialog dialog(mMessageBus, this);
+    dialog.exec();
 }

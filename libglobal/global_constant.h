@@ -36,6 +36,11 @@ namespace CONSTANT {
     const QString URL_DOWNLOAD      = QStringLiteral("https://sultanupdate.lekapin.com/assets/upload/sultan_%1_%2_%3");
 }
 
+namespace GOOGLE {
+    const QString CLIENT_ID         = QStringLiteral("1016493816749-tivbcpabpqpf9lpa5er1f7t8rd8vls93.apps.googleusercontent.com");
+    const QString CLIENT_SECRET     = QStringLiteral("6tAzo9zJp_pTwSD_L6-KBOqc");
+}
+
 namespace PERMISSION {
     const int ADMINISTRATOR     = 9876;
     const int USER              = 1;
@@ -81,6 +86,7 @@ namespace MSG_TYPE {
     const int BANK              = 16;
     const int TRANSACTION       = 17;
     const int PURCHASE_RETURN   = 18;
+    const int DATABASE          = 19;
 }
 
 namespace MSG_COMMAND {

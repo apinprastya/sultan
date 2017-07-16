@@ -58,6 +58,8 @@
     </property>
     <addaction name="actionSetting"/>
     <addaction name="separator"/>
+    <addaction name="actionImport_Export_Database"/>
+    <addaction name="separator"/>
     <addaction name="actionLogout"/>
    </widget>
    <widget class="QMenu" name="menuAdministration">
@@ -237,6 +239,11 @@
   <action name="actionPurchaseReturn">
    <property name="text">
     <string>Purchase &amp;Return</string>
+   </property>
+  </action>
+  <action name="actionImport_Export_Database">
+   <property name="text">
+    <string>&amp;Import / Export Database</string>
    </property>
   </action>
  </widget>
