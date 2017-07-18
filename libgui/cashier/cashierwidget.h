@@ -61,6 +61,7 @@ private:
     void loadFromSlot(int slot);
     void removeSlot(int slot);
     void updateCustomerLabel();
+    double getTax();
 
 private slots:
     void barcodeEntered();

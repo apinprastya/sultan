@@ -86,13 +86,13 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
     mDb->table(mTableName)->where("barcode = ", barcode);
     DbResult res = mDb->exec();
     if(res.isEmpty()) {
-        message.setError("Item not found");
+        message.setError(QObject::tr("Item not found"));
     } else {
         message.addData("item", res.first());
         mDb->table("sellprices")->where("barcode = ", barcode);
         res = mDb->exec();
         if(res.isEmpty()) {
-            message.setError("Item has no price");
+            message.setError(QObject::tr("Item has no price"));
         } else {
             message.addData("prices", res.data());
         }

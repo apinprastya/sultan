@@ -66,6 +66,9 @@ void SettingWidget::setupAppliaction()
 {
     ui->lineAppName->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->plainSubName->setPlainText(Preference::getString(SETTING::MARKET_SUBNAME, "Jl. Bantul\nYogyakarta"));
+
+    ui->groupBoxTax->setChecked(Preference::getBool(SETTING::USE_TAX));
+    ui->lineSalesTax->setText(Preference::getString(SETTING::TAX_VALUE));
 }
 
 void SettingWidget::setupLocale()
@@ -141,6 +144,9 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
     Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toInt());
+    //taxes
+    Preference::setValue(SETTING::USE_TAX, ui->groupBoxTax->isChecked());
+    Preference::setValue(SETTING::TAX_VALUE, ui->lineSalesTax->text());
     //locale
     Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());

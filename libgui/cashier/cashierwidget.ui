@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>804</width>
-    <height>473</height>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,6 +213,112 @@ border: 1px solid #ababab;</string>
     </widget>
    </item>
    <item>
+    <widget class="QWidget" name="widgetTax" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_8">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayoutTax">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget_3" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>250</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: white;
+border: 1px solid #ababab;</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="labelAlignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="styleSheet">
+              <string notr="true">font: italic; border: none;</string>
+             </property>
+             <property name="text">
+              <string>Sub Total</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="labelSubTotal">
+             <property name="styleSheet">
+              <string notr="true">border: none;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="styleSheet">
+              <string notr="true">font: italic; border: none;</string>
+             </property>
+             <property name="text">
+              <string>Tax</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="labelTax">
+             <property name="styleSheet">
+              <string notr="true">border: none;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -240,7 +346,7 @@ border: 1px solid #ababab;</string>
          <item row="0" column="0">
           <widget class="QLabel" name="label_4">
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">font: italic;</string>
            </property>
            <property name="text">
             <string>Cusomer</string>
@@ -259,6 +365,9 @@ border: 1px solid #ababab;</string>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="styleSheet">
+            <string notr="true">font: italic;</string>
+           </property>
            <property name="text">
             <string>Name</string>
            </property>
@@ -266,6 +375,9 @@ border: 1px solid #ababab;</string>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_5">
+           <property name="styleSheet">
+            <string notr="true">font: italic;</string>
+           </property>
            <property name="text">
             <string>Poin</string>
            </property>

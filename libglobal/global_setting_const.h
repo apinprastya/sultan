@@ -49,6 +49,9 @@ namespace SETTING {
     const QString LOCALE_SIGN                   = QStringLiteral("application/locale_sign");
     const QString LOCALE_DECIMAL                = QStringLiteral("application/locale_decimal");
 
+    const QString USE_TAX                       = QStringLiteral("application/use_tax");
+    const QString TAX_VALUE                     = QStringLiteral("application/tax_value");
+
     const QString PRINTER_CASHIER_TYPE          = QStringLiteral("printer/cashier_type");
     const QString PRINTER_CASHIER_NAME          = QStringLiteral("printer/cashier_name");
     const QString PRINTER_CASHIER_DEVICE        = QStringLiteral("printer/cashier_device");

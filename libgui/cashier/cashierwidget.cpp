@@ -43,6 +43,7 @@
 #include "flashmessagemanager.h"
 #include "paycashlessdialog.h"
 #include "checkpricedialog.h"
+#include "util.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -117,6 +118,9 @@ CashierWidget::~CashierWidget()
 void CashierWidget::showEvent(QShowEvent *event)
 {
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
+    bool isTax = Preference::getBool(SETTING::USE_TAX);
+    if(!isTax) ui->widgetTax->hide();
+    else ui->widgetTax->show();
     QWidget::showEvent(event);
 }
 
@@ -124,6 +128,8 @@ void CashierWidget::messageReceived(LibG::Message *msg)
 {
     if(!msg->isSuccess()) {
         QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE))
+            ui->lineBarcode->selectAll();
         return;
     }
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
@@ -239,6 +245,12 @@ void CashierWidget::updateCustomerLabel()
     ui->labelCustomerPoin->setText(QString::number(cust->reward));
 }
 
+double CashierWidget::getTax()
+{
+    return Preference::getBool(SETTING::USE_TAX) ?
+                Util::calculateDiscount(Preference::getString(SETTING::TAX_VALUE), mModel->getTotal()) : 0;
+}
+
 void CashierWidget::barcodeEntered()
 {
     QString barcode = ui->lineBarcode->text();
@@ -259,7 +271,15 @@ void CashierWidget::barcodeEntered()
 
 void CashierWidget::totalChanged(double value)
 {
-    ui->labelTotal->setText(Preference::toString(value));
+    bool isTax = Preference::getBool(SETTING::USE_TAX);
+    if(!isTax) {
+        ui->labelTotal->setText(Preference::toString(value));
+    } else {
+        double tax = Util::calculateDiscount(Preference::getString(SETTING::TAX_VALUE), value);
+        ui->labelSubTotal->setText(Preference::toString(value));
+        ui->labelTax->setText(Preference::toString(tax));
+        ui->labelTotal->setText(Preference::toString(value + tax));
+    }
 }
 
 void CashierWidget::selectRow(const QModelIndex &index)
@@ -290,14 +310,14 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
 void CashierWidget::payCash()
 {
     if(mModel->isEmpty()) return;
-    mPayCashDialog->fill(mModel->getTotal());
+    mPayCashDialog->fill(mModel->getTotal() + getTax());
     mPayCashDialog->show();
 }
 
 void CashierWidget::payCashless()
 {
     if(mModel->isEmpty()) return;
-    mPayCashlessDialog->showDialog(mModel->getTotal());
+    mPayCashlessDialog->showDialog(mModel->getTotal() + getTax());
 }
 
 void CashierWidget::payAdvance()
@@ -307,7 +327,7 @@ void CashierWidget::payAdvance()
         FlashMessageManager::showMessage(tr("Advance payment only for valid customer"), FlashMessage::Error);
         return;
     }
-    mAdvancePaymentDialog->setup(mModel->getTotal(), mModel->getCustomer());
+    mAdvancePaymentDialog->setup(mModel->getTotal() + getTax(), mModel->getCustomer());
     mAdvancePaymentDialog->show();
 }
 
@@ -335,18 +355,20 @@ void CashierWidget::updateLastInputed()
 void CashierWidget::payRequested(int type, double value)
 {
     QVariantMap data;
+    double tax = getTax();
     data.insert("cart", mModel->getCart());
     data.insert("user_id", UserSession::id());
     data.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
     data.insert("subtotal", mModel->getTotal());
+    data.insert("tax", tax);
     if(type == PAYMENT::CASH) {
         data.insert("payment", value);
-        data.insert("total", mModel->getTotal());
+        data.insert("total", mModel->getTotal() + tax);
         data.insert("bank_id", 0);
     } else {
         data.insert("payment", mModel->getTotal());
         data.insert("additional_charge", value);
-        data.insert("total", mModel->getTotal() + value);
+        data.insert("total", mModel->getTotal() + value + tax);
         data.insert("card_number", mPayCashlessDialog->getCardNumber());
         data.insert("bank_id", mPayCashlessDialog->getBank());
         data.insert("card_type", mPayCashlessDialog->getCardType());
@@ -362,10 +384,12 @@ void CashierWidget::payRequested(int type, double value)
 void CashierWidget::printBill(const QVariantMap &data)
 {
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    bool isTax = Preference::getBool(SETTING::USE_TAX);
     if(type < 0) {
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
         return;
     }
+    int paymentType = data["payment_type"].toInt();
     const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
     const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
@@ -394,9 +418,26 @@ void CashierWidget::printBill(const QVariantMap &data)
         escp->rightText(Preference::toString(m["final"].toDouble()))->column(QList<int>())->newLine();
     }
     escp->line();
-    escp->column(QList<int>{50, 50})->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine()->
-            leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
+    escp->column(QList<int>{50, 50});
+    if(isTax) {
+        escp->leftText(tr("Sub-total"))->rightText(Preference::toString(data["subtotal"].toDouble()))->newLine()->
+                leftText(tr("Tax"))->rightText(Preference::toString(data["tax"].toDouble()))->newLine();
+        if(paymentType == PAYMENT::NON_CASH)
+            escp->leftText(tr("Card Charge"))->rightText(Preference::toString(data["additional_charge"].toDouble()))->newLine();
+        escp->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine();
+    } else {
+        if(paymentType == PAYMENT::NON_CASH) {
+            escp->leftText(tr("Sub-total"))->rightText(Preference::toString(data["subtotal"].toDouble()))->newLine()->
+                leftText(tr("Card Charge"))->rightText(Preference::toString(data["additional_charge"].toDouble()))->newLine();
+        }
+        escp->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine();
+    }
+    if(paymentType == PAYMENT::CASH) {
+        escp->leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
             leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
+    } else {
+        escp->leftText(tr("Card Number"))->rightText(data["card_number"].toString())->newLine();
+    }
     escp->column(QList<int>())->doubleHeight(false);
     if(data.contains("customer")) {
         const QVariantMap &cust = data["customer"].toMap();
@@ -406,8 +447,6 @@ void CashierWidget::printBill(const QVariantMap &data)
         if(credit > 0) {
             escp->leftText(tr("Credit"))->rightText(Preference::toString(cust["credit"].toDouble()))->newLine();
         }
-    } else {
-        escp->line();
     }
     escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
