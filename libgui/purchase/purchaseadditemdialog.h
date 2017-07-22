@@ -51,10 +51,10 @@ private:
     int mId = 0;
     bool mIsAgain = false;
     bool mIsClosing = false;
-    double mDiscount;
-    double mTotal;
-    float mCurrentStock;
-    double mBuyPrice;
+    double mDiscount = 0;
+    double mTotal = 0;
+    float mCurrentStock = 0;
+    double mBuyPrice = 0;
 
     void save();
     void getPurchaseItem(const QString &barcode);
