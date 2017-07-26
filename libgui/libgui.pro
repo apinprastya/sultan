@@ -125,7 +125,9 @@ SOURCES += \
     admin/importexportdatabasedialog.cpp \
     admin/browserdialog.cpp \
     googledrive.cpp \
-    admin/listdialog.cpp
+    admin/listdialog.cpp \
+    checkstock/checkstockwidget.cpp \
+    checkstock/checkstockadddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -205,7 +207,9 @@ HEADERS += \
     admin/importexportdatabasedialog.h \
     admin/browserdialog.h \
     googledrive.h \
-    admin/listdialog.h
+    admin/listdialog.h \
+    checkstock/checkstockwidget.h \
+    checkstock/checkstockadddialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -253,4 +257,5 @@ FORMS += \
     cashier/checkpricedialog.ui \
     admin/importexportdatabasedialog.ui \
     admin/browserdialog.ui \
-    admin/listdialog.ui
+    admin/listdialog.ui \
+    checkstock/checkstockadddialog.ui

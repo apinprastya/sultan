@@ -55,6 +55,7 @@ private:
     double mTotal = 0;
     float mCurrentStock = 0;
     double mBuyPrice = 0;
+    QString mLastBarcode;
 
     void save();
     void getPurchaseItem(const QString &barcode);

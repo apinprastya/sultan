@@ -87,6 +87,7 @@ namespace MSG_TYPE {
     const int TRANSACTION       = 17;
     const int PURCHASE_RETURN   = 18;
     const int DATABASE          = 19;
+    const int CHECKSTOCK        = 20;
 }
 
 namespace MSG_COMMAND {

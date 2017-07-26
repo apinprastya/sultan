@@ -50,5 +50,15 @@
         <source>Item with id not found</source>
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
+    <message>
+        <location filename="../libserver/action/itemaction.cpp" line="89"/>
+        <source>Item not found</source>
+        <translation>Item tidak ditemukan</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/itemaction.cpp" line="95"/>
+        <source>Item has no price</source>
+        <translation>Item tidak memiliki harga</translation>
+    </message>
 </context>
 </TS>

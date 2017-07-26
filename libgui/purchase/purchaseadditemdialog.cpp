@@ -27,6 +27,7 @@
 #include "preference.h"
 #include "item/additemdialog.h"
 #include "db_constant.h"
+#include "keyevent.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -40,8 +41,12 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
 {
     ui->setupUi(this);
     setMessageBus(bus);
-    connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(barcodeDone()));
-    connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
+    auto ke = new KeyEvent(this);
+    ke->addConsumeKey(Qt::Key_Return);
+    ke->addConsumeKey(Qt::Key_Enter);
+    ke->addConsumeKey(Qt::Key_Tab);
+    ui->lineBarcode->installEventFilter(ke);
+    connect(ke, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(barcodeDone()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAgainClicked()));
     connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
@@ -93,6 +98,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
+            mLastBarcode = ui->lineBarcode->text();
             ui->labelName->setText(msg->data("name").toString());
             ui->labelName->setStyleSheet("color: black");
             ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
@@ -156,6 +162,10 @@ void PurchaseAddItemDialog::save()
 {
     if(ui->doubleCount->value() == 0) {
         QMessageBox::critical(this, tr("Error"), tr("Count and price can not zero value"));
+        return;
+    }
+    if(mLastBarcode != ui->lineBarcode->text()) {
+        QMessageBox::critical(this, tr("Error"), tr("Barcode has problem, please redo the input"));
         return;
     }
     LibG::Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::INSERT);

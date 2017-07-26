@@ -63,7 +63,8 @@ SOURCES += \
     action/bankaction.cpp \
     action/transactionaction.cpp \
     action/purchasereturnaction.cpp \
-    action/databaseaction.cpp
+    action/databaseaction.cpp \
+    action/checkstockaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -88,4 +89,5 @@ HEADERS += \
     action/bankaction.h \
     action/transactionaction.h \
     action/purchasereturnaction.h \
-    action/databaseaction.h
+    action/databaseaction.h \
+    action/checkstockaction.h

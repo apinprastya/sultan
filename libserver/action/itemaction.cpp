@@ -49,12 +49,14 @@ Message ItemAction::insert(Message *msg)
     } else {
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
         message.setData(res.first());
-        QVariantMap d;
-        d.insert("barcode", msg->data("barcode"));
-        d.insert("count", 1);
-        d.insert("price", sellprice);
-        d.insert("final", sellprice);
-        mDb->insert("sellprices", d);
+        if(sellprice != 0) {
+            QVariantMap d;
+            d.insert("barcode", msg->data("barcode"));
+            d.insert("count", 1);
+            d.insert("price", sellprice);
+            d.insert("final", sellprice);
+            mDb->insert("sellprices", d);
+        }
     }
     return message;
 }

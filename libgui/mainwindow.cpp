@@ -48,6 +48,7 @@
 #include "flashmessagemanager.h"
 #include "purchase/purchasereturnwidget.h"
 #include "admin/importexportdatabasedialog.h"
+#include "checkstock/checkstockwidget.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -143,6 +144,7 @@ void MainWindow::setupConnection()
     connect(ui->actionCheck_Update, SIGNAL(triggered(bool)), SLOT(openAutoUpdate()));
     connect(ui->actionPurchaseReturn, SIGNAL(triggered(bool)), SLOT(openPurchaseReturn()));
     connect(ui->actionImport_Export_Database, SIGNAL(triggered(bool)), SLOT(openExportImport()));
+    connect(ui->action_Check_Stock, SIGNAL(triggered(bool)), SLOT(openCheckStock()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -397,4 +399,14 @@ void MainWindow::openExportImport()
 {
     ImportExportDatabaseDialog dialog(mMessageBus, this);
     dialog.exec();
+}
+
+void MainWindow::openCheckStock()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<CheckStockWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new CheckStockWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/bagbox.png");
+    }
 }

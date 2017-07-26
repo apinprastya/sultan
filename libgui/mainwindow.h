@@ -90,6 +90,7 @@ private slots:
     void openAutoUpdate();
     void openPurchaseReturn();
     void openExportImport();
+    void openCheckStock();
 };
 
 }
