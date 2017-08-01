@@ -60,7 +60,6 @@ void AddItemDialog::reset(bool isAddAgain)
     }
     ui->doubleBuyPrice->setValue(0);
     ui->doubleSellPrice->setValue(0);
-    ui->doubleStock->setValue(0);
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->lineBarcode->setEnabled(true);
     ui->pushSave->setEnabled(true);
@@ -76,7 +75,6 @@ void AddItemDialog::fill(const QVariantMap &data)
     ui->lineName->setText(data["name"].toString());
     ui->doubleBuyPrice->setValue(data["buy_price"].toDouble());
     ui->doubleSellPrice->setValue(data["sell_price"].toDouble());
-    ui->doubleStock->setValue(data["stock"].toDouble());
     ui->lineBarcode->setEnabled(false);
     GuiUtil::selectCombo(ui->comboCategory, data["category_id"].toInt());
     GuiUtil::selectCombo(ui->comboSuplier, data["suplier_id"].toInt());
@@ -166,7 +164,6 @@ void AddItemDialog::saveData()
     data["suplier_id"] = ui->comboSuplier->currentData().toInt();
     data["sell_price"] = ui->doubleSellPrice->value();
     data["buy_price"] = ui->doubleBuyPrice->value();
-    data["stock"] = ui->doubleStock->value();
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::INSERT);
     if(mIsUpdate) {
         msg.setCommand(MSG_COMMAND::UPDATE);

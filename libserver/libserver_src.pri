@@ -21,7 +21,8 @@ SOURCES += \
     $$PWD/action/bankaction.cpp \
     $$PWD/action/transactionaction.cpp \
     $$PWD/action/purchasereturnaction.cpp \
-    $$PWD/action/databaseaction.cpp
+    $$PWD/action/databaseaction.cpp \
+    $$PWD/action/checkstockaction.cpp
 
 HEADERS += \ 
     $$PWD/server_global.h \
@@ -46,4 +47,5 @@ HEADERS += \
     $$PWD/action/bankaction.h \
     $$PWD/action/transactionaction.h \
     $$PWD/action/purchasereturnaction.h \
-    $$PWD/action/databaseaction.h
+    $$PWD/action/databaseaction.h \
+    $$PWD/action/checkstockaction.h
