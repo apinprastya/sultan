@@ -102,6 +102,13 @@ void Message::removeData(const QString &key)
     mData.remove(key);
 }
 
+QVariant Message::takeData(const QString &key)
+{
+    const QVariant &data = mData[key];
+    mData.remove(key);
+    return data;
+}
+
 void Message::clearData()
 {
     mData.clear();

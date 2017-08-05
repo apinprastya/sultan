@@ -178,6 +178,7 @@ void PurchaseAddItemDialog::save()
     data.insert("discount_formula", ui->lineDiscountFormula->text());
     data.insert("discount", mDiscount);
     data.insert("final", mTotal - (ui->doubleCount->value() * mDiscount));
+    data.insert("buy_price", ui->doubleBuyPrice->value());
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);

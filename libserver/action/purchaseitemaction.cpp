@@ -39,6 +39,7 @@ PurchaseItemAction::PurchaseItemAction():
 LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    double buyPrice = msg->takeData("buy_price").toDouble();
     DbResult res = mDb->where("barcode = ", msg->data("barcode"))->where("purchase_id = ", msg->data("purchase_id"))->get(mTableName);
     if(!res.isEmpty()) {
         message.setError("Item with barcode already on the purchase");
@@ -52,7 +53,8 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         //update the current stock
         float stock = msg->data("count").toFloat();
         const QString &barcode = msg->data("barcode").toString();
-        mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").arg(QString::number(stock)).arg(barcode));
+        mDb->exec(QString("UPDATE items SET stock = stock + %1, buy_price = %2 WHERE barcode = %3").
+                  arg(QString::number(stock)).arg(QString::number(buyPrice)).arg(barcode));
         updatePurchaseTotal(msg->data("purchase_id").toInt());
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
         message.setData(res.first());
