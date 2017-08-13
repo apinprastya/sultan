@@ -25,6 +25,7 @@
 #include "settingdialog.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "keyevent.h"
 #include <QStringBuilder>
 #include <QCryptographicHash>
 #include <QMessageBox>
@@ -93,6 +94,18 @@ void LoginDialog::closeEvent(QCloseEvent *event)
         }
     }
     QDialog::closeEvent(event);
+}
+
+void LoginDialog::reject()
+{
+    int type = Preference::getInt(SETTING::APP_TYPE);
+    if(type == APPLICATION_TYPE::SERVER) {
+        int ret = QMessageBox::question(this, tr("Close Confirmation"),
+                                        tr("This is a server, any client will be disconnect. Are you sure to exit?"));
+        if(ret != QMessageBox::No) {
+            QDialog::reject();
+        }
+    }
 }
 
 void LoginDialog::loginClicked()

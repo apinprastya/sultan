@@ -91,6 +91,7 @@ private slots:
     void openPurchaseReturn();
     void openExportImport();
     void openCheckStock();
+    void openInitialStock();
 };
 
 }

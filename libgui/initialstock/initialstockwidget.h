@@ -1,5 +1,5 @@
 /*
- * logindialog.h
+ *
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
@@ -17,40 +17,40 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef LOGINDIALOG_H
-#define LOGINDIALOG_H
 
-#include <QDialog>
+#ifndef INITIALSTOCKWIDGET_H
+#define INITIALSTOCKWIDGET_H
+
 #include "messagehandler.h"
+#include <QWidget>
 
 namespace Ui {
-class LoginDialog;
+class NormalWidget;
 }
 
-class LoginDialog : public QDialog, public LibG::MessageHandler
+namespace LibGUI {
+
+class TableWidget;
+class InitialStockAddDialog;
+
+class InitialStockWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
-
 public:
-    LoginDialog(QWidget *parent = 0);
-    ~LoginDialog();
-    void reset();
-    void showDialog();
-
-private:
-    Ui::LoginDialog *ui;
+    InitialStockWidget(LibG::MessageBus *bus,QWidget *parent = 0);
 
 protected:
-    void messageReceived(LibG::Message *msg) override;
-    void closeEvent(QCloseEvent *event) override;
-    void reject() override;
+    void messageReceived(LibG::Message *msg);
 
-signals:
-    void loginSuccess();
+private:
+    Ui::NormalWidget *ui;
+    TableWidget *mTableWidget;
+    InitialStockAddDialog *mAddDialog;
 
 private slots:
-    void loginClicked();
-    void openSetting();
+    void addClicked();
 };
 
-#endif // LOGINDIALOG_H
+}
+
+#endif // INITIALSTOCKWIDGET_H

@@ -78,7 +78,9 @@ SOURCES += \
     $$PWD/googledrive.cpp \
     $$PWD/admin/listdialog.cpp \
     $$PWD/checkstock/checkstockwidget.cpp \
-    $$PWD/checkstock/checkstockadddialog.cpp
+    $$PWD/checkstock/checkstockadddialog.cpp \
+    $$PWD/initialstock/initialstockwidget.cpp \
+    $$PWD/initialstock/initialstockadddialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -160,7 +162,9 @@ HEADERS += \
     $$PWD/googledrive.h \
     $$PWD/admin/listdialog.h \
     $$PWD/checkstock/checkstockwidget.h \
-    $$PWD/checkstock/checkstockadddialog.h
+    $$PWD/checkstock/checkstockadddialog.h \
+    $$PWD/initialstock/initialstockwidget.h \
+    $$PWD/initialstock/initialstockadddialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -209,4 +213,5 @@ FORMS += \
     $$PWD/admin/importexportdatabasedialog.ui \
     $$PWD/admin/browserdialog.ui \
     $$PWD/admin/listdialog.ui \
-    $$PWD/checkstock/checkstockadddialog.ui
+    $$PWD/checkstock/checkstockadddialog.ui \
+    $$PWD/initialstock/initialstockadddialog.ui

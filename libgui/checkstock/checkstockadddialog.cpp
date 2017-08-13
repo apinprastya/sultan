@@ -58,6 +58,9 @@ CheckStockAddDialog::~CheckStockAddDialog()
 void CheckStockAddDialog::reset()
 {
     GuiUtil::enableWidget(false, QList<QWidget*>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
+    ui->labelDiff->clear();
+    ui->labelName->clear();
+    ui->labelStock->clear();
     ui->lineBarcode->clear();
     ui->doubleStock->setValue(0);
     ui->plainNote->clear();
@@ -82,7 +85,8 @@ void CheckStockAddDialog::messageReceived(LibG::Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
         if(msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Check stock inserted successfully"));
-            reset();
+            if(mIsAddAgain) reset();
+            else close();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
@@ -107,6 +111,7 @@ void CheckStockAddDialog::inputCheckStock()
     msg.addData("note", ui->plainNote->toPlainText());
     msg.addData("buy_price", mBuyPrice);
     msg.addData("total_price", mBuyPrice * (ui->doubleStock->value() - mLastStock));
+    msg.addData("flag", CHECKSTOCK_FLAG::CHECKSTOCK);
     sendMessage(&msg);
 }
 

@@ -34,6 +34,7 @@ namespace CONSTANT {
     const QString ABOUT_APP_NAME    = QStringLiteral("Sultan %1");
     const QString URL_UPDATE        = QStringLiteral("https://sultanupdate.lekapin.com/check?arc=%1&qt=%2");
     const QString URL_DOWNLOAD      = QStringLiteral("https://sultanupdate.lekapin.com/assets/upload/sultan_%1_%2_%3");
+    const QString BARCODE_CLOUD     = QStringLiteral("https://barcode.indoarm.com/?barcode=%1");
 }
 
 namespace GOOGLE {
@@ -54,6 +55,8 @@ namespace PERMISSION {
     const int BANK              = 9;
     const int REPORT_MONEY      = 10;
     const int REPORT_TRANS      = 11;
+    const int CHECK_STOCK       = 12;
+    const int INITIAL_STOCK     = 13;
 }
 
 namespace APPLICATION_TYPE {
@@ -176,6 +179,11 @@ namespace PURCHASE_RETURN_TYPE {
 namespace PURCHASE_RETURN_STATUS {
     const int UNRETURN      = 0;
     const int RETURNED      = 1;
+}
+
+namespace CHECKSTOCK_FLAG {
+    const int CHECKSTOCK        = 0x1;
+    const int INITIAL           = 0x2;
 }
 
 }

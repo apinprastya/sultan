@@ -51,6 +51,10 @@ Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QSt
                 db->like(key, option[QLatin1String("value")].toString());
             } else if(type == COMPARE::LIKE_NATIVE) {
                 db->likeNative(key, option[QLatin1String("value")].toString());
+            } else if(type == COMPARE::FLAG) {
+                db->where(QString("(%1 & %2) != 0").arg(key).arg(option[QLatin1String("value")].toInt()));
+            } else if(type == COMPARE::FLAG_ALL) {
+                db->where(QString("(%1 & %2) != %2").arg(key).arg(option[QLatin1String("value")].toInt()));
             } else if(type >= COMPARE::USER_DEFINE) {
                 if(USERDEFINED_FILTER.contains(type))
                     USERDEFINED_FILTER[type](db, key, type, option);

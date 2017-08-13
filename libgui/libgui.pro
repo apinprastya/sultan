@@ -127,7 +127,9 @@ SOURCES += \
     googledrive.cpp \
     admin/listdialog.cpp \
     checkstock/checkstockwidget.cpp \
-    checkstock/checkstockadddialog.cpp
+    checkstock/checkstockadddialog.cpp \
+    initialstock/initialstockwidget.cpp \
+    initialstock/initialstockadddialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -209,7 +211,9 @@ HEADERS += \
     googledrive.h \
     admin/listdialog.h \
     checkstock/checkstockwidget.h \
-    checkstock/checkstockadddialog.h
+    checkstock/checkstockadddialog.h \
+    initialstock/initialstockwidget.h \
+    initialstock/initialstockadddialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -258,4 +262,5 @@ FORMS += \
     admin/importexportdatabasedialog.ui \
     admin/browserdialog.ui \
     admin/listdialog.ui \
-    checkstock/checkstockadddialog.ui
+    checkstock/checkstockadddialog.ui \
+    initialstock/initialstockadddialog.ui

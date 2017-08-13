@@ -49,6 +49,7 @@
 #include "purchase/purchasereturnwidget.h"
 #include "admin/importexportdatabasedialog.h"
 #include "checkstock/checkstockwidget.h"
+#include "initialstock/initialstockwidget.h"
 #include "preference.h"
 #include "global_setting_const.h"
 #include <QShortcut>
@@ -103,6 +104,8 @@ void MainWindow::setup()
     ui->action_MOney->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_MONEY));
     ui->action_Transaction->setEnabled(UserSession::hasPermission(PERMISSION::REPORT_TRANS));
     ui->action_Machines->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
+    ui->action_Check_Stock->setEnabled(UserSession::hasPermission(PERMISSION::CHECK_STOCK));
+    ui->actionInitial_Stock->setEnabled(UserSession::hasPermission(PERMISSION::INITIAL_STOCK));
     ui->action_Cashier->setShortcut(Qt::CTRL + Qt::Key_D);
 }
 
@@ -152,6 +155,7 @@ void MainWindow::setupConnection()
     connect(ui->actionPurchaseReturn, SIGNAL(triggered(bool)), SLOT(openPurchaseReturn()));
     connect(ui->actionImport_Export_Database, SIGNAL(triggered(bool)), SLOT(openExportImport()));
     connect(ui->action_Check_Stock, SIGNAL(triggered(bool)), SLOT(openCheckStock()));
+    connect(ui->actionInitial_Stock, SIGNAL(triggered(bool)), SLOT(openInitialStock()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -415,5 +419,15 @@ void MainWindow::openCheckStock()
     })) {
         auto widget = new CheckStockWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/bagbox.png");
+    }
+}
+
+void MainWindow::openInitialStock()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<InitialStockWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new InitialStockWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Initial Stock"), ":/images/16x16/bagbox.png");
     }
 }

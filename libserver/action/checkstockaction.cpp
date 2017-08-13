@@ -23,13 +23,52 @@
 #include "global_constant.h"
 #include "queryhelper.h"
 #include "global_constant.h"
+#include "util.h"
+#include <QStringBuilder>
+#include <QDateTime>
+#include <QDebug>
 
 using namespace LibServer;
+using namespace LibDB;
+using namespace LibG;
 
 CheckStockAction::CheckStockAction():
     ServerAction("checkstocks", "id")
 {
-    mFlag = AFTER_INSERT;
+    mFlag |= Flag::AFTER_INSERT;
+}
+
+LibG::Message CheckStockAction::insert(LibG::Message *msg)
+{
+    LibG::Message message(msg);
+    if(hasFlag(HAS_UPDATE_FIELD))
+        msg->addData("updated_at", QDateTime::currentDateTime());
+    bool hasName = msg->hasData("category_id");
+    QVariantMap item{{"name", msg->data("name")}, {"category_id", msg->takeData("category_id")},
+                    {"suplier_id", msg->takeData("suplier_id")}, {"buy_price", msg->takeData("buy_price")}};
+    double sellPrice = msg->takeData("sell_price").toDouble();
+    if(!mDb->insert(mTableName, msg->data())) {
+        message.setError(mDb->lastError().text());
+    } else {
+        DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
+        const QVariantMap d = res.first();
+        if(hasName) {
+            mDb->where("barcode = ", msg->data("barcode"));
+            if(mDb->update("items", item)) {
+                res = mDb->where("count = ", 1)->where("barcode = ", msg->data("barcode"))->get("sellprices");
+                if(res.isEmpty()) {
+                    QVariantMap sp{{"barcode", item["barcode"]}, {"count", 1}, {"price", sellPrice}};
+                    mDb->insert("sellprices", sp);
+                } else {
+                    mDb->where("id = ", res.first()["id"]);
+                    mDb->update("sellprices", QVariantMap{{"price", sellPrice}});
+                }
+            }
+        }
+        if(hasFlag(AFTER_INSERT)) afterInsert(d);
+        message.setData(d);
+    }
+    return message;
 }
 
 void CheckStockAction::afterInsert(const QVariantMap &data)

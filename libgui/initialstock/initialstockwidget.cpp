@@ -2,7 +2,7 @@
  *
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
- * This file is part of Turbin.
+ * This file is part of Sultan.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,7 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "checkstockwidget.h"
+#include "initialstockwidget.h"
 #include "ui_normalwidget.h"
 #include "tablewidget.h"
 #include "tablemodel.h"
@@ -33,24 +33,21 @@
 #include "flashmessagemanager.h"
 #include "preference.h"
 #include "util.h"
-#include "checkstockadddialog.h"
-#include "db_constant.h"
+#include "initialstockadddialog.h"
 #include <QMessageBox>
-#include <QPushButton>
-#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
+InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
     mTableWidget(new TableWidget(this)),
-    mAddDialog(new CheckStockAddDialog(bus, this))
+    mAddDialog(new InitialStockAddDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
-    ui->labelTitle->setText(tr("Check Stock"));
+    ui->labelTitle->setText(tr("Initial Stock"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);
     auto dateFormater = [](TableItem *item, const QString &key) {
@@ -61,13 +58,9 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("created_at", tr("Date"), Qt::AlignLeft, dateFormater);
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
-    model->addColumn("real_stock", tr("Real<br>Stock"), Qt::AlignRight);
-    model->addColumn("system_stock", tr("System<br>Stock"), Qt::AlignRight);
-    model->addColumn("diff", tr("Different"), Qt::AlignRight, [](TableItem *item, const QString &/*key*/) {
-        return item->data("real_stock").toDouble() - item->data("system_stock").toDouble();
-    });
-    model->addColumn("note", tr("Note"));
-    model->setFilter("flag", COMPARE::FLAG, CHECKSTOCK_FLAG::CHECKSTOCK);
+    model->addColumn("real_stock", tr("Stock"), Qt::AlignRight);
+    //model->addColumn("note", tr("Note"));
+    model->setFilter("flag", COMPARE::FLAG, CHECKSTOCK_FLAG::INITIAL);
 
     QVariantMap defVal;
     defVal.insert("start", Util::getBeginningOfMonth());
@@ -85,14 +78,15 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
 
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
+    connect(mAddDialog, SIGNAL(addSuccess()), model, SLOT(refresh()));
 }
 
-void CheckStockWidget::messageReceived(LibG::Message */*msg*/)
+void InitialStockWidget::messageReceived(LibG::Message */*msg*/)
 {
 
 }
 
-void CheckStockWidget::addClicked()
+void InitialStockWidget::addClicked()
 {
     mAddDialog->reset();
     mAddDialog->show();

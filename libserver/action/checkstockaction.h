@@ -29,6 +29,7 @@ class CheckStockAction : public ServerAction
 {
 public:
     CheckStockAction();
+    LibG::Message insert(LibG::Message *msg) override;
 
 protected:
     void afterInsert(const QVariantMap &data) override;

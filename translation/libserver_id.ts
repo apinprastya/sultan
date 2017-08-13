@@ -51,12 +51,12 @@
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="89"/>
+        <location filename="../libserver/action/itemaction.cpp" line="91"/>
         <source>Item not found</source>
         <translation>Item tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="95"/>
+        <location filename="../libserver/action/itemaction.cpp" line="97"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
     </message>
