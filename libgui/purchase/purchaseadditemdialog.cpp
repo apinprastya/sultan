@@ -53,6 +53,8 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
     connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
     connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateDiscount()));
     connect(ui->pushAddNewItem, SIGNAL(clicked(bool)), SLOT(addNewItemClicked()));
+    connect(ui->doubleSellPrice, SIGNAL(valueChanged(double)), SLOT(calculateMargin()));
+    connect(ui->doubleBuyPrice, SIGNAL(valueChanged(double)), SLOT(calculateMargin()));
 }
 
 PurchaseAddItemDialog::~PurchaseAddItemDialog()
@@ -80,18 +82,19 @@ void PurchaseAddItemDialog::fill(const QVariantMap &data)
 {
     mId = data["id"].toInt();
     mCurrentStock = data["stock"].toFloat();
-    mBuyPrice = data["buy_price"].toDouble();
+    //mBuyPrice = data["buy_price"].toDouble();
     ui->lineBarcode->setText(data["barcode"].toString());
     ui->lineBarcode->setReadOnly(true);
     ui->labelName->setText(data["name"].toString());
-    ui->doubleBuyPrice->setValue(data["buy_price"].toDouble());
-    ui->doubleCount->setValue(data["count"].toDouble());
-    ui->doubleSellPrice->setValue(data["sell_price"].toDouble());
+    ui->doubleCount->setValue(data["count"].toDouble());    
     ui->doublePrice->setValue(data["price"].toDouble());
     ui->lineDiscountFormula->setText(data["discount_formula"].toString());
     ui->doubleCount->setFocus();
     ui->pushSaveAgain->hide();
     ui->pushAddNewItem->hide();
+    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::GET);
+    msg.addData("barcode", ui->lineBarcode->text());
+    sendMessage(&msg);
 }
 
 void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
@@ -99,10 +102,16 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
             mLastBarcode = ui->lineBarcode->text();
+            mSellPrice = msg->data("sell_price").toDouble();
+            mSellDiscountFormula = msg->data("sell_discount_formula").toString();
+            mSellDiscount = msg->data("sell_discount").toDouble();
+            mSellFinal = msg->data("sell_final").toDouble();
+            mSellCount = msg->data("sell_count").toFloat();
+            mBuyPrice = msg->data("buy_price").toDouble();
             ui->labelName->setText(msg->data("name").toString());
             ui->labelName->setStyleSheet("color: black");
-            ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
-            ui->doubleSellPrice->setValue(msg->data("sell_price").toDouble());
+            ui->doubleBuyPrice->setValue(mBuyPrice);
+            ui->doubleSellPrice->setValue(mSellPrice);
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleCount <<
                                   ui->doubleSellPrice << ui->doublePrice << ui->pushSave <<
                                   ui->pushSaveAgain << ui->lineDiscountFormula);
@@ -134,7 +143,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
                     const QVariantMap &d = l[0].toMap();
                     mId = d["id"].toInt();
                     ui->doubleCount->setValue(d["count"].toFloat());
-                    ui->doublePrice->setValue(d["total"].toDouble());
+                    ui->doublePrice->setValue(d["price"].toDouble());
                     ui->lineDiscountFormula->setText(d["discount_formula"].toString());
                     calculateDiscount();
                     ui->doubleCount->selectAll();
@@ -170,8 +179,6 @@ void PurchaseAddItemDialog::save()
     }
     LibG::Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::INSERT);
     QVariantMap data;
-    data.insert("barcode", ui->lineBarcode->text());
-    data.insert("purchase_id", mPurchaseId);
     data.insert("count", ui->doubleCount->value());
     data.insert("price", ui->doublePrice->value());
     data.insert("total", ui->doublePrice->value() * ui->doubleCount->value());
@@ -179,11 +186,19 @@ void PurchaseAddItemDialog::save()
     data.insert("discount", mDiscount);
     data.insert("final", mTotal - (ui->doubleCount->value() * mDiscount));
     data.insert("buy_price", ui->doubleBuyPrice->value());
+    if(mSellPrice != ui->doubleSellPrice->value()) {
+        data.insert("sell_price", ui->doubleSellPrice->value());
+        data.insert("sell_count", mSellCount);
+        data.insert("sell_discount", mSellDiscount);
+        data.insert("sell_final", mSellFinal);
+    }
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);
         msg.addData("data", data);
     } else {
+        data.insert("barcode", ui->lineBarcode->text());
+        data.insert("purchase_id", mPurchaseId);
         msg.setData(data);
     }
     sendMessage(&msg);
@@ -257,4 +272,17 @@ void PurchaseAddItemDialog::addNewItemClicked()
     if(dialog.isSuccess()) {
         barcodeDone();
     }
+}
+
+void PurchaseAddItemDialog::calculateMargin()
+{
+    mSellDiscount = Util::calculateDiscount(mSellDiscountFormula, ui->doubleSellPrice->value());
+    mSellFinal = ui->doubleSellPrice->value() - mSellDiscount;
+    double diff = mSellFinal - ui->doubleBuyPrice->value();
+    double p = 100;
+    if(ui->doubleBuyPrice->value() != 0)
+        p = diff * 100 / ui->doubleBuyPrice->value();
+    ui->labelSellDiscount->setText(Preference::toString(mSellDiscount));
+    ui->labelSellFinal->setText(Preference::toString(mSellFinal));
+    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::toString(diff)).arg(QString::number(p, 'f', 2)));
 }

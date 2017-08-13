@@ -129,6 +129,11 @@ QVariant Message::data(const QString &key)
     return mData[key];
 }
 
+bool Message::hasData(const QString &key)
+{
+    return mData.contains(key);
+}
+
 void Message::setError(const QString &error)
 {
     setStatus(STATUS::ERROR);

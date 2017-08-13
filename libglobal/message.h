@@ -75,6 +75,7 @@ public:
     void setData(const QVariantMap &data);
     QVariantMap data();
     QVariant data(const QString &key);
+    bool hasData(const QString &key);
 
     void setError(const QString &error);
 

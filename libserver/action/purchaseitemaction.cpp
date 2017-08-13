@@ -40,6 +40,11 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
 {
     LibG::Message message(msg);
     double buyPrice = msg->takeData("buy_price").toDouble();
+    bool editSellPrice = msg->hasData("sell_price");
+    double sellPrice = msg->takeData("sell_price").toDouble();
+    double discount = msg->takeData("sell_discount").toDouble();
+    float count = msg->takeData("sell_count").toFloat();
+    double final = msg->takeData("sell_final").toDouble();
     DbResult res = mDb->where("barcode = ", msg->data("barcode"))->where("purchase_id = ", msg->data("purchase_id"))->get(mTableName);
     if(!res.isEmpty()) {
         message.setError("Item with barcode already on the purchase");
@@ -55,6 +60,10 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         const QString &barcode = msg->data("barcode").toString();
         mDb->exec(QString("UPDATE items SET stock = stock + %1, buy_price = %2 WHERE barcode = %3").
                   arg(QString::number(stock)).arg(QString::number(buyPrice)).arg(barcode));
+        if(editSellPrice) {
+            mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = %4 AND count = %5").
+                      arg(sellPrice).arg(discount).arg(final).arg(barcode).arg(count));
+        }
         updatePurchaseTotal(msg->data("purchase_id").toInt());
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
         message.setData(res.first());
@@ -67,6 +76,12 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
     LibG::Message message(msg);
     mDb->where("id = ", msg->data(mIdField));
     QVariantMap d = msg->data("data").toMap();
+    double buyPrice = d.take("buy_price").toDouble();
+    bool editSellPrice = d.contains("sell_price");
+    double sellPrice = d.take("sell_price").toDouble();
+    double discount = d.take("sell_discount").toDouble();
+    float count = d.take("sell_count").toFloat();
+    double final = d.take("sell_final").toDouble();
     if(hasFlag(HAS_UPDATE_FIELD))
         d.insert("updated_at", QDateTime::currentDateTime());
     DbResult res = mDb->clone()->get(mTableName);
@@ -77,9 +92,11 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
         const QVariantMap old = res.first();
         const int pid = old["purchase_id"].toInt();
         float diff = n["count"].toFloat() - old["count"].toFloat();
-        if(n.contains("count") && diff != 0.0f) {
-            mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
-                      arg(QString::number(diff)).arg(old["barcode"].toString()));
+        mDb->exec(QString("UPDATE items SET stock = stock + %1, buy_price = %2 WHERE barcode = %3").
+                  arg(QString::number(diff)).arg(buyPrice).arg(old["barcode"].toString()));
+        if(editSellPrice) {
+            mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = %4 AND count = %5").
+                      arg(sellPrice).arg(discount).arg(final).arg(old["barcode"].toString()).arg(count));
         }
         updatePurchaseTotal(pid);
         res = mDb->where("id = ", msg->data("id"))->get(mTableName);

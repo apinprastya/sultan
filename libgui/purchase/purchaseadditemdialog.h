@@ -55,6 +55,11 @@ private:
     double mTotal = 0;
     float mCurrentStock = 0;
     double mBuyPrice = 0;
+    double mSellPrice = 0;
+    double mSellDiscount = 0;
+    double mSellFinal = 0;
+    float mSellCount = 0;
+    QString mSellDiscountFormula;
     QString mLastBarcode;
 
     void save();
@@ -71,6 +76,7 @@ private slots:
     void calculateDiscount();
     void calculateBuyPriceSuggestion();
     void addNewItemClicked();
+    void calculateMargin();
 };
 
 }
