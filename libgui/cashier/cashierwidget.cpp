@@ -264,9 +264,20 @@ void CashierWidget::barcodeEntered()
     } else {
         mCount = 1.0f;
     }
-    LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
-    msg.addData("barcode", barcode);
-    sendMessage(&msg);
+    if(Preference::getBool(SETTING::CASHIER_NAMEBASED)) {
+        SearchItemDialog dialog(mMessageBus, this);
+        dialog.setNameField(ui->lineBarcode->text());
+        dialog.exec();
+        const QString &barcode = dialog.getSelectedBarcode();
+        if(barcode.isEmpty()) return;
+        LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
+        msg.addData("barcode", barcode);
+        sendMessage(&msg);
+    } else {
+        LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
+        msg.addData("barcode", barcode);
+        sendMessage(&msg);
+    }
 }
 
 void CashierWidget::totalChanged(double value)

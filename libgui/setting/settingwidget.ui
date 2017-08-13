@@ -78,7 +78,7 @@
             <x>0</x>
             <y>0</y>
             <width>647</width>
-            <height>452</height>
+            <height>447</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -135,7 +135,7 @@
            <item>
             <widget class="QGroupBox" name="groupBoxTax">
              <property name="title">
-              <string>Taxes</string>
+              <string>Ta&amp;xes</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -155,6 +155,31 @@
                <widget class="QLineEdit" name="lineSalesTax">
                 <property name="placeholderText">
                  <string>Ex: 10%</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupNameBased">
+             <property name="title">
+              <string>Na&amp;me based</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_12">
+              <item>
+               <widget class="QLabel" name="label_26">
+                <property name="text">
+                 <string>To input the order on chasier will use search of item name instead using barcode directly. When pressing enter and no item found, it will find the name of the item on search item dialog.</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -199,7 +224,7 @@
             <x>0</x>
             <y>0</y>
             <width>647</width>
-            <height>452</height>
+            <height>447</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -373,8 +398,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>633</width>
-            <height>509</height>
+            <width>627</width>
+            <height>511</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">

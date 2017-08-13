@@ -42,6 +42,7 @@ public:
     SearchItemDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~SearchItemDialog();
     inline QString getSelectedBarcode() { return mSelectedBarcode; }
+    void setNameField(const QString &str);
 
 private:
     Ui::SearchItemDialog *ui;

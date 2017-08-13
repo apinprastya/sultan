@@ -27,6 +27,7 @@
 #include "guiutil.h"
 #include "db_constant.h"
 #include "keyevent.h"
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -62,6 +63,18 @@ SearchItemDialog::~SearchItemDialog()
     delete ui;
 }
 
+void SearchItemDialog::setNameField(const QString &str)
+{
+    if(str.contains("*")) {
+        auto l = str.split("*");
+        if(l.size() > 1)
+            ui->lineName->setText(l[1]);
+    } else {
+        ui->lineName->setText(str);
+    }
+    nameDone();
+}
+
 void SearchItemDialog::nameDone()
 {
     const QString &name = ui->lineName->text();
@@ -74,7 +87,7 @@ void SearchItemDialog::dataLoaded()
 {
    if(mTableWidget->getModel()->rowCount(QModelIndex()) > 0) {
        mTableWidget->getTableView()->selectRow(0);
-       mTableWidget->setFocus(Qt::TabFocusReason);
+       mTableWidget->getTableView()->setFocus(Qt::TabFocusReason);
    }
 }
 

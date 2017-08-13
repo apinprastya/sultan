@@ -49,11 +49,14 @@
 #include "purchase/purchasereturnwidget.h"
 #include "admin/importexportdatabasedialog.h"
 #include "checkstock/checkstockwidget.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
 #include <QTimer>
 #include <QCloseEvent>
+#include <QMessageBox>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -113,6 +116,10 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     mStatusBar->updateUser();
     QMainWindow::showEvent(event);
+    if(Preference::getInt(SETTING::MACHINE_ID) == 0) {
+        QMessageBox::warning(this, tr("First setting"), tr("Please set the machine ID on setting first before start using the application"));
+        openSetting();
+    }
 }
 
 void MainWindow::setupConnection()

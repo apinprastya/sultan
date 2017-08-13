@@ -40,6 +40,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("F4", tr("Pay cash transaction"));
     addRow("F5", tr("Open drawer"));
     addRow("F6", tr("History transaction list"));
+    addRow("F7", tr("Check Prices"));
     addRow("F8", tr("Non full customer payment"));
     addRow("F9", tr("Cashless payment"));
     addRow("Ctrl + N", tr("Clear current cart and start new transaction"));
