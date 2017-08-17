@@ -35,6 +35,7 @@ public:
     static bool isBetaVersion(QString version);
     static bool isValidDiscountFormula(const QString &val);
     static double calculateDiscount(const QString &formula, double value);
+    static QString genSoldNumber();
 
 private:
 };

@@ -146,6 +146,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
     Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toInt());
+    Preference::setValue(SETTING::MACHINE_NAME, ui->comboMachine->currentText());
     //taxes
     Preference::setValue(SETTING::USE_TAX, ui->groupBoxTax->isChecked());
     Preference::setValue(SETTING::TAX_VALUE, ui->lineSalesTax->text());

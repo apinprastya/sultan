@@ -28,8 +28,6 @@ using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-static int NEXT_VAL = 0;
-
 //NOTE : this flag is taken from CashierItem::Flag
 #define ITEM (0x1)
 #define SERVICE (0x2)
@@ -46,15 +44,15 @@ Message SoldAction::insertSold(Message *msg)
 {
     LibG::Message message(msg);
     const QVariantList &l = msg->data("cart").toList();
-    auto now = QDateTime::currentMSecsSinceEpoch() / 10000;
+    //auto now = QDateTime::currentMSecsSinceEpoch() / 10000;
     double total = msg->data("total").toDouble();
     double payment = msg->data("payment").toDouble();
     int cust_id = msg->data("customer_id").toInt();
     int user_id = msg->data("user_id").toInt();
     int poin = msg->data("reward").toInt();
     msg->removeData("cart");
-    QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
-    msg->addData("number", number);
+    //QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
+    //msg->addData("number", number);
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(mDb->insert(mTableName, msg->data())) {
         //TODO: change it to insert batch
@@ -77,20 +75,20 @@ Message SoldAction::insertSold(Message *msg)
             mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
         }
         //transaction
-        QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", number},
+        QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", msg->data("number")},
                        {"type", TRANSACTION_TYPE::INCOME}, {"link_id", id},
                        {"link_type", TRANSACTION_LINK_TYPE::SOLD}, {"user_id", user_id},
                        {"machine_id", msg->data("machine_id")}, {"transaction_total", msg->data("total")},
                        {"bank_id", msg->data("bank_id")}, {"money_total", payment},
-                       {"detail", QObject::tr("Sold : %1").arg(number)}};
+                       {"detail", QObject::tr("Sold : %1").arg(msg->data("number").toString())}};
         mDb->insert("transactions", tr);
         //credit to customer
         if(payment < total) {
             QVariantMap cr;
             cr.insert("customer_id", cust_id);
-            cr.insert("number", number);
+            cr.insert("number", msg->data("number"));
             cr.insert("link_id", id);
-            cr.insert("detail", QObject::tr("Credit from transaction %1").arg(number));
+            cr.insert("detail", QObject::tr("Credit from transaction %1").arg(msg->data("number").toString()));
             cr.insert("credit", total - payment);
             cr.insert("machine_id", msg->data("machine_id"));
             cr.insert("user_id", user_id);
@@ -101,9 +99,9 @@ Message SoldAction::insertSold(Message *msg)
         if(cust_id > 0) {
             QVariantMap p;
             p.insert("customer_id", cust_id);
-            p.insert("number", number);
+            p.insert("number", msg->data("number"));
             p.insert("link_id", id);
-            p.insert("detail", QObject::tr("Poin from transaction %1").arg(number));
+            p.insert("detail", QObject::tr("Poin from transaction %1").arg(msg->data("number").toString()));
             p.insert("reward", poin);
             p.insert("total_shop", total);
             p.insert("user_id", user_id);

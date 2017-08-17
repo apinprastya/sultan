@@ -41,6 +41,7 @@ namespace SETTING {
     const QString MARKET_NAME                   = QStringLiteral("application/market_name");
     const QString MARKET_SUBNAME                = QStringLiteral("application/market_subname");
     const QString MACHINE_ID                    = QStringLiteral("application/machine_id");
+    const QString MACHINE_NAME                  = QStringLiteral("application/machine_name");
 
     const QString APPLICATION_LANGUAGE          = QStringLiteral("application/language");
     const QString CASHIER_NAMEBASED             = QStringLiteral("application/name_based");
@@ -66,6 +67,9 @@ namespace SETTING {
     const QString PRINTER_CASHIER_LINEFEED      = QStringLiteral("printer/cashier_linefeed");
 
     const QString PRINTER_CASHIER_PRICE_LINEFEED      = QStringLiteral("printer/cashier_price_linefeed");
+
+    const QString NUMBER_DATE                   = QStringLiteral("number/date");
+    const QString NUMBER_VALUE                  = QStringLiteral("number/value");
 }
 
 }
