@@ -92,6 +92,7 @@ private slots:
     void openExportImport();
     void openCheckStock();
     void openInitialStock();
+    void openUnit();
 };
 
 }

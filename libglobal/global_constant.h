@@ -57,6 +57,7 @@ namespace PERMISSION {
     const int REPORT_TRANS      = 11;
     const int CHECK_STOCK       = 12;
     const int INITIAL_STOCK     = 13;
+    const int UNIT              = 14;
 }
 
 namespace APPLICATION_TYPE {
@@ -91,6 +92,7 @@ namespace MSG_TYPE {
     const int PURCHASE_RETURN   = 18;
     const int DATABASE          = 19;
     const int CHECKSTOCK        = 20;
+    const int UNIT              = 21;
 }
 
 namespace MSG_COMMAND {

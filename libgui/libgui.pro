@@ -129,7 +129,8 @@ SOURCES += \
     checkstock/checkstockwidget.cpp \
     checkstock/checkstockadddialog.cpp \
     initialstock/initialstockwidget.cpp \
-    initialstock/initialstockadddialog.cpp
+    initialstock/initialstockadddialog.cpp \
+    unit/unitwidget.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -213,7 +214,8 @@ HEADERS += \
     checkstock/checkstockwidget.h \
     checkstock/checkstockadddialog.h \
     initialstock/initialstockwidget.h \
-    initialstock/initialstockadddialog.h
+    initialstock/initialstockadddialog.h \
+    unit/unitwidget.h
 
 FORMS += \
     mainwindow.ui \

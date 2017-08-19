@@ -80,7 +80,8 @@ SOURCES += \
     $$PWD/checkstock/checkstockwidget.cpp \
     $$PWD/checkstock/checkstockadddialog.cpp \
     $$PWD/initialstock/initialstockwidget.cpp \
-    $$PWD/initialstock/initialstockadddialog.cpp
+    $$PWD/initialstock/initialstockadddialog.cpp \
+    $$PWD/unit/unitwidget.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -164,7 +165,8 @@ HEADERS += \
     $$PWD/checkstock/checkstockwidget.h \
     $$PWD/checkstock/checkstockadddialog.h \
     $$PWD/initialstock/initialstockwidget.h \
-    $$PWD/initialstock/initialstockadddialog.h
+    $$PWD/initialstock/initialstockadddialog.h \
+    $$PWD/unit/unitwidget.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

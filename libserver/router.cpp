@@ -41,6 +41,7 @@
 #include "action/purchasereturnaction.h"
 #include "action/databaseaction.h"
 #include "action/checkstockaction.h"
+#include "action/unitaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -112,6 +113,8 @@ ServerAction *Router::getServerAction(int type)
         return new DatabaseAction();
     case MSG_TYPE::CHECKSTOCK:
         return new CheckStockAction();
+    case MSG_TYPE::UNIT:
+        return new UnitAction();
     }
     return nullptr;
 }
