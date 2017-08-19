@@ -36,10 +36,11 @@ public:
     static void setColumnWidth(QTableView *table, const QList<int> &widths);
     static QString toHtml(QString value);
     static void selectCombo(QComboBox *combo, const QVariant &value);
+    static void selectComboByText(QComboBox *combo, const QString &value);
     static void clearAll(const QList<QWidget*> &lists);
     static void enableWidget(bool enable, const QList<QWidget*> &lists);
-    static void populateCategory(QComboBox *combo, const QVariantList &list, const QVariant &currentSelected = QVariant());
     static bool isWidgetFocused(QWidget *widget);
+    static void populateCombo(QComboBox *combo, const QVariantList &list, const QString &holder);
 };
 
 }

@@ -10,3 +10,4 @@ INSERT INTO units (name) VALUES ('pcs'), ('box'), ('renteng'), ('kg'), ('gram'),
 ALTER TABLE items ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
 ALTER TABLE items ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
 ALTER TABLE checkstocks ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
+UPDATE items SET unit = 'pcs';

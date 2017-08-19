@@ -35,7 +35,6 @@ private:
     QNetworkAccessManager *mNetworkManager;
     QString mLastBarcode;
 
-    void populateSuplier(const QVariantList &list);
     void openAddItem();
     void save();
 

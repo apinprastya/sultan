@@ -11,3 +11,5 @@ ALTER TABLE items ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
 ALTER TABLE items ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
 -- separator
 ALTER TABLE checkstocks ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
+-- separator
+UPDATE items SET unit = 'pcs';

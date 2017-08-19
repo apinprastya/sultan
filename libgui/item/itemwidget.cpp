@@ -66,6 +66,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumnMoney("buy_price", tr("Buy Price"));
     model->addColumnMoney("sell_price", tr("Sell Price"));
     model->addColumnMoney("stock", tr("Stock"));
+    model->addColumn("unit", tr("Unit"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative, QVariant()});
@@ -74,7 +75,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addHeaderFilter("category", HeaderFilter{HeaderWidget::Combo, TableModel::FilterCategory, QVariant()});
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
     mMainTable->setupTable();
-    GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 150 << 150 << 150 << 150 << 150);
+    GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 150 << 75 << 150 << 150);
     mMainTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
     auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
     button->setToolTip(tr("Export"));
@@ -132,9 +133,9 @@ ItemWidget::~ItemWidget()
 void ItemWidget::messageReceived(LibG::Message *msg)
 {
     if(msg->isType(MSG_TYPE::CATEGORY) && msg->isSuccess()) {
-        auto combo = mMainTable->getTableView()->getHeaderWidget(mMainTable->getModel()->getIndex("category"))->getComboBox();
         const QVariantList &list = msg->data("data").toList();
-        GuiUtil::populateCategory(combo, list);
+        GuiUtil::populateCombo(mMainTable->getTableView()->getHeaderWidget(mMainTable->getModel()->getIndex("category"))->getComboBox(),
+                               list, tr("-- Select Category --"));
     } else if(msg->isTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Price deleted successfully"));
         mSecondTable->getModel()->refresh();

@@ -87,10 +87,12 @@ void InitialStockAddDialog::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isType(MSG_TYPE::SUPLIER)) {
         const QVariantList &list = msg->data("data").toList();
-        populateSuplier(list);
+        GuiUtil::populateCombo(ui->comboSuplier, list, tr("-- Select Suplier --"));
+        GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
     } else if(msg->isType(MSG_TYPE::CATEGORY)) {
         const QVariantList &list = msg->data("data").toList();
-        GuiUtil::populateCategory(ui->comboCategory, list, mCurrentCategory);
+        GuiUtil::populateCombo(ui->comboCategory, list, tr("-- Select Category --"));
+        GuiUtil::selectCombo(ui->comboCategory, mCurrentCategory);
     } else if(msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
         if(msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Initial stock addedd successfully"));
@@ -112,17 +114,6 @@ void InitialStockAddDialog::showEvent(QShowEvent *event)
     msg2.setLimit(-1);
     sendMessage(&msg2);
     QDialog::showEvent(event);
-}
-
-void InitialStockAddDialog::populateSuplier(const QVariantList &list)
-{
-    ui->comboSuplier->clear();
-    ui->comboSuplier->addItem(tr("-- Select Suplier --"), 0);
-    for(auto &d : list) {
-        const QVariantMap &m = d.toMap();
-        ui->comboSuplier->addItem(m["name"].toString(), m["id"].toInt());
-    }
-    GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
 }
 
 void InitialStockAddDialog::openAddItem()

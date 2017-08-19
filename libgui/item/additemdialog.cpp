@@ -81,6 +81,7 @@ void AddItemDialog::fill(const QVariantMap &data)
     ui->labelError->hide();
     mCurrentSuplier = data["suplier_id"].toInt();
     mCUrrentCategory = data["category_id"].toInt();
+    mCurrentUnit = data["unit"].toString();
 }
 
 void AddItemDialog::setAsUpdate()
@@ -133,22 +134,30 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isType(MSG_TYPE::SUPLIER)) {
         const QVariantList &list = msg->data("data").toList();
-        populateSuplier(list);
+        GuiUtil::populateCombo(ui->comboSuplier, list, tr("-- Select Suplier --"));
+        GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
     } else if(msg->isType(MSG_TYPE::CATEGORY)) {
         const QVariantList &list = msg->data("data").toList();
-        GuiUtil::populateCategory(ui->comboCategory, list, mCUrrentCategory);
+        GuiUtil::populateCombo(ui->comboCategory, list, tr("-- Select Category --"));
+        GuiUtil::selectCombo(ui->comboCategory, mCUrrentCategory);
+    } else if(msg->isType(MSG_TYPE::UNIT)) {
+        const QVariantList &list = msg->data("data").toList();
+        GuiUtil::populateCombo(ui->comboUnit, list, tr("-- Select Unit --"));
+        GuiUtil::selectComboByText(ui->comboUnit, mCurrentUnit);
     }
 }
 
 void AddItemDialog::showEvent(QShowEvent *event)
 {
-    //reload category and suplier
     Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     msg.setLimit(-1);
     sendMessage(&msg);
     Message msg2(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
     msg2.setLimit(-1);
     sendMessage(&msg2);
+    Message msg3(MSG_TYPE::UNIT, MSG_COMMAND::QUERY);
+    msg2.setLimit(-1);
+    sendMessage(&msg3);
     QDialog::showEvent(event);
 }
 
@@ -164,6 +173,7 @@ void AddItemDialog::saveData()
     data["suplier_id"] = ui->comboSuplier->currentData().toInt();
     data["sell_price"] = ui->doubleSellPrice->value();
     data["buy_price"] = ui->doubleBuyPrice->value();
+    data["unit"] = ui->comboUnit->currentText();
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::INSERT);
     if(mIsUpdate) {
         msg.setCommand(MSG_COMMAND::UPDATE);
@@ -176,17 +186,6 @@ void AddItemDialog::saveData()
     sendMessage(&msg);
     ui->pushSave->setEnabled(false);
     ui->pushSaveAgain->setEnabled(false);
-}
-
-void AddItemDialog::populateSuplier(const QVariantList &list)
-{
-    ui->comboSuplier->clear();
-    ui->comboSuplier->addItem(tr("-- Select Suplier --"), 0);
-    for(auto &d : list) {
-        const QVariantMap &m = d.toMap();
-        ui->comboSuplier->addItem(m["name"].toString(), m["id"].toInt());
-    }
-    GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
 }
 
 void AddItemDialog::barcodeDone()

@@ -56,9 +56,9 @@ private:
     bool mIsOk = false;
     bool mIsReturnPressed = false;
     bool mIsSuccess = false;
+    QString mCurrentUnit;
 
     void saveData();
-    void populateSuplier(const QVariantList &list);
 
 private slots:
     void barcodeDone();

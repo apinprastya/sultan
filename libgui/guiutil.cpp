@@ -70,6 +70,16 @@ void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value)
     }
 }
 
+void GuiUtil::selectComboByText(QComboBox *combo, const QString &value)
+{
+    for(int i = 0; i < combo->count(); i++) {
+        if(!combo->itemText(i).compare(value, Qt::CaseInsensitive)) {
+            combo->setCurrentIndex(i);
+            return;
+        }
+    }
+}
+
 void GuiUtil::clearAll(const QList<QWidget *> &lists)
 {
     for(auto w : lists) {
@@ -95,18 +105,17 @@ void GuiUtil::enableWidget(bool enable, const QList<QWidget *> &lists)
     }
 }
 
-void GuiUtil::populateCategory(QComboBox *combo, const QVariantList &list, const QVariant &currentSelected)
+bool GuiUtil::isWidgetFocused(QWidget *widget)
+{
+    return qApp->focusWidget() == widget;
+}
+
+void GuiUtil::populateCombo(QComboBox *combo, const QVariantList &list, const QString &holder)
 {
     combo->clear();
-    combo->addItem(QObject::tr("-- Select Category --"), -1);
+    combo->addItem(holder, -1);
     for(auto &d : list) {
         const QVariantMap &m = d.toMap();
         combo->addItem(m["name"].toString(), m["id"].toInt());
     }
-    GuiUtil::selectCombo(combo, currentSelected);
-}
-
-bool GuiUtil::isWidgetFocused(QWidget *widget)
-{
-    return qApp->focusWidget() == widget;
 }
