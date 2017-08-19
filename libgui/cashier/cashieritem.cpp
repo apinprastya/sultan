@@ -28,18 +28,18 @@ CashierItem::CashierItem():
 {
 }
 
-CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double total,const QString &discformula, double discount, double final, int type):
+CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double total,const QString &discformula, double discount, double final, const QString &unit, int type):
     id(ID++)
 {
-    set(name, barcode, count, price, total, discformula, discount, final, type);
+    set(name, barcode, count, price, total, discformula, discount, final, unit, type);
 }
 
-CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double discount, int flag)
+CashierItem::CashierItem(const QString &name, const QString &barcode, float count, double price, double discount, const QString &unit, int flag)
 {
-    set(name, barcode, count, price,price - discount, "", discount, (price - discount) * count, flag);
+    set(name, barcode, count, price, price - discount, "", discount, (price - discount) * count, unit, flag);
 }
 
-void CashierItem::set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int type)
+void CashierItem::set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int type)
 {
     this->name = name;
     this->barcode = barcode;
@@ -50,6 +50,7 @@ void CashierItem::set(const QString &name, const QString &barcode, float count, 
     this->discount_formula = discformula;
     this->discount = discount;
     this->final = final;
+    this->unit = unit;
 }
 
 void CashierItem::fill(const QVariantMap &data)
@@ -66,6 +67,7 @@ void CashierItem::fill(const QVariantMap &data)
     flag = data["flag"].toInt();
     linkId = data["link_id"].toInt();
     buyPrice = data["buy_price"].toDouble();
+    unit = data["unit"].toString();
 }
 
 QVariantMap CashierItem::toMap()
@@ -82,12 +84,13 @@ QVariantMap CashierItem::toMap()
     data.insert("flag", flag);
     data.insert("link_id", linkId);
     data.insert("buy_price", buyPrice);
+    data.insert("unit", unit);
     return data;
 }
 
 CashierItem *CashierItem::clone()
 {
-    auto item = new CashierItem(name, barcode, count, price, total, discount_formula, discount, final, flag);
+    auto item = new CashierItem(name, barcode, count, price, total, discount_formula, discount, final, unit, flag);
     item->id = id;
     item->parent = parent;
     item->flag = flag;
@@ -112,4 +115,5 @@ void CashierItem::fill(CashierItem *another)
     flag = another->flag;
     linkId = another->linkId;
     buyPrice = another->buyPrice;
+    unit = another->unit;
 }

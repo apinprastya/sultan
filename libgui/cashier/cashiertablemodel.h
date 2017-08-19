@@ -40,8 +40,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    void addItem(float count, const QString &name, const QString &barcode, const QVariantList &prices = QVariantList());
-    CashierItem *addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, int flag);
+    void addItem(float count, const QString &name, const QString &barcode, const QString &unit, const QVariantList &prices = QVariantList());
+    CashierItem *addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, const QString &unit, int flag);
     void reset();
     inline double getTotal() { return mTotal; }
     inline bool isEmpty() { return mData.isEmpty(); }
@@ -68,7 +68,7 @@ private:
     float getTotalCount(const QString &barcode);
     void calculateTotal();
     QList<int> rowOfBarcode(const QString &barcode);
-    QList<CashierItem *> calculatePrices(const QString &barcode, const QString &name, float count);
+    QList<CashierItem *> calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit);
     void calculatePoin();
 
 signals:

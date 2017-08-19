@@ -77,7 +77,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 100 << 90 << 120);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 75 << 100 << 90 << 120);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);
@@ -137,6 +137,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         ui->lineBarcode->setEnabled(true);
         const QString &name = msg->data("item").toMap()["name"].toString();
         const QString &barcode = msg->data("item").toMap()["barcode"].toString();
+        const QString &unit = msg->data("item").toMap()["unit"].toString();
         ui->labelName->setText(name);
         const QVariantList &list = msg->data("prices").toList();
         double price = list.first().toMap()["price"].toDouble();
@@ -147,7 +148,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             }
         }
         ui->labelPrice->setText(Preference::toString(price));
-        mModel->addItem(mCount, name, barcode, list);
+        mModel->addItem(mCount, name, barcode, unit, list);
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
@@ -308,12 +309,12 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
         bool ok = false;
         double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
         if(ok)
-            mModel->addItem(count - item->count, item->name, item->barcode);
+            mModel->addItem(count - item->count, item->name, item->barcode, item->unit);
     } else if(event->key() == Qt::Key_Delete){
         if(item->isReturn()) {
             mModel->removeReturn(item);
         } else {
-            mModel->addItem(-item->count, item->name, item->barcode);
+            mModel->addItem(-item->count, item->name, item->barcode, item->unit);
         }
     }
 }
@@ -360,7 +361,7 @@ void CashierWidget::updateLastInputed()
     bool ok = false;
     double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
     if(ok)
-        mModel->addItem(count - item->count, item->name, item->barcode);
+        mModel->addItem(count - item->count, item->name, item->barcode, item->unit);
 }
 
 void CashierWidget::payRequested(int type, double value)

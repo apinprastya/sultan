@@ -44,6 +44,7 @@ private:
     double mDiscount;
     int mFlag;
     double mBuyPrice;
+    QString mUnit;
 
 private slots:
     void calculateTotal();

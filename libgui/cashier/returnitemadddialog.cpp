@@ -56,6 +56,7 @@ void ReturnItemAddDialog::fill(const QVariantMap &d)
     ui->doubleCount->setMaximum(d["count"].toDouble());
     ui->doubleCount->setValue(d["count"].toDouble());
     ui->doubleCount->selectAll();
+    mUnit = d["unit"].toString();
     calculateTotal();
 }
 
@@ -72,7 +73,7 @@ void ReturnItemAddDialog::saveClicked()
         QMessageBox::critical(this, tr("Error"), tr("Return item with barcode already exists"));
         return;
     }
-    auto it = model->addReturnItem(ui->doubleCount->value(), ui->labelName->text(), ui->labelBarcode->text(), mPrice, mDiscount, mFlag | CashierItem::Return);
+    auto it = model->addReturnItem(ui->doubleCount->value(), ui->labelName->text(), ui->labelBarcode->text(), mPrice, mDiscount, mUnit, mFlag | CashierItem::Return);
     it->linkId = mId;
     it->buyPrice = mBuyPrice;
     close();

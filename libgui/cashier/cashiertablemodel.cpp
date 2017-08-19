@@ -36,7 +36,7 @@ CashierTableModel::CashierTableModel(MessageBus *bus, QObject *parent):
     QAbstractTableModel(parent)
 {
     setMessageBus(bus);
-    mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Price") << tr("Discount") << tr("Total");
+    mHeaders << "No" << tr("Barcode") << tr("Name") << tr("Count") << tr("Unit") << tr("Price") << tr("Discount") << tr("Total");
     sInstance = this;
 }
 
@@ -80,17 +80,19 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
             return item->name;
         }
         case 3: return QLocale().toString(item->count);
-        case 4: return Preference::toString(item->price);
-        case 5: return Preference::toString(item->discount);
-        case 6: return Preference::toString(item->final);
+        case 4: return item->unit;
+        case 5: return Preference::toString(item->price);
+        case 6: return Preference::toString(item->discount);
+        case 7: return Preference::toString(item->final);
         }
     } else if(role == Qt::TextAlignmentRole) {
         switch (index.column()) {
         case 0: return QVariant(Qt::AlignVCenter | Qt::AlignHCenter);
-        case 3:
-        case 4:
+        case 3: return QVariant(Qt::AlignVCenter | Qt::AlignRight);
+        case 4: return QVariant(Qt::AlignVCenter | Qt::AlignHCenter);
         case 5:
         case 6:
+        case 7:
             return QVariant(Qt::AlignVCenter | Qt::AlignRight);
         default:
             return QVariant(Qt::AlignVCenter | Qt::AlignLeft);
@@ -107,7 +109,7 @@ QModelIndex CashierTableModel::index(int row, int column, const QModelIndex &/*p
     return createIndex(row, column, item);
 }
 
-void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QVariantList &prices)
+void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QString &unit, const QVariantList &prices)
 {
     float totCount = getTotalCount(barcode) + count;
     const QList<int> &row = rowOfBarcode(barcode);
@@ -119,7 +121,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
             endRemoveRows();
         }
     } else if(totCount > 0) {
-        const QList<CashierItem*> &items = calculatePrices(barcode, name, totCount);
+        const QList<CashierItem*> &items = calculatePrices(barcode, name, totCount, unit);
         if(row.count() > 0) {
             if(row.count() < items.count()) {
                 //adding more price
@@ -167,10 +169,10 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
     calculateTotal();
 }
 
-CashierItem *CashierTableModel::addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, int flag)
+CashierItem *CashierTableModel::addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, const QString &unit, int flag)
 {
     beginInsertRows(QModelIndex(), mData.size() - 1, mData.size() - 1);
-    auto item = new CashierItem(name, barcode, -count, price, discount, flag);
+    auto item = new CashierItem(name, barcode, -count, price, discount, unit, flag);
     mData.append(item);
     endInsertRows();
     emit selectRow(createIndex(mData.size() - 1, 0, mData[mData.size() - 1]));
@@ -281,7 +283,7 @@ QList<int> CashierTableModel::rowOfBarcode(const QString &barcode)
     return retVal;
 }
 
-QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count)
+QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit)
 {
     QList<CashierItem*> retVal;
     const QVariantList &prices = mPrices[barcode];
@@ -289,7 +291,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
         const double &price = prices[0].toMap()["price"].toDouble();
         const QString &discformula = prices[0].toMap()["discount_formula"].toString();
         double disc = Util::calculateDiscount(discformula, price);
-        CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price - disc) * count);
+        CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price - disc) * count, unit);
         retVal << item;
     } else {
         for(int i = prices.count() - 1; i >= 0; i--) {
@@ -297,7 +299,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
             const double &price = p["price"].toDouble();
             const float &c = p["count"].toFloat();
             const QString &discformula = p["discount_formula"].toString();
-            auto item = new CashierItem(name, barcode, 0, price, 0, discformula, 0, 0);
+            auto item = new CashierItem(name, barcode, 0, price, 0, discformula, 0, 0, unit);
             if(c <= count) {
                 if(i == 0) {
                     item->total += count * price;

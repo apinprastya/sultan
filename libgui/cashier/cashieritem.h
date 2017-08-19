@@ -47,10 +47,11 @@ public:
     QString barcode;
     QString name;
     QString discount_formula;
+    QString unit;
     CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int flag = Item);
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double discount, int flag);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, int flag = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double discount,  const QString &unit, int flag);
+    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
     void fill(const QVariantMap &data);
     QVariantMap toMap();
     CashierItem *clone();
