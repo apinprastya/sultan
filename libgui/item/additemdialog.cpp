@@ -67,6 +67,7 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->pushSaveAgain->show();
     ui->labelError->hide();
     setWindowTitle(tr("Add New Item"));
+    mIsOk = false;
 }
 
 void AddItemDialog::fill(const QVariantMap &data)
@@ -82,6 +83,7 @@ void AddItemDialog::fill(const QVariantMap &data)
     mCurrentSuplier = data["suplier_id"].toInt();
     mCUrrentCategory = data["category_id"].toInt();
     mCurrentUnit = data["unit"].toString();
+    mIsOk = true;
 }
 
 void AddItemDialog::setAsUpdate()
