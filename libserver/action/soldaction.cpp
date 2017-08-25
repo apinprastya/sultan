@@ -55,10 +55,10 @@ Message SoldAction::insertSold(Message *msg)
     //msg->addData("number", number);
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(mDb->insert(mTableName, msg->data())) {
-        //TODO: change it to insert batch
         QVariant id = mDb->lastInsertedId();
         for(auto v : l) {
             QVariantMap m = v.toMap();
+            m.remove("unit");
             int flag = m["flag"].toInt();
             m["sold_id"] = id;
             DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
