@@ -242,7 +242,7 @@ QString Db::getSelectQuery(const QString &select)
     if(!mStart.isEmpty())
         sql.append(QStringLiteral(" OFFSET ")).append(mStart);
     if(mDebug)
-        qDebug() << sql;
+        qDebug() << TAG << sql;
     return sql;
 }
 
@@ -300,7 +300,7 @@ bool Db::exec(const QString &sqlcommand)
     reset();
     postQuery(&query);
     if(mDebug)
-        qDebug() << sqlcommand;
+        qDebug() << TAG << sqlcommand;
     if(!ok) {
         qCritical() << TAG << lastQuery();
         qCritical() << TAG << mLastError.text();
@@ -329,9 +329,11 @@ bool Db::insert(const QString &table, const QVariantMap &data)
         query.bindValue(i, data[keys.at(i)]);
     reset();
     bool res = query.exec();
-    qCritical() << TAG << query.lastQuery() << dataToString(data);
+    if(mDebug)
+        qDebug() << TAG << query.lastQuery() << dataToString(data);
     postQuery(&query);
     if(!res) {
+        qCritical() << TAG << query.lastQuery() << dataToString(data);
         qCritical() << TAG << mLastError.text();
     }
     return res;
@@ -360,9 +362,11 @@ bool Db::update(const QString &table, const QVariantMap &data)
         query.bindValue(i, data[keys.at(i)]);
     reset();
     bool res = query.exec();
-    qCritical() << TAG << query.lastQuery() << dataToString(data);
+    if(mDebug)
+        qDebug() << TAG << query.lastQuery() << dataToString(data);
     postQuery(&query);
     if(!res) {
+        qCritical() << TAG << query.lastQuery() << dataToString(data);
         qCritical() << TAG << mLastError.text();
     }
     return res;
@@ -380,9 +384,11 @@ bool Db::del(const QString &table)
         sql.append(table).append(QStringLiteral(" WHERE ")).append(mWhere);
         reset();
         bool res = query.exec(sql);
-        qDebug() << TAG << query.lastQuery();
+        if(mDebug)
+            qDebug() << TAG << query.lastQuery();
         postQuery(&query);
         if(!res) {
+            qCritical() << TAG << query.lastQuery();
             qCritical() << TAG << mLastError.text();
         }
         return res;
