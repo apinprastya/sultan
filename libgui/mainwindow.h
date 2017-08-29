@@ -93,6 +93,7 @@ private slots:
     void openCheckStock();
     void openInitialStock();
     void openUnit();
+    void openDateSetting();
 };
 
 }

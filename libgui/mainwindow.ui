@@ -57,6 +57,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionSetting"/>
+    <addaction name="actionDate_Setting"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Export_Database"/>
     <addaction name="separator"/>
@@ -263,6 +264,11 @@
   <action name="actionUnits">
    <property name="text">
     <string>&amp;Units</string>
+   </property>
+  </action>
+  <action name="actionDate_Setting">
+   <property name="text">
+    <string>&amp;Date Setting</string>
    </property>
   </action>
  </widget>

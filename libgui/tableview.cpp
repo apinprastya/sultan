@@ -19,6 +19,7 @@
  */
 #include "tableview.h"
 #include "horizontalheader.h"
+#include <QScrollBar>
 
 using namespace LibGUI;
 
@@ -30,6 +31,7 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
     mHeader = new HorizontalHeader(this, useStandartHeader);
     setHorizontalHeader(mHeader);
     setTabKeyNavigation(false);
+    verticalScrollBar()->setTracking(false);
 }
 
 HeaderWidget *TableView::getHeaderWidget(int index)

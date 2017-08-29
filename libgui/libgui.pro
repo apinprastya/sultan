@@ -130,7 +130,8 @@ SOURCES += \
     checkstock/checkstockadddialog.cpp \
     initialstock/initialstockwidget.cpp \
     initialstock/initialstockadddialog.cpp \
-    unit/unitwidget.cpp
+    unit/unitwidget.cpp \
+    setting/datesettingdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -215,7 +216,8 @@ HEADERS += \
     checkstock/checkstockadddialog.h \
     initialstock/initialstockwidget.h \
     initialstock/initialstockadddialog.h \
-    unit/unitwidget.h
+    unit/unitwidget.h \
+    setting/datesettingdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -265,4 +267,5 @@ FORMS += \
     admin/browserdialog.ui \
     admin/listdialog.ui \
     checkstock/checkstockadddialog.ui \
-    initialstock/initialstockadddialog.ui
+    initialstock/initialstockadddialog.ui \
+    setting/datesettingdialog.ui

@@ -55,11 +55,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     if(role == Qt::DisplayRole) {
         const int row = index.row();
-        if(!mData.exist(row + LibG::CONFIG::ITEMS_PER_LOAD))
+        if(!mIsLocal && !mData.exist(row + LibG::CONFIG::ITEMS_PER_LOAD))
             emit loadMore((row + LibG::CONFIG::ITEMS_PER_LOAD) / LibG::CONFIG::ITEMS_PER_LOAD);
-        if((row - LibG::CONFIG::ITEMS_PER_LOAD) > 0 && !mData.exist(row - LibG::CONFIG::ITEMS_PER_LOAD))
+        if(!mIsLocal && (row - LibG::CONFIG::ITEMS_PER_LOAD) > 0 && !mData.exist(row - LibG::CONFIG::ITEMS_PER_LOAD))
             emit loadMore((row - LibG::CONFIG::ITEMS_PER_LOAD) / LibG::CONFIG::ITEMS_PER_LOAD);
-        if(!mData.exist(row)) {
+        if(!mIsLocal && !mData.exist(row)) {
             emit loadMore(row / LibG::CONFIG::ITEMS_PER_LOAD);
             return QVariant(QLatin1String("loading..."));
         }
@@ -146,14 +146,36 @@ void TableModel::setSort(const QString &sort)
     mQuery.setSort(sort);
 }
 
+void TableModel::appendItem(TableItem *item)
+{
+    beginInsertRows(QModelIndex(), mData.size(), mData.size());
+    mData.append(item);
+    mNumRow++;
+    endInsertRows();
+}
+
+void TableModel::removeItem(TableItem *item)
+{
+    int row = mData.indexOf(item);
+    beginRemoveRows(QModelIndex(), row, row);
+    mData.removeAndRelease(row);
+    mNumRow--;
+    endRemoveRows();
+}
+
 void TableModel::refresh()
 {
-    reset();
-    loadPage();
+    if(mIsLocal) {
+        emit dataChanged(createIndex(0, 0), createIndex(mNumRow, mHeaders.size()));
+    } else {
+        reset();
+        loadPage();
+    }
 }
 
 void TableModel::resfreshOne(const QVariant &id)
 {
+    if(mIsLocal) return;
     Message msg(std::get<0>(mTypeCommandOne), std::get<1>(mTypeCommandOne));
     msg.addData(mIdKey, id);
     sendMessage(&msg);

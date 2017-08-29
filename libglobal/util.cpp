@@ -120,3 +120,8 @@ QString Util::genSoldNumber()
     const QString &ret = QString("%1-%2").arg(name).arg(val, 3, 16, QChar('0'));
     return ret;
 }
+
+bool Util::hasFlag(int flag, int tocheck)
+{
+    return (flag & tocheck) != 0;
+}

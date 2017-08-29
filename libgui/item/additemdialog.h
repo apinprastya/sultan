@@ -34,6 +34,7 @@ class AddItemDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
+    enum Tab { Price, Package, Ingridient };
     AddItemDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~AddItemDialog();
     void reset(bool isAddAgain = false);
@@ -57,14 +58,25 @@ private:
     bool mIsReturnPressed = false;
     bool mIsSuccess = false;
     QString mCurrentUnit;
+    QVariantList mPriceList;
 
     void saveData();
+    int getItemFlagFromCheckbox();
+    void applyItemFlagToCheckbox(int flag);
 
 private slots:
     void barcodeDone();
     void returnPressed();
     void saveClicked();
     void saveAndAgainClicked();
+    void checkWidget();
+    void calculateDiscount();
+    void addPriceClicked();
+    void updatePriceClicked(const QModelIndex &index);
+    void deletePriceClicked(const QModelIndex &index);
+    void openSearchItem();
+    void getItemPrice();
+    double updatePackagePrice();
 
 signals:
     void success();

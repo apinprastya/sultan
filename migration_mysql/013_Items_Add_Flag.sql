@@ -9,5 +9,13 @@ INSERT INTO units (name) VALUES ('pcs'), ('box'), ('renteng'), ('kg'), ('gram'),
 
 ALTER TABLE items ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
 ALTER TABLE items ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
+ALTER TABLE items ADD COLUMN `note` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE items ADD COLUMN `barcode_link` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE items ADD COLUMN `count_link` FLOAT NOT NULL DEFAULT '0';
+ALTER TABLE items ADD COLUMN `picture` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE solditems ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
+
 ALTER TABLE checkstocks ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
+
 UPDATE items SET unit = 'pcs';
+UPDATE items set flag = 89;

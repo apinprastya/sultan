@@ -101,7 +101,9 @@ void SettingWidget::setupLocale()
 void SettingWidget::setupPrinter()
 {
     ui->comboPrintCashierType->addItem(tr("Device Printer"), PRINT_TYPE::DEVICE);
+#ifndef NO_PRINTER_SPOOL
     ui->comboPrintCashierType->addItem(tr("Spool Printer"), PRINT_TYPE::SPOOL);
+#endif
     ui->comboPrintCashier->addItems(Printer::instance()->getPrintList());
     connect(ui->comboPrintCashierType, SIGNAL(currentIndexChanged(int)), SLOT(cashierPrintTypeChanged()));
     cashierPrintTypeChanged();

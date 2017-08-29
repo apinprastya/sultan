@@ -45,8 +45,9 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setMessageBus(bus);
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
-    model->addColumn("stock", tr("Stock"));
-    model->addColumn("count", tr("Sold"));
+    model->addColumnMoney("stock", tr("Stock"));
+    model->addColumnMoney("count", tr("Sold"));
+    model->addColumn("unit", tr("Unit"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
@@ -57,7 +58,7 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setFilter("0$DATE(solditems.created_at)", COMPARE::GREATER_EQUAL, prev);
     model->setFilter("1$DATE(solditems.created_at)", COMPARE::LESS_EQUAL, QDate::currentDate());
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 150 << 150);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 100 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
 }

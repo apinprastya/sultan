@@ -58,11 +58,12 @@ Message SoldAction::insertSold(Message *msg)
         QVariant id = mDb->lastInsertedId();
         for(auto v : l) {
             QVariantMap m = v.toMap();
-            m.remove("unit");
+            //TODO: get the item flag and process
             int flag = m["flag"].toInt();
             m["sold_id"] = id;
             DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
             const QVariantMap &item = res.first();
+            int itemflag = item["flag"].toInt();
             if((flag & RETURN) != 0) {
                 mDb->exec(QString("UPDATE solditems SET flag = flag | %1 WHERE id = %2").arg(RETURNED).arg(m["link_id"].toInt()));
                 //TODO: need to check if it a FIFO operation in the future
@@ -72,7 +73,9 @@ Message SoldAction::insertSold(Message *msg)
                 m["buy_price"] = m["count"].toFloat() * item["buy_price"].toDouble();
             }
             mDb->insert("solditems", m);
-            mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
+            if((itemflag & ITEM_FLAG::CALCULATE_STOCK) != 0) {
+                mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
+            }
         }
         //transaction
         QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", msg->data("number")},
@@ -140,4 +143,14 @@ Message SoldAction::get(Message *msg)
         message.setError("Data not found");
     }
     return message;
+}
+
+void SoldAction::calculateStock(const QVariantMap &data)
+{
+    int flag = data["flag"].toInt();
+    if((flag & ITEM_FLAG::CALCULATE_STOCK) != 0) {
+        //mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
+        //if((flag & ITEM_FLAG))
+        //TODO : apply semua yang dibawahnya dan diatasnya
+    }
 }

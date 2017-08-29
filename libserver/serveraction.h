@@ -38,6 +38,7 @@ public:
         AFTER_INSERT        = 0x1,
         AFTER_UPDATE        = 0x2,
         HAS_UPDATE_FIELD    = (1 << 16),
+        USE_TRANSACTION     = (1 << 17),
     };
 
     ServerAction(const QString &tableName, const QString idfield);

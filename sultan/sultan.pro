@@ -40,7 +40,7 @@ macx {
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
-    copytr.commands = $$quote(cp -R $${PWD}/translation/*.qm $${OUT_PWD}/../bin/)
+    copytr.commands = $$quote(cp -R $${PWD}/../translation/*.qm $${OUT_PWD}/../bin/)
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
@@ -96,8 +96,7 @@ SOURCES += main.cpp \
     socket/socketclient.cpp \
     socket/sockethandler.cpp \
     gui/logindialog.cpp \
-    gui/restartconfirmationdialog.cpp \
-    gui/datesettingdialog.cpp
+    gui/restartconfirmationdialog.cpp
 
 HEADERS  += \
     core.h \
@@ -107,12 +106,10 @@ HEADERS  += \
     socket/socketclient.h \
     socket/sockethandler.h \
     gui/logindialog.h \
-    gui/restartconfirmationdialog.h \
-    gui/datesettingdialog.h
+    gui/restartconfirmationdialog.h
 
 FORMS += \
     gui/splash.ui \
     gui/settingdialog.ui \
     gui/logindialog.ui \
-    gui/restartconfirmationdialog.ui \
-    gui/datesettingdialog.ui
+    gui/restartconfirmationdialog.ui

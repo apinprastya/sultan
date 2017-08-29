@@ -21,6 +21,7 @@
 #define SEARCHITEMDIALOG_H
 
 #include <QDialog>
+#include <QVariantMap>
 
 namespace Ui {
 class SearchItemDialog;
@@ -39,20 +40,25 @@ class SearchItemDialog : public QDialog
     Q_OBJECT
 
 public:
-    SearchItemDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    SearchItemDialog(LibG::MessageBus *bus, bool advance, QWidget *parent = 0);
     ~SearchItemDialog();
     inline QString getSelectedBarcode() { return mSelectedBarcode; }
     void setNameField(const QString &str);
+    inline QVariantMap getSelectedData() { return mSelectedData; }
+    inline bool isOk() { return mIsOk; }
 
 private:
     Ui::SearchItemDialog *ui;
     TableWidget *mTableWidget;
     QString mSelectedBarcode;
+    QVariantMap mSelectedData;
+    bool mIsOk = false;
 
 private slots:
     void nameDone();
     void dataLoaded();
     void returnPressed();
+    void doubleClicked(const QModelIndex &index);
 };
 
 }

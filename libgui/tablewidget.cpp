@@ -61,6 +61,7 @@ TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     auto header = static_cast<HorizontalHeader*>(mTableView->horizontalHeader());
     connect(header, SIGNAL(filterValueChanged(int,QVariant)), mModel, SLOT(filterChanged(int,QVariant)));
     connect(mTableView, SIGNAL(clicked(QModelIndex)), SLOT(tableSelected()));
+    connect(mTableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
 }
 
 TableWidget::~TableWidget()
@@ -155,4 +156,10 @@ void TableWidget::actionClicked()
 void TableWidget::tableSelected()
 {
     enableNoSelect(true);
+}
+
+void TableWidget::tableDoubleClicked(const QModelIndex &index)
+{
+    if(index.isValid())
+        emit updateClicked(index);
 }

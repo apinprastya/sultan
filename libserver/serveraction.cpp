@@ -63,6 +63,8 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
     LibG::Message message(msg);
     if(hasFlag(HAS_UPDATE_FIELD))
         msg->addData("updated_at", QDateTime::currentDateTime());
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+        mDb->beginTransaction();
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
@@ -70,6 +72,12 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
         const QVariantMap d = res.first();
         if(hasFlag(AFTER_INSERT)) afterInsert(d);
         message.setData(d);
+    }
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
+        }
     }
     return message;
 }
@@ -81,6 +89,8 @@ LibG::Message ServerAction::update(LibG::Message *msg)
     QVariantMap d = msg->data("data").toMap();
     if(hasFlag(HAS_UPDATE_FIELD))
         d.insert("updated_at", QDateTime::currentDateTime());
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+        mDb->beginTransaction();
     DbResult oldRes = mDb->clone()->get(mTableName);
     QVariantMap oldData = oldRes.first();
     if(!mDb->clone()->update(mTableName, d)) {
@@ -91,15 +101,29 @@ LibG::Message ServerAction::update(LibG::Message *msg)
         if(hasFlag(AFTER_UPDATE)) afterUpdate(oldData, d);
         message.setData(d);
     }
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
+        }
+    }
     return message;
 }
 
 LibG::Message ServerAction::del(LibG::Message *msg)
 {
     LibG::Message message(msg);
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+        mDb->beginTransaction();
     mDb->where(mIdField % " = ", msg->data(mIdField));
     if(!mDb->del(mTableName)) {
         message.setError(mDb->lastError().text());
+    }
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
+        }
     }
     return message;
 }

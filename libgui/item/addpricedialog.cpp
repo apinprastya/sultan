@@ -29,12 +29,12 @@
 using namespace LibGUI;
 using namespace LibG;
 
-AddPriceDialog::AddPriceDialog(LibG::MessageBus *bus, QWidget *parent) :
+AddPriceDialog::AddPriceDialog(bool local, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AddPriceDialog)
+    ui(new Ui::AddPriceDialog),
+    mIsLocal(local)
 {
     ui->setupUi(this);
-    setMessageBus(bus);
     ui->doublePrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(updateDiscount()));
@@ -67,23 +67,11 @@ void AddPriceDialog::fill(const QVariantMap &data)
     if(discFormula.isEmpty()) updateDiscount();
 }
 
-void AddPriceDialog::setBarcodeName(const QString &barcode, const QString &name, double buyprice)
+void AddPriceDialog::setBuyPrice(double buyprice)
 {
-    ui->labelBarcode->setText(barcode);
-    ui->labelName->setText(name);
+    mBuyPrice = buyprice;
     ui->labelBuyPrice->setText(Preference::toString(buyprice));
-}
-
-void AddPriceDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isType(MSG_TYPE::SELLPRICE)) {
-        if(msg->isSuccess()) {
-            hide();
-            emit success();
-        } else {
-            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
-        }
-    }
+    updateDiscount();
 }
 
 void AddPriceDialog::saveClicked()
@@ -94,28 +82,24 @@ void AddPriceDialog::saveClicked()
         QMessageBox::critical(this, tr("Error"), tr("Make sure value is greater than 0"));
         return;
     }
-    QVariantMap data;
+    mData.clear();
     double discount = Util::calculateDiscount(ui->lineEdit->text(), ui->doublePrice->value());
-    Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::INSERT);
-    data.insert("count", count);
-    data.insert("price", price);
-    data.insert("discount_formula", ui->lineEdit->text());
-    data.insert("discount", discount);
-    data.insert("final", ui->doublePrice->value() - discount);
-    if(mId > 0) {
-        msg.setCommand(MSG_COMMAND::UPDATE);
-        msg.addData("id", mId);
-        msg.addData("data", data);
-    } else {
-        data.insert("barcode", ui->labelBarcode->text());
-        msg.setData(data);
-    }
-    sendMessage(&msg);
+    mData.insert("count", count);
+    mData.insert("price", price);
+    mData.insert("discount_formula", ui->lineEdit->text());
+    mData.insert("discount", discount);
+    mData.insert("final", ui->doublePrice->value() - discount);
+    mIsOk = true;
+    close();
 }
 
 void AddPriceDialog::updateDiscount()
 {
     double discount = Util::calculateDiscount(ui->lineEdit->text(), ui->doublePrice->value());
+    double margin = ui->doublePrice->value() - discount - mBuyPrice;
+    double perc = 100;
+    if(mBuyPrice > 0) perc = margin * 100 / mBuyPrice;
     ui->labelDiscount->setText(Preference::toString(discount));
     ui->labelFinal->setText(Preference::toString(ui->doublePrice->value() - discount));
+    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::toString(margin)).arg(Preference::toString(perc)));
 }

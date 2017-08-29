@@ -37,6 +37,7 @@
 #include "escp.h"
 #include "printer.h"
 #include "global_setting_const.h"
+#include "addpricedialog.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -50,14 +51,11 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ItemWidget),
     mMainTable(new TableWidget(this)),
-    mSecondTable(new TableWidget(this, true)),
     mAddDialog(new AddItemDialog(bus, this)),
     mPriceDialog(new AddPriceDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
-    ui->splitter->setStretchFactor(0, 3);
-    ui->splitter->setStretchFactor(1, 2);
     mMainTable->initCrudButton();
     auto model = mMainTable->getModel();
     model->setMessageBus(bus);
@@ -90,31 +88,11 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
     ui->verticalLayoutTop->addWidget(mMainTable);
 
-    mSecondTable->initCrudButton();
-    model = mSecondTable->getModel();
-    model->setMessageBus(bus);
-    model->addColumn("barcode", tr("Barcode"));
-    model->addColumn("name", tr("Name"));
-    model->addColumnMoney("count", tr("Count"));
-    model->addColumnMoney("price", tr("Sell Price"));
-    model->addColumn("discount_formula", tr("Discount Formula"));
-    model->addColumnMoney("discount", tr("Discount"));
-    model->addColumnMoney("final", tr("Price - Discount"));
-    model->setTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::QUERY);
-    mSecondTable->setupTable();
-    GuiUtil::setColumnWidth(mSecondTable->getTableView(), QList<int>() << 150 << 150 << 90 << 90 << 150 << 100 << 100);
-    mSecondTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    ui->verticalLayoutBottom->addWidget(mSecondTable);
-
     connect(mMainTable->getTableView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(mainTableSelectionChanges()));
     connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
     connect(mMainTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteItemClicked(QModelIndex)));
-    connect(mSecondTable, SIGNAL(addClicked()), SLOT(addPriceClicked()));
-    connect(mSecondTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePriceClicked(QModelIndex)));
-    connect(mSecondTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(success()), mMainTable->getModel(), SLOT(refresh()));
-    connect(mPriceDialog, SIGNAL(success()), mSecondTable->getModel(), SLOT(refresh()));
 
     auto key = new KeyEvent(this);
     key->addConsumeKey(Qt::Key_P);
@@ -138,7 +116,7 @@ void ItemWidget::messageReceived(LibG::Message *msg)
                                list, tr("-- Select Category --"));
     } else if(msg->isTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Price deleted successfully"));
-        mSecondTable->getModel()->refresh();
+        //mSecondTable->getModel()->refresh();
     } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Item deleted successfully"));
         mMainTable->getModel()->refresh();
@@ -166,8 +144,6 @@ void ItemWidget::mainTableSelectionChanges()
         mCurrentBarcode = item->data("barcode").toString();
         mCurrentName = item->data("name").toString();
         mCurrentBuyPrice = item->data("buy_price").toDouble();
-        mSecondTable->getModel()->setFilter("barcode", COMPARE::EQUAL, item->data("barcode"));
-        mSecondTable->getModel()->refresh();
     }
 }
 
@@ -193,38 +169,7 @@ void ItemWidget::deleteItemClicked(const QModelIndex &index)
     if(ret != QMessageBox::Yes) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::DEL);
-    msg.addData("id", item->id);
-    sendMessage(&msg);
-}
-
-void ItemWidget::addPriceClicked()
-{
-    mPriceDialog->reset();
-    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName, mCurrentBuyPrice);
-    mPriceDialog->show();
-}
-
-void ItemWidget::updatePriceClicked(const QModelIndex &index)
-{
-    if(!index.isValid() || mCurrentBarcode.isEmpty()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    mPriceDialog->setBarcodeName(mCurrentBarcode, mCurrentName, mCurrentBuyPrice);
-    mPriceDialog->fill(item->data());
-    mPriceDialog->show();
-}
-
-void ItemWidget::deletePriceClicked(const QModelIndex &index)
-{
-    if(!index.isValid()) return;
-    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete price?"));
-    if(ret != QMessageBox::Yes) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("stock").toFloat() != 0) {
-        FlashMessageManager::showError(tr("Only item with 0 stock can be deleted"));
-        return;
-    }
-    Message msg(MSG_TYPE::SELLPRICE, MSG_COMMAND::DEL);
-    msg.addData("id", item->id);
+    msg.addData("barcode", item->data("barcode"));
     sendMessage(&msg);
 }
 

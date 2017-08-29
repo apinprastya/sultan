@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
-    <height>313</height>
+    <width>804</width>
+    <height>493</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,133 +18,586 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <property name="labelAlignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,4">
+     <property name="leftMargin">
+      <number>0</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Barcode</string>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QLineEdit" name="lineBarcode">
-         <property name="placeholderText">
-          <string>Barcode</string>
+        <layout class="QFormLayout" name="formLayout">
+         <property name="labelAlignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Barcode</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="lineBarcode">
+             <property name="placeholderText">
+              <string>Barcode</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelError">
+             <property name="styleSheet">
+              <string notr="true">color: red; font-size: 12px;</string>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineName">
+           <property name="placeholderText">
+            <string>Name</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Unit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="comboUnit"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Category</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="comboCategory"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Suplier</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="comboSuplier"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="labelError">
-         <property name="styleSheet">
-          <string notr="true">color: red; font-size: 12px;</string>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Item Settings</string>
          </property>
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="checkStock">
+            <property name="text">
+             <string>Handle Stock</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkPurchase">
+            <property name="text">
+             <string>Purcashable</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkSell">
+            <property name="text">
+             <string>Sellable</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkNote">
+            <property name="text">
+             <string>Require note when sold</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkEditPrice">
+            <property name="text">
+             <string>Editable price when selling</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkIngridient">
+            <property name="text">
+             <string>Has ingridient</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkPackage">
+            <property name="text">
+             <string>Package</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkProduct">
+            <property name="text">
+             <string>Product</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Name</string>
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::North</enum>
        </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="price">
+        <attribute name="title">
+         <string>Price</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="labelAlignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Buy Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="doubleBuyPrice">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="maximum">
+              <double>100000000.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelStock">
+             <property name="text">
+              <string>Initial Stock</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="doubleStock">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="maximum">
+              <double>1000000.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QToolBox" name="toolBoxPrice">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="pageSinglePrice">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>423</width>
+              <height>281</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>Single Price</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QGroupBox" name="groupSinglePrice">
+               <property name="title">
+                <string>Single Price</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_5">
+                <property name="labelAlignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="labelFinalPrice">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_22">
+                  <property name="text">
+                   <string>Final Price</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="labelPriceDiscount">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>Discount</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="lineDiscountFormula"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>Discount Formula</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QDoubleSpinBox" name="doubleSellPrice">
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="maximum">
+                   <double>100000000.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>Sell Price</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_13">
+                  <property name="text">
+                   <string>Margin</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="labelPriceMargin">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>131</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+            <zorder>groupSinglePrice</zorder>
+            <zorder>verticalSpacer_3</zorder>
+           </widget>
+           <widget class="QWidget" name="pageMultiPrice">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>423</width>
+              <height>281</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>MultiPrice</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QGroupBox" name="groupMultiPrice">
+               <property name="title">
+                <string>Multi Price</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <widget class="LibGUI::TableWidget" name="tablePrice" native="true"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="package">
+        <attribute name="title">
+         <string>Package</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>This package contain this items</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_3">
+           <property name="labelAlignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Item</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="linePackageItem">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushPackageItem">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../sultan/sultan.qrc">
+                 <normaloff>:/images/16x16/blue-document-search-result.png</normaloff>:/images/16x16/blue-document-search-result.png</iconset>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="labelPackageName">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Quantity</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="doublePackageQty">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="maximum">
+              <double>1000000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Package Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="labelPackagePrice">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="ingridient">
+        <attribute name="title">
+         <string>Ingridient</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="LibGUI::TableWidget" name="widget" native="true"/>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Buy Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>Sell Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="labelIngridientPrice">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="labelIngridientSellPrice">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineName">
-       <property name="placeholderText">
-        <string>Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Category</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="comboCategory"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Suplier</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="comboSuplier"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Buy Price</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QDoubleSpinBox" name="doubleBuyPrice">
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="maximum">
-        <double>1000000.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Sell Price</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSellPrice">
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="maximum">
-        <double>1000000.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Unit</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="comboUnit"/>
      </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -195,19 +648,44 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LibGUI::TableWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">tablewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineBarcode</tabstop>
   <tabstop>lineName</tabstop>
   <tabstop>comboUnit</tabstop>
   <tabstop>comboCategory</tabstop>
   <tabstop>comboSuplier</tabstop>
+  <tabstop>doubleStock</tabstop>
   <tabstop>doubleBuyPrice</tabstop>
   <tabstop>doubleSellPrice</tabstop>
+  <tabstop>lineDiscountFormula</tabstop>
   <tabstop>pushSaveAgain</tabstop>
   <tabstop>pushSave</tabstop>
   <tabstop>pushCancel</tabstop>
+  <tabstop>checkStock</tabstop>
+  <tabstop>checkPurchase</tabstop>
+  <tabstop>checkSell</tabstop>
+  <tabstop>checkNote</tabstop>
+  <tabstop>checkEditPrice</tabstop>
+  <tabstop>checkIngridient</tabstop>
+  <tabstop>checkPackage</tabstop>
+  <tabstop>checkProduct</tabstop>
+  <tabstop>groupMultiPrice</tabstop>
+  <tabstop>linePackageItem</tabstop>
+  <tabstop>pushPackageItem</tabstop>
+  <tabstop>doublePackageQty</tabstop>
+  <tabstop>tabWidget</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../sultan/sultan.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushCancel</sender>

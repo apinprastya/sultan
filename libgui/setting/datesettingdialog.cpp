@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
+using namespace LibGUI;
+
 DateSettingDialog::DateSettingDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DateSettingDialog)
@@ -61,5 +63,9 @@ void DateSettingDialog::saveClicked()
         return;
     }
     mIsOk = true;
+#ifdef Q_PROCESSOR_ARM
+    p.start("hwclock", QStringList("-w"));
+    p.waitForFinished();
+#endif
     close();
 }

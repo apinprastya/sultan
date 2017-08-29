@@ -58,6 +58,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
     model->addColumnMoney("count", tr("Count"));
+    model->addColumn("unit", tr("Unit"));
     model->addColumnMoney("final", tr("Total"));
     model->addColumnMoney("buy_price", tr("Buy Price"));
     model->addColumnMoney("margin", tr("Margin"));
@@ -69,7 +70,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 70 << 100 << 100 << 100);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 60 << 75 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));

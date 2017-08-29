@@ -61,6 +61,12 @@ public:
     inline LibDB::QueryDB *getQuery() { return &mQuery; }
     inline int getIndex(const QString &key) { return mColumns.indexOf(key); }
     void setSort(const QString &sort);
+    inline void setAsLocal(bool value) { mIsLocal = value; }
+    inline bool isLocal() { return mIsLocal; }
+    inline void setTableItemTemplateFunc(std::function<TableItem*(void)> func) { mTemplateTableItemFunc = func; }
+    void appendItem(TableItem* item);
+    void removeItem(TableItem *item);
+    inline RowData* getRowData() { return &mData; }
 
 public slots:
     void refresh();
@@ -85,6 +91,8 @@ protected:
     QString mIdKey = QStringLiteral("id");
     QMap<QString, HeaderFilter> mHeaderFilter;
     bool mUseStandartHeader = false;
+    bool mIsLocal = false;
+    std::function<TableItem*(void)> mTemplateTableItemFunc = nullptr;
 
 signals:
     void loadMore(int page) const;

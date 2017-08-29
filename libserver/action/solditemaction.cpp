@@ -54,7 +54,7 @@ Message SoldItemAction::getSummary(Message *msg)
 Message SoldItemAction::report(Message *msg)
 {
     LibG::Message message(msg);
-    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, items.name, items.stock, categories.name as category, supliers.name as suplier")->
+    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, items.name, items.stock, items.unit, categories.name as category, supliers.name as suplier")->
             join("LEFT JOIN items ON items.barcode = solditems.barcode")->
             join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
             join("LEFT JOIN categories ON categories.id = items.category_id")->group("solditems.barcode")->sort("count DESC");

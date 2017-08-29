@@ -188,6 +188,18 @@ namespace CHECKSTOCK_FLAG {
     const int INITIAL           = 0x2;
 }
 
+namespace ITEM_FLAG {
+    const int MULTIPRICE        = 0x1;
+    const int EDITABLE_PRICE    = 0x2;
+    const int REQUIRE_NOTE      = 0x4;
+    const int CALCULATE_STOCK   = 0x8;
+    const int PURCHASE          = 0x10;
+    const int HAS_INGRIDIENT    = 0x20;
+    const int SELLABLE          = 0x40;
+    const int PROCESS_FIRST     = 0x80;
+    const int PACKAGE           = 0x100;
+}
+
 }
 
 #endif // GLOBAL_CONSTANT_H

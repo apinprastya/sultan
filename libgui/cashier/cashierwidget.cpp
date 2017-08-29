@@ -77,7 +77,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 75 << 75 << 100 << 90 << 120);
+    GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 60 << 75 << 90 << 80 << 100);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
     auto keyevent = new KeyEvent(ui->tableView);
@@ -266,17 +266,19 @@ void CashierWidget::barcodeEntered()
         mCount = 1.0f;
     }
     if(Preference::getBool(SETTING::CASHIER_NAMEBASED)) {
-        SearchItemDialog dialog(mMessageBus, this);
+        SearchItemDialog dialog(mMessageBus, false, this);
         dialog.setNameField(ui->lineBarcode->text());
         dialog.exec();
         const QString &barcode = dialog.getSelectedBarcode();
         if(barcode.isEmpty()) return;
         LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
         msg.addData("barcode", barcode);
+        msg.addFilter("flag", COMPARE::FLAG, ITEM_FLAG::SELLABLE);
         sendMessage(&msg);
     } else {
         LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
         msg.addData("barcode", barcode);
+        msg.addFilter("flag", COMPARE::FLAG, ITEM_FLAG::SELLABLE);
         sendMessage(&msg);
     }
 }
@@ -469,7 +471,7 @@ void CashierWidget::printBill(const QVariantMap &data)
 
 void CashierWidget::openSearch()
 {
-    SearchItemDialog dialog(mMessageBus, this);
+    SearchItemDialog dialog(mMessageBus, false, this);
     dialog.exec();
     const QString &barcode = dialog.getSelectedBarcode();
     if(barcode.isEmpty()) return;

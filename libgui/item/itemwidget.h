@@ -47,7 +47,6 @@ protected:
 private:
     Ui::ItemWidget *ui;
     TableWidget *mMainTable;
-    TableWidget *mSecondTable;
     AddItemDialog *mAddDialog;
     AddPriceDialog *mPriceDialog;
     QString mCurrentBarcode;
@@ -59,9 +58,6 @@ private slots:
     void addItemClicked();
     void updateItemClicked(const QModelIndex &index);
     void deleteItemClicked(const QModelIndex &index);
-    void addPriceClicked();
-    void updatePriceClicked(const QModelIndex &index);
-    void deletePriceClicked(const QModelIndex &index);
     void importClicked();
     void exportClicked();
     void mainTableKeyPressed(QObject *, QKeyEvent *event);

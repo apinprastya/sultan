@@ -53,6 +53,9 @@
 #include "unit/unitwidget.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#ifdef USE_DATE_SETTING
+#include "setting/datesettingdialog.h"
+#endif
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -90,6 +93,7 @@ void MainWindow::setup()
 {
     ui->tabWidget->closeAllTabAndFree();
     ui->actionSetting->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
+    ui->actionImport_Export_Database->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
     ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::USER));
     ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
@@ -109,6 +113,10 @@ void MainWindow::setup()
     ui->actionInitial_Stock->setEnabled(UserSession::hasPermission(PERMISSION::INITIAL_STOCK));
     ui->actionUnits->setEnabled(UserSession::hasPermission(PERMISSION::UNIT));
     ui->action_Cashier->setShortcut(Qt::CTRL + Qt::Key_D);
+#ifndef USE_DATE_SETTING
+    ui->actionDate_Setting->setEnabled(false);
+#endif
+    ui->actionInitial_Stock->setVisible(false);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -121,6 +129,13 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     mStatusBar->updateUser();
     QMainWindow::showEvent(event);
+#ifdef USE_DATE_SETTING
+    auto date = QDate::currentDate();
+    if(date.year() < 2017) {
+        DateSettingDialog dialog;
+        dialog.exec();
+    }
+#endif
     if(Preference::getInt(SETTING::MACHINE_ID) == 0) {
         QMessageBox::warning(this, tr("First setting"), tr("Please set the machine ID on setting first before start using the application"));
         openSetting();
@@ -159,6 +174,7 @@ void MainWindow::setupConnection()
     connect(ui->action_Check_Stock, SIGNAL(triggered(bool)), SLOT(openCheckStock()));
     connect(ui->actionInitial_Stock, SIGNAL(triggered(bool)), SLOT(openInitialStock()));
     connect(ui->actionUnits, SIGNAL(triggered(bool)), SLOT(openUnit()));
+    connect(ui->actionDate_Setting, SIGNAL(triggered(bool)), SLOT(openDateSetting()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -443,4 +459,12 @@ void MainWindow::openUnit()
         auto widget = new UnitWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Unit"), ":/images/16x16/ruler.png");
     }
+}
+
+void MainWindow::openDateSetting()
+{
+#ifdef USE_DATE_SETTING
+    DateSettingDialog dialog;
+    dialog.exec();
+#endif
 }

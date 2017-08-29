@@ -37,6 +37,7 @@ public:
     void clearAndRelease();
     void insert(int index, TableItem *item);
     void insert(int index, const QList<TableItem*> &list);
+    void append(TableItem *item);
     void removeAndRelease(int index);
     TableItem *operator[](int index);
     TableItem *at(int index);
@@ -47,6 +48,7 @@ public:
     inline TableItem *getItem(int index) { return mData[index]; }
     int getLogicalIndex(int internalIndex);
     TableItem *getItem(const QString &key, const QVariant &val);
+    int indexOf(TableItem *item);
 
 private:
     QList<TableItem*> mData;

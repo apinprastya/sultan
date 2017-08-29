@@ -32,6 +32,9 @@ public:
 protected:
     LibG::Message insertSold(LibG::Message *msg);
     LibG::Message get(LibG::Message *msg) override;
+
+private:
+    void calculateStock(const QVariantMap &data);
 };
 
 }

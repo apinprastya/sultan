@@ -104,7 +104,7 @@ void Message::removeData(const QString &key)
 
 QVariant Message::takeData(const QString &key)
 {
-    const QVariant &data = mData[key];
+    const QVariant data = mData[key];
     mData.remove(key);
     return data;
 }

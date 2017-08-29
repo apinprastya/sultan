@@ -42,20 +42,29 @@ ItemAction::ItemAction():
 Message ItemAction::insert(Message *msg)
 {
     LibG::Message message(msg);
-    const double sellprice = msg->data("sell_price").toDouble();
-    msg->removeData("sell_price");
+    const int flag = msg->data("flag").toInt();
+    const QVariant &sellPrice = msg->takeData("sell_price");
+    if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
         message.setData(res.first());
-        if(sellprice != 0) {
-            QVariantMap d;
-            d.insert("barcode", msg->data("barcode"));
-            d.insert("count", 1);
-            d.insert("price", sellprice);
-            d.insert("final", sellprice);
-            mDb->insert("sellprices", d);
+        if((flag & ITEM_FLAG::MULTIPRICE) == 0) {
+            mDb->insert("sellprices", sellPrice.toMap());
+        } else {
+            const QVariantList &l = sellPrice.toList();
+            for(int i = 0; i < l.size(); i++) {
+                QVariantMap d = l.at(i).toMap();
+                d["barcode"] = msg->data("barcode");
+                mDb->insert("sellprices", d);
+            }
+        }
+    }
+    if(mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
         }
     }
     return message;
@@ -65,17 +74,27 @@ Message ItemAction::update(Message *msg)
 {
     LibG::Message message(msg);
     QVariantMap data = msg->data("data").toMap();
-    const double sellprice = data["sell_price"].toDouble();
+    QVariant sellprice = data["sell_price"];
+    const int flag = data["flag"].toInt();
     data.remove("sell_price");
     mDb->where(mIdField % " = ", msg->data(mIdField));
     if(!mDb->update(mTableName, data)) {
         message.setError(mDb->lastError().text());
     } else {
-        QVariantMap d;
-        d.insert("price", sellprice);
-        mDb->where("barcode = ", msg->data("barcode"))->where("count = '1.0'")->update("sellprices", d);
-        DbResult res = mDb->where("id = ", msg->data("id"))->get(mTableName);
-        message.setData(res.first());
+        if((flag & ITEM_FLAG::MULTIPRICE) == 0) {
+            QVariantMap sp = sellprice.toMap();
+            sp["count"] = 1;
+            DbResult res = mDb->where("barcode = ", msg->data("barcode"))->get("sellprices");
+            if(res.size() == 1) {
+                sp.remove("barcode");
+                mDb->where("barcode = ", msg->data("barcode"))->update("sellprices", sp);
+            } else if(res.size() > 1) {
+                mDb->where("barcode = ", msg->data("barcode"))->del("sellprices");
+                mDb->insert("sellprices", sp);
+            }
+            res = mDb->where("id = ", msg->data("id"))->get(mTableName);
+            message.setData(res.first());
+        }
     }
     return message;
 }
@@ -85,6 +104,7 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
     LibG::Message message(msg);
     const QString &barcode = msg->data("barcode").toString();
     //get item detail
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     mDb->table(mTableName)->where("barcode = ", barcode);
     DbResult res = mDb->exec();
     if(res.isEmpty()) {

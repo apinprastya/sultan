@@ -27,15 +27,17 @@
 #include "guiutil.h"
 #include "db_constant.h"
 #include "keyevent.h"
+#include "headerwidget.h"
+#include "tableitem.h"
 #include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-SearchItemDialog::SearchItemDialog(MessageBus *bus, QWidget *parent) :
+SearchItemDialog::SearchItemDialog(MessageBus *bus, bool advance, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SearchItemDialog),
-    mTableWidget(new TableWidget(this, true))
+    mTableWidget(new TableWidget(this, !advance))
 {
     ui->setupUi(this);
     auto keyEvent = new KeyEvent(this);
@@ -56,6 +58,13 @@ SearchItemDialog::SearchItemDialog(MessageBus *bus, QWidget *parent) :
     ui->lineName->setFocus();
     connect(mTableWidget->getModel(), SIGNAL(firstDataLoaded()), SLOT(dataLoaded()));
     connect(keyEvent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(returnPressed()));
+    if(advance) {
+        ui->lineName->hide();
+        connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+        model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative, QVariant()});
+        model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+        model->refresh();
+    }
 }
 
 SearchItemDialog::~SearchItemDialog()
@@ -97,6 +106,16 @@ void SearchItemDialog::returnPressed()
     if(index.isValid()) {
         auto item = static_cast<TableItem*>(index.internalPointer());
         mSelectedBarcode = item->data("barcode").toString();
+        close();
+    }
+}
+
+void SearchItemDialog::doubleClicked(const QModelIndex &index)
+{
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(item) {
+        mSelectedData = item->data();
+        mIsOk = true;
         close();
     }
 }

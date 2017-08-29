@@ -71,6 +71,7 @@ signals:
 private slots:
     void actionClicked();
     void tableSelected();
+    void tableDoubleClicked(const QModelIndex &index);
 };
 
 }

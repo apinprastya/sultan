@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>365</width>
-    <height>140</height>
+    <width>299</width>
+    <height>111</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Your date time is too old. You have to set your current date and time manual.</string>
+      <string>Setting you date and time manually</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

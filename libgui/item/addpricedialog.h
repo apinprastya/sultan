@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QDialog>
+#include <QVariantMap>
 
 namespace Ui {
 class AddPriceDialog;
@@ -29,23 +30,26 @@ class AddPriceDialog;
 
 namespace LibGUI {
 
-class AddPriceDialog : public QDialog, public LibG::MessageHandler
+class AddPriceDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AddPriceDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddPriceDialog(bool local, QWidget *parent = 0);
     ~AddPriceDialog();
     void reset();
     void fill(const QVariantMap &data);
-    void setBarcodeName(const QString &barcode, const QString &name, double buyprice);
-
-protected:
-    void messageReceived(LibG::Message *msg) override;
+    void setBuyPrice(double buyprice);
+    inline QVariantMap getData() const { return mData; }
+    inline bool isOk() { return mIsOk; }
 
 private:
     Ui::AddPriceDialog *ui;
     int mId = 0;
+    bool mIsLocal;
+    double mBuyPrice;
+    bool mIsOk = false;
+    QVariantMap mData;
 
 signals:
     void success();

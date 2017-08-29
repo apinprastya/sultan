@@ -77,21 +77,28 @@ void RowData::insert(int index, const QList<TableItem*> &list)
     }
 }
 
+void RowData::append(TableItem *item)
+{
+    mData.append(item);
+}
+
 void RowData::removeAndRelease(int index)
 {
     int real = getInternalIndex(index);
     if(real >= 0) {
-        QMapIterator<int, int> i(mOffset);
-        int lenght = 0;
-        int key = 0;
-        while (i.hasNext()) {
-            i.next();
-            if(lenght + i.value() > real)  {
-                break;
+        if(!mOffset.isEmpty()) {
+            QMapIterator<int, int> i(mOffset);
+            int lenght = 0;
+            int key = 0;
+            while (i.hasNext()) {
+                i.next();
+                if(lenght + i.value() > real)  {
+                    break;
+                }
+                key = i.key();
             }
-            key = i.key();
+            mOffset[key] = mOffset[key] - 1;
         }
-        mOffset[key] = mOffset[key] - 1;
         auto item = mData.takeAt(real);
         delete item;
     }
@@ -129,18 +136,17 @@ bool RowData::exist(int index) const
 
 int RowData::getIndexOfId(const QString &key, const QVariant &id)
 {
-    int index = -1;
     for(int i =  0; i < mData.size(); i++) {
         if(mData[i]->data(key) == id) {
-            index = i;
-            break;
+            return getLogicalIndex(i);
         }
     }
-    return getLogicalIndex(index);
+    return -1;
 }
 
 int RowData::getLogicalIndex(int internalIndex)
 {
+    if(mOffset.isEmpty()) return internalIndex;
     if(internalIndex >= 0) {
         QMapIterator<int, int> i(mOffset);
         int lenght = 0;
@@ -165,6 +171,16 @@ TableItem *RowData::getItem(const QString &key, const QVariant &val)
         }
     }
     return nullptr;
+}
+
+int RowData::indexOf(TableItem *item)
+{
+    for(int i =  0; i < mData.size(); i++) {
+        if(mData[i] == item) {
+            return getLogicalIndex(i);
+        }
+    }
+    return -1;
 }
 
 int RowData::getInternalIndex(int index) const

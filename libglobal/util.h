@@ -36,6 +36,7 @@ public:
     static bool isValidDiscountFormula(const QString &val);
     static double calculateDiscount(const QString &formula, double value);
     static QString genSoldNumber();
+    static bool hasFlag(int flag, int tocheck);
 
 private:
 };

@@ -26,6 +26,8 @@ namespace Ui {
 class DateSettingDialog;
 }
 
+namespace LibGUI {
+
 class DateSettingDialog : public QDialog
 {
     Q_OBJECT
@@ -42,5 +44,7 @@ private:
 private slots:
     void saveClicked();
 };
+
+}
 
 #endif // DATESETTINGDIALOG_H
