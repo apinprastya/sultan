@@ -131,7 +131,8 @@ SOURCES += \
     initialstock/initialstockwidget.cpp \
     initialstock/initialstockadddialog.cpp \
     unit/unitwidget.cpp \
-    setting/datesettingdialog.cpp
+    setting/datesettingdialog.cpp \
+    cashier/searchcustomerdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -217,7 +218,8 @@ HEADERS += \
     initialstock/initialstockwidget.h \
     initialstock/initialstockadddialog.h \
     unit/unitwidget.h \
-    setting/datesettingdialog.h
+    setting/datesettingdialog.h \
+    cashier/searchcustomerdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -268,4 +270,5 @@ FORMS += \
     admin/listdialog.ui \
     checkstock/checkstockadddialog.ui \
     initialstock/initialstockadddialog.ui \
-    setting/datesettingdialog.ui
+    setting/datesettingdialog.ui \
+    cashier/searchcustomerdialog.ui

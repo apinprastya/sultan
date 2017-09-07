@@ -36,6 +36,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("F1", tr("Open this help"));
     addRow("F2", tr("Search items"));
     addRow("F3", tr("Scan customer"));
+    addRow("Shift + F3", tr("Search customer"));
     addRow("Ctrl + F3", tr("Reset customer"));
     addRow("F4", tr("Pay cash transaction"));
     addRow("F5", tr("Open drawer"));
@@ -48,7 +49,6 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("Ctrl + S", tr("Save current cart to slot"));
     addRow("Ctrl + O", tr("Load cart from slot"));
     addRow("PgDn", tr("Edit last inserted item"));
-    //addRow("", tr(""));
 }
 
 CashierHelpDialog::~CashierHelpDialog()

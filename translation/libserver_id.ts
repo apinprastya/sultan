@@ -15,17 +15,17 @@
         <translation>Pembelian : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="85"/>
+        <location filename="../libserver/action/soldaction.cpp" line="86"/>
         <source>Sold : %1</source>
         <translation>Penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="93"/>
+        <location filename="../libserver/action/soldaction.cpp" line="94"/>
         <source>Credit from transaction %1</source>
         <translation>Piutang dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="106"/>
+        <location filename="../libserver/action/soldaction.cpp" line="107"/>
         <source>Poin from transaction %1</source>
         <translation>Poin dari penjualan : %1</translation>
     </message>
@@ -51,12 +51,12 @@
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="91"/>
+        <location filename="../libserver/action/itemaction.cpp" line="111"/>
         <source>Item not found</source>
         <translation>Item tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="97"/>
+        <location filename="../libserver/action/itemaction.cpp" line="117"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
     </message>

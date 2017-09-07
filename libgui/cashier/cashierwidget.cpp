@@ -44,6 +44,7 @@
 #include "paycashlessdialog.h"
 #include "checkpricedialog.h"
 #include "util.h"
+#include "searchcustomerdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -103,6 +104,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
+    new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F3), this, SLOT(openSearchCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
@@ -563,4 +565,15 @@ void CashierWidget::openCheckPrice()
     }
     CheckPriceDialog dialog(mMessageBus, barcode, this);
     dialog.exec();
+}
+
+void CashierWidget::openSearchCustomer()
+{
+    SearchCustomerDialog dialog(mMessageBus, this);
+    dialog.exec();
+    if(dialog.isOk()) {
+        Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY);
+        msg.addFilter("number", COMPARE::EQUAL, dialog.getSelectedData()["number"].toString());
+        sendMessage(&msg);
+    }
 }

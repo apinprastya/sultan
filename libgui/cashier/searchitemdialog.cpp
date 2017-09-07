@@ -106,6 +106,7 @@ void SearchItemDialog::returnPressed()
     if(index.isValid()) {
         auto item = static_cast<TableItem*>(index.internalPointer());
         mSelectedBarcode = item->data("barcode").toString();
+        mSelectedData = item->data();
         close();
     }
 }
@@ -115,6 +116,7 @@ void SearchItemDialog::doubleClicked(const QModelIndex &index)
     auto item = static_cast<TableItem*>(index.internalPointer());
     if(item) {
         mSelectedData = item->data();
+        mSelectedBarcode = item->data("barcode").toString();
         mIsOk = true;
         close();
     }

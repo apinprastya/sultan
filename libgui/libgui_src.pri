@@ -81,7 +81,9 @@ SOURCES += \
     $$PWD/checkstock/checkstockadddialog.cpp \
     $$PWD/initialstock/initialstockwidget.cpp \
     $$PWD/initialstock/initialstockadddialog.cpp \
-    $$PWD/unit/unitwidget.cpp
+    $$PWD/unit/unitwidget.cpp \
+    $$PWD/setting/datesettingdialog.cpp \
+    $$PWD/cashier/searchcustomerdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -166,7 +168,9 @@ HEADERS += \
     $$PWD/checkstock/checkstockadddialog.h \
     $$PWD/initialstock/initialstockwidget.h \
     $$PWD/initialstock/initialstockadddialog.h \
-    $$PWD/unit/unitwidget.h
+    $$PWD/unit/unitwidget.h \
+    $$PWD/setting/datesettingdialog.h \
+    $$PWD/cashier/searchcustomerdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -216,4 +220,6 @@ FORMS += \
     $$PWD/admin/browserdialog.ui \
     $$PWD/admin/listdialog.ui \
     $$PWD/checkstock/checkstockadddialog.ui \
-    $$PWD/initialstock/initialstockadddialog.ui
+    $$PWD/initialstock/initialstockadddialog.ui \
+    $$PWD/setting/datesettingdialog.ui \
+    $$PWD/cashier/searchcustomerdialog.ui

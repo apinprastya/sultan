@@ -4,43 +4,43 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../sultan/core.cpp" line="120"/>
-        <location filename="../sultan/core.cpp" line="135"/>
+        <location filename="../sultan/core.cpp" line="117"/>
+        <location filename="../sultan/core.cpp" line="132"/>
         <source>Database Error</source>
         <translation>Database Error</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="135"/>
+        <location filename="../sultan/core.cpp" line="132"/>
         <source>Migrate database failed</source>
         <translation>Migrasi database gagal</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="145"/>
+        <location filename="../sultan/core.cpp" line="142"/>
         <source>Server Socket Error</source>
         <translation>Socket Server Error</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="145"/>
+        <location filename="../sultan/core.cpp" line="142"/>
         <source>Port already in used</source>
         <translation>Port sudah digunakan</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="186"/>
+        <location filename="../sultan/core.cpp" line="176"/>
         <source>Error Disconnect</source>
         <translation>Error Disconnect</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="186"/>
+        <location filename="../sultan/core.cpp" line="176"/>
         <source>Connection to server lost. Please check your connectivity.</source>
         <translation>Koneksi ke server terputus. Silakan cek koneksi Anda.</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="211"/>
+        <location filename="../sultan/core.cpp" line="201"/>
         <source>Error Timeout</source>
         <translation>Error Timeout</translation>
     </message>
     <message>
-        <location filename="../sultan/core.cpp" line="211"/>
+        <location filename="../sultan/core.cpp" line="201"/>
         <source>Connection to server timeout. Please check your connectivity.</source>
         <translation>Koneksi ke server timeout. Silakan cek koneksi Anda.</translation>
     </message>
@@ -48,35 +48,24 @@
 <context>
     <name>DateSettingDialog</name>
     <message>
-        <location filename="../sultan/gui/datesettingdialog.ui" line="14"/>
         <source>Setting Date and Time</source>
-        <translation>Setting tanggal dan jam</translation>
+        <translation type="vanished">Setting tanggal dan jam</translation>
     </message>
     <message>
-        <location filename="../sultan/gui/datesettingdialog.ui" line="20"/>
         <source>Your date time is too old. You have to set your current date and time manual.</source>
-        <translation>Tanggal dan jam sudah kadaluarsa. Tangal dan jam haus di set secara manual.</translation>
+        <translation type="vanished">Tanggal dan jam sudah kadaluarsa. Tangal dan jam haus di set secara manual.</translation>
     </message>
     <message>
-        <location filename="../sultan/gui/datesettingdialog.ui" line="68"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation type="vanished">Simpan</translation>
     </message>
     <message>
-        <location filename="../sultan/gui/datesettingdialog.cpp" line="55"/>
-        <location filename="../sultan/gui/datesettingdialog.cpp" line="60"/>
-        <source>Error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../sultan/gui/datesettingdialog.cpp" line="55"/>
         <source>Unable to set the date time</source>
-        <translation>Tidak dapat menset tanggal dan jam</translation>
+        <translation type="vanished">Tidak dapat menset tanggal dan jam</translation>
     </message>
     <message>
-        <location filename="../sultan/gui/datesettingdialog.cpp" line="60"/>
         <source>Seems your date is not up to date. Please check again</source>
-        <translation>Sepertinya tanggal dan jam masih belum terupdate. Silakan cek ulang</translation>
+        <translation type="vanished">Sepertinya tanggal dan jam masih belum terupdate. Silakan cek ulang</translation>
     </message>
 </context>
 <context>
@@ -87,22 +76,24 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../sultan/gui/logindialog.cpp" line="42"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="43"/>
         <source>Login</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sultan/gui/logindialog.cpp" line="88"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="89"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="103"/>
         <source>Close Confirmation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sultan/gui/logindialog.cpp" line="89"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="90"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="104"/>
         <source>This is a server, any client will be disconnect. Are you sure to exit?</source>
         <translation>Aplikasi ini adalah server, semua client yang terhubung ke server ini akan terputus. Yakin keluar?</translation>
     </message>
     <message>
-        <location filename="../sultan/gui/logindialog.cpp" line="104"/>
+        <location filename="../sultan/gui/logindialog.cpp" line="117"/>
         <source>fill all field</source>
         <translation>Lengkapi semua form</translation>
     </message>

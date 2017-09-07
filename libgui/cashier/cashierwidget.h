@@ -84,6 +84,7 @@ private slots:
     void scanCustomer();
     void resetCustomer(bool dontShowMessage = false);
     void openCheckPrice();
+    void openSearchCustomer();
 };
 
 }
