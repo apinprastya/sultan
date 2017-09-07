@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>246</height>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,13 +75,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineBarcode">
-       <property name="placeholderText">
-        <string>Scan barcode</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="1">
       <widget class="QDoubleSpinBox" name="doubleStock">
        <property name="minimum">
@@ -111,6 +104,34 @@
         <bool>true</bool>
        </property>
       </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="lineBarcode">
+         <property name="placeholderText">
+          <string>Scan barcode</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushSearch">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../../sultan/sultan.qrc">
+           <normaloff>:/images/16x16/blue-document-search-result.png</normaloff>:/images/16x16/blue-document-search-result.png</iconset>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -174,14 +195,15 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>lineBarcode</tabstop>
   <tabstop>doubleStock</tabstop>
   <tabstop>plainNote</tabstop>
   <tabstop>pushAddAgain</tabstop>
   <tabstop>pushAdd</tabstop>
   <tabstop>pushCancel</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../sultan/sultan.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushCancel</sender>

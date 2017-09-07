@@ -50,6 +50,7 @@ public:
     inline TableView *getTableView() { return mTableView; }
     QPushButton *addActionButton(const QIcon &icon);
     inline void addEnableNoSelect(QPushButton *btn) { mEnableNoSelect.append(btn); }
+    inline void setEnableDoubleClickUpdate(bool value) { mEnableDoubleClickUpdate = value; }
 
 private:
     TableView *mTableView;
@@ -57,6 +58,7 @@ private:
     QHBoxLayout *mActionLayout;
     QMap<int, QPushButton*> mActionButton;
     QList<QPushButton*> mEnableNoSelect;
+    bool mEnableDoubleClickUpdate = true;
 
     QPushButton *addActionButton(const QString &path, int type);
     QPushButton *addActionButton(const QIcon &icon, int type);

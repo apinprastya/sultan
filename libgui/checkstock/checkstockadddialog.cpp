@@ -27,6 +27,7 @@
 #include "global_constant.h"
 #include "usersession.h"
 #include "flashmessagemanager.h"
+#include "cashier/searchitemdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -48,6 +49,7 @@ CheckStockAddDialog::CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent)
     connect(ui->doubleStock, SIGNAL(valueChanged(double)), SLOT(checkDiff()));
     connect(ui->pushAdd, SIGNAL(clicked(bool)), SLOT(addClicked()));
     connect(ui->pushAddAgain, SIGNAL(clicked(bool)), SLOT(addAgainClicked()));
+    connect(ui->pushSearch, SIGNAL(clicked(bool)), SLOT(openSearchItem()));
 }
 
 CheckStockAddDialog::~CheckStockAddDialog()
@@ -71,6 +73,12 @@ void CheckStockAddDialog::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
         if(msg->isSuccess()) {
+            int flag = msg->data("flag").toInt();
+            if((flag & ITEM_FLAG::CALCULATE_STOCK) == 0) {
+                QMessageBox::critical(this, tr("Error"), tr("Item does not support stock handling"));
+                ui->lineBarcode->selectAll();
+                return;
+            }
             ui->labelName->setText(msg->data("name").toString());
             mLastStock = msg->data("stock").toFloat();
             mBuyPrice = msg->data("buy_price").toDouble();
@@ -139,4 +147,14 @@ void CheckStockAddDialog::addAgainClicked()
 void CheckStockAddDialog::checkDiff()
 {
     ui->labelDiff->setText(QString::number(ui->doubleStock->value() - mLastStock));
+}
+
+void CheckStockAddDialog::openSearchItem()
+{
+    SearchItemDialog dialog(mMessageBus, true, this);
+    dialog.exec();
+    if(dialog.isOk()) {
+        ui->lineBarcode->setText(dialog.getSelectedData()["barcode"].toString());
+        barcodeDone();
+    }
 }

@@ -54,6 +54,7 @@ private:
     double mDiscount = 0;
     double mTotal = 0;
     float mCurrentStock = 0;
+    float mOldCount = 0;
     double mBuyPrice = 0;
     double mSellPrice = 0;
     double mSellDiscount = 0;
@@ -77,6 +78,7 @@ private slots:
     void calculateBuyPriceSuggestion();
     void addNewItemClicked();
     void calculateMargin();
+    void openSearchItem();
 };
 
 }

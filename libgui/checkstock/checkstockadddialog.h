@@ -56,6 +56,7 @@ private slots:
     void addClicked();
     void addAgainClicked();
     void checkDiff();
+    void openSearchItem();
 };
 
 }

@@ -160,6 +160,8 @@ void TableWidget::tableSelected()
 
 void TableWidget::tableDoubleClicked(const QModelIndex &index)
 {
+    auto sender = qobject_cast<TableView*>(QObject::sender());
+    if(sender != nullptr && !mEnableDoubleClickUpdate) return;
     if(index.isValid())
         emit updateClicked(index);
 }

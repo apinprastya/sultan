@@ -55,6 +55,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayout->addWidget(mTotalDebit);
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
+    mTableWidget->setEnableDoubleClickUpdate(false);
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
     model->addColumn("created_at", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
@@ -91,7 +92,7 @@ PurchaseWidget::PurchaseWidget(LibG::MessageBus *bus, QWidget *parent) :
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(paymentClicked()));
     mTableWidget->addActionButton(button);
-    model->setSort("created_at DESC");
+    model->setSort("id DESC");
     model->refresh();
 
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
