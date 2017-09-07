@@ -16,12 +16,12 @@ TEMPLATE = app
 CONFIG += c++11
 
 contains(CONFIG, SINGLEBIN) {
-    #include(../external_library/o2/src/src.pri)
-    #include(../libglobal/libglobal_src.pri)
-    #include(../libprint/libprint_src.pri)
-    #include(../libdb/libdb_src.pri)
-    #include(../libserver/libserver_src.pri)
-    #include(../libgui/libgui_src.pri)
+    include(../external_library/o2/src/src.pri)
+    include(../libglobal/libglobal_src.pri)
+    include(../libprint/libprint_src.pri)
+    include(../libdb/libdb_src.pri)
+    include(../libserver/libserver_src.pri)
+    include(../libgui/libgui_src.pri)
 } else {
     include(../libglobal/libglobal.pri)
     include(../libprint/libprint.pri)
