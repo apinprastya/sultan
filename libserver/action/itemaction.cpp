@@ -126,7 +126,7 @@ Message ItemAction::exportData(Message *msg)
 {
     LibG::Message message(msg);
     QString arr;
-    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;\n");
+    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;flag;\n");
     mDb->table(mTableName);
     mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
                 (select count from sellprices where barcode = items.barcode limit 1) as count1, \
@@ -161,7 +161,8 @@ Message ItemAction::exportData(Message *msg)
             arr.append(d["discform2"].toString() % ";");
             arr.append(d["count3"].toString() % ";");
             arr.append(d["price3"].toString() % ";");
-            arr.append(d["discform3"].toString() % ";\n");
+            arr.append(d["discform3"].toString() % ";");
+            arr.append(d["flag"].toString() % ";\n");
         }
         start += limit;
     }
@@ -202,7 +203,7 @@ Message ItemAction::importData(Message *msg)
         }
         const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
                               {"name", row[1].toString()}, {"stock", row[4].toFloat()},
-                              {"buy_price", row[5].toDouble()}};
+                              {"buy_price", row[5].toDouble()}, {"flag", row[15].toInt()}};
         if(mDb->insert(mTableName, ins)) {
             for(int i = 0; i < 3; i++) {
                 if(row.size() <= (8 + (3 * i))) continue;
