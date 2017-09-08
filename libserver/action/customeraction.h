@@ -28,6 +28,7 @@ class CustomerAction : public ServerAction
 {
 public:
     CustomerAction();
+    LibG::Message summary(LibG::Message *msg);
 };
 
 }

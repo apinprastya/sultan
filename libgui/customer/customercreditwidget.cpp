@@ -73,6 +73,7 @@ CustomerCreditWidget::CustomerCreditWidget(int id, const QString &number, LibG::
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::CUSTOMER_CREDIT, MSG_COMMAND::QUERY);
     model->setFilter("customer_id", COMPARE::EQUAL, id);
+    model->setSort("id DESC");
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 300 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);

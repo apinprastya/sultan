@@ -50,19 +50,30 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget(new TableWidget(this)),
     mTileIncome(new TileWidget(this)),
     mTileExpense(new TileWidget(this)),
-    mTileDifference(new TileWidget(this))
+    mTileDifference(new TileWidget(this)),
+    mTileNet(new TileWidget(this)),
+    mTileProfit(new TileWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Transactions"));
 
     auto hor = new QHBoxLayout;
-    mTileIncome->setTitleValue(tr("Income"), "loading...");
+    mTileIncome->setTitleValue(tr("Bruto"), "loading...");
     hor->addWidget(mTileIncome);
     mTileExpense->setTitleValue(tr("Expense"), "loading...");
     hor->addWidget(mTileExpense);
-    mTileDifference->setTitleValue(tr("Income - Expense"), "loading...");
+    mTileDifference->setTitleValue(tr("Bruto - Expense"), "loading...");
     hor->addWidget(mTileDifference);
+    auto line = new QFrame(this);
+    line->setFrameShape(QFrame::VLine);
+    line->setLineWidth(1);
+    line->setFrameShadow(QFrame::Plain);
+    hor->addWidget(line);
+    mTileNet->setTitleValue(tr("Net"), "loading...");
+    hor->addWidget(mTileNet);
+    mTileProfit->setTitleValue(tr("Profit"), "loading...");
+    hor->addWidget(mTileProfit);
     hor->addStretch();
     ui->verticalLayout->addLayout(hor);
     ui->verticalLayout->addWidget(mTableWidget);
@@ -109,9 +120,13 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_TRANSACTION)) {
         if(msg->isSuccess()) {
+            double expense = msg->data("expense").toDouble();
+            double net = msg->data("margin").toDouble() + msg->data("transonly").toDouble();
             mTileIncome->setValue(Preference::toString(msg->data("income").toDouble()));
-            mTileExpense->setValue(Preference::toString(msg->data("expense").toDouble()));
+            mTileExpense->setValue(Preference::toString(expense));
             mTileDifference->setValue(Preference::toString(msg->data("total").toDouble()));
+            mTileNet->setValue(Preference::toString(net));
+            mTileProfit->setValue(Preference::toString(net + expense));
         }
     } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
         FlashMessageManager::showMessage(tr("Suplier deleted successfully"));

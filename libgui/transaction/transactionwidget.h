@@ -48,6 +48,8 @@ private:
     TileWidget *mTileIncome;
     TileWidget *mTileExpense;
     TileWidget *mTileDifference;
+    TileWidget *mTileNet;
+    TileWidget *mTileProfit;
     bool isShowed = false;
 
 private slots:

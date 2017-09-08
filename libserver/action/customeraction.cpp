@@ -18,11 +18,30 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "customeraction.h"
+#include "global_constant.h"
+#include "message.h"
+#include "db.h"
+#include "queryhelper.h"
+#include "dbresult.h"
+#include "preference.h"
 
 using namespace LibServer;
+using namespace LibG;
+using namespace LibDB;
 
 CustomerAction::CustomerAction():
     ServerAction("customers", "id")
 {
     mFlag = HAS_UPDATE_FIELD;
+    mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&CustomerAction::summary, this, std::placeholders::_1));
+}
+
+LibG::Message CustomerAction::summary(LibG::Message *msg)
+{
+    Message message(msg);
+    mDb->table(mTableName);
+    mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
+    DbResult res = mDb->clone()->select("sum(credit) as credit, sum(reward) as reward")->exec();
+    message.setData(res.first());
+    return message;
 }

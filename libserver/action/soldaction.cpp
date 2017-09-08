@@ -78,11 +78,12 @@ Message SoldAction::insertSold(Message *msg)
             }
         }
         //transaction
+        double mon = payment > total ? total : payment;
         QVariantMap tr{{"date", QDateTime::currentDateTime()}, {"number", msg->data("number")},
                        {"type", TRANSACTION_TYPE::INCOME}, {"link_id", id},
                        {"link_type", TRANSACTION_LINK_TYPE::SOLD}, {"user_id", user_id},
-                       {"machine_id", msg->data("machine_id")}, {"transaction_total", msg->data("total")},
-                       {"bank_id", msg->data("bank_id")}, {"money_total", payment},
+                       {"machine_id", msg->data("machine_id")}, {"transaction_total", total},
+                       {"bank_id", msg->data("bank_id")}, {"money_total", mon},
                        {"detail", QObject::tr("Sold : %1").arg(msg->data("number").toString())}};
         mDb->insert("transactions", tr);
         //credit to customer

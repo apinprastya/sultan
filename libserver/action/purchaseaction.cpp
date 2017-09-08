@@ -98,9 +98,9 @@ void PurchaseAction::insertTransaction(const QVariantMap &data)
 {
     QVariantMap d{{"date", QDateTime::currentDateTime()}, {"number", data["number"]},
                  {"type", TRANSACTION_TYPE::EXPENSE}, {"link_id", data["id"]},
-                 {"link_type", TRANSACTION_LINK_TYPE::PURCHASE}, {"transaction_total", data["final"]},
+                 {"link_type", TRANSACTION_LINK_TYPE::PURCHASE}, {"transaction_total", -data["final"].toDouble()},
                  {"user_id", data["user_id"]}, {"machine_id", data["machine_id"]},
-                 {"bank_id", data["bank_id"]}, {"money_total", data["final"]},
+                 {"bank_id", data["bank_id"]}, {"money_total", -data["final"].toDouble()},
                  {"detail", QObject::tr("Purchase : %1").arg(data["number"].toString())}};
     if(data["payment_type"].toInt() == PURCHASEPAYMENT::TEMPO)
         d["date"] = data["payment_date"];
@@ -110,7 +110,7 @@ void PurchaseAction::insertTransaction(const QVariantMap &data)
 void PurchaseAction::updateTransaction(const QVariantMap &data)
 {
     mDb->where("link_type = ", TRANSACTION_LINK_TYPE::PURCHASE)->where("link_id = ", data["id"]);
-    QVariantMap d{{"transaction_total", data["final"]}, {"money_total", data["final"]},
+    QVariantMap d{{"transaction_total", -data["final"].toDouble()}, {"money_total", -data["final"].toDouble()},
                  {"number", data["number"]}, {"detail", QObject::tr("Purchase : %1").arg(data["number"].toString())}};
     if(data["payment_type"].toInt() == PURCHASEPAYMENT::TEMPO)
         d["date"] = data["payment_date"];

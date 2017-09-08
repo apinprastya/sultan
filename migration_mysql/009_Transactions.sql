@@ -1,5 +1,5 @@
 -- type : 0 = income, 1 = expense
--- link_type : 0 = sold transaction, 1 = purchase
+-- link_type : 0 = transaction, 1 = sold, 2 = purchase, 16 = customer credit
 CREATE TABLE transactions (
     `id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

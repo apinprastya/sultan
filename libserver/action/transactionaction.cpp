@@ -45,11 +45,18 @@ LibG::Message TransactionAction::summaryTransaction(LibG::Message *msg)
     mDb->table(mTableName);
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     DbResult res = mDb->clone()->select("sum(transaction_total) as total")->exec();
-    message.addData("total", res.first()["total"].toDouble());
+    message.addData("total", res.first()["total"]);
     res = mDb->clone()->select("sum(transaction_total) as income")->where("type = ", TRANSACTION_TYPE::INCOME)->exec();
-    message.addData("income", res.first()["income"].toDouble());
+    message.addData("income", res.first()["income"]);
     res = mDb->clone()->select("sum(transaction_total) as expense")->where("type = ", TRANSACTION_TYPE::EXPENSE)->exec();
     message.addData("expense", res.first()["expense"].toDouble());
+    res = mDb->clone()->select("sum(transaction_total) as transonly")->where("type = ", TRANSACTION_TYPE::INCOME)->
+            where("link_type = ", TRANSACTION_LINK_TYPE::TRANSACTION)->exec();
+    message.addData("transonly", res.first()["transonly"]);
+    //Margin
+    res = mDb->reset()->select("sum(final - buy_price) as margin")->where("created_at >=", msg->getFilter("0$date"))->
+            where("created_at <=", msg->getFilter("1$date"))->get("solditems");
+    message.addData("margin", res.first()["margin"]);
     return message;
 }
 

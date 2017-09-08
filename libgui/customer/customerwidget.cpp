@@ -32,8 +32,11 @@
 #include "db_constant.h"
 #include "flashmessagemanager.h"
 #include "customeradddialog.h"
+#include "tilewidget.h"
+#include "preference.h"
 #include <QMessageBox>
 #include <QPushButton>
+#include <QHBoxLayout>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -42,10 +45,16 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
     mTableWidget(new TableWidget(this)),
-    mAddDialog(new CustomerAddDialog(bus, this))
+    mAddDialog(new CustomerAddDialog(bus, this)),
+    mTileCredit(new TileWidget(this))
 {
     setMessageBus(bus);
     ui->setupUi(this);
+    auto hbox = new QHBoxLayout;
+    mTileCredit->setTitleValue(tr("Total Credit"), "loading...");
+    hbox->addWidget(mTileCredit);
+    hbox->addStretch();
+    ui->verticalLayout->addLayout(hbox);
     ui->labelTitle->setText(tr("Customer"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();
@@ -79,6 +88,7 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(customerAdded()), SLOT(customerAdded()));
     connect(mAddDialog, SIGNAL(customerUpdated(int)), SLOT(customerUpdated(int)));
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
 }
 
 void CustomerWidget::messageReceived(LibG::Message *msg)
@@ -88,6 +98,8 @@ void CustomerWidget::messageReceived(LibG::Message *msg)
             FlashMessageManager::showMessage(tr("Customer deleted successfully"));
             mTableWidget->getModel()->refresh();
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY)) {
+        mTileCredit->setValue(Preference::toString(msg->data("credit").toDouble()));
     }
 }
 
@@ -141,4 +153,10 @@ void CustomerWidget::rewardClicked()
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
     emit requestOpenCustomerReward(item->id.toInt(), item->data("number").toString());
+}
+
+void CustomerWidget::refreshSummary()
+{
+    Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY);
+    sendMessage(&msg);
 }

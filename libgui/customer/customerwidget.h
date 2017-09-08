@@ -31,6 +31,7 @@ namespace LibGUI {
 
 class TableWidget;
 class CustomerAddDialog;
+class TileWidget;
 
 class CustomerWidget : public QWidget, public LibG::MessageHandler
 {
@@ -45,6 +46,7 @@ private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     CustomerAddDialog *mAddDialog;
+    TileWidget *mTileCredit;
 
 private slots:
     void addClicked();
@@ -54,6 +56,7 @@ private slots:
     void customerUpdated(int id);
     void creditClicked();
     void rewardClicked();
+    void refreshSummary();
 
 signals:
     void requestOpenCustomerCredit(int id, const QString &number);

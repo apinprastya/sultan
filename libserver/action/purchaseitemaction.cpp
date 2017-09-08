@@ -156,7 +156,7 @@ void PurchaseItemAction::updatePurchaseTotal(int purchaseid)
     mDb->where("id = ", purchaseid)->update("purchases", QVariantMap{{"total", total}, {"discount", discount}, {"final", total - discount}});
     if(ptype == PURCHASEPAYMENT::DIRECT || (ptype == PURCHASEPAYMENT::TEMPO && status == PAYMENT_STATUS::PAID)) {
         mDb->where("link_type = ", TRANSACTION_LINK_TYPE::PURCHASE)->where("link_id = ", purchaseid);
-        QVariantMap d{{"transaction_total", total - discount}, {"money_total", total - discount}};
+        QVariantMap d{{"transaction_total", -(total - discount)}, {"money_total", -(total - discount)}};
         mDb->update("transactions", d);
     }
 }
