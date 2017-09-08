@@ -447,8 +447,6 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
 {
     auto database = getDatabase();
     if(database.isOpen()) return true;
-    mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
-    qDebug() << TAG << "Database support transaction :" << mSupportTransaction;
     bool ret = false;
     if(DBTYPE == "MYSQL") {
         database.setPort(port);
@@ -473,6 +471,8 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
 #endif
         ret = database.open();
     }
+    mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
+    qDebug() << TAG << "Database support transaction :" << mSupportTransaction;
     if(!ret) mLastError = database.lastError();
     reset();
     return ret;
