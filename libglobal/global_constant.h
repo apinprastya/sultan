@@ -116,6 +116,12 @@ namespace MSG_COMMAND {
     const int RESET                     = 16;
 }
 
+namespace GUI_MESSAGE {
+    const int MSG_CONNECTION_SUCCESS = 0;
+    const int MSG_CONNECTION_FAILED  = 1;
+    const int MSG_CONNECTION_TIMEOUT = 2;
+}
+
 namespace PRINT_TYPE {
     const int DEVICE    = 0;
     const int SPOOL     = 1;

@@ -23,13 +23,12 @@
 
 #include <QObject>
 
-class Splash;
-class LoginDialog;
 class SocketManager;
 class SocketClient;
 
 namespace LibG {
 class MessageBus;
+class AbstractSultanGUI;
 }
 
 namespace LibServer {
@@ -49,24 +48,22 @@ public:
     void setup();
 
 private:
-    Splash *mSplashUi;
-    LoginDialog *mLoginDialog;
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
     LibServer::MainServer *mMainServer;
     LibG::MessageBus *mMessageBus;
-    LibGUI::MainWindow *mMainWindow;
-
-    void showRestartError(const QString &title, const QString &msg);
+    LibG::AbstractSultanGUI *mMainWindow;
+    SocketClient *mSettingSocketClient = nullptr;
 
 private slots:
     void init();
     void connectToServer();
     void clientConnected();
     void clientDisconnected();
-    void loginSuccess();
-    void logout();
     void connectionTimeout();
+    void settingSocketConnected();
+    void settingSocketError();
+    void settingSocketTimeout();
 };
 
 #endif // CORE_H

@@ -8,7 +8,7 @@ TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets network
+QT += core gui widgets network sql
 
 CONFIG(USE_WEBENGINE) {
     QT += webenginewidgets
@@ -132,7 +132,11 @@ SOURCES += \
     initialstock/initialstockadddialog.cpp \
     unit/unitwidget.cpp \
     setting/datesettingdialog.cpp \
-    cashier/searchcustomerdialog.cpp
+    cashier/searchcustomerdialog.cpp \
+    main/splash.cpp \
+    main/logindialog.cpp \
+    main/restartconfirmationdialog.cpp \
+    main/settingdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -219,7 +223,11 @@ HEADERS += \
     initialstock/initialstockadddialog.h \
     unit/unitwidget.h \
     setting/datesettingdialog.h \
-    cashier/searchcustomerdialog.h
+    cashier/searchcustomerdialog.h \
+    main/splash.h \
+    main/logindialog.h \
+    main/restartconfirmationdialog.h \
+    main/settingdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -271,4 +279,8 @@ FORMS += \
     checkstock/checkstockadddialog.ui \
     initialstock/initialstockadddialog.ui \
     setting/datesettingdialog.ui \
-    cashier/searchcustomerdialog.ui
+    cashier/searchcustomerdialog.ui \
+    main/splash.ui \
+    main/logindialog.ui \
+    main/restartconfirmationdialog.ui \
+    main/settingdialog.ui

@@ -90,26 +90,14 @@ TRANSLATIONS = ../translation/sultan_id.ts
 
 SOURCES += main.cpp \
     core.cpp \
-    gui/splash.cpp \
-    gui/settingdialog.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
-    socket/sockethandler.cpp \
-    gui/logindialog.cpp \
-    gui/restartconfirmationdialog.cpp
+    socket/sockethandler.cpp
 
 HEADERS  += \
     core.h \
-    gui/splash.h \
-    gui/settingdialog.h \
     socket/socketmanager.h \
     socket/socketclient.h \
-    socket/sockethandler.h \
-    gui/logindialog.h \
-    gui/restartconfirmationdialog.h
+    socket/sockethandler.h
 
-FORMS += \
-    gui/splash.ui \
-    gui/settingdialog.ui \
-    gui/logindialog.ui \
-    gui/restartconfirmationdialog.ui
+FORMS +=

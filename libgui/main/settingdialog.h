@@ -21,13 +21,15 @@
 #define SETTINGDIALOG_H
 
 #include <QDialog>
+#include <functional>
 
 namespace Ui {
 class SettingDialog;
 }
 
 class QTimer;
-class SocketClient;
+
+namespace LibGUI {
 
 class SettingDialog : public QDialog
 {
@@ -37,12 +39,13 @@ public:
     SettingDialog(QWidget *parent = 0);
     ~SettingDialog();
     void showDialog();
+    static void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon);
+    static void guiMessage(int id, const QString &str);
 
 private:
     Ui::SettingDialog *ui;
     bool mMysqlOk;
     bool mConOk;
-    SocketClient *mSocket = nullptr;
     QTimer *mTimer;
 
     void saveMysqlSetting();
@@ -55,8 +58,12 @@ private slots:
     void checkConnection();
     void cancel();
     void save();
+
+public:
     void clientConnected();
-    void clientError();
+    void clientError(const QString &err);
+    void clientTimeout();
 };
 
+}
 #endif // SETTINGDIALOG_H

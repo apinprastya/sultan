@@ -22,13 +22,19 @@
 #include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
-#include "socket/socketclient.h"
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QMessageBox>
 #include <QProcess>
 
+using namespace LibGUI;
 using namespace LibG;
+
+static std::function<void(const QString&, int)> sOpenCon = nullptr;
+static std::function<void()> sCloseCon = nullptr;
+static std::function<void()> sConConnected = nullptr;
+static std::function<void(const QString&)> sConError = nullptr;
+static std::function<void()> sConTimeout = nullptr;
 
 SettingDialog::SettingDialog(QWidget *parent) :
     QDialog(parent),
@@ -53,11 +59,17 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     checkType();
     databaseChanged();
+    sConConnected = std::bind(&SettingDialog::clientConnected, this);
+    sConError = std::bind(&SettingDialog::clientError, this, std::placeholders::_1);
+    sConTimeout = std::bind(&SettingDialog::clientTimeout, this);
 }
 
 SettingDialog::~SettingDialog()
 {
     delete ui;
+    sConConnected = nullptr;
+    sConError = nullptr;
+    sConTimeout = nullptr;
 }
 
 void SettingDialog::showDialog()
@@ -69,6 +81,22 @@ void SettingDialog::showDialog()
     ui->lineEditPassword->setText(Preference::getString(SETTING::MYSQL_PASSWORD));
     ui->lineEditDatabase->setText(Preference::getString(SETTING::MYSQL_DB));
     show();
+}
+
+void SettingDialog::setSettingSocketOpenClose(std::function<void (const QString &, int)> openCon, std::function<void ()> closeCon)
+{
+    sOpenCon = openCon;
+    sCloseCon = closeCon;
+}
+
+void SettingDialog::guiMessage(int id, const QString &str)
+{
+    if(id == GUI_MESSAGE::MSG_CONNECTION_SUCCESS)
+        sConConnected();
+    else if(id == GUI_MESSAGE::MSG_CONNECTION_FAILED)
+        sConError(str);
+    else if(id == GUI_MESSAGE::MSG_CONNECTION_TIMEOUT)
+        sConTimeout();
 }
 
 void SettingDialog::saveMysqlSetting()
@@ -141,13 +169,8 @@ void SettingDialog::checkMysql()
 
 void SettingDialog::checkConnection()
 {
-    if(mSocket == nullptr) {
-        mSocket = new SocketClient(this);
-        connect(mSocket, SIGNAL(socketConnected()), SLOT(clientConnected()));
-        connect(mSocket, SIGNAL(socketError()), SLOT(clientError()));
-        connect(mSocket, SIGNAL(connectionTimeout()), SLOT(clientTimeOut()));
-    }
-    mSocket->connectToServer(ui->lineEditClientAddress->text(), ui->spinBoxClientPort->value());
+    if(sOpenCon != nullptr)
+        sOpenCon(ui->lineEditClientAddress->text(), ui->spinBoxClientPort->value());
 }
 
 void SettingDialog::cancel()
@@ -178,10 +201,8 @@ void SettingDialog::save()
         list.append(args[i]);
     }
     QProcess::startDetached(qApp->arguments()[0], list);
-    if(mSocket != nullptr) {
-        if(mSocket->isConnected()) mSocket->disconnectFromServer();
-        mSocket->deleteLater();
-    }
+    if(sCloseCon != nullptr)
+        sCloseCon();
 }
 
 void SettingDialog::clientConnected()
@@ -191,7 +212,12 @@ void SettingDialog::clientConnected()
     checkSetting();
 }
 
-void SettingDialog::clientError()
+void SettingDialog::clientError(const QString &err)
 {
-    QMessageBox::critical(this, tr("Connection Error"), tr("Connection error : %1").arg(mSocket->lastError()));
+    QMessageBox::critical(this, tr("Connection Error"), tr("Connection error : %1").arg(err));
+}
+
+void SettingDialog::clientTimeout()
+{
+    QMessageBox::critical(this, tr("Connection Timeout"), tr("Connection timeout"));
 }

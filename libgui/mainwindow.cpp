@@ -57,6 +57,11 @@
 #include "setting/datesettingdialog.h"
 #endif
 #include "message.h"
+#include "main/splash.h"
+#include "main/logindialog.h"
+#include "main/restartconfirmationdialog.h"
+#include "main/settingdialog.h"
+
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
@@ -72,7 +77,9 @@ using namespace LibG;
 
 MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mSplashUi(new Splash()),
+    mLoginDialog(new LoginDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -123,6 +130,51 @@ void MainWindow::setup()
     ui->actionInitial_Stock->setVisible(false);
 }
 
+void MainWindow::showSplashScreen()
+{
+    mSplashUi->show();
+}
+
+void MainWindow::hideSplashScreen()
+{
+    mSplashUi->hide();
+    mSplashUi->deleteLater();
+}
+
+void MainWindow::splashShowMessage(const QString &msg)
+{
+    mSplashUi->setMessage(msg);
+}
+
+void MainWindow::showSetting()
+{
+    SettingDialog dialog;
+    dialog.showDialog();
+    dialog.exec();
+}
+
+void MainWindow::showMainWindow()
+{
+    mLoginDialog->showDialog();
+}
+
+void MainWindow::showRestartError(const QString &title, const QString &msg)
+{
+    RestartConfirmationDialog dialog;
+    dialog.setMessage(title, msg);
+    dialog.exec();
+}
+
+void MainWindow::guiMessage(int id, const QString &str)
+{
+    SettingDialog::guiMessage(id, str);
+}
+
+void MainWindow::setSettingSocketOpenClose(std::function<void (const QString&, int)> openCon, std::function<void ()> closeCon)
+{
+    SettingDialog::setSettingSocketOpenClose(openCon, closeCon);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     emit logout();
@@ -131,8 +183,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::showEvent(QShowEvent *event)
 {
-    mStatusBar->updateUser();
+    //TODO : take care of it
     QMainWindow::showEvent(event);
+    mStatusBar->updateUser();
 #ifdef USE_DATE_SETTING
     auto date = QDate::currentDate();
     if(date.year() < 2017) {
@@ -167,6 +220,7 @@ void MainWindow::messageReceived(Message *msg)
 
 void MainWindow::setupConnection()
 {
+    connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
     new QShortcut(QKeySequence(Qt::Key_F11), this, SLOT(showWindowFullScreen()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this, SLOT(closeCurrentTab()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab), this, SLOT(nextTab()));
@@ -175,7 +229,7 @@ void MainWindow::setupConnection()
     connect(ui->actionSetting, SIGNAL(triggered(bool)), SLOT(openSetting()));
     connect(ui->actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->action_About, SIGNAL(triggered(bool)), SLOT(openAbout()));
-    connect(ui->actionLogout, SIGNAL(triggered(bool)), SIGNAL(logout()));
+    connect(ui->actionLogout, SIGNAL(triggered(bool)), SLOT(logout()));
     connect(ui->action_User, SIGNAL(triggered(bool)), SLOT(openUser()));
     connect(ui->action_Suplier, SIGNAL(triggered(bool)), SLOT(openSuplier()));
     connect(ui->action_Cashier, SIGNAL(triggered(bool)), SLOT(openCashier()));
@@ -199,6 +253,26 @@ void MainWindow::setupConnection()
     connect(ui->actionUnits, SIGNAL(triggered(bool)), SLOT(openUnit()));
     connect(ui->actionDate_Setting, SIGNAL(triggered(bool)), SLOT(openDateSetting()));
     connect(ui->action_Reset_Database, SIGNAL(triggered(bool)), SLOT(resetDatabase()));
+}
+
+void MainWindow::loginSuccess()
+{
+    setup();
+#ifdef Q_PROCESSOR_ARM
+    showFullScreen();
+#else
+#ifdef QT_DEBUG
+    show();
+#else
+    showMaximized();
+#endif
+#endif
+}
+
+void MainWindow::logout()
+{
+    hide();
+    mLoginDialog->showDialog();
 }
 
 void MainWindow::showWindowFullScreen()

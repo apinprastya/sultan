@@ -72,3 +72,13 @@ void UserSession::destroy()
 {
     if(sInstance) delete sInstance;
 }
+
+void UserSession::logout()
+{
+    sInstance->mId = 0;
+}
+
+bool UserSession::isLoggedIn()
+{
+    return sInstance->mId > 0;
+}

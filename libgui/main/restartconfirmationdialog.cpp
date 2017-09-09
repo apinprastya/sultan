@@ -22,6 +22,8 @@
 #include "settingdialog.h"
 #include <QProcess>
 
+using namespace LibGUI;
+
 RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RestartConfirmationDialog)

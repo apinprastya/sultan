@@ -33,13 +33,15 @@
 #include <QApplication>
 #include <QDebug>
 
+using namespace LibGUI;
 using namespace LibG;
 
-LoginDialog::LoginDialog(QWidget *parent) :
+LoginDialog::LoginDialog(MessageBus *bus, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
+    setMessageBus(bus);
     setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
     connect(ui->pushLogin, SIGNAL(clicked(bool)), SLOT(loginClicked()));
     connect(ui->pushConfig, SIGNAL(clicked(bool)), SLOT(openSetting()));
@@ -92,6 +94,7 @@ void LoginDialog::closeEvent(QCloseEvent *event)
             event->ignore();
             return;
         }
+        qApp->quit();
     }
     QDialog::closeEvent(event);
 }
@@ -125,7 +128,7 @@ void LoginDialog::loginClicked()
 
 void LoginDialog::openSetting()
 {
-    SettingDialog dialog;
+    SettingDialog dialog(this);
     dialog.showDialog();
     dialog.exec();
 }

@@ -1,5 +1,5 @@
 /*
- * logindialog.h
+ * restartconfirmationdialog.h
  * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
@@ -17,40 +17,34 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef LOGINDIALOG_H
-#define LOGINDIALOG_H
+#ifndef RESTARTCONFIRMATIONDIALOG_H
+#define RESTARTCONFIRMATIONDIALOG_H
 
 #include <QDialog>
-#include "messagehandler.h"
 
 namespace Ui {
-class LoginDialog;
+class RestartConfirmationDialog;
 }
 
-class LoginDialog : public QDialog, public LibG::MessageHandler
+namespace LibGUI {
+
+class RestartConfirmationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    LoginDialog(QWidget *parent = 0);
-    ~LoginDialog();
-    void reset();
-    void showDialog();
+    RestartConfirmationDialog(QWidget *parent = 0);
+    ~RestartConfirmationDialog();
+    void setMessage(const QString &title, const QString &msg);
 
 private:
-    Ui::LoginDialog *ui;
-
-protected:
-    void messageReceived(LibG::Message *msg) override;
-    void closeEvent(QCloseEvent *event) override;
-    void reject() override;
-
-signals:
-    void loginSuccess();
+    Ui::RestartConfirmationDialog *ui;
 
 private slots:
-    void loginClicked();
+    void restartClicked();
+    void exitClicked();
     void openSetting();
 };
 
-#endif // LOGINDIALOG_H
+}
+#endif // RESTARTCONFIRMATIONDIALOG_H

@@ -83,7 +83,11 @@ SOURCES += \
     $$PWD/initialstock/initialstockadddialog.cpp \
     $$PWD/unit/unitwidget.cpp \
     $$PWD/setting/datesettingdialog.cpp \
-    $$PWD/cashier/searchcustomerdialog.cpp
+    $$PWD/cashier/searchcustomerdialog.cpp \
+    $$PWD/main/splash.cpp \
+    $$PWD/main/logindialog.cpp \
+    $$PWD/main/restartconfirmationdialog.cpp \
+    $$PWD/main/settingdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -170,7 +174,11 @@ HEADERS += \
     $$PWD/initialstock/initialstockadddialog.h \
     $$PWD/unit/unitwidget.h \
     $$PWD/setting/datesettingdialog.h \
-    $$PWD/cashier/searchcustomerdialog.h
+    $$PWD/cashier/searchcustomerdialog.h \
+    $$PWD/main/splash.h \
+    $$PWD/main/logindialog.h \
+    $$PWD/main/restartconfirmationdialog.h \
+    $$PWD/main/settingdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -222,4 +230,8 @@ FORMS += \
     $$PWD/checkstock/checkstockadddialog.ui \
     $$PWD/initialstock/initialstockadddialog.ui \
     $$PWD/setting/datesettingdialog.ui \
-    $$PWD/cashier/searchcustomerdialog.ui
+    $$PWD/cashier/searchcustomerdialog.ui \
+    $$PWD/main/splash.ui \
+    $$PWD/main/logindialog.ui \
+    $$PWD/main/restartconfirmationdialog.ui \
+    $$PWD/main/settingdialog.ui

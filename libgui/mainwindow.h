@@ -21,6 +21,7 @@
 #define MAINWINDOW_H
 
 #include "messagehandler.h"
+#include "abstractsultangui.h"
 #include "gui_global.h"
 #include <QMainWindow>
 
@@ -37,8 +38,10 @@ class MessageBus;
 namespace LibGUI {
 
 class StatusBarWidget;
+class Splash;
+class LoginDialog;
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHandler
+class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHandler, public LibG::AbstractSultanGUI
 {
     Q_OBJECT
 
@@ -46,23 +49,32 @@ public:
     MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
     ~MainWindow();
     void setup();
+    void showSplashScreen() override;
+    void hideSplashScreen() override;
+    void splashShowMessage(const QString &msg) override;
+    void showSetting() override;
+    void showMainWindow() override;
+    void showRestartError(const QString &title, const QString &msg) override;
+    void guiMessage(int id, const QString &str) override;
+    void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon) override;
 
 protected:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void messageReceived(LibG::Message *msg) override;
 
-signals:
-    void logout();
-
 private:
     Ui::MainWindow *ui;
     int mLastIdLogin = 0;
     StatusBarWidget *mStatusBar;
+    Splash *mSplashUi;
+    LoginDialog *mLoginDialog;
 
     void setupConnection();
 
 private slots:
+    void loginSuccess();
+    void logout();
     void showWindowFullScreen();
     void closeTab(int index);
     void closeCurrentTab();

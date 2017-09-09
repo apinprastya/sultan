@@ -57,4 +57,5 @@ HEADERS += \
     messagebus.h \
     usersession.h \
     permissionhelper.h \
-    util.h
+    util.h \
+    abstractsultangui.h

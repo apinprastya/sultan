@@ -34,11 +34,13 @@ public:
     static int id();
     static bool hasPermission(int permission);
     static void destroy();
+    static void logout();
+    static bool isLoggedIn();
 
 private:
     UserSession();
 
-    int mId;
+    int mId = 0;
     QString mUsername;
     QString mName;
     QList<int> mPermission;

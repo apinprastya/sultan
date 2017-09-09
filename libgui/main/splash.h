@@ -26,6 +26,8 @@ namespace Ui {
 class Splash;
 }
 
+namespace LibGUI {
+
 class Splash : public QDialog
 {
     Q_OBJECT
@@ -39,4 +41,5 @@ private:
     Ui::Splash *ui;
 };
 
+}
 #endif // SPLASH_H

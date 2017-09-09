@@ -23,9 +23,6 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "db.h"
-#include "gui/splash.h"
-#include "gui/settingdialog.h"
-#include "gui/logindialog.h"
 #include "socket/socketmanager.h"
 #include "socket/socketclient.h"
 #include "mainserver.h"
@@ -33,7 +30,6 @@
 #include "migration.h"
 #include "usersession.h"
 #include "mainwindow.h"
-#include "gui/restartconfirmationdialog.h"
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
@@ -47,22 +43,20 @@ static QString TAG{"CORE"};
 
 Core::Core(QObject *parent) :
     QObject(parent),
-    mSplashUi(new Splash()),
-    mLoginDialog(new LoginDialog()),
     mSocketManager(nullptr),
     mSocketClient(new SocketClient(this)),
     mMainServer(nullptr),
     mMessageBus(new MessageBus(this)),
     mMainWindow(new LibGUI::MainWindow(mMessageBus))
 {
-    mLoginDialog->setMessageBus(mMessageBus);
+    //mLoginDialog->setMessageBus(mMessageBus);
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
     connect(mSocketClient, SIGNAL(connectionTimeout()), SLOT(connectionTimeout()));
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
-    connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
-    connect(mMainWindow, SIGNAL(logout()), SLOT(logout()));
+    //connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
+    //connect(mMainWindow, SIGNAL(logout()), SLOT(logout()));
 #ifdef Q_OS_LINUX
     qApp->setWindowIcon(QIcon(":/images/icon_64.png"));
 #endif
@@ -72,23 +66,29 @@ Core::~Core()
 {
     qDebug() << TAG << "Application Exited";
     Preference::destroy();
-    if(mSplashUi) delete mSplashUi;
-    if(mLoginDialog) delete mLoginDialog;
     if(mMainWindow) delete mMainWindow;
     UserSession::destroy();
 }
 
 void Core::setup()
 {
-    mSplashUi->show();
+    mMainWindow->showSplashScreen();
     QTimer::singleShot(1000, this, SLOT(init()));
-}
-
-void Core::showRestartError(const QString &title, const QString &msg)
-{
-    RestartConfirmationDialog dialog;
-    dialog.setMessage(title, msg);
-    dialog.exec();
+    mMainWindow->setSettingSocketOpenClose([=](const QString &address, int port) {
+        if(mSettingSocketClient == nullptr) {
+            mSettingSocketClient = new SocketClient(this);
+            connect(mSettingSocketClient, SIGNAL(socketConnected()), SLOT(settingSocketConnected()));
+            connect(mSettingSocketClient, SIGNAL(socketError()), SLOT(settingSocketError()));
+            connect(mSettingSocketClient, SIGNAL(connectionTimeout()), SLOT(settingSocketTimeout()));
+        }
+        mSettingSocketClient->connectToServer(address, port);
+    }, [=]() {
+        if(mSettingSocketClient != nullptr) {
+            if(mSettingSocketClient->isConnected()) mSettingSocketClient->disconnectFromServer();
+            mSettingSocketClient->deleteLater();
+            mSettingSocketClient = nullptr;
+        }
+    });
 }
 
 void Core::init()
@@ -96,14 +96,11 @@ void Core::init()
     qDebug() << TAG << "Initialize application";
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting
-        mSplashUi->hide();
-        SettingDialog dialog;
-        dialog.showDialog();
-        dialog.exec();
+        mMainWindow->hideSplashScreen();
+        mMainWindow->showSetting();
     } else {
         if(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
             qDebug() << "[CORE]" << "database type :" << Preference::getString(SETTING::DATABASE);
-            mSplashUi->setMessage("Setting SQL connection ...");
             qApp->processEvents();
             LibDB::Db::setDatabaseType(Preference::getString(SETTING::DATABASE));
             LibDB::Db::setDbSetting(
@@ -114,10 +111,10 @@ void Core::init()
                     Preference::getString(SETTING::MYSQL_DB));
             QString error;
             if(!LibDB::Db::checkConnection(error)) {
-                showRestartError(tr("Database Error"), error);
+                mMainWindow->showRestartError(tr("Database Error"), error);
                 return;
             }
-            mSplashUi->setMessage("Migrate database ...");
+            mMainWindow->splashShowMessage("Migrate database ...");
             qApp->processEvents();
             const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
                         "migration_mysql" : "migration_sqlite";
@@ -127,28 +124,28 @@ void Core::init()
             if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {
 #endif
                 qCritical() << TAG << "Error migration";
-                mSplashUi->setMessage("Migrate database failed");
+                mMainWindow->splashShowMessage("Migrate database failed");
                 qApp->processEvents();
-                showRestartError(tr("Database Error"), tr("Migrate database failed"));
+                mMainWindow->showRestartError(tr("Database Error"), tr("Migrate database failed"));
                 return;
             }
-            mSplashUi->setMessage("Start action server ...");
+            mMainWindow->splashShowMessage("Start action server ...");
             qApp->processEvents();
             mMainServer = new LibServer::MainServer(this);
-            mSplashUi->setMessage("Start socket server ...");
+            mMainWindow->splashShowMessage("Start socket server ...");
             qApp->processEvents();
             mSocketManager = new SocketManager(this);
             if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
-                showRestartError(tr("Server Socket Error"), tr("Port already in used"));
+                mMainWindow->showRestartError(tr("Server Socket Error"), tr("Port already in used"));
                 return;
             }
             connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));
             connect(mMainServer, SIGNAL(messageReady(LibG::Message*)), mSocketManager, SLOT(sendToClient(LibG::Message*)));
-            mSplashUi->setMessage("Connecting to server ...");
+            mMainWindow->splashShowMessage("Connecting to server ...");
             qApp->processEvents();
             QTimer::singleShot(10, this, SLOT(connectToServer()));
         } else {
-            mSplashUi->setMessage("Connecting to server ...");
+            mMainWindow->splashShowMessage("Connecting to server ...");
             qApp->processEvents();
             QTimer::singleShot(10, this, SLOT(connectToServer()));
         }
@@ -167,36 +164,31 @@ void Core::connectToServer()
 
 void Core::clientConnected()
 {
-    mSplashUi->hide();
-    mLoginDialog->showDialog();
+    mMainWindow->hideSplashScreen();
+    mMainWindow->showMainWindow();
 }
 
 void Core::clientDisconnected()
 {
-    showRestartError(tr("Error Disconnect"), tr("Connection to server lost. Please check your connectivity."));
-}
-
-void Core::loginSuccess()
-{
-    mMainWindow->setup();
-#ifdef Q_PROCESSOR_ARM
-    mMainWindow->showFullScreen();
-#else
-#ifdef QT_DEBUG
-    mMainWindow->show();
-#else
-    mMainWindow->showMaximized();
-#endif
-#endif
-}
-
-void Core::logout()
-{
-    mMainWindow->hide();
-    mLoginDialog->showDialog();
+    mMainWindow->showRestartError(tr("Error Disconnect"), tr("Connection to server lost. Please check your connectivity."));
 }
 
 void Core::connectionTimeout()
 {
-    showRestartError(tr("Error Timeout"), tr("Connection to server timeout. Please check your connectivity."));
+    mMainWindow->showRestartError(tr("Error Timeout"), tr("Connection to server timeout. Please check your connectivity."));
+}
+
+void Core::settingSocketConnected()
+{
+    mMainWindow->guiMessage(GUI_MESSAGE::MSG_CONNECTION_SUCCESS, "");
+}
+
+void Core::settingSocketError()
+{
+    mMainWindow->guiMessage(GUI_MESSAGE::MSG_CONNECTION_FAILED, mSettingSocketClient->lastError());
+}
+
+void Core::settingSocketTimeout()
+{
+    mMainWindow->guiMessage(GUI_MESSAGE::MSG_CONNECTION_TIMEOUT, "");
 }

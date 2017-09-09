@@ -20,6 +20,8 @@
 #include "splash.h"
 #include "ui_splash.h"
 
+using namespace LibGUI;
+
 Splash::Splash(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Splash)
