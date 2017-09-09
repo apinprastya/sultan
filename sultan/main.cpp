@@ -7,6 +7,7 @@
 #include <QPalette>
 #include <QDir>
 #include <QTextStream>
+#include <QDateTime>
 #include <QDebug>
 
 static QTextStream sLogStream;
@@ -35,10 +36,15 @@ int main(int argc, char *argv[])
     qSetMessagePattern("%{time yyyy-MM-dd HH:mm:ss} %{type} %{message}");
     qInstallMessageHandler(MessageHandler);
 #ifdef Q_OS_WIN32
-    QFile file("log.log");
+    const QString logFileName("log.log");
 #else
-    QFile file(dir.absoluteFilePath("log.log"));
+    const QString logFileName(dir.absoluteFilePath("log.log"));
 #endif
+    QFile file(dir.absoluteFilePath(logFileName));
+    QFileInfo fi(dir.absoluteFilePath(logFileName));
+    if(fi.size() >= (2 * 1024 * 1024)) {
+        QFile::rename(logFileName, logFileName + "." + QDateTime::currentDateTime().toString("yyyyMMddhhMMss"));
+    }
     file.open(QFile::Append);
     sLogStream.setDevice(&file);
 #endif
