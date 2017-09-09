@@ -45,6 +45,7 @@ void BankAddDialog::reset()
 {
     ui->lineName->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
+    mId = 0;
 }
 
 void BankAddDialog::fill(const QVariantMap &data)

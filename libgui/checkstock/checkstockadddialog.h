@@ -46,7 +46,7 @@ private:
     Ui::CheckStockAddDialog *ui;
     bool mIsAddAgain = false;
     float mLastStock = 0;
-    double mBuyPrice;
+    double mBuyPrice = 0;
     QString mLastBarcode;
 
     void inputCheckStock();

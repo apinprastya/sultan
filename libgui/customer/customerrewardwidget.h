@@ -47,8 +47,8 @@ private:
     Ui::CreditSummaryWidget *uiSummary;
     TableWidget *mTableWidget;
     int mId;
-    double mTotal;
-    int mPoin;
+    double mTotal = 0;
+    int mPoin = 0;
     QString mNumber;
 
 private slots:

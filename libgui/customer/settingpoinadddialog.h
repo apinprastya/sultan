@@ -41,7 +41,7 @@ public:
 
 private:
     Ui::SettingPoinAddDialog *ui;
-    int mId;
+    int mId = 0;
 
 protected:
     void messageReceived(LibG::Message *msg) override;

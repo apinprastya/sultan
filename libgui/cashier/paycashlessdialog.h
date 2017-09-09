@@ -47,8 +47,8 @@ protected:
 
 private:
     Ui::PayCashlessDialog *ui;
-    double mTotal;
-    double mAdditonal;
+    double mTotal = 0;
+    double mAdditonal = 0;
     QMap<int, std::tuple<QString, QString>> mAdditionalCharge;
 
 private slots:

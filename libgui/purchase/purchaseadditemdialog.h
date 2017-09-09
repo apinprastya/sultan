@@ -47,7 +47,7 @@ protected:
 
 private:
     Ui::PurchaseAddItemDialog *ui;
-    int mPurchaseId;
+    int mPurchaseId = 0;
     int mId = 0;
     bool mIsAgain = false;
     bool mIsClosing = false;

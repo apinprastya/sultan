@@ -52,8 +52,8 @@ private:
     Ui::AddItemDialog *ui;
     bool mIsUpdate = false;
     bool mIsAddAgain = false;
-    int mCurrentSuplier;
-    int mCUrrentCategory;
+    int mCurrentSuplier = 0;
+    int mCUrrentCategory = 0;
     bool mIsOk = false;
     bool mIsReturnPressed = false;
     bool mIsSuccess = false;

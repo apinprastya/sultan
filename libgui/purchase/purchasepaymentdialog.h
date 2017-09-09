@@ -40,8 +40,8 @@ public:
 
 private:
     Ui::PurchasePaymentDialog *ui;
-    int mId;
-    int mBankId;
+    int mId = 0;
+    int mBankId = 0;
 
 protected:
     void messageReceived(LibG::Message *msg) override;

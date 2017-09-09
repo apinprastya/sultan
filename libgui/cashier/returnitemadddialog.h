@@ -39,11 +39,11 @@ public:
 
 private:
     Ui::ReturnItemAddDialog *ui;
-    int mId;
-    double mPrice;
-    double mDiscount;
-    int mFlag;
-    double mBuyPrice;
+    int mId = 0;
+    double mPrice = 0;
+    double mDiscount = 0;
+    int mFlag = 0;
+    double mBuyPrice = 0;
     QString mUnit;
 
 private slots:

@@ -44,7 +44,7 @@ public:
 
 private:
     Ui::CategoryAddDialog *ui;
-    int mId;
+    int mId = 0;
 
 signals:
     void saveRequest(const QVariantMap &data, int id);

@@ -45,8 +45,8 @@ protected:
 
 private:
     Ui::AdvancePaymentDialog *ui;
-    double mTotal;
-    Customer *mCustomer;
+    double mTotal = 0;
+    Customer *mCustomer = nullptr;
 
 signals:
     void payRequested(int type, double value);

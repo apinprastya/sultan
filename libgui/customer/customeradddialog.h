@@ -44,7 +44,7 @@ protected:
 
 private:
     Ui::CustomerAddDialog *ui;
-    int mId;
+    int mId = 0;
 
 signals:
     void customerAdded();

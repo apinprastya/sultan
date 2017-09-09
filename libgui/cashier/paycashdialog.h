@@ -40,7 +40,7 @@ public:
 
 private:
     Ui::PayCashDialog *ui;
-    double mTotal;
+    double mTotal = 0;
     std::function<bool(double)> mPayCallback;
 
 private slots:

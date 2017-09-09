@@ -47,7 +47,7 @@ private:
     Ui::AddPriceDialog *ui;
     int mId = 0;
     bool mIsLocal;
-    double mBuyPrice;
+    double mBuyPrice = 0;
     bool mIsOk = false;
     QVariantMap mData;
 

@@ -40,7 +40,7 @@ public:
 
 private:
     Ui::AddCreditPaymentDialog *ui;
-    int mId;
+    int mId = 0;
 
 protected:
     void messageReceived(LibG::Message *msg) override;
