@@ -60,6 +60,7 @@
     <addaction name="actionDate_Setting"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Export_Database"/>
+    <addaction name="action_Reset_Database"/>
     <addaction name="separator"/>
     <addaction name="actionLogout"/>
    </widget>
@@ -269,6 +270,11 @@
   <action name="actionDate_Setting">
    <property name="text">
     <string>&amp;Date Setting</string>
+   </property>
+  </action>
+  <action name="action_Reset_Database">
+   <property name="text">
+    <string>&amp;Reset Database</string>
    </property>
   </action>
  </widget>

@@ -55,6 +55,7 @@ void PayCashlessDialog::showDialog(const double &total)
     ui->labelSubtotal->setText(Preference::toString(total));
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
     sendMessage(&msg);
+    ui->pushSave->setEnabled(true);
     show();
 }
 
@@ -103,5 +104,6 @@ void PayCashlessDialog::payClicked()
         QMessageBox::critical(this, tr("Error"), tr("Card number can not empty"));
         return;
     }
+    ui->pushSave->setEnabled(false);
     emit requestPay(PAYMENT::NON_CASH, mAdditonal);
 }

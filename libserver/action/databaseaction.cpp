@@ -40,6 +40,7 @@ DatabaseAction::DatabaseAction():
 {
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&DatabaseAction::exportDatabase, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&DatabaseAction::importDatabase, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::RESET, std::bind(&DatabaseAction::resetDatabase, this, std::placeholders::_1));
 }
 
 LibG::Message DatabaseAction::exportDatabase(LibG::Message *msg)
@@ -60,6 +61,37 @@ LibG::Message DatabaseAction::importDatabase(LibG::Message *msg)
         f.close();
     }
     importData(f.fileName(), msg->data("version").toString(), &message);
+    return message;
+}
+
+Message DatabaseAction::resetDatabase(Message *msg)
+{
+    Message message(msg);
+    DbResult res = mDb->where("id = ", msg->data("user_id"))->get("users");
+    if(res.size() != 1) {
+        message.setError(QObject::tr("User id not found"));
+    } else {
+        const QVariantMap &data = res.first();
+        const QString &pass = data["password"].toString();
+        if(pass.compare(msg->data("password").toString()) != 0) {
+            message.setError("Password is wrong!");
+        } else {
+            auto dbtype = Preference::getString(SETTING::DATABASE);
+            QStringList tableList;
+            if(dbtype == "SQLITE") {
+                DbResult res = mDb->where("type = ", "table")->get("sqlite_master");
+                for(int i = 0; i < res.size(); i++)
+                    tableList << res.data(i)["tbl_name"].toString();
+            } else {
+                DbResult res = mDb->execResult("SHOW TABLES");
+                for(int i = 0; i < res.size(); i++)
+                    tableList << res.data(i).first().toString();
+            }
+            for(int i = 0; i < tableList.size(); i++) {
+                mDb->exec(QString("DROP TABLE %1").arg(tableList[i]));
+            }
+        }
+    }
     return message;
 }
 

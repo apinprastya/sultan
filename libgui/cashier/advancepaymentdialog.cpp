@@ -55,6 +55,7 @@ void AdvancePaymentDialog::setup(double total, Customer *cust)
     ui->labelCusName->setText(cust->name);
     ui->labelCusReward->setText(QString::number(cust->reward));
     ui->labelCusCredit->setText(Preference::toString(cust->credit));
+    ui->pushPay->setEnabled(true);
 }
 
 void AdvancePaymentDialog::messageReceived(LibG::Message */*msg*/)
@@ -79,5 +80,6 @@ void AdvancePaymentDialog::payClicked()
         QMessageBox::critical(this, tr("Error"), tr("Payment must equal or greater than 0"));
         return;
     }
+    ui->pushPay->setEnabled(false);
     emit payRequested(PAYMENT::CASH, val);
 }

@@ -22,7 +22,7 @@
 #include <QDebug>
 
 static QMap<int, QString> AVAIL_PERMISSION = {
-    {9876, "Administrator"}, {1, "User"}, {2, "Suplier"},
+    {9876, "Administrator"}, /*{1, "User"},*/ {2, "Suplier"},
     {3, "Item"}, {4, "Cashier"}, {5, "Category"}, {6, "Purchase"},
     {7, "Report"}, {8, "Customer"}, {9, "Bank"}, {10, "Money Report"},
     {11, "Report Transaction"}, {12, "Check Stock"}, {13, "Initial Stock"},

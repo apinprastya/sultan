@@ -15,27 +15,27 @@
         <translation>Pembelian : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="86"/>
+        <location filename="../libserver/action/soldaction.cpp" line="87"/>
         <source>Sold : %1</source>
         <translation>Penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="94"/>
+        <location filename="../libserver/action/soldaction.cpp" line="95"/>
         <source>Credit from transaction %1</source>
         <translation>Piutang dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="107"/>
+        <location filename="../libserver/action/soldaction.cpp" line="108"/>
         <source>Poin from transaction %1</source>
         <translation>Poin dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="84"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="91"/>
         <source>Income</source>
         <translation>Pemasukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="84"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="91"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
     </message>
@@ -59,6 +59,17 @@
         <location filename="../libserver/action/itemaction.cpp" line="117"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/databaseaction.cpp" line="72"/>
+        <source>User id not found</source>
+        <translation>User tidak ditemukan</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/purchasereturnaction.cpp" line="92"/>
+        <location filename="../libserver/action/purchasereturnaction.cpp" line="101"/>
+        <source>Purchase Return : %1</source>
+        <translation>Return pembelian : %1</translation>
     </message>
 </context>
 </TS>

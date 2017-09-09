@@ -89,7 +89,7 @@ void ImportExportDatabaseDialog::messageReceived(Message *msg)
         }
     } else if(msg->isTypeCommand(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT)) {
         if(msg->isSuccess()) {
-            QMessageBox::information(this, tr("Import success"), tr("Import sucess. Application need to restart."));
+            QMessageBox::information(this, tr("Import success"), tr("Import success. Application need to restart."));
             qApp->quit();
             QStringList list;
             const QStringList &args = qApp->arguments();

@@ -144,7 +144,7 @@ void CustomerCreditWidget::print(const QVariantMap &data)
 
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
-            centerText(tr("Credit Payment"))->
+            centerText(tr("Debt Payment"))->
             doubleHeight(false)->cpi12()->newLine(2);
     escp->column(QList<int>())->line(QChar('='));
     escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();

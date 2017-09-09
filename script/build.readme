@@ -1,0 +1,2 @@
+build for raspberry :
+/media/apin/linux/buildroot/gamaral/output/host/usr/bin/qmake CONFIG+=release CONFIG+=SINGLEBIN CONFIG+=NO_PRINTER_SPOOL DEFINES+=USE_DATE_SETTING DEFINES+=FLASHMESSAGE_USE_PARENT ../sultan.pro

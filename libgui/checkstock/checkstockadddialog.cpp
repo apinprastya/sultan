@@ -64,7 +64,9 @@ void CheckStockAddDialog::reset()
     ui->labelName->clear();
     ui->labelStock->clear();
     ui->lineBarcode->clear();
+    mLastStock = 0;
     ui->doubleStock->setValue(0);
+    mLastBarcode = "";
     ui->plainNote->clear();
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
 }
@@ -84,8 +86,9 @@ void CheckStockAddDialog::messageReceived(LibG::Message *msg)
             mBuyPrice = msg->data("buy_price").toDouble();
             ui->labelStock->setText(msg->data("stock").toString());
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
-            ui->doubleStock->setValue(0);
+            ui->doubleStock->setValue(mLastStock);
             ui->doubleStock->setFocus(Qt::TabFocusReason);
+            ui->doubleStock->selectAll();
             checkDiff();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());

@@ -30,6 +30,7 @@ public:
     DatabaseAction();
     LibG::Message exportDatabase(LibG::Message *msg);
     LibG::Message importDatabase(LibG::Message *msg);
+    LibG::Message resetDatabase(LibG::Message *msg);
 
 private:
     QByteArray exportData(const QString &version);

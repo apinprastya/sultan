@@ -20,6 +20,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "messagehandler.h"
 #include "gui_global.h"
 #include <QMainWindow>
 
@@ -37,7 +38,7 @@ namespace LibGUI {
 
 class StatusBarWidget;
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow
+class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHandler
 {
     Q_OBJECT
 
@@ -49,13 +50,13 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
+    void messageReceived(LibG::Message *msg) override;
 
 signals:
     void logout();
 
 private:
     Ui::MainWindow *ui;
-    LibG::MessageBus *mMessageBus;
     int mLastIdLogin = 0;
     StatusBarWidget *mStatusBar;
 
@@ -94,6 +95,7 @@ private slots:
     void openInitialStock();
     void openUnit();
     void openDateSetting();
+    void resetDatabase();
 };
 
 }

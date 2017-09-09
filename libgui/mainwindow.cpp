@@ -56,12 +56,15 @@
 #ifdef USE_DATE_SETTING
 #include "setting/datesettingdialog.h"
 #endif
+#include "message.h"
 #include <QShortcut>
 #include <QDateTime>
 #include <QLabel>
 #include <QTimer>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QInputDialog>
+#include <QProcess>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -69,10 +72,10 @@ using namespace LibG;
 
 MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    mMessageBus(bus)
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setMessageBus(bus);
     mStatusBar = new StatusBarWidget(this);
     statusBar()->addPermanentWidget(mStatusBar, 1);
     ui->tabWidget->clear();
@@ -93,8 +96,9 @@ void MainWindow::setup()
 {
     ui->tabWidget->closeAllTabAndFree();
     ui->actionSetting->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
+    ui->action_Reset_Database->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
     ui->actionImport_Export_Database->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
-    ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::USER));
+    ui->action_User->setEnabled(UserSession::hasPermission(PERMISSION::ADMINISTRATOR));
     ui->action_Category->setEnabled(UserSession::hasPermission(PERMISSION::CATEGORY));
     ui->action_Suplier->setEnabled(UserSession::hasPermission(PERMISSION::SUPLIER));
     ui->action_Cashier->setEnabled(UserSession::hasPermission(PERMISSION::CASHIER));
@@ -142,6 +146,25 @@ void MainWindow::showEvent(QShowEvent *event)
     }
 }
 
+void MainWindow::messageReceived(Message *msg)
+{
+    if(msg->isTypeCommand(MSG_TYPE::DATABASE, MSG_COMMAND::RESET)) {
+        if(msg->isSuccess()) {
+            QMessageBox::information(this, tr("Success"), tr("Reset success, will restart application"));
+            qApp->quit();
+            QStringList list;
+            const QStringList &args = qApp->arguments();
+            for(int i = 0; i < args.count(); i++) {
+                if(i == 0) continue;
+                list.append(args[i]);
+            }
+            QProcess::startDetached(qApp->arguments()[0], list);
+        } else {
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
+    }
+}
+
 void MainWindow::setupConnection()
 {
     new QShortcut(QKeySequence(Qt::Key_F11), this, SLOT(showWindowFullScreen()));
@@ -175,6 +198,7 @@ void MainWindow::setupConnection()
     connect(ui->actionInitial_Stock, SIGNAL(triggered(bool)), SLOT(openInitialStock()));
     connect(ui->actionUnits, SIGNAL(triggered(bool)), SLOT(openUnit()));
     connect(ui->actionDate_Setting, SIGNAL(triggered(bool)), SLOT(openDateSetting()));
+    connect(ui->action_Reset_Database, SIGNAL(triggered(bool)), SLOT(resetDatabase()));
 }
 
 void MainWindow::showWindowFullScreen()
@@ -467,4 +491,15 @@ void MainWindow::openDateSetting()
     DateSettingDialog dialog;
     dialog.exec();
 #endif
+}
+
+void MainWindow::resetDatabase()
+{
+    const QString &str = QInputDialog::getText(this, tr("Confirmation"), tr("Are you sure to reset your database?\nPlease input your password to confirm"), QLineEdit::Password);
+    if(!str.isEmpty()) {
+        Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::RESET);
+        msg.addData("user_id", UserSession::id());
+        msg.addData("password", QString(QCryptographicHash::hash(str.toUtf8(),QCryptographicHash::Md5).toHex()));
+        sendMessage(&msg);
+    }
 }

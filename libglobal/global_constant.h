@@ -113,6 +113,7 @@ namespace MSG_COMMAND {
     const int SUMMARY                   = 13;
     const int SUMMARY_TRANSACTION       = 14;
     const int SUMMARY_MONEY             = 15;
+    const int RESET                     = 16;
 }
 
 namespace PRINT_TYPE {
