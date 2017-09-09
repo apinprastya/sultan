@@ -17,5 +17,7 @@ ALTER TABLE solditems ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
 
 ALTER TABLE checkstocks ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
 
+ALTER TABLE purchaseitemreturns ADD COLUMN `machine_id` INT NOT NULL;
+
 UPDATE items SET unit = 'pcs';
 UPDATE items set flag = 89;

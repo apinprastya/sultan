@@ -159,6 +159,7 @@ namespace TRANSACTION_LINK_TYPE {
     const int SOLD              = 1;
     const int PURCHASE          = 2;
     const int CUSTOMER_CREDIT   = 16;
+    const int BUY_RETURN        = 17;
 }
 
 namespace MONEY_TYPE {

@@ -27,6 +27,7 @@
 #include "preference.h"
 #include "flashmessagemanager.h"
 #include "usersession.h"
+#include "global_setting_const.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -156,7 +157,7 @@ void ReturnAddDialog::saveClicked()
     QVariantMap data{{"barcode", mItem.barcode}, {"count", ui->doubleCount->value()}, {"price", (mItem.price - mItem.discount)},
                     {"suplier_id", ui->comboSuplier->currentData()}, {"purchase_item_id", mItem.id},
                     {"total", (mItem.price - mItem.discount) * ui->doubleCount->value()}, {"note", ui->plainNote->toPlainText()},
-                    {"name", mItem.name}};
+                    {"name", mItem.name}, {"machine_id", Preference::getInt(SETTING::MACHINE_ID)}};
     if(mId <= 0) {
         msg.setData(data);
         msg.addData("user_id", UserSession::id());

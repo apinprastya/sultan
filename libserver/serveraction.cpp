@@ -96,7 +96,7 @@ LibG::Message ServerAction::update(LibG::Message *msg)
     if(!mDb->clone()->update(mTableName, d)) {
         message.setError(mDb->lastError().text());
     } else {
-        DbResult res = mDb->clone()->where("id = ", msg->data("id"))->get(mTableName);
+        DbResult res = mDb->get(mTableName);
         const QVariantMap d = res.first();
         if(hasFlag(AFTER_UPDATE)) afterUpdate(oldData, d);
         message.setData(d);

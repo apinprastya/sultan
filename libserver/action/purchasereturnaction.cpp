@@ -81,11 +81,29 @@ void PurchaseReturnAction::afterUpdate(const QVariantMap &oldData, const QVarian
     if(oldStatus != newStatus) {
         if(newStatus == PURCHASE_RETURN_STATUS::UNRETURN) {
             addCount -= oldRet;
+            mDb->where("link_type =", TRANSACTION_LINK_TYPE::BUY_RETURN)->where("link_id =", newData["id"])->del("transactions");
         } else {
             addCount += newRet;
+            QVariantMap d{{"date", newData["return_date"]}, {"number", newData["barcode"]},
+                         {"type", TRANSACTION_TYPE::EXPENSE}, {"link_id", newData["id"]},
+                         {"link_type", TRANSACTION_LINK_TYPE::BUY_RETURN}, {"transaction_total", newData["money_returned"]},
+                         {"user_id", newData["user_id"]}, {"machine_id", newData["machine_id"]},
+                         {"bank_id", newData["bank_id"]}, {"money_total", newData["money_returned"]},
+                         {"detail", QObject::tr("Purchase Return : %1").arg(newData["barcode"].toString())}};
+            if(newData["payment_type"].toInt() == PURCHASEPAYMENT::TEMPO)
+                d["date"] = newData["payment_date"];
+            mDb->insert("transactions", d);
         }
-    } else if(newRet != oldRet && newStatus == PURCHASE_RETURN_STATUS::RETURNED) {
-        addCount += newRet - oldRet;
+    } else if(newStatus == PURCHASE_RETURN_STATUS::RETURNED) {
+        QVariantMap d{{"date", newData["return_date"]}, {"number", newData["barcode"]},
+                     {"transaction_total", newData["money_returned"]}, {"machine_id", newData["machine_id"]},
+                     {"bank_id", newData["bank_id"]}, {"money_total", newData["money_returned"]},
+                     {"detail", QObject::tr("Purchase Return : %1").arg(newData["barcode"].toString())}};
+        mDb->where("link_type =", TRANSACTION_LINK_TYPE::BUY_RETURN)->where("link_id =", newData["id"])->
+                update("transactions", d);
+        if(newRet != oldRet)
+            addCount += newRet - oldRet;
     }
     mDb->exec(query.arg(addCount).arg(newData["barcode"].toString()));
+
 }

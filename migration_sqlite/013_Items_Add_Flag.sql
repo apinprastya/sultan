@@ -22,6 +22,8 @@ ALTER TABLE solditems ADD COLUMN `unit` VARCHAR(64) NOT NULL DEFAULT '';
 -- separator
 ALTER TABLE checkstocks ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
 -- separator
+ALTER TABLE purchaseitemreturns ADD COLUMN `machine_id` INT NOT NULL;
+-- separator
 UPDATE items SET unit = 'pcs';
 -- separator
 UPDATE items set flag = 89;
