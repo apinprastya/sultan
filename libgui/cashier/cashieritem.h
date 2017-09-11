@@ -44,6 +44,7 @@ public:
     double final = 0;
     int linkId = 0;
     double buyPrice;
+    int itemFlag = 0;
     QString barcode;
     QString name;
     QString discount_formula;

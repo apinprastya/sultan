@@ -136,7 +136,8 @@ SOURCES += \
     main/splash.cpp \
     main/logindialog.cpp \
     main/restartconfirmationdialog.cpp \
-    main/settingdialog.cpp
+    main/settingdialog.cpp \
+    cashier/editpricecountdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -227,7 +228,8 @@ HEADERS += \
     main/splash.h \
     main/logindialog.h \
     main/restartconfirmationdialog.h \
-    main/settingdialog.h
+    main/settingdialog.h \
+    cashier/editpricecountdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -283,4 +285,5 @@ FORMS += \
     main/splash.ui \
     main/logindialog.ui \
     main/restartconfirmationdialog.ui \
-    main/settingdialog.ui
+    main/settingdialog.ui \
+    cashier/editpricecountdialog.ui

@@ -57,6 +57,7 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->checkSell, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->checkIngridient, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->checkPackage, SIGNAL(toggled(bool)), SLOT(checkWidget()));
+    connect(ui->checkEditPrice, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->groupMultiPrice, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->doubleBuyPrice, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
     connect(ui->doubleSellPrice, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
@@ -90,7 +91,6 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->tablePrice, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
     ui->toolBoxPrice->setCurrentIndex(0);
     //this is temporary
-    ui->checkEditPrice->setEnabled(false);
     ui->checkNote->setEnabled(false);
     ui->checkIngridient->setEnabled(false);
     ui->checkProduct->setEnabled(false);
@@ -363,12 +363,12 @@ void AddItemDialog::saveAndAgainClicked()
 void AddItemDialog::checkWidget()
 {
     auto sender = qobject_cast<QCheckBox*>(QObject::sender());
-    /*ui->checkEditPrice->setEnabled(ui->checkSell->isChecked());
-    ui->checkIngridient->setEnabled(ui->checkSell->isChecked());
+    ui->checkEditPrice->setEnabled(ui->checkSell->isChecked());
+    /*ui->checkIngridient->setEnabled(ui->checkSell->isChecked());
     ui->checkNote->setEnabled(ui->checkSell->isChecked());*/
     if(sender == ui->checkSell) {
-        /*ui->checkEditPrice->setChecked(false);
-        ui->checkNote->setChecked(false);
+        ui->checkEditPrice->setChecked(false);
+        /*ui->checkNote->setChecked(false);
         ui->checkIngridient->setChecked(false);*/
     }
     if(sender == ui->checkPackage && !ui->checkPackage->isChecked())
@@ -377,6 +377,10 @@ void AddItemDialog::checkWidget()
         if(ui->checkPackage->isChecked())
             ui->groupMultiPrice->setChecked(false);
         ui->groupMultiPrice->setEnabled(!ui->checkPackage->isChecked());
+    }
+    if(sender == ui->checkEditPrice) {
+        ui->groupMultiPrice->setChecked(false);
+        ui->groupMultiPrice->setEnabled(!ui->checkEditPrice->isChecked());
     }
 
     ui->tabWidget->setTabEnabled(Ingridient, ui->checkIngridient->isChecked());

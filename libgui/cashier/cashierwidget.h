@@ -34,6 +34,7 @@ class CashierTableModel;
 class PayCashDialog;
 class AdvancePaymentDialog;
 class PayCashlessDialog;
+class CashierItem;
 
 class CashierWidget : public QWidget, public LibG::MessageHandler
 {
@@ -62,6 +63,7 @@ private:
     void removeSlot(int slot);
     void updateCustomerLabel();
     double getTax();
+    void updateItem(CashierItem *item);
 
 private slots:
     void barcodeEntered();

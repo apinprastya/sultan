@@ -87,7 +87,8 @@ SOURCES += \
     $$PWD/main/splash.cpp \
     $$PWD/main/logindialog.cpp \
     $$PWD/main/restartconfirmationdialog.cpp \
-    $$PWD/main/settingdialog.cpp
+    $$PWD/main/settingdialog.cpp \
+    $$PWD/cashier/editpricecountdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -178,7 +179,8 @@ HEADERS += \
     $$PWD/main/splash.h \
     $$PWD/main/logindialog.h \
     $$PWD/main/restartconfirmationdialog.h \
-    $$PWD/main/settingdialog.h
+    $$PWD/main/settingdialog.h \
+    $$PWD/cashier/editpricecountdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -234,4 +236,5 @@ FORMS += \
     $$PWD/main/splash.ui \
     $$PWD/main/logindialog.ui \
     $$PWD/main/restartconfirmationdialog.ui \
-    $$PWD/main/settingdialog.ui
+    $$PWD/main/settingdialog.ui \
+    $$PWD/cashier/editpricecountdialog.ui

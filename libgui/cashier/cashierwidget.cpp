@@ -45,6 +45,7 @@
 #include "checkpricedialog.h"
 #include "util.h"
 #include "searchcustomerdialog.h"
+#include "editpricecountdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -150,7 +151,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             }
         }
         ui->labelPrice->setText(Preference::toString(price));
-        mModel->addItem(mCount, name, barcode, unit, list);
+        mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt());
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
@@ -254,6 +255,28 @@ double CashierWidget::getTax()
                 Util::calculateDiscount(Preference::getString(SETTING::TAX_VALUE), mModel->getTotal()) : 0;
 }
 
+void CashierWidget::updateItem(CashierItem *item)
+{
+    if((item->itemFlag & ITEM_FLAG::EDITABLE_PRICE) != 0) {
+        EditPriceCountDialog dialog(mMessageBus, this);
+        dialog.setup(item->barcode, item->count, item->price, item->discount_formula);
+        dialog.exec();
+        if(dialog.isOk()) {
+            QVariantList &prices = mModel->getPrices(item->barcode);
+            QVariantMap price = prices[0].toMap();
+            price["price"] = dialog.getPrice();
+            price["formula_discount"] = dialog.getDiscountFormula();
+            prices[0] = price;
+            mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag);
+        }
+    } else {
+        bool ok = false;
+        double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
+        if(ok)
+            mModel->addItem(count - item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag);
+    }
+}
+
 void CashierWidget::barcodeEntered()
 {
     QString barcode = ui->lineBarcode->text();
@@ -310,15 +333,12 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
     if(!index.isValid()) return;
     auto item = static_cast<CashierItem*>(index.internalPointer());
     if(event->key() == Qt::Key_Return && !item->isReturn()) {
-        bool ok = false;
-        double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
-        if(ok)
-            mModel->addItem(count - item->count, item->name, item->barcode, item->unit);
+        updateItem(item);
     } else if(event->key() == Qt::Key_Delete){
         if(item->isReturn()) {
             mModel->removeReturn(item);
         } else {
-            mModel->addItem(-item->count, item->name, item->barcode, item->unit);
+            mModel->addItem(-item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag);
         }
     }
 }
@@ -362,10 +382,7 @@ void CashierWidget::updateLastInputed()
     if(!index.isValid()) return;
     auto item = static_cast<CashierItem*>(index.internalPointer());
     if(item->isReturn()) return;
-    bool ok = false;
-    double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
-    if(ok)
-        mModel->addItem(count - item->count, item->name, item->barcode, item->unit);
+    updateItem(item);
 }
 
 void CashierWidget::payRequested(int type, double value)

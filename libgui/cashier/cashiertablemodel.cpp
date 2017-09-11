@@ -109,7 +109,7 @@ QModelIndex CashierTableModel::index(int row, int column, const QModelIndex &/*p
     return createIndex(row, column, item);
 }
 
-void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QString &unit, const QVariantList &prices)
+void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QString &unit, const QVariantList &prices, int itemflag)
 {
     float totCount = getTotalCount(barcode) + count;
     const QList<int> &row = rowOfBarcode(barcode);
@@ -121,7 +121,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
             endRemoveRows();
         }
     } else if(totCount > 0) {
-        const QList<CashierItem*> &items = calculatePrices(barcode, name, totCount, unit);
+        const QList<CashierItem*> &items = calculatePrices(barcode, name, totCount, unit, itemflag);
         if(row.count() > 0) {
             if(row.count() < items.count()) {
                 //adding more price
@@ -283,7 +283,7 @@ QList<int> CashierTableModel::rowOfBarcode(const QString &barcode)
     return retVal;
 }
 
-QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit)
+QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit, int itemFlag)
 {
     QList<CashierItem*> retVal;
     const QVariantList &prices = mPrices[barcode];
@@ -292,6 +292,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
         const QString &discformula = prices[0].toMap()["discount_formula"].toString();
         double disc = Util::calculateDiscount(discformula, price);
         CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price - disc) * count, unit);
+        item->itemFlag = itemFlag;
         retVal << item;
     } else {
         for(int i = prices.count() - 1; i >= 0; i--) {
@@ -300,6 +301,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
             const float &c = p["count"].toFloat();
             const QString &discformula = p["discount_formula"].toString();
             auto item = new CashierItem(name, barcode, 0, price, 0, discformula, 0, 0, unit);
+            item->itemFlag = itemFlag;
             if(c <= count) {
                 if(i == 0) {
                     item->total += count * price;
