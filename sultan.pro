@@ -10,6 +10,7 @@ CONFIG   += ordered
         SUBDIRS += \
             libprint \
             libgui \
+            libguiqml
     }
 }
 

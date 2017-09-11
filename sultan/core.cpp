@@ -31,6 +31,7 @@
 #include "usersession.h"
 #ifndef SERVER_BUILD
 #include "mainwindow.h"
+#include "mainwindowqml.h"
 #else
 #include "dummy/guidummy.h"
 #endif
@@ -62,7 +63,8 @@ Core::Core(QObject *parent) :
 #ifdef SERVER_BUILD
     mMainWindow(new GuiDummy())
 #else
-    mMainWindow(new LibGUI::MainWindow(mMessageBus))
+    mMainWindow(new LibGUI::MainWindow(mMessageBus)),
+    mWindowQml(new LibGUIQML::MainWindowQML())
 #endif
 {
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));

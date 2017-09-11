@@ -35,10 +35,6 @@ namespace LibServer {
 class MainServer;
 }
 
-namespace LibGUI {
-class MainWindow;
-}
-
 class Core : public QObject
 {
     Q_OBJECT
@@ -53,6 +49,7 @@ private:
     LibServer::MainServer *mMainServer;
     LibG::MessageBus *mMessageBus;
     LibG::AbstractSultanGUI *mMainWindow;
+    LibG::AbstractSultanGUI *mWindowQml;
     SocketClient *mSettingSocketClient = nullptr;
 
 protected:

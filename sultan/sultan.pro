@@ -27,6 +27,7 @@ contains(CONFIG, SINGLEBIN) {
     include(../libprint/libprint.pri)
     include(../libdb/libdb.pri)
     include(../libserver/libserver.pri)
+    include(../libguiqml/libguiqml.pri)
     include(../libgui/libgui.pri)
 }
 
