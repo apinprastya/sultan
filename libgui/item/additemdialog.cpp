@@ -117,8 +117,8 @@ void AddItemDialog::reset(bool isAddAgain)
     }
     ui->doubleBuyPrice->setValue(0);
     ui->doubleSellPrice->setValue(0);
-    ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->lineBarcode->setEnabled(true);
+    ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
     ui->pushSaveAgain->setEnabled(true);
     ui->pushSaveAgain->show();
@@ -127,6 +127,7 @@ void AddItemDialog::reset(bool isAddAgain)
     mIsOk = false;
     ui->toolBoxPrice->setCurrentIndex(0);
     ui->tablePrice->getModel()->reset();
+    ui->tablePrice->getModel()->setAsLocal(true);
     ui->linePackageItem->clear();
     ui->labelPackageName->clear();
     ui->labelPackagePrice->setText("0");
