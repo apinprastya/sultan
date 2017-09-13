@@ -58,6 +58,7 @@ private slots:
     void checkConnection();
     void cancel();
     void save();
+    void openDirectorySelector();
 
 public:
     void clientConnected();

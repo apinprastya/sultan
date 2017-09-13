@@ -55,6 +55,8 @@ bool KeyEvent::eventFilter(QObject *obj, QEvent *event)
     } else if(mFocusEvent && event->type() == QEvent::FocusIn) {
         emit focused(obj);
         return true;
+    } else if(mClickEvent && event->type() == QEvent::MouseButtonPress) {
+        emit clicked(obj);
     }
     return QObject::eventFilter(obj, event);
 }

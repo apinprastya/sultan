@@ -19,6 +19,8 @@
  */
 
 #include "db.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QUuid>
 #include <QSqlRecord>
 #include <QDebug>
@@ -28,6 +30,7 @@
 #include <QDir>
 
 using namespace LibDB;
+using namespace LibG;
 
 static QString TAG{"[DB]"};
 static DBSetting DBSETTING;
@@ -461,14 +464,23 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
         database.setDatabaseName(dbname);
         ret = database.open();
     } else if(DBTYPE == "SQLITE") {
-#ifdef Q_OS_WIN32
-        database.setDatabaseName("sultan.db");
-#else
+        QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
+        QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
         QDir dir = QDir::home();
-        dir.mkdir(".sultan");
-        dir.cd(".sultan");
-        database.setDatabaseName(dir.absoluteFilePath("sultan.db"));
+        if(dbname.isEmpty()) dbname = "sultan.db";
+        if(!dbname.endsWith(".db")) dbname += ".db";
+        if(dirpath.isEmpty()) {
+#ifdef Q_OS_WIN32
+            dir.mkdir("sultan");
+            dir.cd("sultan");
+#else
+            dir.mkdir(".sultan");
+            dir.cd(".sultan");
 #endif
+        } else {
+        }
+        database.setDatabaseName(dir.absoluteFilePath(dbname));
+        qDebug() << TAG << "SQLite database path :" << dir.absoluteFilePath(dbname);
         ret = database.open();
     }
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);

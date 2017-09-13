@@ -35,18 +35,21 @@ public:
     void discardKey(Qt::Key key);
     void addConsumeKey(Qt::Key key);
     inline void setFocusEvent(bool value) { mFocusEvent = value; }
+    inline void setClickEvent(bool value) { mClickEvent = true; }
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     bool mFocusEvent = false;
+    bool mClickEvent = false;
     QList<Qt::Key> mDiscardKey;
     QList<Qt::Key> mConsumeKey;
 
 signals:
     void keyPressed(QObject *sender, QKeyEvent *keyEvent);
     void focused(QObject *sender);
+    void clicked(QObject *sender);
 };
 
 }

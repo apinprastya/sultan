@@ -22,10 +22,12 @@
 #include "global_constant.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "keyevent.h"
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QMessageBox>
 #include <QProcess>
+#include <QFileDialog>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -62,6 +64,11 @@ SettingDialog::SettingDialog(QWidget *parent) :
     sConConnected = std::bind(&SettingDialog::clientConnected, this);
     sConError = std::bind(&SettingDialog::clientError, this, std::placeholders::_1);
     sConTimeout = std::bind(&SettingDialog::clientTimeout, this);
+    auto ke = new KeyEvent(this);
+    ke->setClickEvent(true);
+    ui->lineSqlitePath->installEventFilter(ke);
+    connect(ke, SIGNAL(clicked(QObject*)), SLOT(openDirectorySelector()));
+    ui->lineSqlitePath->setReadOnly(true);
 }
 
 SettingDialog::~SettingDialog()
@@ -75,6 +82,9 @@ SettingDialog::~SettingDialog()
 void SettingDialog::showDialog()
 {
     ui->comboType->setCurrentIndex(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER ? 0 : 1);
+    ui->comboDatabase->setCurrentIndex(Preference::getString(SETTING::DATABASE) == "MYSQL" ? 1 : 0);
+    ui->lineSqlitePath->setText(Preference::getString(SETTING::SQLITE_DBPATH));
+    ui->lineSqliteName->setText(Preference::getString(SETTING::SQLITE_DBNAME));
     ui->lineEditHost->setText(Preference::getString(SETTING::MYSQL_HOST));
     ui->spinBoxPort->setValue(Preference::getInt(SETTING::MYSQL_PORT, 3306));
     ui->lineEditUsername->setText(Preference::getString(SETTING::MYSQL_USERNAME));
@@ -112,6 +122,8 @@ void SettingDialog::saveMysqlSetting()
 void SettingDialog::databaseChanged()
 {
     bool isMysql = ui->comboDatabase->currentText() == "MYSQL";
+    ui->lineSqlitePath->setEnabled(!isMysql);
+    ui->lineSqliteName->setEnabled(!isMysql);
     ui->lineEditDatabase->setEnabled(isMysql);
     ui->lineEditHost->setEnabled(isMysql);
     ui->lineEditPassword->setEnabled(isMysql);
@@ -190,6 +202,8 @@ void SettingDialog::save()
     Preference::setValue(SETTING::SERVER_PORT, ui->spinBoxClientPort->value());
     Preference::setValue(SETTING::SERVER_ADDRESS, ui->lineEditClientAddress->text());
     Preference::setValue(SETTING::DATABASE, ui->comboDatabase->currentText());
+    Preference::setValue(SETTING::SQLITE_DBPATH, ui->lineSqlitePath->text());
+    Preference::setValue(SETTING::SQLITE_DBNAME, ui->lineSqliteName->text());
     Preference::setValue(SETTING::SETTING_OK, true);
     Preference::sync();
     //restart the app for easier :D
@@ -203,6 +217,14 @@ void SettingDialog::save()
     QProcess::startDetached(qApp->arguments()[0], list);
     if(sCloseCon != nullptr)
         sCloseCon();
+}
+
+void SettingDialog::openDirectorySelector()
+{
+    auto str = QFileDialog::getExistingDirectory(this, tr("Select directory"), QDir::homePath());
+    if(!str.isEmpty()) {
+        ui->lineSqlitePath->setText(str);
+    }
 }
 
 void SettingDialog::clientConnected()
