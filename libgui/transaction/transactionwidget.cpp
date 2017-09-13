@@ -109,7 +109,7 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
     mTableWidget->addActionButton(button);
-    model->refresh();
+    //model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));

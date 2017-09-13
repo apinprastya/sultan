@@ -204,8 +204,8 @@ void TableModel::filterChanged(int index, const QVariant &value)
     } else if(filter.compare == FilterBetweenDate) {
         if(value.canConvert(QVariant::Map)) {
             const QVariantMap &map = value.toMap();
-            mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"]);
-            mQuery.setFilter("1$" + key, COMPARE::LESS_EQUAL, map["end"]);
+            mQuery.setFilter("0$DATE(" + key + ")", COMPARE::GREATER_EQUAL, map["start"]);
+            mQuery.setFilter("1$DATE(" + key + ")", COMPARE::LESS_EQUAL, map["end"]);
         }
     } else if(filter.compare == FilterCategory) {
         if((value.canConvert(QVariant::String) && value.toString().isEmpty()) ||

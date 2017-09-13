@@ -83,14 +83,22 @@ void HorizontalHeader::fillDefValue(int index)
     int type = model()->headerData(index, Qt::Horizontal, TableModel::FilterRole).toInt();
     if(d.isValid()) {
         if(type == HeaderWidget::LineEdit) {
+            widget->getLineEdit()->blockSignals(true);
             widget->getLineEdit()->setText(d.toString());
+            widget->getLineEdit()->blockSignals(false);
             emit filterValueChanged(index, d);
         } else if(type == HeaderWidget::Date) {
+            widget->getDateEdit()->blockSignals(true);
             widget->getDateEdit()->setDate(d.toDate());
+            widget->getDateEdit()->blockSignals(false);
             emit filterValueChanged(index, d);
         } else if(type == HeaderWidget::DateStartEnd) {
+            widget->getDateEdit()->blockSignals(true);
+            widget->getDateEnd()->blockSignals(true);
             widget->getDateEdit()->setDate(d.toMap()["start"].toDate());
             widget->getDateEnd()->setDate(d.toMap()["end"].toDate());
+            widget->getDateEdit()->blockSignals(false);
+            widget->getDateEnd()->blockSignals(false);
             emit filterValueChanged(index, d);
         }
     }

@@ -97,7 +97,7 @@ MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 100 << 200 << 100 << 100 << 100 << 250 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    model->refresh();
+    //model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
     sendMessage(&msg);

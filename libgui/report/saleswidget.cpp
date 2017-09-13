@@ -72,7 +72,7 @@ SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent):
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 200 << 60 << 75 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-    model->refresh();
+    //model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
     button->setFlat(true);

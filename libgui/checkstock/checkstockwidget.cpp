@@ -82,7 +82,7 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 100 << 100 << 75 << 75 << 75 << 200);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->setSort("created_at DESC");
-    model->refresh();
+    //model->refresh();
 
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
 }
