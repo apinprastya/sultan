@@ -29,6 +29,7 @@
 #include <QStringBuilder>
 #include <QTemporaryFile>
 #include <QTextStream>
+#include <QDir>
 #include <QDebug>
 
 using namespace LibServer;
@@ -77,18 +78,22 @@ Message DatabaseAction::resetDatabase(Message *msg)
             message.setError("Password is wrong!");
         } else {
             auto dbtype = Preference::getString(SETTING::DATABASE);
-            QStringList tableList;
             if(dbtype == "SQLITE") {
-                DbResult res = mDb->where("type = ", "table")->get("sqlite_master");
-                for(int i = 0; i < res.size(); i++)
-                    tableList << res.data(i)["tbl_name"].toString();
+                QDir dir = QDir::home();
+                QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
+                QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
+                if(dbname.isEmpty()) dbname = "sultan.db";
+                if(!dbname.endsWith(".db")) dbname += ".db";
+                if(dirpath.isEmpty()) {
+#ifdef Q_OS_WIN32
+                    dir.cd("sultan");
+#else
+                    dir.cd(".sultan");
+#endif
+                }
+                QFile::remove(dir.absoluteFilePath(dbname));
             } else {
-                DbResult res = mDb->execResult("SHOW TABLES");
-                for(int i = 0; i < res.size(); i++)
-                    tableList << res.data(i).first().toString();
-            }
-            for(int i = 0; i < tableList.size(); i++) {
-                mDb->exec(QString("DROP TABLE %1").arg(tableList[i]));
+                mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
             }
         }
     }
