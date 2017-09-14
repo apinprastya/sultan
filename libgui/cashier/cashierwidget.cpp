@@ -93,11 +93,12 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mPayCashDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
     connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double)), SLOT(payRequested(int,double)));
     connect(mPayCashlessDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
+    connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F6), this, SLOT(openPreviousTransaction()));
-    new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateLastInputed()));
+    new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
@@ -376,7 +377,7 @@ void CashierWidget::openDrawer()
                                command, type);
 }
 
-void CashierWidget::updateLastInputed()
+void CashierWidget::updateCurrentItem()
 {
     const QModelIndex &index = ui->tableView->currentIndex();
     if(!index.isValid()) return;

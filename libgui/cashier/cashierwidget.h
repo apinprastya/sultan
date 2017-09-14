@@ -74,7 +74,7 @@ private slots:
     void payCashless();
     void payAdvance();
     void openDrawer();
-    void updateLastInputed();
+    void updateCurrentItem();
     void payRequested(int type, double value);
     void printBill(const QVariantMap &data);
     void openSearch();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>437</height>
+    <width>814</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,159 +44,184 @@
          <property name="title">
           <string>Database</string>
          </property>
-         <layout class="QFormLayout" name="formLayout">
-          <property name="labelAlignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="horizontalSpacing">
-           <number>10</number>
-          </property>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string notr="true">Host</string>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QFormLayout" name="formLayout">
+            <property name="bottomMargin">
+             <number>0</number>
             </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string notr="true">Database</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="comboDatabase"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupSqlite">
+            <property name="title">
+             <string>SQLite</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_4">
+             <property name="labelAlignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>DB Path</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineSqlitePath">
+               <property name="placeholderText">
+                <string>Folder to save the database</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>DB Name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineSqliteName">
+               <property name="placeholderText">
+                <string>Database name</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEditHost">
-            <property name="inputMask">
-             <string/>
+          <item>
+           <widget class="QGroupBox" name="groupMysql_2">
+            <property name="title">
+             <string>MySQL</string>
             </property>
-            <property name="text">
-             <string notr="true">localhost</string>
-            </property>
-            <property name="placeholderText">
-             <string notr="true">Myqsl host</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string notr="true">Port</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QSpinBox" name="spinBoxPort">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>65000</number>
-            </property>
-            <property name="value">
-             <number>3306</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string notr="true">Username</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEditUsername">
-            <property name="inputMask">
-             <string/>
-            </property>
-            <property name="text">
-             <string notr="true">root</string>
-            </property>
-            <property name="placeholderText">
-             <string notr="true">Mysql username</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string notr="true">Password</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLineEdit" name="lineEditPassword">
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="echoMode">
-             <enum>QLineEdit::Password</enum>
-            </property>
-            <property name="placeholderText">
-             <string notr="true">Mysql password</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string notr="true">Database</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="lineEditDatabase">
-            <property name="inputMask">
-             <string/>
-            </property>
-            <property name="text">
-             <string notr="true">sultan</string>
-            </property>
-            <property name="placeholderText">
-             <string notr="true">Mysql database</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QPushButton" name="pushCheckMysql">
-            <property name="text">
-             <string>Check Mysql</string>
-            </property>
-            <property name="autoDefault">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string notr="true">Database</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="comboDatabase"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>DB Path</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>DB Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineSqlitePath">
-            <property name="placeholderText">
-             <string>Folder to save the database</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineSqliteName">
-            <property name="placeholderText">
-             <string>Database name</string>
-            </property>
+            <layout class="QFormLayout" name="formLayout_5">
+             <property name="labelAlignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string notr="true">Host</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEditHost">
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string notr="true">localhost</string>
+               </property>
+               <property name="placeholderText">
+                <string notr="true">Myqsl host</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string notr="true">Port</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxPort">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>65000</number>
+               </property>
+               <property name="value">
+                <number>3306</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string notr="true">Username</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineEditUsername">
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string notr="true">root</string>
+               </property>
+               <property name="placeholderText">
+                <string notr="true">Mysql username</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string notr="true">Password</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="lineEditPassword">
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string notr="true">Mysql password</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string notr="true">Database</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="lineEditDatabase">
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string notr="true">sultan</string>
+               </property>
+               <property name="placeholderText">
+                <string notr="true">Mysql database</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QPushButton" name="pushCheckMysql">
+               <property name="text">
+                <string>Check Mysql</string>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -232,7 +257,7 @@
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="horizontalSpacing">
-           <number>60</number>
+           <number>6</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_6">
@@ -263,8 +288,11 @@
           <string>Client Setting</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="horizontalSpacing">
-           <number>40</number>
+           <number>6</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_7">
@@ -371,15 +399,6 @@
  </widget>
  <tabstops>
   <tabstop>comboType</tabstop>
-  <tabstop>comboDatabase</tabstop>
-  <tabstop>lineSqlitePath</tabstop>
-  <tabstop>lineSqliteName</tabstop>
-  <tabstop>lineEditHost</tabstop>
-  <tabstop>spinBoxPort</tabstop>
-  <tabstop>lineEditUsername</tabstop>
-  <tabstop>lineEditPassword</tabstop>
-  <tabstop>lineEditDatabase</tabstop>
-  <tabstop>pushCheckMysql</tabstop>
   <tabstop>spinBoxServerPort</tabstop>
   <tabstop>lineEditClientAddress</tabstop>
   <tabstop>spinBoxClientPort</tabstop>

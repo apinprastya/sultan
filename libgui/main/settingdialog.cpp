@@ -122,14 +122,8 @@ void SettingDialog::saveMysqlSetting()
 void SettingDialog::databaseChanged()
 {
     bool isMysql = ui->comboDatabase->currentText() == "MYSQL";
-    ui->lineSqlitePath->setEnabled(!isMysql);
-    ui->lineSqliteName->setEnabled(!isMysql);
-    ui->lineEditDatabase->setEnabled(isMysql);
-    ui->lineEditHost->setEnabled(isMysql);
-    ui->lineEditPassword->setEnabled(isMysql);
-    ui->lineEditUsername->setEnabled(isMysql);
-    ui->pushCheckMysql->setEnabled(isMysql);
-    ui->spinBoxPort->setEnabled(isMysql);
+    ui->groupMysql_2->setEnabled(isMysql);
+    ui->groupSqlite->setEnabled(!isMysql);
     mMysqlOk = !isMysql;
     checkSetting();
 }
