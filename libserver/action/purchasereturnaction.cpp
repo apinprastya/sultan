@@ -23,6 +23,7 @@
 #include "queryhelper.h"
 #include "util.h"
 #include "dbresult.h"
+#include "util/itemutil.h"
 #include <QStringBuilder>
 
 using namespace LibServer;
@@ -32,7 +33,7 @@ using namespace LibG;
 PurchaseReturnAction::PurchaseReturnAction():
     ServerAction("purchaseitemreturns", "id")
 {
-    mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE;
+    mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE | USE_TRANSACTION | AFTER_DELETE;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseReturnAction::summary, this, std::placeholders::_1));
 }
 
@@ -64,12 +65,13 @@ QMap<QString, QString> PurchaseReturnAction::fieldMap() const
 
 void PurchaseReturnAction::afterInsert(const QVariantMap &data)
 {
-    mDb->exec(QString("UPDATE items SET stock = stock - '%1' WHERE barcode = '%2'").arg(data["count"].toFloat()).arg(data["barcode"].toString()));
+    const QString &barcode = data["barcode"].toString();
+    ItemUtil util(mDb);
+    util.insertStock(barcode, QObject::tr("Purchase Return : %1").arg(barcode), STOCK_CARD_TYPE::PURCHASE_RETURN, -data["count"].toFloat(), 0, data["id"].toInt());
 }
 
 void PurchaseReturnAction::afterUpdate(const QVariantMap &oldData, const QVariantMap &newData)
 {
-    QString query{"UPDATE items SET stock = stock + '%1' WHERE barcode = '%2'"};
     float addCount = 0;
     const float &oldCount = oldData["count"].toFloat();
     const float &newCount = newData["count"].toFloat();
@@ -85,13 +87,11 @@ void PurchaseReturnAction::afterUpdate(const QVariantMap &oldData, const QVarian
         } else {
             addCount += newRet;
             QVariantMap d{{"date", newData["return_date"]}, {"number", newData["barcode"]},
-                         {"type", TRANSACTION_TYPE::EXPENSE}, {"link_id", newData["id"]},
+                         {"type", TRANSACTION_TYPE::INCOME}, {"link_id", newData["id"]},
                          {"link_type", TRANSACTION_LINK_TYPE::BUY_RETURN}, {"transaction_total", newData["money_returned"]},
                          {"user_id", newData["user_id"]}, {"machine_id", newData["machine_id"]},
                          {"bank_id", newData["bank_id"]}, {"money_total", newData["money_returned"]},
                          {"detail", QObject::tr("Purchase Return : %1").arg(newData["barcode"].toString())}};
-            if(newData["payment_type"].toInt() == PURCHASEPAYMENT::TEMPO)
-                d["date"] = newData["payment_date"];
             mDb->insert("transactions", d);
         }
     } else if(newStatus == PURCHASE_RETURN_STATUS::RETURNED) {
@@ -104,6 +104,15 @@ void PurchaseReturnAction::afterUpdate(const QVariantMap &oldData, const QVarian
         if(newRet != oldRet)
             addCount += newRet - oldRet;
     }
-    mDb->exec(query.arg(addCount).arg(newData["barcode"].toString()));
+    if(addCount != 0) {
+        ItemUtil util(mDb);
+        util.updateStockCardCount(newData["barcode"].toString(), -(newCount - newRet), STOCK_CARD_TYPE::PURCHASE_RETURN, newData["id"].toInt(), true);
+    }
+}
 
+void PurchaseReturnAction::afterDelete(const QVariantMap &oldData)
+{
+    ItemUtil util(mDb);
+    util.updateStockCardCount(oldData["barcode"].toString(), 0, STOCK_CARD_TYPE::PURCHASE_RETURN, oldData["id"].toInt(), true);
+    mDb->where("link_type =", TRANSACTION_LINK_TYPE::BUY_RETURN)->where("link_id =", oldData["id"])->del("transactions");
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>493</height>
+    <width>838</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -194,6 +194,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="labelWarningItemLink">
+         <property name="styleSheet">
+          <string notr="true">color: red; border: 1px solid red; padding: 5px; border-radius: 5px;</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This item has link to other item(s). If you change price, you should change other item(s) price. Please check on &amp;quot;Item Link&amp;quot; tab.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -214,7 +227,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="price">
         <attribute name="title">
@@ -272,8 +285,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>423</width>
-              <height>281</height>
+              <width>409</width>
+              <height>273</height>
              </rect>
             </property>
             <attribute name="label">
@@ -392,8 +405,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>423</width>
-              <height>281</height>
+              <width>409</width>
+              <height>273</height>
              </rect>
             </property>
             <attribute name="label">
@@ -592,6 +605,23 @@
             </widget>
            </item>
           </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="itemlink">
+        <attribute name="title">
+         <string>Item Link</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_11">
+         <item>
+          <widget class="LibGUI::TableWidget" name="tableItemLink" native="true"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>* double click row to edit item</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>

@@ -35,16 +35,16 @@ PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWid
     double total = data["total"].toDouble();
     double payment = data["payment"].toDouble();
     if(type == PAYMENT::CASH) {
-        ui->labelTotal->setText(LibG::Preference::toString(total));
-        ui->labelPayment->setText(LibG::Preference::toString(payment));
-        ui->labelChange->setText(LibG::Preference::toString(total - payment));
+        ui->labelTotal->setText(LibG::Preference::formatMoney(total));
+        ui->labelPayment->setText(LibG::Preference::formatMoney(payment));
+        ui->labelChange->setText(LibG::Preference::formatMoney(total - payment));
     } else {
         ui->labelTotal_2->setText(tr("Sub Total"));
-        ui->labelTotal->setText(Preference::toString(data["subtotal"].toDouble()));
+        ui->labelTotal->setText(Preference::formatMoney(data["subtotal"].toDouble()));
         ui->labelPayment_2->setText(tr("Additional Charge"));
-        ui->labelPayment->setText(Preference::toString(data["additional_charge"].toDouble()));
+        ui->labelPayment->setText(Preference::formatMoney(data["additional_charge"].toDouble()));
         ui->labelChange_2->setText(tr("Total"));
-        ui->labelChange->setText(Preference::toString(total));
+        ui->labelChange->setText(Preference::formatMoney(total));
     }
 }
 

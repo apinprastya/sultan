@@ -67,7 +67,7 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
         return item->data("real_stock").toDouble() - item->data("system_stock").toDouble();
     });
     model->addColumn("note", tr("Note"));
-    model->setFilter("flag", COMPARE::FLAG, CHECKSTOCK_FLAG::CHECKSTOCK);
+    model->setFilter("flag", COMPARE::FLAG_ENABLE, CHECKSTOCK_FLAG::CHECKSTOCK);
 
     QVariantMap defVal;
     defVal.insert("start", Util::getBeginningOfMonth());
@@ -82,7 +82,6 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 100 << 100 << 75 << 75 << 75 << 200);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->setSort("created_at DESC");
-    //model->refresh();
 
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
 }
@@ -95,6 +94,7 @@ void CheckStockWidget::messageReceived(LibG::Message */*msg*/)
 void CheckStockWidget::addClicked()
 {
     mAddDialog->reset();
-    mAddDialog->show();
+    mAddDialog->exec();
+    mTableWidget->getModel()->refresh();
 }
 

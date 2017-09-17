@@ -36,7 +36,7 @@ public:
     void setMessageBus(MessageBus *bus);
     bool consumeMessage(Message *msg);
     void clearInterested();
-    void sendMessage(Message *msg);
+    int sendMessage(Message *msg);
 
 protected:
     MessageBus *mMessageBus;

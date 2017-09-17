@@ -53,10 +53,11 @@ bool MessageHandler::consumeMessage(Message *msg)
     return false;
 }
 
-void MessageHandler::sendMessage(Message *msg)
+int MessageHandler::sendMessage(Message *msg)
 {
     int unique = UNIQUE_ID++;
     msg->setUniqueId(unique);
     mInterests.append(unique);
     mMessageBus->sendMessage(msg);
+    return msg->getUniqueId();
 }

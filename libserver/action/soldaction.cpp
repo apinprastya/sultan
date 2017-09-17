@@ -21,6 +21,7 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
+#include "util/itemutil.h"
 #include <QDateTime>
 #include <QStringBuilder>
 
@@ -37,6 +38,7 @@ using namespace LibDB;
 SoldAction::SoldAction():
     ServerAction("solds", "id")
 {
+    mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::NEW_SOLD, std::bind(&SoldAction::insertSold, this, std::placeholders::_1));
 }
 
@@ -51,19 +53,14 @@ Message SoldAction::insertSold(Message *msg)
     int user_id = msg->data("user_id").toInt();
     int poin = msg->data("reward").toInt();
     msg->removeData("cart");
-    //QString number = QString("%1-%2").arg(now).arg(NEXT_VAL++, 3, 16, QChar('0'));
-    //msg->addData("number", number);
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(mDb->insert(mTableName, msg->data())) {
         QVariant id = mDb->lastInsertedId();
         for(auto v : l) {
             QVariantMap m = v.toMap();
-            //TODO: get the item flag and process
-            int flag = m["flag"].toInt();
             m["sold_id"] = id;
-            DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
+            /*DbResult res = mDb->where("barcode = ", m["barcode"])->get("items");
             const QVariantMap &item = res.first();
-            int itemflag = item["flag"].toInt();
             if((flag & RETURN) != 0) {
                 mDb->exec(QString("UPDATE solditems SET flag = flag | %1 WHERE id = %2").arg(RETURNED).arg(m["link_id"].toInt()));
                 //TODO: need to check if it a FIFO operation in the future
@@ -75,7 +72,9 @@ Message SoldAction::insertSold(Message *msg)
             mDb->insert("solditems", m);
             if((itemflag & ITEM_FLAG::CALCULATE_STOCK) != 0) {
                 mDb->exec(QString("UPDATE items SET stock = stock - %1 WHERE barcode = %2").arg(m["count"].toFloat()).arg(m["barcode"].toString()));
-            }
+            }*/
+            ItemUtil iu(mDb);
+            iu.insertStock(m["barcode"].toString(), msg->data("number").toString(), STOCK_CARD_TYPE::SOLD, -m["count"].toFloat(), 0, m);
         }
         //transaction
         double mon = payment > total ? total : payment;

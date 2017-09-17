@@ -89,17 +89,17 @@ void Preference::applyApplicationSetting()
     QLocale::setDefault(locale);
 }
 
-QString Preference::toString(double val)
+QString Preference::formatMoney(double val)
 {
     return QLocale().toString(val, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL));
 }
 
-QString Preference::toString(int val)
+QString Preference::formatMoney(int val)
 {
     return QLocale().toString(val);
 }
 
-QString Preference::toString(float val)
+QString Preference::formatMoney(float val)
 {
     return QLocale().toString(val, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL));
 }

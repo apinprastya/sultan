@@ -102,7 +102,7 @@ void CustomerCreditWidget::messageReceived(LibG::Message *msg)
             uiSummary->labelPhone->setText(msg->data("phone").toString());
             uiSummary->labelAddress->setText(msg->data("address").toString());
             uiSummary->labelReward->setText(QString::number(msg->data("reward").toInt()));
-            uiSummary->labelCredit->setText(Preference::toString(mTotal));
+            uiSummary->labelCredit->setText(Preference::formatMoney(mTotal));
         }
     }
 }
@@ -149,11 +149,11 @@ void CustomerCreditWidget::print(const QVariantMap &data)
     escp->column(QList<int>())->line(QChar('='));
     escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();
     escp->column(QList<int>{50, 50})->leftText(tr("Name"))->rightText(uiSummary->labelName->text())->newLine();
-    escp->column(QList<int>{50, 50})->leftText(tr("Rest Credit"))->rightText(Preference::toString(mTotal))->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Rest Credit"))->rightText(Preference::formatMoney(mTotal))->newLine();
     escp->column(QList<int>())->line(QChar('-'));
     escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
     escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
-    escp->leftText(tr("Payment"))->rightText(Preference::toString(-data["credit"].toDouble()))->newLine();
+    escp->leftText(tr("Payment"))->rightText(Preference::formatMoney(-data["credit"].toDouble()))->newLine();
     escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(data["detail"].toString())->newLine();
     escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);

@@ -33,8 +33,9 @@ namespace COMPARE {
     const int LIKE              = 8;
     const int IGNORE            = 10;
     const int LIKE_NATIVE       = 11;
-    const int FLAG              = 12;
-    const int FLAG_ALL          = 13;
+    const int FLAG_ENABLE       = 12;
+    const int FLAG_DISABLE      = 13;
+    const int FLAG_ALL          = 14;
     const int USER_DEFINE       = 100;
 }
 

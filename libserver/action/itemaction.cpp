@@ -22,6 +22,7 @@
 #include "db.h"
 #include "queryhelper.h"
 #include "util.h"
+#include "util/itemutil.h"
 #include <QStringRef>
 #include <QStringBuilder>
 #include <QDataStream>
@@ -34,6 +35,7 @@ using namespace LibDB;
 ItemAction::ItemAction():
     ServerAction("items", "barcode")
 {
+    mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::CASHIER_PRICE, std::bind(&ItemAction::prices, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));
@@ -44,11 +46,13 @@ Message ItemAction::insert(Message *msg)
     LibG::Message message(msg);
     const int flag = msg->data("flag").toInt();
     const QVariant &sellPrice = msg->takeData("sell_price");
+    QVariantMap box = msg->takeData("box").toMap();
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
-        DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
+        DbResult res = mDb->where("barcode = ", mDb->lastInsertedId())->get(mTableName);
+        float count = msg->data("stock").toFloat();
         message.setData(res.first());
         if((flag & ITEM_FLAG::MULTIPRICE) == 0) {
             mDb->insert("sellprices", sellPrice.toMap());
@@ -60,6 +64,18 @@ Message ItemAction::insert(Message *msg)
                 mDb->insert("sellprices", d);
             }
         }
+        if((flag & ITEM_FLAG::PACKAGE) != 0) {
+            box.insert("barcode", msg->data("barcode"));
+            box.insert("type", ITEM_LINK_TYPE::BOX);
+            mDb->insert("itemlinks", box);
+            //check stock card to linked item
+            DbResult r = mDb->where("barcode = ", box["barcode_link"])->get("items");
+            if(!r.isEmpty()) count = r.first()["stock"].toFloat() / box["count_link"].toFloat();
+        }
+        ItemUtil util(mDb);
+        util.insertStock(msg->data("barcode").toString(),
+                         QString("Initial %1").arg(msg->data("barcode").toString()),
+                         STOCK_CARD_TYPE::INITIAL_STOCK, count, msg->data("flag").toInt(), QVariantMap(), false);
     }
     if(mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
@@ -75,6 +91,7 @@ Message ItemAction::update(Message *msg)
     LibG::Message message(msg);
     QVariantMap data = msg->data("data").toMap();
     QVariant sellprice = data["sell_price"];
+    QVariantMap box = data.take("box").toMap();
     const int flag = data["flag"].toInt();
     data.remove("sell_price");
     mDb->where(mIdField % " = ", msg->data(mIdField));
@@ -94,6 +111,36 @@ Message ItemAction::update(Message *msg)
             }
             res = mDb->where("id = ", msg->data("id"))->get(mTableName);
             message.setData(res.first());
+        }
+        if((flag & ITEM_FLAG::PACKAGE) != 0) {
+            mDb->where("barcode = ", msg->data("barcode"))->where("type = ", ITEM_LINK_TYPE::BOX);
+            mDb->update("itemlinks", box);
+        } else {
+            mDb->where("barcode = ", msg->data("barcode"))->where("type = ", ITEM_LINK_TYPE::BOX);
+            mDb->del("itemlinks");
+        }
+        ItemUtil util(mDb);
+        util.updateBuyPrice(msg->data(mIdField).toString());
+    }
+    return message;
+}
+
+Message ItemAction::del(Message *msg)
+{
+    LibG::Message message(msg);
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+        mDb->beginTransaction();
+    mDb->where(mIdField % " = ", msg->data(mIdField));
+    if(!mDb->del(mTableName)) {
+        message.setError(mDb->lastError().text());
+    } else {
+        //remove stok card
+        mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
+    }
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
         }
     }
     return message;

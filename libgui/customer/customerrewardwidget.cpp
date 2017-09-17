@@ -99,7 +99,7 @@ void CustomerRewardWidget::messageReceived(LibG::Message *msg)
             uiSummary->labelPhone->setText(msg->data("phone").toString());
             uiSummary->labelAddress->setText(msg->data("address").toString());
             uiSummary->labelReward->setText(QString::number(mPoin));
-            uiSummary->labelCredit->setText(Preference::toString(mTotal));
+            uiSummary->labelCredit->setText(Preference::formatMoney(mTotal));
         }
     }
 }
@@ -147,11 +147,11 @@ void CustomerRewardWidget::print(const QVariantMap &data)
     escp->column(QList<int>())->line(QChar('='));
     escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();
     escp->column(QList<int>{50, 50})->leftText(tr("Name"))->rightText(uiSummary->labelName->text())->newLine();
-    escp->column(QList<int>{50, 50})->leftText(tr("Total Reward"))->rightText(Preference::toString(mTotal))->newLine();
+    escp->column(QList<int>{50, 50})->leftText(tr("Total Reward"))->rightText(Preference::formatMoney(mTotal))->newLine();
     escp->column(QList<int>())->line(QChar('-'));
     escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
     escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
-    escp->leftText(tr("Reward Exchange"))->rightText(Preference::toString(-data["reward"].toDouble()))->newLine();
+    escp->leftText(tr("Reward Exchange"))->rightText(Preference::formatMoney(-data["reward"].toDouble()))->newLine();
     escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(data["detail"].toString())->newLine();
     escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);

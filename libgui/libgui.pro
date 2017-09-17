@@ -137,7 +137,11 @@ SOURCES += \
     main/logindialog.cpp \
     main/restartconfirmationdialog.cpp \
     main/settingdialog.cpp \
-    cashier/editpricecountdialog.cpp
+    cashier/editpricecountdialog.cpp \
+    report/stockcardwidget.cpp \
+    item/stockcarddialog.cpp \
+    soldreturn/solditemreturnwidget.cpp \
+    soldreturn/addsoldreturndialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -229,7 +233,11 @@ HEADERS += \
     main/logindialog.h \
     main/restartconfirmationdialog.h \
     main/settingdialog.h \
-    cashier/editpricecountdialog.h
+    cashier/editpricecountdialog.h \
+    report/stockcardwidget.h \
+    item/stockcarddialog.h \
+    soldreturn/solditemreturnwidget.h \
+    soldreturn/addsoldreturndialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -286,4 +294,6 @@ FORMS += \
     main/logindialog.ui \
     main/restartconfirmationdialog.ui \
     main/settingdialog.ui \
-    cashier/editpricecountdialog.ui
+    cashier/editpricecountdialog.ui \
+    item/stockcarddialog.ui \
+    soldreturn/addsoldreturndialog.ui

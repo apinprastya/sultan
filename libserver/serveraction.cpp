@@ -65,6 +65,9 @@ LibG::Message ServerAction::insert(LibG::Message *msg)
         msg->addData("updated_at", QDateTime::currentDateTime());
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
+    if(hasFlag(BEFORE_INSERT)) {
+        if(!beforeInsert(msg->data(), &message)) return message;
+    }
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
@@ -92,7 +95,10 @@ LibG::Message ServerAction::update(LibG::Message *msg)
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
     DbResult oldRes = mDb->clone()->get(mTableName);
-    QVariantMap oldData = oldRes.first();
+    const QVariantMap &oldData = oldRes.first();
+    if(hasFlag(BEFORE_UPDATE)) {
+        if(!beforeUpdate(oldData, msg, &message)) return message;
+    }
     if(!mDb->clone()->update(mTableName, d)) {
         message.setError(mDb->lastError().text());
     } else {
@@ -115,9 +121,17 @@ LibG::Message ServerAction::del(LibG::Message *msg)
     LibG::Message message(msg);
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
+    DbResult res = mDb->where(mIdField % " = ", msg->data(mIdField))->get(mTableName);
+    if(hasFlag(BEFORE_DELETE)) {
+        if(!res.isEmpty() && !beforeDelete(res.first(), &message)) return message;
+    }
     mDb->where(mIdField % " = ", msg->data(mIdField));
     if(!mDb->del(mTableName)) {
         message.setError(mDb->lastError().text());
+    }
+    if(hasFlag(AFTER_DELETE)) {
+        if(!res.isEmpty())
+            afterDelete(res.first());
     }
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {

@@ -49,9 +49,9 @@ void ReturnResolutionDialog::fill(const QVariantMap &data)
     ui->labelBarcode->setText(data["barcode"].toString());
     ui->labelName->setText(data["name"].toString());
     ui->labelCount->setText(QString::number(data["count"].toFloat()));
-    ui->labelPrice->setText(Preference::toString(data["price"].toDouble()));
+    ui->labelPrice->setText(Preference::formatMoney(data["price"].toDouble()));
     ui->labelSuplier->setText(data["suplier"].toString());
-    ui->labelTotal->setText(Preference::toString(data["total"].toDouble()));
+    ui->labelTotal->setText(Preference::formatMoney(data["total"].toDouble()));
     ui->doubleItem->setMaximum(data["count"].toFloat());
     ui->doubleItem->setValue(data["item_returned"].toFloat());
     ui->doubleMoney->setValue(data["money_returned"].toDouble());

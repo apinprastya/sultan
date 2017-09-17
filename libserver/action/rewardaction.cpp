@@ -24,5 +24,5 @@ using namespace LibServer;
 RewardAction::RewardAction():
     ServerAction("rewards", "id")
 {
-
+    mFlag = USE_TRANSACTION;
 }

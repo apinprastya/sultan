@@ -219,3 +219,18 @@ QVariant Message::getFilter(const QString &key)
     const QVariantMap f = mData["filter"].toMap();
     return f[key].toMap()["value"];
 }
+
+void Message::keepFilter(const QStringList &list)
+{
+    const QVariantMap f = mData["filter"].toMap();
+    QVariantMap newFilter;
+    QMapIterator<QString, QVariant> i(f);
+    while (i.hasNext()) {
+        i.next();
+        for(int a = 0; a < list.size(); a++) {
+            if(!list[a].compare(i.key()))
+                newFilter.insert(i.key(), i.value());
+        }
+    }
+    mData["filter"] = newFilter;
+}

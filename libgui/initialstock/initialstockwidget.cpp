@@ -60,7 +60,7 @@ InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("name", tr("Name"));
     model->addColumn("real_stock", tr("Stock"), Qt::AlignRight);
     //model->addColumn("note", tr("Note"));
-    model->setFilter("flag", COMPARE::FLAG, CHECKSTOCK_FLAG::INITIAL);
+    model->setFilter("flag", COMPARE::FLAG_ENABLE, CHECKSTOCK_FLAG::INITIAL);
 
     QVariantMap defVal;
     defVal.insert("start", Util::getBeginningOfMonth());

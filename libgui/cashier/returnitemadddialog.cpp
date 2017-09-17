@@ -51,8 +51,8 @@ void ReturnItemAddDialog::fill(const QVariantMap &d)
     mBuyPrice = d["buy_price"].toDouble();
     ui->labelBarcode->setText(d["barcode"].toString());
     ui->labelName->setText(d["name"].toString());
-    ui->labelPrice->setText(Preference::toString(mPrice));
-    ui->labelDiscount->setText(Preference::toString(mDiscount));
+    ui->labelPrice->setText(Preference::formatMoney(mPrice));
+    ui->labelDiscount->setText(Preference::formatMoney(mDiscount));
     ui->doubleCount->setMaximum(d["count"].toDouble());
     ui->doubleCount->setValue(d["count"].toDouble());
     ui->doubleCount->selectAll();
@@ -62,7 +62,7 @@ void ReturnItemAddDialog::fill(const QVariantMap &d)
 
 void ReturnItemAddDialog::calculateTotal()
 {
-    ui->labelTotal->setText(Preference::toString((mPrice - mDiscount) * ui->doubleCount->value()));
+    ui->labelTotal->setText(Preference::formatMoney((mPrice - mDiscount) * ui->doubleCount->value()));
 }
 
 void ReturnItemAddDialog::saveClicked()

@@ -29,23 +29,8 @@ using namespace LibG;
 PurchaseAction::PurchaseAction():
     ServerAction("purchases", "id")
 {
-    mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE;
+    mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE | USE_TRANSACTION | BEFORE_DELETE | BEFORE_INSERT;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseAction::summary, this, std::placeholders::_1));
-}
-
-LibG::Message PurchaseAction::del(LibG::Message *msg)
-{
-    LibG::Message message(msg);
-    DbResult res = mDb->where("purchase_id = ", msg->data(mIdField))->get("purchaseitems");
-    if(!res.isEmpty()) {
-        message.setError("Purchase item must empty before deleted!");
-        return message;
-    }
-    mDb->where("id = ", msg->data(mIdField));
-    if(!mDb->del(mTableName)) {
-        message.setError(mDb->lastError().text());
-    }
-    return message;
 }
 
 Message PurchaseAction::summary(Message *msg)
@@ -55,6 +40,16 @@ Message PurchaseAction::summary(Message *msg)
             where("status = ", PAYMENT_STATUS::UNPAID)->get(mTableName);
     message.setData(res.first());
     return message;
+}
+
+bool PurchaseAction::beforeInsert(const QVariantMap &data, Message *retMsg)
+{
+    DbResult res = mDb->where("number = ", data["number"].toString())->get(mTableName);
+    if(!res.isEmpty()) {
+        retMsg->setError(QObject::tr("Purchase with number already exist!"));
+        return false;
+    }
+    return true;
 }
 
 void PurchaseAction::afterInsert(const QVariantMap &data)
@@ -79,6 +74,16 @@ void PurchaseAction::afterUpdate(const QVariantMap &/*oldData*/, const QVariantM
             updateTransaction(data);
         }
     }
+}
+
+bool PurchaseAction::beforeDelete(const QVariantMap &oldData, Message *retMsg)
+{
+    DbResult res = mDb->where("purchase_id = ", oldData["id"])->get("purchaseitems");
+    if(!res.isEmpty()) {
+        retMsg->setError("Purchase item must empty before deleted!");
+        return false;
+    }
+    return true;
 }
 
 void PurchaseAction::selectAndJoin()

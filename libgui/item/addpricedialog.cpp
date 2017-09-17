@@ -70,7 +70,7 @@ void AddPriceDialog::fill(const QVariantMap &data)
 void AddPriceDialog::setBuyPrice(double buyprice)
 {
     mBuyPrice = buyprice;
-    ui->labelBuyPrice->setText(Preference::toString(buyprice));
+    ui->labelBuyPrice->setText(Preference::formatMoney(buyprice));
     updateDiscount();
 }
 
@@ -99,7 +99,7 @@ void AddPriceDialog::updateDiscount()
     double margin = ui->doublePrice->value() - discount - mBuyPrice;
     double perc = 100;
     if(mBuyPrice > 0) perc = margin * 100 / mBuyPrice;
-    ui->labelDiscount->setText(Preference::toString(discount));
-    ui->labelFinal->setText(Preference::toString(ui->doublePrice->value() - discount));
-    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::toString(margin)).arg(Preference::toString(perc)));
+    ui->labelDiscount->setText(Preference::formatMoney(discount));
+    ui->labelFinal->setText(Preference::formatMoney(ui->doublePrice->value() - discount));
+    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::formatMoney(margin)).arg(Preference::formatMoney(perc)));
 }

@@ -47,14 +47,14 @@ void AdvancePaymentDialog::setup(double total, Customer *cust)
 {
     mTotal = total;
     mCustomer = cust;
-    ui->labelTotal->setText(Preference::toString(total));
+    ui->labelTotal->setText(Preference::formatMoney(total));
     ui->linePayment->setText("0");
     ui->linePayment->setFocus(Qt::TabFocusReason);
     ui->linePayment->selectAll();
     ui->labelCusNumber->setText(cust->number);
     ui->labelCusName->setText(cust->name);
     ui->labelCusReward->setText(QString::number(cust->reward));
-    ui->labelCusCredit->setText(Preference::toString(cust->credit));
+    ui->labelCusCredit->setText(Preference::formatMoney(cust->credit));
     ui->pushPay->setEnabled(true);
 }
 
@@ -66,7 +66,7 @@ void AdvancePaymentDialog::messageReceived(LibG::Message */*msg*/)
 void AdvancePaymentDialog::paymentValueChanged(const QString &/*value*/)
 {
     double val = ui->linePayment->value();
-    ui->labelCredit->setText(Preference::toString(mTotal - val));
+    ui->labelCredit->setText(Preference::formatMoney(mTotal - val));
 }
 
 void AdvancePaymentDialog::payClicked()

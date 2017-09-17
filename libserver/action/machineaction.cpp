@@ -24,5 +24,5 @@ using namespace LibServer;
 MachineAction::MachineAction():
     ServerAction("machines", "id")
 {
-    mFlag = HAS_UPDATE_FIELD;
+    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION;
 }

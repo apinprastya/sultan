@@ -99,7 +99,7 @@ void CustomerWidget::messageReceived(LibG::Message *msg)
             mTableWidget->getModel()->refresh();
         }
     } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY)) {
-        mTileCredit->setValue(Preference::toString(msg->data("credit").toDouble()));
+        mTileCredit->setValue(Preference::formatMoney(msg->data("credit").toDouble()));
     }
 }
 

@@ -23,6 +23,7 @@
 
 #include "db_global.h"
 #include <QDir>
+#include <functional>
 
 namespace LibDB {
 
@@ -31,16 +32,17 @@ class Db;
 class DBSHARED_EXPORT Migration
 {
 public:
-    static bool migrateAll(const QString &folder, const QString &dbtype);
+    static bool migrateAll(const QString &folder, const QString &dbtype, std::function<bool(const QString &)> afterCallback = nullptr);
     Migration(Db *db, const QString &folder, const QString &dbtype);
-    bool migrate();
 
 private:
     Db *mDb;
     QDir mDir;
     QString mLastFile;
     QString mDbType;
+    std::function<bool(const QString &)> mAfterMigrate = nullptr;
 
+    bool migrate();
     void init();
     bool executeFile(const QString &filePath);
 };

@@ -141,7 +141,7 @@ void PurchaseWidget::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::SUMMARY)) {
         if(msg->isSuccess()) {
-            mTotalDebit->setValue(Preference::toString(msg->data("total").toDouble()));
+            mTotalDebit->setValue(Preference::formatMoney(msg->data("total").toDouble()));
         }
     }
 }

@@ -35,8 +35,12 @@ class SERVERSHARED_EXPORT ServerAction
 {
 public:
     enum Flag {
-        AFTER_INSERT        = 0x1,
-        AFTER_UPDATE        = 0x2,
+        BEFORE_INSERT       = 0x1,
+        AFTER_INSERT        = 0x2,
+        BEFORE_UPDATE       = 0x4,
+        AFTER_UPDATE        = 0x8,
+        BEFORE_DELETE       = 0x10,
+        AFTER_DELETE        = 0x20,
         HAS_UPDATE_FIELD    = (1 << 16),
         USE_TRANSACTION     = (1 << 17),
     };
@@ -61,8 +65,12 @@ protected:
     void setStart(LibG::Message *msg, LibG::Message *src);
     virtual QMap<QString, QString> fieldMap() const;
     virtual void selectAndJoin() {}
+    virtual bool beforeInsert(const QVariantMap &/*data*/, LibG::Message */*retMsg*/) { return true; }
     virtual void afterInsert(const QVariantMap &/*data*/) {}
+    virtual bool beforeUpdate(const QVariantMap &/*oldData*/, LibG::Message */*msg*/, LibG::Message */*retMsg*/) { return true; }
     virtual void afterUpdate(const QVariantMap &/*oldData*/, const QVariantMap &/*newData*/) {}
+    virtual bool beforeDelete(const QVariantMap &/*oldData*/, LibG::Message */*retMsg*/) { return true; }
+    virtual void afterDelete(const QVariantMap &/*oldData*/) {}
 
     bool hasFlag(int flag);
 };

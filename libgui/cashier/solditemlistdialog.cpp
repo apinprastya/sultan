@@ -65,6 +65,7 @@ SoldItemListDialog::SoldItemListDialog(const QVariantMap &data, LibG::MessageBus
     keyevent->addConsumeKey(Qt::Key_Return);
     ui->tableWidget->getTableView()->installEventFilter(keyevent);
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableReturnPressed()));
+    connect(ui->tableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableReturnPressed()));
 }
 
 SoldItemListDialog::~SoldItemListDialog()
@@ -88,7 +89,10 @@ void SoldItemListDialog::tableReturnPressed()
     const QModelIndex &index = ui->tableWidget->getTableView()->currentIndex();
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    int flag = item->data("flag").toInt();
+    mData = item->data();
+    mIsOk = true;
+    close();
+    /*int flag = item->data("flag").toInt();
     if((flag & CashierItem::Return) != 0) {
         FlashMessageManager::showError(tr("Return item can not return again"));
         return;
@@ -98,5 +102,5 @@ void SoldItemListDialog::tableReturnPressed()
     }
     ReturnItemAddDialog dialog(this);
     dialog.fill(item->data());
-    dialog.exec();
+    dialog.exec();*/
 }

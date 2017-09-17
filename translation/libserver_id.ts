@@ -9,33 +9,38 @@
         <translation>Piutang Pelanggan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/purchaseaction.cpp" line="104"/>
-        <location filename="../libserver/action/purchaseaction.cpp" line="114"/>
+        <location filename="../libserver/action/purchaseaction.cpp" line="49"/>
+        <source>Purchase with number already exist!</source>
+        <translation>Pembelian dengan nomor tersebut sudah ada!</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/purchaseaction.cpp" line="109"/>
+        <location filename="../libserver/action/purchaseaction.cpp" line="119"/>
         <source>Purchase : %1</source>
         <translation>Pembelian : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="87"/>
+        <location filename="../libserver/action/soldaction.cpp" line="86"/>
         <source>Sold : %1</source>
         <translation>Penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="95"/>
+        <location filename="../libserver/action/soldaction.cpp" line="94"/>
         <source>Credit from transaction %1</source>
         <translation>Piutang dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/soldaction.cpp" line="108"/>
+        <location filename="../libserver/action/soldaction.cpp" line="107"/>
         <source>Poin from transaction %1</source>
         <translation>Poin dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="91"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="93"/>
         <source>Income</source>
         <translation>Pemasukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="91"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="93"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
     </message>
@@ -51,25 +56,34 @@
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="111"/>
+        <location filename="../libserver/action/itemaction.cpp" line="158"/>
         <source>Item not found</source>
         <translation>Item tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="117"/>
+        <location filename="../libserver/action/itemaction.cpp" line="164"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
     </message>
     <message>
-        <location filename="../libserver/action/databaseaction.cpp" line="72"/>
+        <location filename="../libserver/action/databaseaction.cpp" line="73"/>
         <source>User id not found</source>
         <translation>User tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/purchasereturnaction.cpp" line="92"/>
+        <location filename="../libserver/action/purchasereturnaction.cpp" line="70"/>
+        <location filename="../libserver/action/purchasereturnaction.cpp" line="94"/>
         <location filename="../libserver/action/purchasereturnaction.cpp" line="101"/>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="72"/>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="79"/>
         <source>Purchase Return : %1</source>
-        <translation>Return pembelian : %1</translation>
+        <translation>Retur pembelian : %1</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="39"/>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="46"/>
+        <source>Sold Return : %1</source>
+        <translation>Retur Penjualan: %1</translation>
     </message>
 </context>
 </TS>

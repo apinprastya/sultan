@@ -25,7 +25,7 @@ using namespace LibServer;
 CustomerPointAction::CustomerPointAction():
     ServerAction("customerrewards", "id")
 {
-    mFlag = AFTER_INSERT;
+    mFlag = AFTER_INSERT | USE_TRANSACTION;
 }
 
 void CustomerPointAction::afterInsert(const QVariantMap &data)

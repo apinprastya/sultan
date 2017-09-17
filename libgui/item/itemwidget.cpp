@@ -38,6 +38,7 @@
 #include "printer.h"
 #include "global_setting_const.h"
 #include "addpricedialog.h"
+#include "stockcarddialog.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -63,7 +64,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("name", tr("Name"));
     model->addColumnMoney("buy_price", tr("Buy Price"));
     model->addColumnMoney("sell_price", tr("Sell Price"));
-    model->addColumnMoney("stock", tr("Stock"));
+    model->addColumn("stock", tr("Stock"), Qt::AlignRight);
     model->addColumn("unit", tr("Unit"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));
@@ -75,7 +76,12 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     mMainTable->setupTable();
     GuiUtil::setColumnWidth(mMainTable->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 150 << 75 << 150 << 150);
     mMainTable->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    auto button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
+    auto button = new QPushButton(QIcon(":/images/16x16/bagbox.png"), "");
+    button->setToolTip(tr("Stock Card"));
+    button->setFlat(true);
+    connect(button, SIGNAL(clicked(bool)), SLOT(openStockCard()));
+    mMainTable->addActionButton(button);
+    button = new QPushButton(QIcon(":/images/16x16/drive-download.png"), "");
     button->setToolTip(tr("Export"));
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
@@ -157,15 +163,16 @@ void ItemWidget::updateItemClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    mAddDialog->fill(item->data());
+    mAddDialog->reset();
     mAddDialog->setAsUpdate();
+    mAddDialog->openBarcode(item->data("barcode").toString());
     mAddDialog->show();
 }
 
 void ItemWidget::deleteItemClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
-    int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete item?"));
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("This will also delete the stock card. Are you sure to delete item?"));
     if(ret != QMessageBox::Yes) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::DEL);
@@ -201,6 +208,16 @@ void ItemWidget::mainTableKeyPressed(QObject */*sender*/, QKeyEvent *event)
     }
 }
 
+void ItemWidget::openStockCard()
+{
+    const QModelIndex &index = mMainTable->getTableView()->currentIndex();
+    if(index.isValid()) {
+        auto item = static_cast<TableItem*>(index.internalPointer());
+        StockCardDialog dialog(item->data("barcode").toString(), mMessageBus);
+        dialog.exec();
+    }
+}
+
 void ItemWidget::printPrice(TableItem *item)
 {
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
@@ -216,7 +233,7 @@ void ItemWidget::printPrice(TableItem *item)
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
     escp->cpi10()->line(QChar('='))->newLine()->
             centerText(item->data("name").toString())->newLine()->
-            centerText(Preference::toString(item->data("sell_price").toDouble()))->newLine()->
+            centerText(Preference::formatMoney(item->data("sell_price").toDouble()))->newLine()->
             line(QChar('='))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, 2));
     LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
     delete escp;

@@ -122,11 +122,11 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             double expense = msg->data("expense").toDouble();
             double net = msg->data("margin").toDouble() + msg->data("transonly").toDouble();
-            mTileIncome->setValue(Preference::toString(msg->data("income").toDouble()));
-            mTileExpense->setValue(Preference::toString(expense));
-            mTileDifference->setValue(Preference::toString(msg->data("total").toDouble()));
-            mTileNet->setValue(Preference::toString(net));
-            mTileProfit->setValue(Preference::toString(net + expense));
+            mTileIncome->setValue(Preference::formatMoney(msg->data("income").toDouble()));
+            mTileExpense->setValue(Preference::formatMoney(expense));
+            mTileDifference->setValue(Preference::formatMoney(msg->data("total").toDouble()));
+            mTileNet->setValue(Preference::formatMoney(net));
+            mTileProfit->setValue(Preference::formatMoney(net + expense));
         }
     } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
         FlashMessageManager::showMessage(tr("Suplier deleted successfully"));

@@ -107,7 +107,7 @@ void PurchaseReturnWidget::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
     } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::SUMMARY) && msg->isSuccess()) {
-        mTotalCredit->setValue(Preference::toString(msg->data("total").toDouble()));
+        mTotalCredit->setValue(Preference::formatMoney(msg->data("total").toDouble()));
     }
 }
 

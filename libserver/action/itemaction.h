@@ -30,6 +30,7 @@ public:
     ItemAction();
     LibG::Message insert(LibG::Message *msg) override;
     LibG::Message update(LibG::Message *msg) override;
+    LibG::Message del(LibG::Message *msg) override;
     LibG::Message prices(LibG::Message *msg);
     LibG::Message exportData(LibG::Message *msg);
     LibG::Message importData(LibG::Message *msg);
@@ -37,6 +38,9 @@ public:
 protected:
     void selectAndJoin() override;
     QMap<QString, QString> fieldMap() const override;
+
+private:
+    QStringList mBarcodeChecked;
 };
 
 }

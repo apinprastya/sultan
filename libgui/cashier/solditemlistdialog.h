@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QDialog>
+#include <QVariantMap>
 
 namespace Ui {
 class SoldItemListDialog;
@@ -36,6 +37,8 @@ class SoldItemListDialog : public QDialog, public LibG::MessageHandler
 public:
     SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = 0);
     ~SoldItemListDialog();
+    inline bool isOk() { return mIsOk; }
+    inline QVariantMap getData() { return mData; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -43,6 +46,8 @@ protected:
 private:
     Ui::SoldItemListDialog *ui;
     int mId;
+    QVariantMap mData;
+    bool mIsOk = false;
 
 private slots:
     void focusAndSelectTable();

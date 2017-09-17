@@ -62,11 +62,20 @@ TransactionListDialog::TransactionListDialog(LibG::MessageBus *bus, QWidget *par
     key->addConsumeKey(Qt::Key_Return);
     ui->tableWidget->getTableView()->installEventFilter(key);
     connect(key, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(showItems()));
+    connect(ui->tableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(showItems()));
 }
 
 TransactionListDialog::~TransactionListDialog()
 {
     delete ui;
+}
+
+void TransactionListDialog::setType(int type)
+{
+    if(type == SoldReturn) {
+        ui->groupBox->hide();
+    }
+    mType = type;
 }
 
 void TransactionListDialog::messageReceived(LibG::Message *msg)
@@ -106,4 +115,13 @@ void TransactionListDialog::showItems()
     auto item = static_cast<TableItem*>(index.internalPointer());
     SoldItemListDialog dialog(item->data(), mMessageBus, this);
     dialog.exec();
+    if(mType == SoldReturn && dialog.isOk()) {
+        mIsOk = true;
+        mData = dialog.getData();
+        mData["sold_id"] = item->data("id");
+        mData["sold_created_at"] = item->data("created_at");
+        mData["sold_number"] = item->data("number");
+        mIsOk = true;
+        close();
+    }
 }

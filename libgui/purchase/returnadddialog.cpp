@@ -126,7 +126,7 @@ void ReturnAddDialog::fillField()
 {
     ui->linePurchaseItem->setText(mItem.barcode);
     ui->labelName->setText(mItem.name);
-    ui->labelPrice->setText(Preference::toString(mItem.price - mItem.discount));
+    ui->labelPrice->setText(Preference::formatMoney(mItem.price - mItem.discount));
     ui->doubleCount->setFocus(Qt::TabFocusReason);
     ui->doubleCount->selectAll();
     calculateTotal();
@@ -173,5 +173,5 @@ void ReturnAddDialog::saveClicked()
 
 void ReturnAddDialog::calculateTotal()
 {
-    ui->labelTotal->setText(Preference::toString((mItem.price - mItem.discount) * ui->doubleCount->value()));
+    ui->labelTotal->setText(Preference::formatMoney((mItem.price - mItem.discount) * ui->doubleCount->value()));
 }

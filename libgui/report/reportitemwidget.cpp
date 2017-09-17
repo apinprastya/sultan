@@ -45,8 +45,8 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setMessageBus(bus);
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
-    model->addColumnMoney("stock", tr("Stock"));
-    model->addColumnMoney("count", tr("Sold"));
+    model->addColumn("stock", tr("Stock"), Qt::AlignRight);
+    model->addColumn("count", tr("Sold"), Qt::AlignRight);
     model->addColumn("unit", tr("Unit"));
     model->addColumn("category", tr("Category"));
     model->addColumn("suplier", tr("Suplier"));

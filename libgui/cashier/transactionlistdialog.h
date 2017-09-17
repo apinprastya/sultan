@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QDialog>
+#include <QVariantMap>
 #include <functional>
 
 namespace Ui {
@@ -35,16 +36,23 @@ class TransactionListDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
+    enum DialogType { Cashier, SoldReturn };
     TransactionListDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~TransactionListDialog();
+    void setType(int type);
     inline void setPrintFunction(std::function<void(QVariantMap)> func) { mPrintFunction = func; }
+    inline bool isOk() { return mIsOk; }
+    inline QVariantMap getData() { return mData; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;
 
 private:
     Ui::TransactionListDialog *ui;
+    int mType = Cashier;
+    bool mIsOk = false;
     std::function<void(QVariantMap)> mPrintFunction;
+    QVariantMap mData;
 
 private slots:
     void focusAndSelectTable();

@@ -28,12 +28,13 @@ class PurchaseAction: public ServerAction
 {
 public:
     PurchaseAction();
-    LibG::Message del(LibG::Message *msg) override;
     LibG::Message summary(LibG::Message *msg);
 
 protected:
+    bool beforeInsert(const QVariantMap &data, LibG::Message *retMsg) override;
     void afterInsert(const QVariantMap &data) override;
     void afterUpdate(const QVariantMap &oldData, const QVariantMap &data) override;
+    bool beforeDelete(const QVariantMap &oldData, LibG::Message *retMsg) override;
     void selectAndJoin() override;
     QMap<QString, QString> fieldMap() const override;
     void insertTransaction(const QVariantMap &data);

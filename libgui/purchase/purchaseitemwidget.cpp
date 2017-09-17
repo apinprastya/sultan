@@ -105,9 +105,9 @@ void PurchaseItemWidget::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
     } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::SUMMARY)) {
-        mTileTotal->setValue(Preference::toString(msg->data("total").toDouble()));
-        mTileDiscount->setValue(Preference::toString(msg->data("discount").toDouble()));
-        mTileFinal->setValue(Preference::toString(msg->data("final").toDouble()));
+        mTileTotal->setValue(Preference::formatMoney(msg->data("total").toDouble()));
+        mTileDiscount->setValue(Preference::formatMoney(msg->data("discount").toDouble()));
+        mTileFinal->setValue(Preference::formatMoney(msg->data("final").toDouble()));
     }
 }
 

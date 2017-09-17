@@ -40,7 +40,7 @@ AddPoinDialog::AddPoinDialog(LibG::MessageBus *bus, int id, const QString &numbe
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelNumber->setText(number);
-    ui->labelReward->setText(Preference::toString(poin));
+    ui->labelReward->setText(Preference::formatMoney(poin));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     ui->comboType->addItem(tr("-- Select type --"), -1);
     ui->comboType->addItem(tr("Exchange Reward"), POIN_TYPE::EXCHANGE);

@@ -55,7 +55,7 @@ void MoneyLineEdit::textHasChanged(const QString &value)
     if(!str.endsWith(",")) {
         str = str.replace(locale.groupSeparator(), "");
         if(str.isEmpty()) setText(str);
-        else setText(LibG::Preference::toString(locale.toDouble(str)));
+        else setText(LibG::Preference::formatMoney(locale.toDouble(str)));
     }
     blockSignals(false);
 }

@@ -47,7 +47,7 @@ void EditPriceCountDialog::messageReceived(LibG::Message *msg)
         const QVariantList &list = msg->data("prices").toList();
         if(!list.isEmpty()) {
             const QVariantMap &d = list.first().toMap();
-            ui->labelMasterPrice->setText(tr("Master price : %1").arg(Preference::toString(d["price"].toDouble())));
+            ui->labelMasterPrice->setText(tr("Master price : %1").arg(Preference::formatMoney(d["price"].toDouble())));
             ui->labelMasterDiscount->setText(tr("Master discount : %1").arg(d["discount_formula"].toString()));
         }
     }
@@ -56,8 +56,8 @@ void EditPriceCountDialog::messageReceived(LibG::Message *msg)
 void EditPriceCountDialog::updatePrice()
 {
     auto disc = Util::calculateDiscount(ui->lineDiscount->text(), ui->doublePrice->value());
-    ui->labelDiscount->setText(Preference::toString(disc));
-    ui->labelFinal->setText(Preference::toString(ui->doublePrice->value() - disc));
+    ui->labelDiscount->setText(Preference::formatMoney(disc));
+    ui->labelFinal->setText(Preference::formatMoney(ui->doublePrice->value() - disc));
 }
 
 void EditPriceCountDialog::saveClicked()

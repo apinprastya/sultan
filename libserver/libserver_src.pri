@@ -23,7 +23,11 @@ SOURCES += \
     $$PWD/action/purchasereturnaction.cpp \
     $$PWD/action/databaseaction.cpp \
     $$PWD/action/checkstockaction.cpp \
-    $$PWD/action/unitaction.cpp
+    $$PWD/action/unitaction.cpp \
+    $$PWD/action/stockcardaction.cpp \
+    $$PWD/action/itemlinkaction.cpp \
+    $$PWD/util/itemutil.cpp \
+    $$PWD/action/soldreturnaction.cpp
 
 HEADERS += \ 
     $$PWD/server_global.h \
@@ -50,4 +54,9 @@ HEADERS += \
     $$PWD/action/purchasereturnaction.h \
     $$PWD/action/databaseaction.h \
     $$PWD/action/checkstockaction.h \
-    $$PWD/action/unitaction.h
+    $$PWD/action/unitaction.h \
+    $$PWD/action/stockcardaction.h \
+    $$PWD/action/itemlinkaction.h \
+    $$PWD/util/itemutil.h \
+    $$PWD/action/soldreturnaction.h
+

@@ -81,9 +81,9 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         }
         case 3: return QLocale().toString(item->count);
         case 4: return item->unit;
-        case 5: return Preference::toString(item->price);
-        case 6: return Preference::toString(item->discount);
-        case 7: return Preference::toString(item->final);
+        case 5: return Preference::formatMoney(item->price);
+        case 6: return Preference::formatMoney(item->discount);
+        case 7: return Preference::formatMoney(item->final);
         }
     } else if(role == Qt::TextAlignmentRole) {
         switch (index.column()) {
@@ -302,7 +302,7 @@ QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, 
             const QString &discformula = p["discount_formula"].toString();
             auto item = new CashierItem(name, barcode, 0, price, 0, discformula, 0, 0, unit);
             item->itemFlag = itemFlag;
-            if(c <= count) {
+            if(c <= count || i == 0) {
                 if(i == 0) {
                     item->total += count * price;
                     item->count = count;

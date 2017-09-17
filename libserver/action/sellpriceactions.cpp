@@ -28,7 +28,7 @@ using namespace LibDB;
 SellPriceActions::SellPriceActions():
     ServerAction("sellprices", "id")
 {
-    mFlag = HAS_UPDATE_FIELD;
+    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION;
 }
 
 LibG::Message SellPriceActions::insert(LibG::Message *msg)

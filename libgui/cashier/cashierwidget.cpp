@@ -151,7 +151,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
                 break;
             }
         }
-        ui->labelPrice->setText(Preference::toString(price));
+        ui->labelPrice->setText(Preference::formatMoney(price));
         mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt());
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
@@ -299,12 +299,12 @@ void CashierWidget::barcodeEntered()
         if(barcode.isEmpty()) return;
         LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
         msg.addData("barcode", barcode);
-        msg.addFilter("flag", COMPARE::FLAG, ITEM_FLAG::SELLABLE);
+        msg.addFilter("flag", COMPARE::FLAG_ENABLE, ITEM_FLAG::SELLABLE);
         sendMessage(&msg);
     } else {
         LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
         msg.addData("barcode", barcode);
-        msg.addFilter("flag", COMPARE::FLAG, ITEM_FLAG::SELLABLE);
+        msg.addFilter("flag", COMPARE::FLAG_ENABLE, ITEM_FLAG::SELLABLE);
         sendMessage(&msg);
     }
 }
@@ -313,12 +313,12 @@ void CashierWidget::totalChanged(double value)
 {
     bool isTax = Preference::getBool(SETTING::USE_TAX);
     if(!isTax) {
-        ui->labelTotal->setText(Preference::toString(value));
+        ui->labelTotal->setText(Preference::formatMoney(value));
     } else {
         double tax = Util::calculateDiscount(Preference::getString(SETTING::TAX_VALUE), value);
-        ui->labelSubTotal->setText(Preference::toString(value));
-        ui->labelTax->setText(Preference::toString(tax));
-        ui->labelTotal->setText(Preference::toString(value + tax));
+        ui->labelSubTotal->setText(Preference::formatMoney(value));
+        ui->labelTax->setText(Preference::formatMoney(tax));
+        ui->labelTotal->setText(Preference::formatMoney(value + tax));
     }
 }
 
@@ -444,32 +444,32 @@ void CashierWidget::printBill(const QVariantMap &data)
         QVariantMap m = v.toMap();
         escp->leftText(m["name"].toString())->newLine();
         QString s = QString("%1 x %2").
-                arg(Preference::toString(m["count"].toFloat())).
-                 arg(Preference::toString(m["price"].toDouble()));
+                arg(Preference::formatMoney(m["count"].toFloat())).
+                 arg(Preference::formatMoney(m["price"].toDouble()));
         if(m["discount"].toDouble() != 0) {
-            s = s % " (" % Preference::toString(-m["discount"].toDouble()) % ")";
+            s = s % " (" % Preference::formatMoney(-m["discount"].toDouble()) % ")";
         }
         escp->column(QList<int>{70, 30})->leftText(s);
-        escp->rightText(Preference::toString(m["final"].toDouble()))->column(QList<int>())->newLine();
+        escp->rightText(Preference::formatMoney(m["final"].toDouble()))->column(QList<int>())->newLine();
     }
     escp->line();
     escp->column(QList<int>{50, 50});
     if(isTax) {
-        escp->leftText(tr("Sub-total"))->rightText(Preference::toString(data["subtotal"].toDouble()))->newLine()->
-                leftText(tr("Tax"))->rightText(Preference::toString(data["tax"].toDouble()))->newLine();
+        escp->leftText(tr("Sub-total"))->rightText(Preference::formatMoney(data["subtotal"].toDouble()))->newLine()->
+                leftText(tr("Tax"))->rightText(Preference::formatMoney(data["tax"].toDouble()))->newLine();
         if(paymentType == PAYMENT::NON_CASH)
-            escp->leftText(tr("Card Charge"))->rightText(Preference::toString(data["additional_charge"].toDouble()))->newLine();
-        escp->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine();
+            escp->leftText(tr("Card Charge"))->rightText(Preference::formatMoney(data["additional_charge"].toDouble()))->newLine();
+        escp->leftText(tr("Total"))->rightText(Preference::formatMoney(data["total"].toDouble()))->newLine();
     } else {
         if(paymentType == PAYMENT::NON_CASH) {
-            escp->leftText(tr("Sub-total"))->rightText(Preference::toString(data["subtotal"].toDouble()))->newLine()->
-                leftText(tr("Card Charge"))->rightText(Preference::toString(data["additional_charge"].toDouble()))->newLine();
+            escp->leftText(tr("Sub-total"))->rightText(Preference::formatMoney(data["subtotal"].toDouble()))->newLine()->
+                leftText(tr("Card Charge"))->rightText(Preference::formatMoney(data["additional_charge"].toDouble()))->newLine();
         }
-        escp->leftText(tr("Total"))->rightText(Preference::toString(data["total"].toDouble()))->newLine();
+        escp->leftText(tr("Total"))->rightText(Preference::formatMoney(data["total"].toDouble()))->newLine();
     }
     if(paymentType == PAYMENT::CASH) {
-        escp->leftText(tr("Payment"))->rightText(Preference::toString(data["payment"].toDouble()))->newLine()->
-            leftText(tr("Change"))->rightText(Preference::toString(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
+        escp->leftText(tr("Payment"))->rightText(Preference::formatMoney(data["payment"].toDouble()))->newLine()->
+            leftText(tr("Change"))->rightText(Preference::formatMoney(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
     } else {
         escp->leftText(tr("Card Number"))->rightText(data["card_number"].toString())->newLine();
     }
@@ -480,7 +480,7 @@ void CashierWidget::printBill(const QVariantMap &data)
         escp->leftText(tr("Reward Poin"))->rightText(QString::number(cust["reward"].toInt()))->newLine();
         double credit = cust["credit"].toDouble();
         if(credit > 0) {
-            escp->leftText(tr("Credit"))->rightText(Preference::toString(cust["credit"].toDouble()))->newLine();
+            escp->leftText(tr("Credit"))->rightText(Preference::formatMoney(cust["credit"].toDouble()))->newLine();
         }
     }
     escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));

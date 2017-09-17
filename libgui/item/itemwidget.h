@@ -61,6 +61,7 @@ private slots:
     void importClicked();
     void exportClicked();
     void mainTableKeyPressed(QObject *, QKeyEvent *event);
+    void openStockCard();
 
 private:
     void printPrice(TableItem *item);

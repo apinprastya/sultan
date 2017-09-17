@@ -53,7 +53,7 @@ AddCreditPaymentDialog::~AddCreditPaymentDialog()
 void AddCreditPaymentDialog::fill(int id, double total)
 {
     mId = id;
-    ui->labelTotal->setText(Preference::toString(total));
+    ui->labelTotal->setText(Preference::formatMoney(total));
     ui->linePayment->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
 }

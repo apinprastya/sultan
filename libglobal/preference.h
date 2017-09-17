@@ -40,9 +40,9 @@ public:
     static void sync();
 
     static void applyApplicationSetting();
-    static QString toString(double val);
-    static QString toString(int val);
-    static QString toString(float val);
+    static QString formatMoney(double val);
+    static QString formatMoney(int val);
+    static QString formatMoney(float val);
 
 private:
     static Preference *instance();

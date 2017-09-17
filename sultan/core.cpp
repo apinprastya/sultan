@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <QStringBuilder>
 #include <QDate>
+#include <functional>
 #include <QDebug>
 
 using namespace LibG;
@@ -91,6 +92,12 @@ void Core::setup()
     });
 }
 
+bool Core::migrationCallback(const QString &str)
+{
+    Q_UNUSED(str)
+    return true;
+}
+
 void Core::init()
 {
     qDebug() << TAG << "Initialize application";
@@ -118,10 +125,11 @@ void Core::init()
             qApp->processEvents();
             const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
                         "migration_mysql" : "migration_sqlite";
+            auto func = std::bind(&Core::migrationCallback, this, std::placeholders::_1);
 #ifdef Q_OS_MAC
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE))) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE), func)) {
 #else
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE), func)) {
 #endif
                 qCritical() << TAG << "Error migration";
                 mMainWindow->splashShowMessage("Migrate database failed");
@@ -136,7 +144,7 @@ void Core::init()
             qApp->processEvents();
             mSocketManager = new SocketManager(this);
             if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
-                mMainWindow->showRestartError(tr("Server Socket Error"), tr("Port already in used"));
+                mMainWindow->showRestartError(tr("Server Socket Error"), tr("Port already in used.\nPossible another Sultan already openned"));
                 return;
             }
             connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));

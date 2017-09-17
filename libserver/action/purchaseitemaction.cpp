@@ -21,6 +21,7 @@
 #include "db.h"
 #include "global_constant.h"
 #include "util.h"
+#include "util/itemutil.h"
 #include <QStringBuilder>
 #include <QDateTime>
 #include <QDebug>
@@ -32,7 +33,7 @@ using namespace LibG;
 PurchaseItemAction::PurchaseItemAction():
     ServerAction(QStringLiteral("purchaseitems"), QStringLiteral("id"))
 {
-    mFlag = HAS_UPDATE_FIELD;
+    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseItemAction::summary, this, std::placeholders::_1));
 }
 
@@ -56,17 +57,20 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         message.setError(mDb->lastError().text());
     } else {
         //update the current stock
+        int id = mDb->lastInsertedId().toInt();
+        DbResult res = mDb->where("id = ", id)->get(mTableName);
+        message.setData(res.first());
         float stock = msg->data("count").toFloat();
         const QString &barcode = msg->data("barcode").toString();
-        mDb->exec(QString("UPDATE items SET stock = stock + %1, buy_price = %2 WHERE barcode = %3").
-                  arg(QString::number(stock)).arg(QString::number(buyPrice)).arg(barcode));
+        mDb->exec(QString("UPDATE items SET buy_price = %1 WHERE barcode = %2").arg(QString::number(buyPrice)).arg(barcode));
         if(editSellPrice) {
             mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = %4 AND count = %5").
                       arg(sellPrice).arg(discount).arg(final).arg(barcode).arg(count));
         }
         updatePurchaseTotal(msg->data("purchase_id").toInt());
-        DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
-        message.setData(res.first());
+        DbResult purResult = mDb->where("id = ", msg->data("purchase_id").toInt())->get("purchases");
+        ItemUtil util(mDb);
+        util.insertStock(barcode, purResult.first()["number"].toString(), STOCK_CARD_TYPE::PURCHASE, stock, 0, id);
     }
     return message;
 }
@@ -91,14 +95,15 @@ LibG::Message PurchaseItemAction::update(LibG::Message *msg)
         const QVariantMap n = msg->data("data").toMap();
         const QVariantMap old = res.first();
         const int pid = old["purchase_id"].toInt();
-        float diff = n["count"].toFloat() - old["count"].toFloat();
-        mDb->exec(QString("UPDATE items SET stock = stock + %1, buy_price = %2 WHERE barcode = %3").
-                  arg(QString::number(diff)).arg(buyPrice).arg(old["barcode"].toString()));
+        mDb->exec(QString("UPDATE items SET buy_price = %2 WHERE barcode = %3").
+                  arg(buyPrice).arg(old["barcode"].toString()));
         if(editSellPrice) {
             mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = %4 AND count = %5").
                       arg(sellPrice).arg(discount).arg(final).arg(old["barcode"].toString()).arg(count));
         }
         updatePurchaseTotal(pid);
+        ItemUtil util(mDb);
+        util.updateStockCardCount(res.first()["barcode"].toString(), n["count"].toFloat(), STOCK_CARD_TYPE::PURCHASE, msg->data("id").toInt(), true);
         res = mDb->where("id = ", msg->data("id"))->get(mTableName);
         message.setData(res.first());
     }
@@ -114,8 +119,8 @@ LibG::Message PurchaseItemAction::del(LibG::Message *msg)
         message.setError(mDb->lastError().text());
     }
     const QVariantMap old = res.first();
-    mDb->exec(QString("UPDATE items SET stock = stock + %1 WHERE barcode = %2").
-              arg(QString::number(-old["count"].toFloat())).arg(old["barcode"].toString()));
+    ItemUtil util(mDb);
+    util.updateStockCardCount(old["barcode"].toString(), 0, STOCK_CARD_TYPE::PURCHASE, msg->data("id").toInt(), true);
     updatePurchaseTotal(old["puchase_id"].toInt());
     return message;
 }

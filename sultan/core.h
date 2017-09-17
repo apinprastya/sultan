@@ -55,6 +55,9 @@ private:
     LibG::AbstractSultanGUI *mMainWindow;
     SocketClient *mSettingSocketClient = nullptr;
 
+protected:
+    bool migrationCallback(const QString &str);
+
 private slots:
     void init();
     void connectToServer();

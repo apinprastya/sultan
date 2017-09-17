@@ -108,6 +108,7 @@ void PurchaseAddDialog::messageReceived(LibG::Message *msg)
             }
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+            ui->pushSave->setEnabled(true);
         }
     } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
         if(msg->isSuccess()) {
@@ -192,7 +193,7 @@ void PurchaseAddDialog::typeChanged()
 void PurchaseAddDialog::calculateTotal()
 {
     double disc = Util::calculateDiscount(ui->lineDiscountFormula->text(), mTotal);
-    ui->labelTotal->setText(Preference::toString(mTotal));
-    ui->labelDiscount->setText(Preference::toString(disc));
-    ui->labelFinal->setText(Preference::toString(mTotal - disc));
+    ui->labelTotal->setText(Preference::formatMoney(mTotal));
+    ui->labelDiscount->setText(Preference::formatMoney(disc));
+    ui->labelFinal->setText(Preference::formatMoney(mTotal - disc));
 }

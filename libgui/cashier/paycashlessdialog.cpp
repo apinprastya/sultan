@@ -52,7 +52,7 @@ void PayCashlessDialog::showDialog(const double &total)
     mTotal = total;
     mAdditionalCharge.clear();
     ui->comboBank->clear();
-    ui->labelSubtotal->setText(Preference::toString(total));
+    ui->labelSubtotal->setText(Preference::formatMoney(total));
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
     sendMessage(&msg);
     ui->pushSave->setEnabled(true);
@@ -94,8 +94,8 @@ void PayCashlessDialog::calculateTotal()
                 std::get<0>(mAdditionalCharge[ui->comboBank->currentData().toInt()]):
                 std::get<1>(mAdditionalCharge[ui->comboBank->currentData().toInt()]);
     mAdditonal = Util::calculateDiscount(formula, mTotal);
-    ui->labelAdditional->setText(Preference::toString(mAdditonal));
-    ui->labelTotal->setText(Preference::toString(mTotal + mAdditonal));
+    ui->labelAdditional->setText(Preference::formatMoney(mAdditonal));
+    ui->labelTotal->setText(Preference::formatMoney(mTotal + mAdditonal));
 }
 
 void PayCashlessDialog::payClicked()

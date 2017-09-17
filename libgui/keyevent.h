@@ -35,7 +35,7 @@ public:
     void discardKey(Qt::Key key);
     void addConsumeKey(Qt::Key key);
     inline void setFocusEvent(bool value) { mFocusEvent = value; }
-    inline void setClickEvent(bool value) { mClickEvent = true; }
+    inline void setClickEvent(bool value) { mClickEvent = value; }
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);

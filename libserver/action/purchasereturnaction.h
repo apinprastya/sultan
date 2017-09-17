@@ -35,6 +35,7 @@ protected:
     QMap<QString, QString> fieldMap() const override;
     void afterInsert(const QVariantMap &data) override;
     void afterUpdate(const QVariantMap &oldData, const QVariantMap &newData) override;
+    void afterDelete(const QVariantMap &oldData) override;
 };
 
 }

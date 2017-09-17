@@ -50,7 +50,7 @@ PurchasePaymentDialog::~PurchasePaymentDialog()
 void PurchasePaymentDialog::fill(const QVariantMap &data)
 {
     ui->labelSuplier->setText(data["suplier"].toString());
-    ui->labelTotal->setText(Preference::toString(data["final"].toDouble()));
+    ui->labelTotal->setText(Preference::formatMoney(data["final"].toDouble()));
     mId = data["id"].toInt();
     mBankId = data["bank_id"].toInt();
     QDate date = data["payment_date"].toDate();

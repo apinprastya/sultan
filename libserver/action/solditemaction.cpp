@@ -31,6 +31,7 @@ using namespace LibDB;
 SoldItemAction::SoldItemAction():
     ServerAction("solditems", "id")
 {
+    mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::SOLD_SUMMARY, std::bind(&SoldItemAction::getSummary, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SOLD_ITEM_REPORT, std::bind(&SoldItemAction::report, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&SoldItemAction::exportData, this, std::placeholders::_1));

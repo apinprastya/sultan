@@ -251,9 +251,9 @@ void PurchaseAddItemDialog::calculateDiscount()
 {
     mDiscount = Util::calculateDiscount(ui->lineDiscountFormula->text(), ui->doublePrice->value());
     mTotal = ui->doublePrice->value() * ui->doubleCount->value();
-    ui->labelDiscount->setText(Preference::toString(mDiscount));
-    ui->labelPriceDisc->setText(Preference::toString(ui->doublePrice->value() - mDiscount));
-    ui->labelTotal->setText(Preference::toString(mTotal - (mDiscount * ui->doubleCount->value())));
+    ui->labelDiscount->setText(Preference::formatMoney(mDiscount));
+    ui->labelPriceDisc->setText(Preference::formatMoney(ui->doublePrice->value() - mDiscount));
+    ui->labelTotal->setText(Preference::formatMoney(mTotal - (mDiscount * ui->doubleCount->value())));
     calculateBuyPriceSuggestion();
 }
 
@@ -294,9 +294,9 @@ void PurchaseAddItemDialog::calculateMargin()
     double p = 100;
     if(ui->doubleBuyPrice->value() != 0)
         p = diff * 100 / ui->doubleBuyPrice->value();
-    ui->labelSellDiscount->setText(Preference::toString(mSellDiscount));
-    ui->labelSellFinal->setText(Preference::toString(mSellFinal));
-    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::toString(diff)).arg(QString::number(p, 'f', 2)));
+    ui->labelSellDiscount->setText(Preference::formatMoney(mSellDiscount));
+    ui->labelSellFinal->setText(Preference::formatMoney(mSellFinal));
+    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::formatMoney(diff)).arg(QString::number(p, 'f', 2)));
 }
 
 void PurchaseAddItemDialog::openSearchItem()

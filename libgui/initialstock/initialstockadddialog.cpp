@@ -200,5 +200,5 @@ void InitialStockAddDialog::calculateMargin()
     auto buy = ui->doubleBuyPrice->value();
     auto sell = ui->doubleSellPrice->value();
     double c = buy == 0 ? 0 : (sell-buy) * 100 / buy;
-    ui->labelMargin->setText(QString("Margin : %1 (%2 %)").arg(Preference::toString(sell - buy)).arg(QString::number(c, 'f', 2)));
+    ui->labelMargin->setText(QString("Margin : %1 (%2 %)").arg(Preference::formatMoney(sell - buy)).arg(QString::number(c, 'f', 2)));
 }

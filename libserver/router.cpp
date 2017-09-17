@@ -42,6 +42,9 @@
 #include "action/databaseaction.h"
 #include "action/checkstockaction.h"
 #include "action/unitaction.h"
+#include "action/stockcardaction.h"
+#include "action/itemlinkaction.h"
+#include "action/soldreturnaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -115,6 +118,12 @@ ServerAction *Router::getServerAction(int type)
         return new CheckStockAction();
     case MSG_TYPE::UNIT:
         return new UnitAction();
+    case MSG_TYPE::STOCKCARD:
+        return new StockCardAction();
+    case MSG_TYPE::ITEMLINK:
+        return new ItemLinkAction();
+    case MSG_TYPE::SOLDRETURN:
+        return new SoldReturnAction();
     }
     return nullptr;
 }

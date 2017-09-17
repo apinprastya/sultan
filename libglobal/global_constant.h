@@ -93,6 +93,9 @@ namespace MSG_TYPE {
     const int DATABASE          = 19;
     const int CHECKSTOCK        = 20;
     const int UNIT              = 21;
+    const int STOCKCARD         = 22;
+    const int ITEMLINK          = 23;
+    const int SOLDRETURN        = 24;
 }
 
 namespace MSG_COMMAND {
@@ -167,6 +170,7 @@ namespace TRANSACTION_LINK_TYPE {
     const int PURCHASE          = 2;
     const int CUSTOMER_CREDIT   = 16;
     const int BUY_RETURN        = 17;
+    const int SOLD_RETURN       = 18;
 }
 
 namespace MONEY_TYPE {
@@ -206,6 +210,23 @@ namespace ITEM_FLAG {
     const int SELLABLE          = 0x40;
     const int PROCESS_FIRST     = 0x80;
     const int PACKAGE           = 0x100;
+    const int SERVICE           = 0x200;
+    //additional flags start from 1 << 16
+    const int ITEM_LINK         = (1 << 16);
+}
+
+namespace STOCK_CARD_TYPE {
+    const int INITIAL_STOCK     = 0;
+    const int PURCHASE          = 1;
+    const int SOLD              = 2;
+    const int CHECKSTOCK        = 3;
+    const int PURCHASE_RETURN   = 4;
+    const int SOLD_RETURN       = 5;
+}
+
+namespace ITEM_LINK_TYPE {
+    const int BOX           = 0;
+    const int INGRIDIENT    = 1;
 }
 
 }

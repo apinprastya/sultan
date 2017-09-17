@@ -34,6 +34,7 @@ using namespace LibDB;
 TransactionAction::TransactionAction():
     ServerAction("transactions", "id")
 {
+    mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_TRANSACTION, std::bind(&TransactionAction::summaryTransaction, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_MONEY, std::bind(&TransactionAction::summaryMoney, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&TransactionAction::exportData, this, std::placeholders::_1));
@@ -54,8 +55,9 @@ LibG::Message TransactionAction::summaryTransaction(LibG::Message *msg)
             where("link_type = ", TRANSACTION_LINK_TYPE::TRANSACTION)->exec();
     message.addData("transonly", res.first()["transonly"]);
     //Margin
-    res = mDb->reset()->select("sum(final - buy_price) as margin")->where("created_at >=", msg->getFilter("0$date"))->
-            where("created_at <=", msg->getFilter("1$date"))->get("solditems");
+    msg->keepFilter(QStringList() << "0$DATE(date)" << "1$DATE(date)");
+    mDb = QueryHelper::filter(mDb->reset(), msg->data(), QMap<QString, QString> {{"DATE(date)", "DATE(created_at)"}});
+    res = mDb->select("sum(final - buy_price) as margin")->get("solditems");
     message.addData("margin", res.first()["margin"]);
     return message;
 }
@@ -90,7 +92,7 @@ Message TransactionAction::exportData(Message *msg)
             arr.append(d["number"].toString() % ";");
             arr.append((d["type"].toInt() == TRANSACTION_TYPE::INCOME ? QObject::tr("Income") : QObject::tr("Expense")) % ";");
             arr.append(d["detail"].toString() % ";");
-            arr.append(Preference::toString(d["transaction_total"].toDouble()) % ";\n");
+            arr.append(Preference::formatMoney(d["transaction_total"].toDouble()) % ";\n");
         }
         start += limit;
     }

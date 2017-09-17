@@ -31,7 +31,7 @@ using namespace LibG;
 CusomerCreditAction::CusomerCreditAction():
     ServerAction("customercredits", "id")
 {
-    mFlag = AFTER_INSERT;
+    mFlag = AFTER_INSERT | USE_TRANSACTION;
 }
 
 void CusomerCreditAction::afterInsert(const QVariantMap &data)

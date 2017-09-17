@@ -107,7 +107,7 @@ void LibGUI::MoneyWidget::messageReceived(LibG::Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_MONEY)) {
         if(msg->isSuccess()) {
-            mTileTotal->setValue(Preference::toString(msg->data("total").toDouble()));
+            mTileTotal->setValue(Preference::formatMoney(msg->data("total").toDouble()));
         }
     } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
         if(msg->isSuccess()) {
