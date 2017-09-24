@@ -25,7 +25,7 @@ SearchCustomerDialog::SearchCustomerDialog(LibG::MessageBus *bus, QWidget *paren
     ui->table->installEventFilter(keyEvent);
     auto model = ui->table->getModel();
     model->setMessageBus(bus);
-    model->addColumn("id", tr("ID"));
+    model->addColumn("number", tr("ID"));
     model->addColumn("name", tr("Name"));
     model->addColumn("address", tr("Address"));
     model->addColumn("phone", tr("Phone"));
