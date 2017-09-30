@@ -236,7 +236,9 @@ void CashierWidget::loadFromSlot(int slot)
 
 void CashierWidget::removeSlot(int slot)
 {
-    QDir dir(qApp->applicationDirPath());
+    QDir dir = QDir::home();
+    dir.mkdir(".sultan");
+    dir.cd(".sultan");
     QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(slot)));
     if(file.exists()) file.remove();
     mSaveSlot = -1;
