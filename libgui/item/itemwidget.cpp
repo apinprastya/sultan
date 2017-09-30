@@ -127,8 +127,9 @@ void ItemWidget::messageReceived(LibG::Message *msg)
         FlashMessageManager::showMessage(tr("Item deleted successfully"));
         mMainTable->getModel()->refresh();
     } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT)) {
-        const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
         if(!fileName.isEmpty()) {
+            if(!fileName.endsWith(".csv")) fileName += ".csv";
             QFile file(fileName);
             if(file.open(QFile::WriteOnly)) {
                 file.write(msg->data("data").toString().toUtf8());

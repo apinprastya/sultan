@@ -134,8 +134,8 @@ Message ItemAction::del(Message *msg)
     if(!mDb->del(mTableName)) {
         message.setError(mDb->lastError().text());
     } else {
-        //remove stok card
         mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
+        mDb->where("barcode = ", msg->data("barcode"))->del("itemlinks");
     }
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
@@ -173,7 +173,7 @@ Message ItemAction::exportData(Message *msg)
 {
     LibG::Message message(msg);
     QString arr;
-    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;flag;\n");
+    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;\n");
     mDb->table(mTableName);
     mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
                 (select count from sellprices where barcode = items.barcode limit 1) as count1, \
@@ -194,6 +194,7 @@ Message ItemAction::exportData(Message *msg)
         if(res.isEmpty()) break;
         for(int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
+            int flag = d["flag"].toInt();
             arr.append(d["barcode"].toString() % ";");
             arr.append(d["name"].toString() % ";");
             arr.append(d["category"].toString() % ";");
@@ -209,9 +210,25 @@ Message ItemAction::exportData(Message *msg)
             arr.append(d["count3"].toString() % ";");
             arr.append(d["price3"].toString() % ";");
             arr.append(d["discform3"].toString() % ";");
-            arr.append(d["flag"].toString() % ";\n");
+            arr.append((flag & ITEM_FLAG::CALCULATE_STOCK) == 0 ? "0;" : "1;");
+            arr.append((flag & ITEM_FLAG::SELLABLE) == 0 ? "0;" : "1;");
+            arr.append((flag & ITEM_FLAG::PURCHASE) == 0 ? "0;" : "1;");
+            arr.append((flag & ITEM_FLAG::PACKAGE) == 0 ? "0;" : "1;");
+            arr.append((flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0;" : "1;");
+            arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;\n" : "1;\n");
         }
         start += limit;
+    }
+    //handle the link box here
+    arr.append("###LINK\n");
+    arr.append("barcode;type;barcode_link;count_link;\n");
+    DbResult linkres = mDb->reset()->get("itemlinks");
+    for(int i = 0; i < linkres.size(); i++) {
+        const QVariantMap &d = linkres.data(i);
+        arr.append(d["barcode"].toString() % ";");
+        arr.append(d["type"].toString() % ";");
+        arr.append(d["barcode_link"].toString() % ";");
+        arr.append(d["count_link"].toString() % ";\n");
     }
     message.addData("data", arr);
     return message;
@@ -222,51 +239,75 @@ Message ItemAction::importData(Message *msg)
     LibG::Message message(msg);
     const QString &d = msg->data("data").toString();
     const QVector<QStringRef> &vec = d.splitRef("\n", QString::SkipEmptyParts);
+    int state = 0; //0: item, 1: link
     bool headerOk = false;
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     for(int i = 0; i < vec.size(); i++) {
+        if(!vec[i].compare("###LINK")) {
+            headerOk = false;
+            state = 1;
+            continue;
+        }
         if(!headerOk) {
             headerOk = true;
             continue;
         }
-        const QVector<QStringRef> &row = vec[i].split(";", QString::SkipEmptyParts);
-        int cat = 0;
-        int sup = 0;
-        DbResult res = mDb->where("name = ", row[2].toString())->get("categories");
-        if(!res.isEmpty()) {
-            cat = res.first()["id"].toInt();
-        } else {
-            QVariantMap catData{{"name", row[2].toString()}, {"code", row[2].toString()}};
-            mDb->insert("categories", catData);
-            cat = mDb->lastInsertedId().toInt();
-        }
-        res = mDb->where("name = ", row[3].toString())->get("supliers");
-        if(!res.isEmpty()) {
-            sup = res.first()["id"].toInt();
-        } else {
-            QVariantMap supData{{"name", row[3].toString()}, {"code", row[3].toString()}};
-            mDb->insert("supliers", supData);
-            sup = mDb->lastInsertedId().toInt();
-        }
-        const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
-                              {"name", row[1].toString()}, {"stock", row[4].toFloat()},
-                              {"buy_price", row[5].toDouble()}, {"flag", row[15].toInt()}};
-        if(mDb->insert(mTableName, ins)) {
-            for(int i = 0; i < 3; i++) {
-                if(row.size() <= (8 + (3 * i))) continue;
-                if(row[6 + (3 * i)].isEmpty()) continue;
-                bool ok = false;
-                float count = row[6 + (3 * i)].toFloat(&ok);
-                if(!ok) continue;
-                ok = false;
-                double price = row[7 + (3 * i)].toDouble(&ok);
-                if(!ok) continue;
-                const QString &discForm = row[8 + (3 * i)].trimmed().toString();
-                double disc = Util::calculateDiscount(discForm, price);
-                QVariantMap sellprice{{"barcode", row[0].toString()}, {"count", count},
-                                 {"discount_formula", discForm}, {"discount", disc},
-                                 {"price", price}, {"final", price - disc}};
-                mDb->insert("sellprices", sellprice);
+        const QVector<QStringRef> &row = vec[i].split(";");
+        if(state == 0) {
+            int cat = 0;
+            int sup = 0;
+            int flag = 0;
+            if((row[15].toInt() != 0)) flag |= ITEM_FLAG::CALCULATE_STOCK;
+            if((row[16].toInt() != 0)) flag |= ITEM_FLAG::SELLABLE;
+            if((row[17].toInt() != 0)) flag |= ITEM_FLAG::PURCHASE;
+            if((row[18].toInt() != 0)) flag |= ITEM_FLAG::PACKAGE;
+            if((row[19].toInt() != 0)) flag |= ITEM_FLAG::MULTIPRICE;
+            if((row[20].toInt() != 0)) flag |= ITEM_FLAG::EDITABLE_PRICE;
+            DbResult res = mDb->where("name = ", row[2].toString())->get("categories");
+            if(!res.isEmpty()) {
+                cat = res.first()["id"].toInt();
+            } else {
+                QVariantMap catData{{"name", row[2].toString()}, {"code", row[2].toString()}};
+                mDb->insert("categories", catData);
+                cat = mDb->lastInsertedId().toInt();
+            }
+            res = mDb->where("name = ", row[3].toString())->get("supliers");
+            if(!res.isEmpty()) {
+                sup = res.first()["id"].toInt();
+            } else {
+                QVariantMap supData{{"name", row[3].toString()}, {"code", row[3].toString()}};
+                mDb->insert("supliers", supData);
+                sup = mDb->lastInsertedId().toInt();
+            }
+            const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
+                                  {"name", row[1].toString()}, {"stock", row[4].toFloat()},
+                                  {"buy_price", row[5].toDouble()}, {"flag", flag}};
+            if(mDb->insert(mTableName, ins)) {
+                for(int i = 0; i < 3; i++) {
+                    if(row.size() <= (8 + (3 * i))) continue;
+                    if(row[6 + (3 * i)].isEmpty()) continue;
+                    bool ok = false;
+                    float count = row[6 + (3 * i)].toFloat(&ok);
+                    if(!ok) continue;
+                    ok = false;
+                    double price = row[7 + (3 * i)].toDouble(&ok);
+                    if(!ok) continue;
+                    const QString &discForm = row[8 + (3 * i)].trimmed().toString();
+                    double disc = Util::calculateDiscount(discForm, price);
+                    QVariantMap sellprice{{"barcode", row[0].toString()}, {"count", count},
+                                     {"discount_formula", discForm}, {"discount", disc},
+                                     {"price", price}, {"final", price - disc}};
+                    mDb->insert("sellprices", sellprice);
+                }
+            }
+        } else if(state == 1) {
+            const QString &barcode = row[0].toString();
+            const QString &barcode_link = row[2].toString();
+            const QString &count_link = row[3].toString();
+            const int type = row[1].toString().toInt();
+            DbResult res = mDb->where("barcode =", barcode)->where("barcode_link =", barcode_link)->where("type =", type)->get("itemlinks");
+            if(res.isEmpty()) {
+                mDb->insert("itemlinks", QVariantMap{{"barcode", barcode}, {"barcode_link", barcode_link}, {"type", type}, {"count_link", count_link}});
             }
         }
     }
