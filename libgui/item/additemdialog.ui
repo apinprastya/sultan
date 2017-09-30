@@ -285,8 +285,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>409</width>
-              <height>273</height>
+              <width>442</width>
+              <height>327</height>
              </rect>
             </property>
             <attribute name="label">
@@ -405,8 +405,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>409</width>
-              <height>273</height>
+              <width>131</width>
+              <height>69</height>
              </rect>
             </property>
             <attribute name="label">
@@ -670,6 +670,16 @@
         <string>Save and add again</string>
        </property>
        <property name="default">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushSaveClose">
+       <property name="text">
+        <string>Save and close</string>
+       </property>
+       <property name="autoDefault">
         <bool>false</bool>
        </property>
       </widget>

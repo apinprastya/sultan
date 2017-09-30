@@ -64,6 +64,7 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->lineDiscountFormula, SIGNAL(textEdited(QString)), SLOT(calculateDiscount()));
     connect(ui->pushPackageItem, SIGNAL(clicked(bool)), SLOT(openSearchItem()));
     connect(ui->doublePackageQty, SIGNAL(valueChanged(double)), SLOT(updatePackagePrice()));
+    connect(ui->pushSaveClose, SIGNAL(clicked(bool)), SLOT(saveCloseClicked()));
     ui->checkStock->setChecked(true);
     ui->checkSell->setChecked(true);
     ui->checkPurchase->setChecked(true);
@@ -103,6 +104,7 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(ui->tablePrice->getTableView(), QList<int>() << 150 << 100);
     ui->tableItemLink->getTableView()->horizontalHeader()->setStretchLastSection(true);
     connect(ui->tableItemLink->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableItemLinkDoubleClicked()));
+    ui->pushSaveClose->hide();
 }
 
 AddItemDialog::~AddItemDialog()
@@ -130,6 +132,7 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->pushSave->setEnabled(true);
     ui->pushSaveAgain->setEnabled(true);
     ui->pushSaveAgain->show();
+    ui->pushSaveClose->hide();
     ui->labelError->hide();
     setWindowTitle(tr("Add New Item"));
     mIsOk = false;
@@ -192,6 +195,7 @@ void AddItemDialog::setAsUpdate()
     ui->pushSaveAgain->hide();
     setWindowTitle(tr("Update Item"));
     ui->pushSave->setEnabled(true);
+    ui->pushSaveClose->show();
     ui->doubleStock->setEnabled(false);
 }
 
@@ -233,7 +237,8 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
             mIsSuccess = true;
             emit success();
             if(!mIsAddAgain) {
-                hide();
+                if(mIsCloseAfter || !mIsUpdate) hide();
+                ui->pushSave->setEnabled(true);
             } else {
                 reset(true);
             }
@@ -301,12 +306,13 @@ void AddItemDialog::showEvent(QShowEvent *event)
     QDialog::showEvent(event);
 }
 
-void AddItemDialog::saveData()
+void AddItemDialog::saveData(bool close)
 {
     if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineBarcode << ui->lineName << ui->comboCategory << ui->comboSuplier)) {
         QMessageBox::critical(this, tr("Error"), tr("Please fill required field"));
         return;
     }
+    mIsCloseAfter = close;
     QVariantMap data;
     int flag = getItemFlagFromCheckbox();
     data["name"] = ui->lineName->text();
@@ -409,6 +415,13 @@ void AddItemDialog::saveAndAgainClicked()
     if(!mIsOk) return;
     mIsAddAgain = true;
     saveData();
+}
+
+void AddItemDialog::saveCloseClicked()
+{
+    if(!mIsOk) return;
+    mIsAddAgain = false;
+    saveData(true);
 }
 
 void AddItemDialog::checkWidget()

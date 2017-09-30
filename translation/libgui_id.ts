@@ -191,6 +191,11 @@
         <translation>Harga Jual</translation>
     </message>
     <message>
+        <location filename="../libgui/item/additemdialog.ui" line="680"/>
+        <source>Save and close</source>
+        <translation>Simpan &amp; tutup</translation>
+    </message>
+    <message>
         <location filename="../libgui/item/additemdialog.ui" line="69"/>
         <source>TextLabel</source>
         <translation></translation>
@@ -1292,139 +1297,139 @@
 <context>
     <name>LibGUI::AddItemDialog</name>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="134"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="137"/>
         <source>Add New Item</source>
         <translation>Tambah Item Baru</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="193"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="196"/>
         <source>Update Item</source>
         <translation>Ubah Item</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="218"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="222"/>
         <source>Items with barcode already exist : %1</source>
         <translation>Item dengan barcode sudah ada : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="231"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="235"/>
         <source>Item updated successfully</source>
         <translation>Item berhasil diubah</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="232"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="236"/>
         <source>Item added successfully</source>
         <translation>Item berhasil ditambah</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="241"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="307"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="337"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="469"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="500"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="539"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="246"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="312"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="343"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="482"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="513"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="552"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="253"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="258"/>
         <source>-- Select Unit --</source>
         <translation>-- Pilih Satuan --</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="256"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="261"/>
         <source>Price inserted successfully</source>
         <translation>Harga berhasil diinput</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="259"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="507"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="264"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="520"/>
         <source>Price updated successfully</source>
         <translation>Harga berhasil diedit</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="262"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="523"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="267"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="536"/>
         <source>Price deleted successfully</source>
         <translation>Harga berhasil dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="307"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="312"/>
         <source>Please fill required field</source>
         <translation>Silakan isi form dengan benar</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="337"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="343"/>
         <source>Box package not correctly filled</source>
         <translation>Box tidak diisi dengan benar</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="469"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="500"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="482"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="513"/>
         <source>Quantity already exist</source>
         <translation>Quantity sudah ada</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="519"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="532"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="519"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="532"/>
         <source>Are you sure to delete the price?</source>
         <translation>Yakin menghapus harga?</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="539"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="552"/>
         <source>Package can not consist its own</source>
         <translation>Box tidak dapat berisi diri sendiri</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="245"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="250"/>
         <source>-- Select Suplier --</source>
         <translation>-- Pilih Suplier --</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="80"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="81"/>
         <source>Qty</source>
         <translation>Qty</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="81"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="82"/>
         <source>Sell Price</source>
         <translation>Harga Jual</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="82"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="83"/>
         <source>Discount
 Formula</source>
         <translation>Formula
 Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="83"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="84"/>
         <source>Discount</source>
         <translation>Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="84"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="85"/>
         <source>Final
 Price</source>
         <translation>Harga
 Akhir</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="100"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="101"/>
         <source>Barcode</source>
         <translation>Barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="101"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="102"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="249"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="254"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
