@@ -25,6 +25,7 @@
 #include "util.h"
 #include "preference.h"
 #include "dbutil.h"
+#include "migration.h"
 #include <QStringRef>
 #include <QStringBuilder>
 #include <QTemporaryFile>
@@ -47,7 +48,7 @@ DatabaseAction::DatabaseAction():
 LibG::Message DatabaseAction::exportDatabase(LibG::Message *msg)
 {
     Message message(msg);
-    message.addData("data", exportData(msg->data("version").toString()).toBase64());
+    message.addData("data", exportData().toBase64());
     return message;
 }
 
@@ -100,10 +101,12 @@ Message DatabaseAction::resetDatabase(Message *msg)
     return message;
 }
 
-QByteArray DatabaseAction::exportData(const QString &version)
+QByteArray DatabaseAction::exportData()
 {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QStringList tableList;
+    DbResult migRes = mDb->get("migrations");
+    const QString &version = migRes.first()["name"].toString().left(3);
     if(dbtype == "SQLITE") {
         DbResult res = mDb->where("type = ", "table")->get("sqlite_master");
         for(int i = 0; i < res.size(); i++)
@@ -155,6 +158,7 @@ QByteArray DatabaseAction::exportData(const QString &version)
 void DatabaseAction::importData(const QString &fileName, const QString &version, LibG::Message *msg)
 {
     auto dbtype = Preference::getString(SETTING::DATABASE);
+    QString ver = "013";
     QFile f(fileName);
     if(f.open(QFile::ReadOnly)) {
         QTextStream stream(&f);
@@ -164,12 +168,10 @@ void DatabaseAction::importData(const QString &fileName, const QString &version,
         while(!stream.atEnd()) {
             const QString &line = stream.readLine();
             if(!versionOK) {
-                int curVerInt = Util::getIntVersion(version);
-                int verInt = Util::getIntVersion(line.trimmed());
-                if(curVerInt < verInt) {
-                    msg->setError("Your database export is newer than your application version. Your database export version is " + line.trimmed());
-                    return;
-                }
+                const QString &strVersion = line.trimmed();
+                if(strVersion.size() == 3) ver = strVersion;
+                migrateUntil(ver);
+                versionOK = true;
             }
             if(line.startsWith("TABLE|")) {
                 columns.clear();
@@ -190,7 +192,8 @@ void DatabaseAction::importData(const QString &fileName, const QString &version,
                 const QVector<QStringRef> &lsplit = line.splitRef(";");
                 QVariantMap d;
                 for(int i = 0; i < columns.size(); i++) {
-                    d.insert(columns[i], lsplit[i].toString());
+                    if(!lsplit[i].isEmpty())
+                        d.insert(columns[i], lsplit[i].toString());
                 }
                 if(!mDb->insert(tableName, d))
                     qWarning() << "[IMPORT] " << mDb->lastError().text();
@@ -198,5 +201,40 @@ void DatabaseAction::importData(const QString &fileName, const QString &version,
         }
         f.close();
     }
+}
+
+void DatabaseAction::migrateUntil(const QString &version)
+{
+    auto dbtype = Preference::getString(SETTING::DATABASE);
+    if(dbtype == "SQLITE") {
+        QDir dir = QDir::home();
+        QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
+        QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
+        if(dbname.isEmpty()) dbname = "sultan.db";
+        if(!dbname.endsWith(".db")) dbname += ".db";
+        if(dirpath.isEmpty()) {
+#ifdef Q_OS_WIN32
+            dir.cd("sultan");
+#else
+            dir.cd(".sultan");
+#endif
+        }
+        QFile::remove(dir.absoluteFilePath(dbname));
+    } else {
+        mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
+        mDb->exec("CREATE DATABASE " + Preference::getString(SETTING::MYSQL_DB));
+    }
+    const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
+                "migration_mysql" : "migration_sqlite";
+    auto func = [version](const QString &name) -> bool {
+        const QString &ver = name.left(3);
+        if(!ver.compare(version)) return false;
+        return true;
+    };
+#ifdef Q_OS_MAC
+    LibDB::Migration::migrateAll(Util::appDir() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE), func);
+#else
+    LibDB::Migration::migrateAll(Util::appDir() % "/" + migrationpath, Preference::getString(SETTING::DATABASE), func);
+#endif
 }
 

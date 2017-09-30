@@ -25,13 +25,19 @@
 using namespace LibDB;
 
 static QString TAG{"MIGRATION"};
+static std::function<bool(const QString &)> sAfterMigrate = nullptr;
 
 bool Migration::migrateAll(const QString &folder, const QString &dbtype, std::function<bool(const QString &)> afterCallback)
 {
-    auto db = Db::createInstance();
+    auto db = Db::createInstance(false, true);
     Migration mg(db, folder, dbtype);
     mg.mAfterMigrate = afterCallback;
     return mg.migrate();
+}
+
+void Migration::setAfterMigrate(std::function<bool (const QString &)> afterCallback)
+{
+    sAfterMigrate = afterCallback;
 }
 
 Migration::Migration(Db *db, const QString &folder, const QString &dbtype):
@@ -65,6 +71,12 @@ bool Migration::migrate()
         if(started) {
             if(executeFile(file)) {
                 mLastFile = file;
+                if(sAfterMigrate != nullptr) {
+                    if(!sAfterMigrate(mLastFile)) {
+                        errorOccure = true;
+                        break;
+                    }
+                }
                 if(mAfterMigrate != nullptr) {
                     if(!mAfterMigrate(mLastFile)) {
                         errorOccure = true;

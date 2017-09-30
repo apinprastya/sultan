@@ -10,5 +10,6 @@ CREATE TABLE itemlinks (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
+ALTER TABLE solditems MODIFY COLUMN `flag` INT NOT NULL DEFAULT 0;
 ALTER TABLE items DROP COLUMN `barcode_link`;
 ALTER TABLE items DROP COLUMN `count_link`;

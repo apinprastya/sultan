@@ -30,6 +30,7 @@
 #include "migration.h"
 #include "usersession.h"
 #include "mainwindow.h"
+#include "util.h"
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
@@ -50,17 +51,15 @@ Core::Core(QObject *parent) :
     mMessageBus(new MessageBus(this)),
     mMainWindow(new LibGUI::MainWindow(mMessageBus))
 {
-    //mLoginDialog->setMessageBus(mMessageBus);
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
     connect(mSocketClient, SIGNAL(connectionTimeout()), SLOT(connectionTimeout()));
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
-    //connect(mLoginDialog, SIGNAL(loginSuccess()), SLOT(loginSuccess()));
-    //connect(mMainWindow, SIGNAL(logout()), SLOT(logout()));
 #ifdef Q_OS_LINUX
     qApp->setWindowIcon(QIcon(":/images/icon_64.png"));
 #endif
+    Util::init(qApp->applicationDirPath());
 }
 
 Core::~Core()
@@ -125,11 +124,11 @@ void Core::init()
             qApp->processEvents();
             const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
                         "migration_mysql" : "migration_sqlite";
-            auto func = std::bind(&Core::migrationCallback, this, std::placeholders::_1);
+             LibDB::Migration::setAfterMigrate(std::bind(&Core::migrationCallback, this, std::placeholders::_1));
 #ifdef Q_OS_MAC
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE), func)) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE))) {
 #else
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE), func)) {
+            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {
 #endif
                 qCritical() << TAG << "Error migration";
                 mMainWindow->splashShowMessage("Migrate database failed");

@@ -25,10 +25,16 @@
 using namespace LibG;
 
 static int NEXTVAL = 0;
+static QString sAppDir;
 
 Util::Util()
 {
 
+}
+
+void Util::init(const QString &appDir)
+{
+    sAppDir = appDir;
 }
 
 QDate Util::getBeginningOfMonth()
@@ -124,4 +130,9 @@ QString Util::genSoldNumber()
 bool Util::hasFlag(int flag, int tocheck)
 {
     return (flag & tocheck) != 0;
+}
+
+QString Util::appDir()
+{
+    return sAppDir;
 }

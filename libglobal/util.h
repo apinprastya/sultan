@@ -29,6 +29,7 @@ class GLOBALSHARED_EXPORT Util
 {
 public:
     Util();
+    static void init(const QString &appDir);
     static QDate getBeginningOfMonth();
     static QDate getEndOfMonth();
     static int getIntVersion(QString version);
@@ -37,6 +38,7 @@ public:
     static double calculateDiscount(const QString &formula, double value);
     static QString genSoldNumber();
     static bool hasFlag(int flag, int tocheck);
+    static QString appDir();
 
 private:
 };

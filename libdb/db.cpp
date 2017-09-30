@@ -60,10 +60,10 @@ Db::~Db()
     }
 }
 
-Db *Db::createInstance(bool checkDBName)
+Db *Db::createInstance(bool checkDBName, bool newConnection)
 {
     Db* db = new Db();
-    if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName, checkDBName))
+    if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName, checkDBName, newConnection))
         return db;
     qCritical() << TAG << "Error openning database connection :" << db->lastError().text();
     delete db;
@@ -446,10 +446,13 @@ QSqlDatabase Db::getDatabase()
     }
 }
 
-bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname, bool checkDBName)
+bool Db::init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname, bool checkDBName, bool newConnection)
 {
     auto database = getDatabase();
-    if(database.isOpen()) return true;
+    if(database.isOpen()) {
+        if(newConnection) database.close();
+        else return true;
+    }
     bool ret = false;
     if(DBTYPE == "MYSQL") {
         database.setPort(port);

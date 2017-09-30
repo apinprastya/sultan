@@ -33,8 +33,9 @@ public:
     LibG::Message resetDatabase(LibG::Message *msg);
 
 private:
-    QByteArray exportData(const QString &version);
+    QByteArray exportData();
     void importData(const QString &fileName, const QString &version, LibG::Message *msg);
+    void migrateUntil(const QString &version);
 };
 
 }
