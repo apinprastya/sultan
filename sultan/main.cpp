@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
     a.setApplicationName("sultan");
     a.setOrganizationName("lekapin");
-    a.setApplicationVersion("17.09.01");
+    a.setApplicationVersion("17.10.01");
 
 #ifndef QT_DEBUG
     QDir dir = QDir::home();
