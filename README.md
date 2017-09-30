@@ -1,5 +1,5 @@
 # Sultan POS
-Simple minimarket POS software writen in C++ with Qt Framework. The main target of Sultan POS is minimarket and able to run on Raspberry Pi.
+Minimarket POS software writen in C++ with Qt Framework. The main target of Sultan POS is minimarket and able to run on Raspberry Pi.
 
 ## Feature
 * Networked (uses websocket)
@@ -10,11 +10,15 @@ Simple minimarket POS software writen in C++ with Qt Framework. The main target 
 * Databases SQLite / MySQL
 * Sales report
 * Item sales report
-* Simple margin calculation (manual set the buyprice)
+* Money report
+* Margin calculation using average
 * Customer database
 * Customer reward
 * Customer credit
-* Return items from customer
+* Purchase and purchase return
+* Cashier and sold return
+* Stock Card
+* Box / Package item
 
 ## Compile
 * Please check [Wiki Compile](https://github.com/apinprastya/sultan/wiki/Compile)
