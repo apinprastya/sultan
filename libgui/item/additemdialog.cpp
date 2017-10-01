@@ -443,6 +443,10 @@ void AddItemDialog::checkWidget()
         ui->doubleStock->setEnabled(!ui->checkPackage->isChecked());
         ui->groupMultiPrice->setEnabled(!ui->checkPackage->isChecked());
         ui->doubleBuyPrice->setEnabled(!ui->checkPackage->isChecked());
+        if(ui->checkPackage->isChecked()) {
+            ui->checkPurchase->setChecked(false);
+        }
+        ui->checkPurchase->setEnabled(!ui->checkPackage->isChecked());
     }
     if(sender == ui->checkEditPrice) {
         ui->groupMultiPrice->setChecked(false);
