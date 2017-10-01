@@ -19,6 +19,7 @@ Minimarket POS software writen in C++ with Qt Framework. The main target of Sult
 * Cashier and sold return
 * Stock Card
 * Box / Package item
+* Export / import database to file and Google drive
 
 ## Compile
 * Please check [Wiki Compile](https://github.com/apinprastya/sultan/wiki/Compile)
