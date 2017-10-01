@@ -81,7 +81,7 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     mSplashUi(new Splash()),
-    mLoginDialog(new LoginDialog(bus, this))
+    mLoginDialog(new LoginDialog(bus))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -99,6 +99,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     LibPrint::Printer::destroy();
+    delete mLoginDialog;
 }
 
 void MainWindow::setup()
