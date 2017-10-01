@@ -119,7 +119,7 @@
     <message>
         <location filename="../libgui/item/additemdialog.ui" line="175"/>
         <source>Has ingridient</source>
-        <translation>Memiliki Bahan</translation>
+        <translation>Memiliki bahan</translation>
     </message>
     <message>
         <location filename="../libgui/item/additemdialog.ui" line="182"/>
@@ -130,7 +130,7 @@
     <message>
         <location filename="../libgui/item/additemdialog.ui" line="189"/>
         <source>Product</source>
-        <translation>Produksi</translation>
+        <translation>Diproduksi</translation>
     </message>
     <message>
         <location filename="../libgui/item/additemdialog.ui" line="202"/>
@@ -937,7 +937,7 @@
     <message>
         <location filename="../libgui/checkstock/checkstockadddialog.ui" line="14"/>
         <source>Add Check Stock</source>
-        <translation>Tambah Check Stock</translation>
+        <translation>Tambah Perbaikan Stok</translation>
     </message>
     <message>
         <location filename="../libgui/checkstock/checkstockadddialog.ui" line="25"/>
@@ -2117,7 +2117,7 @@ Akhir</translation>
     <message>
         <location filename="../libgui/checkstock/checkstockwidget.cpp" line="53"/>
         <source>Check Stock</source>
-        <translation>Cek Stok</translation>
+        <translation>Perbaikan Stok</translation>
     </message>
     <message>
         <location filename="../libgui/checkstock/checkstockwidget.cpp" line="61"/>
@@ -2484,7 +2484,7 @@ Akhir</translation>
     <message>
         <location filename="../libgui/initialstock/initialstockadddialog.cpp" line="67"/>
         <source>Item already has stock. Use checkstock if you want change the stock</source>
-        <translation>Barang sudah memiliki stok. Silakan gunakan modul cek stok untuk mengubah stok</translation>
+        <translation>Barang sudah memiliki stok. Silakan gunakan modul perbaikan stok untuk mengubah stok</translation>
     </message>
     <message>
         <location filename="../libgui/initialstock/initialstockadddialog.cpp" line="94"/>
@@ -2886,7 +2886,7 @@ Akhir</translation>
     <message>
         <location filename="../libgui/mainwindow.cpp" line="528"/>
         <source>Purchase Return</source>
-        <translation>Retur Penbelian</translation>
+        <translation>Retur Pembelian</translation>
     </message>
     <message>
         <location filename="../libgui/mainwindow.cpp" line="544"/>
@@ -2913,7 +2913,7 @@ Akhir</translation>
         <source>Are you sure to reset your database?
 Please input your password to confirm</source>
         <translation>Yakin reset database?
-Silakan masukkan passwor untuk konfirmasi</translation>
+Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/mainwindow.cpp" line="593"/>
