@@ -38,5 +38,8 @@
         <file>images/16x16/receipt-invoice.png</file>
         <file>images/16x16/report.png</file>
         <file>images/16x16/ruler.png</file>
+        <file>images/16x16/bandaid.png</file>
+        <file>images/16x16/wooden-arrow.png</file>
+        <file>images/16x16/wallet.png</file>
     </qresource>
 </RCC>

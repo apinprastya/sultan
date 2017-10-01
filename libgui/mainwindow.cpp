@@ -509,7 +509,7 @@ void MainWindow::openMoney()
         return (dynamic_cast<MoneyWidget*>(widget) != nullptr);
     })) {
         auto widget = new MoneyWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Money"), ":/images/16x16/report.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Money"), ":/images/16x16/wallet.png");
     }
 }
 
@@ -525,7 +525,7 @@ void MainWindow::openPurchaseReturn()
         return (dynamic_cast<PurchaseReturnWidget*>(widget) != nullptr);
     })) {
         auto widget = new PurchaseReturnWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/bagbox.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Purchase Return"), ":/images/16x16/wooden-arrow.png");
     }
 }
 
@@ -541,7 +541,7 @@ void MainWindow::openCheckStock()
         return (dynamic_cast<CheckStockWidget*>(widget) != nullptr);
     })) {
         auto widget = new CheckStockWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Check Stock"), ":/images/16x16/bagbox.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Check Stock"), ":/images/16x16/bandaid.png");
     }
 }
 
@@ -600,6 +600,6 @@ void MainWindow::openSoldReturn()
         return (dynamic_cast<SoldItemReturnWidget*>(widget) != nullptr);
     })) {
         auto widget = new SoldItemReturnWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Sold Return"), ":/images/16x16/bagbox.png");
+        ui->tabWidget->tbnAddTab(widget, tr("Sold Return"), ":/images/16x16/wooden-arrow.png");
     }
 }
