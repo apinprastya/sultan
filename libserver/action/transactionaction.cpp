@@ -57,7 +57,8 @@ LibG::Message TransactionAction::summaryTransaction(LibG::Message *msg)
     //Margin
     msg->keepFilter(QStringList() << "0$DATE(date)" << "1$DATE(date)");
     mDb = QueryHelper::filter(mDb->reset(), msg->data(), QMap<QString, QString> {{"DATE(date)", "DATE(created_at)"}});
-    res = mDb->select("sum(final - buy_price) as margin")->get("solditems");
+    res = mDb->where(QString("(flag & %1) == 0").arg(ITEM_FLAG::ITEM_LINK))->
+            select("sum(final - buy_price) as margin")->get("solditems");
     message.addData("margin", res.first()["margin"]);
     return message;
 }

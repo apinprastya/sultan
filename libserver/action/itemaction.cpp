@@ -243,7 +243,7 @@ Message ItemAction::importData(Message *msg)
     bool headerOk = false;
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     for(int i = 0; i < vec.size(); i++) {
-        if(!vec[i].compare("###LINK")) {
+        if(!vec[i].compare(QStringLiteral("###LINK"))) {
             headerOk = false;
             state = 1;
             continue;
