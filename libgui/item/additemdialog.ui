@@ -227,7 +227,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="price">
         <attribute name="title">
@@ -556,7 +556,7 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
-          <widget class="LibGUI::TableWidget" name="widget" native="true"/>
+          <widget class="LibGUI::TableWidget" name="tableIngridient" native="true"/>
          </item>
          <item>
           <widget class="Line" name="line_2">

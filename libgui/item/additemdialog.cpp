@@ -36,6 +36,7 @@
 #include "cashier/searchitemdialog.h"
 #include "restoreitemdialog.h"
 #include "keyevent.h"
+#include "addingridientdialog.h"
 #include <cmath>
 #include <QMessageBox>
 #include <QDebug>
@@ -71,14 +72,6 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     ke->addConsumeKey(Qt::Key_Tab);
     ui->lineBarcode->installEventFilter(ke);
     connect(ke, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(returnPressed()));
-    ui->checkStock->setChecked(true);
-    ui->checkSell->setChecked(true);
-    ui->checkPurchase->setChecked(true);
-    ui->checkNote->setChecked(false);
-    ui->checkEditPrice->setChecked(false);
-    ui->checkNote->setChecked(false);
-    ui->checkPackage->setChecked(false);
-    ui->checkProduct->setChecked(false);
     ui->tabWidget->setCurrentIndex(0);
     //table multiprice
     ui->tablePrice->initCrudButton();
@@ -99,7 +92,6 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     ui->toolBoxPrice->setCurrentIndex(0);
     //this is temporary
     ui->checkNote->setEnabled(false);
-    ui->checkIngridient->setEnabled(false);
     ui->checkProduct->setEnabled(false);
     //item links table
     model = ui->tableItemLink->getModel();
@@ -110,7 +102,25 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     GuiUtil::setColumnWidth(ui->tablePrice->getTableView(), QList<int>() << 150 << 100);
     ui->tableItemLink->getTableView()->horizontalHeader()->setStretchLastSection(true);
     connect(ui->tableItemLink->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableItemLinkDoubleClicked()));
+    //ingridient table
+    model = ui->tableIngridient->getModel();
+    model->setMessageBus(mMessageBus);
+    model->addColumn("barcode_link", tr("Barcode"));
+    model->addColumn("name_link", tr("Name"));
+    model->addColumn("count_link", tr("Count"), Qt::AlignRight);
+    model->addColumnMoney("buy_price", tr("Buy Price"));
+    model->addColumnMoney("sell_price", tr("Sell Price"));
+    model->setTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::QUERY);
+    ui->tableIngridient->getTableView()->setUseStandardHeader(true);
+    ui->tableIngridient->initCrudButton();
+    connect(ui->tableIngridient, SIGNAL(addClicked()), SLOT(addIngridient()));
+    connect(ui->tableIngridient, SIGNAL(updateClicked(QModelIndex)), SLOT(updateIngridient(QModelIndex)));
+    connect(ui->tableIngridient, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteIngridient(QModelIndex)));
+    GuiUtil::setColumnWidth(ui->tablePrice->getTableView(), QList<int>() << 150 << 100);
+    ui->tableItemLink->getTableView()->horizontalHeader()->setStretchLastSection(true);
+    connect(ui->tableItemLink->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableItemLinkDoubleClicked()));
     ui->pushSaveClose->hide();
+    connect(ui->tableIngridient->getModel(), SIGNAL(firstDataLoaded()), SLOT(calculateIngridientPrice()));
 }
 
 AddItemDialog::~AddItemDialog()
@@ -146,6 +156,8 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->toolBoxPrice->setCurrentIndex(0);
     ui->tablePrice->getModel()->reset();
     ui->tablePrice->getModel()->setAsLocal(true);
+    ui->tableIngridient->getModel()->reset();
+    ui->tableIngridient->getModel()->setAsLocal(true);
     ui->linePackageItem->clear();
     ui->labelPackageName->clear();
     ui->labelPackagePrice->setText("0");
@@ -155,6 +167,16 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->doubleStock->setEnabled(true);
     ui->tabWidget->setTabEnabled(ItemLink, false);
     ui->labelWarningItemLink->hide();
+    ui->checkStock->setChecked(true);
+    ui->checkSell->setChecked(true);
+    ui->checkPurchase->setChecked(true);
+    ui->checkNote->setChecked(false);
+    ui->checkEditPrice->setChecked(false);
+    ui->checkNote->setChecked(false);
+    ui->checkPackage->setChecked(false);
+    ui->checkProduct->setChecked(false);
+    ui->labelIngridientPrice->setText("0");
+    ui->labelIngridientSellPrice->setText("0");
 }
 
 void AddItemDialog::openBarcode(const QString &barcode)
@@ -194,6 +216,9 @@ void AddItemDialog::fill(const QVariantMap &data)
     ui->tablePrice->getModel()->refresh();
     ui->toolBoxPrice->setCurrentIndex(((flag & ITEM_FLAG::MULTIPRICE) == 0) ? 0 : 1);
     ui->doubleStock->setValue(data["stock"].toFloat());
+    ui->tableIngridient->getModel()->setAsLocal(false);
+    ui->tableIngridient->getModel()->setFilter("barcode", COMPARE::EQUAL, data["barcode"].toString());
+    ui->tableIngridient->getModel()->refresh();
 }
 
 void AddItemDialog::setAsUpdate()
@@ -313,6 +338,9 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
             setAsUpdate();
             openBarcode(msg->data("barcode").toString());
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::UPDATE)) {
+        FlashMessageManager::showMessage(tr("Ingridient item updated successfully"));
+        ui->tableIngridient->getModel()->refresh();
     }
 }
 
@@ -368,10 +396,19 @@ void AddItemDialog::saveData()
         }
         data["box"] = linkdata;
     }
+    if((flag & ITEM_FLAG::HAS_INGRIDIENT) != 0) {
+        auto rdata = ui->tableIngridient->getModel()->getRowData();
+        QVariantList indrigients;
+        for(int i = 0; i < rdata->size(); i++) {
+            indrigients << rdata->at(i)->data();
+        }
+        data["ingridients"] = indrigients;
+    }
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::INSERT);
     if(mIsUpdate) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("barcode", ui->lineBarcode->text());
+        data.remove("ingridients");
         msg.addData("data", data);
     } else {
         data["stock"] = ui->doubleStock->value();
@@ -467,30 +504,27 @@ void AddItemDialog::checkWidget()
 {
     auto sender = qobject_cast<QCheckBox*>(QObject::sender());
     ui->checkEditPrice->setEnabled(ui->checkSell->isChecked());
-    /*ui->checkIngridient->setEnabled(ui->checkSell->isChecked());
-    ui->checkNote->setEnabled(ui->checkSell->isChecked());*/
+    ui->checkIngridient->setEnabled(ui->checkSell->isChecked() && !ui->checkPackage->isChecked());
+    ui->checkPackage->setEnabled(ui->checkSell->isChecked() && !ui->checkIngridient->isChecked());
+    ui->checkPurchase->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
+    ui->doubleBuyPrice->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
+    ui->doubleStock->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
     if(sender == ui->checkSell) {
         ui->checkEditPrice->setChecked(false);
-        /*ui->checkNote->setChecked(false);
-        ui->checkIngridient->setChecked(false);*/
+        ui->checkIngridient->setChecked(false);
     }
     if(sender == ui->checkPackage && !ui->checkPackage->isChecked())
         ui->tabWidget->setCurrentIndex(Price);
     if(sender == ui->checkPackage) {
         if(ui->checkPackage->isChecked())
             ui->groupMultiPrice->setChecked(false);
-        ui->doubleStock->setEnabled(!ui->checkPackage->isChecked());
         ui->groupMultiPrice->setEnabled(!ui->checkPackage->isChecked());
-        ui->doubleBuyPrice->setEnabled(!ui->checkPackage->isChecked());
-        if(ui->checkPackage->isChecked()) {
-            ui->checkPurchase->setChecked(false);
-        }
-        ui->checkPurchase->setEnabled(!ui->checkPackage->isChecked());
     }
     if(sender == ui->checkEditPrice) {
         ui->groupMultiPrice->setChecked(false);
         ui->groupMultiPrice->setEnabled(!ui->checkEditPrice->isChecked());
     }
+    if(!ui->checkPurchase->isEnabled()) ui->checkPurchase->setChecked(false);
 
     ui->tabWidget->setTabEnabled(Ingridient, ui->checkIngridient->isChecked());
     ui->tabWidget->setTabEnabled(Package, ui->checkPackage->isChecked());
@@ -644,4 +678,85 @@ void AddItemDialog::tableItemLinkDoubleClicked()
         dialog.openBarcode(item->data("barcode").toString());
         dialog.exec();
     }
+}
+
+void AddItemDialog::addIngridient()
+{
+    AddIngridientDialog dialog(mMessageBus, this);
+    dialog.exec();
+    if(!dialog.isOk()) return;
+    QVariantMap data = dialog.getData();
+    auto rdata = ui->tableIngridient->getModel()->getRowData();
+    for(int i = 0; i < rdata->size(); i++) {
+        if(!rdata->at(i)->data("barcode_link").toString().compare(data["barcode"].toString())) {
+            QMessageBox::critical(this, tr("Error"), tr("Item with barcode already exist"));
+            return;
+        }
+    }
+    if(ui->tableIngridient->getModel()->isLocal()) {
+        auto item = new TableItem();
+        float count = data["count_link"].toFloat();
+        item->fill(QVariantMap{{"barcode_link", data["barcode_link"]}, {"name_link", data["name_link"]},
+                               {"count_link", count}, {"buy_price", data["buy_price"].toDouble()},
+                               {"sell_price", data["sell_final"].toDouble()}});
+        ui->tableIngridient->getModel()->appendItem(item);
+        calculateIngridientPrice();
+    } else {
+        Message msg(MSG_TYPE::ITEMLINK, MSG_COMMAND::INSERT);
+        msg.setData(data);
+        sendMessage(&msg);
+    }
+}
+
+void AddItemDialog::updateIngridient(const QModelIndex &index)
+{
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    AddIngridientDialog dialog(mMessageBus, this);
+    dialog.setData(item->data());
+    dialog.exec();
+    if(!dialog.isOk()) return;
+    const QVariantMap &data = dialog.getData();
+    if(ui->tableIngridient->getModel()->isLocal()) {
+        item->fill(data);
+        ui->tableIngridient->getModel()->refresh();
+        FlashMessageManager::showMessage(tr("Ingridient updated successfully"));
+        calculateIngridientPrice();
+    } else {
+        Message msg(MSG_TYPE::ITEMLINK, MSG_COMMAND::UPDATE);
+        msg.addData("id", item->id);
+        msg.addData("data", QVariantMap{{"count_link", data["count_link"]}});
+        sendMessage(&msg);
+    }
+}
+
+void AddItemDialog::deleteIngridient(const QModelIndex &index)
+{
+    auto item = static_cast<TableItem*>(index.internalPointer());
+    int res = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete the ingridient?"));
+    if(res == QMessageBox::Yes) {
+        if(ui->tableIngridient->getModel()->isLocal()) {
+            ui->tableIngridient->getModel()->removeItem(item);
+            FlashMessageManager::showMessage(tr("Ingridient deleted successfully"));
+            calculateIngridientPrice();
+        } else {
+            Message msg(MSG_TYPE::ITEMLINK, MSG_COMMAND::DEL);
+            msg.addData("id", item->id);
+            sendMessage(&msg);
+        }
+    }
+}
+
+void AddItemDialog::calculateIngridientPrice()
+{
+    auto rdata = ui->tableIngridient->getModel()->getRowData();
+    double buyPrice = 0;
+    double sellPrice = 0;
+    for(int i = 0; i < rdata->size(); i++) {
+        float count = rdata->at(i)->data("count_link").toDouble();
+        buyPrice += rdata->at(i)->data("buy_price").toDouble() * count;
+        sellPrice += rdata->at(i)->data("sell_price").toDouble() * count;
+    }
+    ui->labelIngridientPrice->setText(Preference::formatMoney(buyPrice));
+    ui->labelIngridientSellPrice->setText(Preference::formatMoney(sellPrice));
+    ui->doubleBuyPrice->setValue(buyPrice);
 }

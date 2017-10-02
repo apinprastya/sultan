@@ -86,6 +86,10 @@ private slots:
     void getItemPrice();
     double updatePackagePrice();
     void tableItemLinkDoubleClicked();
+    void addIngridient();
+    void updateIngridient(const QModelIndex &index);
+    void deleteIngridient(const QModelIndex &index);
+    void calculateIngridientPrice();
 
 signals:
     void success();

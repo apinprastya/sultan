@@ -276,6 +276,7 @@ void MainWindow::loginSuccess()
     showFullScreen();
 #else
 #ifdef QT_DEBUG
+    setFixedSize(1024, 768);
     show();
 #else
     showMaximized();

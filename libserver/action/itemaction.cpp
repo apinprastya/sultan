@@ -48,6 +48,7 @@ Message ItemAction::insert(Message *msg)
     const int flag = msg->data("flag").toInt();
     const QVariant &sellPrice = msg->takeData("sell_price");
     QVariantMap box = msg->takeData("box").toMap();
+    QVariantList ingridients = msg->takeData("ingridients").toList();
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
@@ -77,6 +78,13 @@ Message ItemAction::insert(Message *msg)
         util.insertStock(msg->data("barcode").toString(),
                          QString("Initial %1").arg(msg->data("barcode").toString()),
                          STOCK_CARD_TYPE::INITIAL_STOCK, count, msg->data("flag").toInt(), QVariantMap(), false);
+        if((flag & ITEM_FLAG::HAS_INGRIDIENT) != 0) {
+            for(int i = 0; i < ingridients.size(); i++) {
+                const QVariantMap &d = ingridients[i].toMap();
+                mDb->insert("itemlinks", QVariantMap{{"barcode", msg->data("barcode")}, {"type", ITEM_LINK_TYPE::INGRIDIENT},
+                                                     {"barcode_link", d["barcode_link"]}, {"count_link", d["count_link"]}});
+            }
+        }
     }
     if(mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
