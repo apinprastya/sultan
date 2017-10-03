@@ -1,5 +1,5 @@
-#ifndef GUI_GLOBAL_H
-#define GUI_GLOBAL_H
+#ifndef GUIQML_GLOBAL_H
+#define GUIQML_GLOBAL_H
 
 #include <QtCore/qglobal.h>
 
@@ -17,4 +17,4 @@
     #endif
 #endif
 
-#endif // GUI_GLOBAL_H
+#endif // GUIQML_GLOBAL_H
