@@ -41,6 +41,7 @@ ServerAction::ServerAction(const QString &tableName, const QString idfield):
     mFunctionMap.insert(MSG_COMMAND::DEL, std::bind(&ServerAction::del, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::GET, std::bind(&ServerAction::get, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::QUERY, std::bind(&ServerAction::query, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::RESTORE_DELETED, std::bind(&ServerAction::restoreDelete, this, std::placeholders::_1));
 }
 
 ServerAction::~ServerAction()
@@ -126,8 +127,14 @@ LibG::Message ServerAction::del(LibG::Message *msg)
         if(!res.isEmpty() && !beforeDelete(res.first(), &message)) return message;
     }
     mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(!mDb->del(mTableName)) {
-        message.setError(mDb->lastError().text());
+    if(hasFlag(SOFT_DELETE)) {
+        if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}})) {
+            message.setError(mDb->lastError().text());
+        }
+    } else {
+        if(!mDb->del(mTableName)) {
+            message.setError(mDb->lastError().text());
+        }
     }
     if(hasFlag(AFTER_DELETE)) {
         if(!res.isEmpty())
@@ -142,10 +149,40 @@ LibG::Message ServerAction::del(LibG::Message *msg)
     return message;
 }
 
+Message ServerAction::restoreDelete(Message *msg)
+{
+    LibG::Message message(msg);
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+        mDb->beginTransaction();
+    DbResult res = mDb->where(mIdField % " = ", msg->data(mIdField))->get(mTableName);
+    const QVariantMap &oldData = res.first();
+    if(hasFlag(BEFORE_RESTORE)) {
+        if(!beforeRestore(oldData, msg, &message)) return message;
+    }
+    mDb->where(mIdField % " = ", msg->data(mIdField));
+    if(hasFlag(SOFT_DELETE)) {
+        if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QVariant(QVariant::DateTime)}})) {
+            message.setError(mDb->lastError().text());
+        }
+    }
+    if(hasFlag(AFTER_RESTORE)) {
+        if(!res.isEmpty())
+            afterRestore(res.first());
+    }
+    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if(!mDb->commit()) {
+            mDb->roolback();
+            message.setError(mDb->lastError().text());
+        }
+    }
+    return message;
+}
+
 Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
     selectAndJoin();
+    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdelete")) mDb->where("deleted_at IS NULL");
     DbResult res = mDb->where(mTableName % "." % mIdField % " = ", msg->data(mIdField))->get(mTableName);
     if(res.isEmpty()) {
         message.setError("Data not found");
@@ -160,6 +197,7 @@ LibG::Message ServerAction::query(LibG::Message *msg)
     LibG::Message message(msg);
     mDb->table(mTableName);
     selectAndJoin();
+    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdelete")) mDb->where("deleted_at IS NULL");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"), mDb->count());

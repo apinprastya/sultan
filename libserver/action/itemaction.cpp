@@ -35,7 +35,7 @@ using namespace LibDB;
 ItemAction::ItemAction():
     ServerAction("items", "barcode")
 {
-    mFlag = USE_TRANSACTION;
+    mFlag = USE_TRANSACTION | SOFT_DELETE;
     mFunctionMap.insert(MSG_COMMAND::CASHIER_PRICE, std::bind(&ItemAction::prices, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));

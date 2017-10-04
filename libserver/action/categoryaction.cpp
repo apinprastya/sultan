@@ -26,7 +26,7 @@ using namespace LibDB;
 CategoryAction::CategoryAction():
     ServerAction("categories", "id")
 {
-    mFlag = AFTER_INSERT | HAS_UPDATE_FIELD | USE_TRANSACTION;
+    mFlag = AFTER_INSERT | HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
 }
 
 void CategoryAction::afterInsert(const QVariantMap &data)

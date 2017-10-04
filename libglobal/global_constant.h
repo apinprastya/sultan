@@ -104,19 +104,20 @@ namespace MSG_COMMAND {
     const int DEL                       = 2;
     const int GET                       = 3;
     const int QUERY                     = 4;
+    const int RESTORE_DELETED           = 5;
     //custom command
-    const int LOGIN                     = 5;
-    const int CASHIER_PRICE             = 6;
-    const int NEW_SOLD                  = 7;
-    const int SOLD_SUMMARY              = 8;
-    const int SOLD_ITEM_REPORT          = 9;
-    const int EXPORT                    = 10;
-    const int IMPORT                    = 11;
-    const int CHANGE_MY_PASSWORD        = 12;
-    const int SUMMARY                   = 13;
-    const int SUMMARY_TRANSACTION       = 14;
-    const int SUMMARY_MONEY             = 15;
-    const int RESET                     = 16;
+    const int LOGIN                     = 20;
+    const int CASHIER_PRICE             = 21;
+    const int NEW_SOLD                  = 22;
+    const int SOLD_SUMMARY              = 23;
+    const int SOLD_ITEM_REPORT          = 24;
+    const int EXPORT                    = 25;
+    const int IMPORT                    = 26;
+    const int CHANGE_MY_PASSWORD        = 27;
+    const int SUMMARY                   = 28;
+    const int SUMMARY_TRANSACTION       = 29;
+    const int SUMMARY_MONEY             = 30;
+    const int RESET                     = 31;
 }
 
 namespace GUI_MESSAGE {

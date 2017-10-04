@@ -32,7 +32,7 @@ using namespace LibDB;
 CustomerAction::CustomerAction():
     ServerAction("customers", "id")
 {
-    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION;
+    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&CustomerAction::summary, this, std::placeholders::_1));
 }
 

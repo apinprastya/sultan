@@ -41,6 +41,9 @@ public:
         AFTER_UPDATE        = 0x8,
         BEFORE_DELETE       = 0x10,
         AFTER_DELETE        = 0x20,
+        SOFT_DELETE         = 0x40,
+        BEFORE_RESTORE      = 0x80,
+        AFTER_RESTORE       = 0x100,
         HAS_UPDATE_FIELD    = (1 << 16),
         USE_TRANSACTION     = (1 << 17),
     };
@@ -59,6 +62,7 @@ protected:
     virtual LibG::Message insert(LibG::Message *msg);
     virtual LibG::Message update(LibG::Message *msg);
     virtual LibG::Message del(LibG::Message *msg);
+    virtual LibG::Message restoreDelete(LibG::Message *msg);
     virtual LibG::Message get(LibG::Message *msg);
     virtual LibG::Message query(LibG::Message *msg);
 
@@ -71,6 +75,8 @@ protected:
     virtual void afterUpdate(const QVariantMap &/*oldData*/, const QVariantMap &/*newData*/) {}
     virtual bool beforeDelete(const QVariantMap &/*oldData*/, LibG::Message */*retMsg*/) { return true; }
     virtual void afterDelete(const QVariantMap &/*oldData*/) {}
+    virtual bool beforeRestore(const QVariantMap &/*oldData*/, LibG::Message */*msg*/, LibG::Message */*retMsg*/) { return true; }
+    virtual void afterRestore(const QVariantMap &/*data*/) {}
 
     bool hasFlag(int flag);
 };

@@ -353,7 +353,7 @@ bool Db::update(const QString &table, const QVariantMap &data)
     const QList<QString> &keys = data.keys();
     for(int i = 0; i < keys.size(); i++) {
         sql.append(keys.at(i));
-        if(!data.value(keys.at(i)).isNull()) {
+        if(data.value(keys.at(i)).type() != QVariant::Invalid) {
             sql.append(QStringLiteral(" = ?"));
         }
         if(i != keys.size() - 1)
