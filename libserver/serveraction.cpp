@@ -169,6 +169,7 @@ Message ServerAction::restoreDelete(Message *msg)
         if(!res.isEmpty())
             afterRestore(res.first());
     }
+    message.setData(oldData);
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
             mDb->roolback();
@@ -182,7 +183,7 @@ Message ServerAction::get(Message *msg)
 {
     LibG::Message message(msg);
     selectAndJoin();
-    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdelete")) mDb->where("deleted_at IS NULL");
+    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdeleted")) mDb->where(mTableName % ".deleted_at IS NULL");
     DbResult res = mDb->where(mTableName % "." % mIdField % " = ", msg->data(mIdField))->get(mTableName);
     if(res.isEmpty()) {
         message.setError("Data not found");
@@ -197,7 +198,7 @@ LibG::Message ServerAction::query(LibG::Message *msg)
     LibG::Message message(msg);
     mDb->table(mTableName);
     selectAndJoin();
-    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdelete")) mDb->where("deleted_at IS NULL");
+    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdeleted")) mDb->where(mTableName % ".deleted_at IS NULL");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"), mDb->count());

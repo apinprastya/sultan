@@ -34,6 +34,8 @@
 #include "rowdata.h"
 #include "keyevent.h"
 #include "cashier/searchitemdialog.h"
+#include "restoreitemdialog.h"
+#include "keyevent.h"
 #include <cmath>
 #include <QMessageBox>
 #include <QDebug>
@@ -51,7 +53,7 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     ui->doubleSellPrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAndAgainClicked()));
-    connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
+    //connect(ui->lineBarcode, SIGNAL(editingFinished()), SLOT(barcodeDone()));
     connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(returnPressed()));
     connect(ui->checkPurchase, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->checkSell, SIGNAL(toggled(bool)), SLOT(checkWidget()));
@@ -65,6 +67,10 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->pushPackageItem, SIGNAL(clicked(bool)), SLOT(openSearchItem()));
     connect(ui->doublePackageQty, SIGNAL(valueChanged(double)), SLOT(updatePackagePrice()));
     connect(ui->pushSaveClose, SIGNAL(clicked(bool)), SLOT(saveCloseClicked()));
+    auto ke = new KeyEvent(this);
+    ke->addConsumeKey(Qt::Key_Tab);
+    ui->lineBarcode->installEventFilter(ke);
+    connect(ke, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(returnPressed()));
     ui->checkStock->setChecked(true);
     ui->checkSell->setChecked(true);
     ui->checkPurchase->setChecked(true);
@@ -136,6 +142,7 @@ void AddItemDialog::reset(bool isAddAgain)
     ui->labelError->hide();
     setWindowTitle(tr("Add New Item"));
     mIsOk = false;
+    mIsFromSave = false;
     ui->toolBoxPrice->setCurrentIndex(0);
     ui->tablePrice->getModel()->reset();
     ui->tablePrice->getModel()->setAsLocal(true);
@@ -219,15 +226,26 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
             if(mIsUpdate) {
                 fill(msg->data());
             } else {
-                ui->labelError->setText(tr("Items with barcode already exist : %1").arg(msg->data("name").toString()));
-                ui->labelError->show();
-                ui->lineBarcode->setFocus();
-                ui->lineBarcode->selectAll();
+                if(!msg->data("deleted_at").toString().isEmpty()) {
+                    RestoreItemDialog dialog(msg->data(), this);
+                    dialog.exec();
+                    if(dialog.isOk()) {
+                        Message message(MSG_TYPE::ITEM, MSG_COMMAND::RESTORE_DELETED);
+                        message.addData("barcode", msg->data("barcode"));
+                        sendMessage(&message);
+                    }
+                } else {
+                    ui->labelError->setText(tr("Items with barcode already exist : %1").arg(msg->data("name").toString()));
+                    ui->labelError->show();
+                    ui->lineBarcode->setFocus();
+                    ui->lineBarcode->selectAll();
+                }
             }
         } else {
             ui->labelError->hide();
             mIsOk = true;
             if(mIsReturnPressed) ui->lineName->setFocus(Qt::TabFocusReason);
+            if(mIsFromSave) saveClicked();
         }
         mIsReturnPressed = false;
     } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::UPDATE) || msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::INSERT)) {
@@ -289,6 +307,12 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
                 ui->tableItemLink->getModel()->refresh();
             }
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::RESTORE_DELETED)) {
+        if(msg->isSuccess()) {
+            reset();
+            setAsUpdate();
+            openBarcode(msg->data("barcode").toString());
+        }
     }
 }
 
@@ -306,13 +330,12 @@ void AddItemDialog::showEvent(QShowEvent *event)
     QDialog::showEvent(event);
 }
 
-void AddItemDialog::saveData(bool close)
+void AddItemDialog::saveData()
 {
     if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineBarcode << ui->lineName << ui->comboCategory << ui->comboSuplier)) {
         QMessageBox::critical(this, tr("Error"), tr("Please fill required field"));
         return;
     }
-    mIsCloseAfter = close;
     QVariantMap data;
     int flag = getItemFlagFromCheckbox();
     data["name"] = ui->lineName->text();
@@ -392,6 +415,7 @@ void AddItemDialog::barcodeDone()
 {
     if(ui->lineBarcode->text().isEmpty()) return;
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::GET);
+    msg.addData("withdeleted", true);
     msg.addData("barcode", ui->lineBarcode->text());
     sendMessage(&msg);
     mIsOk = false;
@@ -405,23 +429,38 @@ void AddItemDialog::returnPressed()
 
 void AddItemDialog::saveClicked()
 {
-    if(!mIsOk) return;
+    if(!mIsOk) {
+        mIsFromSave = true;
+        returnPressed();
+        return;
+    }
+    mIsCloseAfter = false;
     mIsAddAgain = false;
     saveData();
 }
 
 void AddItemDialog::saveAndAgainClicked()
 {
-    if(!mIsOk) return;
+    if(!mIsOk) {
+        mIsFromSave = true;
+        returnPressed();
+        return;
+    }
     mIsAddAgain = true;
+    mIsCloseAfter = false;
     saveData();
 }
 
 void AddItemDialog::saveCloseClicked()
 {
-    if(!mIsOk) return;
+    if(!mIsOk) {
+        mIsFromSave = true;
+        returnPressed();
+        return;
+    }
     mIsAddAgain = false;
-    saveData(true);
+    mIsCloseAfter = true;
+    saveData();
 }
 
 void AddItemDialog::checkWidget()

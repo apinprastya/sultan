@@ -173,7 +173,8 @@ void ItemWidget::updateItemClicked(const QModelIndex &index)
 void ItemWidget::deleteItemClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
-    int ret = QMessageBox::question(this, tr("Confirmation"), tr("This will also delete the stock card. Are you sure to delete item?"));
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("The sistem will only make this item not visible in order to make the other data link to it still accessible. \
+The stocks cards and item link will be removed. Are you sure to delete item?"));
     if(ret != QMessageBox::Yes) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::DEL);

@@ -1075,12 +1075,18 @@
         <translation>Telepon</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customeradddialog.ui" line="120"/>
+        <location filename="../libgui/customer/customeradddialog.ui" line="90"/>
+        <location filename="../libgui/customer/customeradddialog.ui" line="97"/>
+        <source>Email</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/customer/customeradddialog.ui" line="134"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customeradddialog.ui" line="127"/>
+        <location filename="../libgui/customer/customeradddialog.ui" line="141"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
@@ -1297,139 +1303,139 @@
 <context>
     <name>LibGUI::AddItemDialog</name>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="137"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="143"/>
         <source>Add New Item</source>
         <translation>Tambah Item Baru</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="196"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="203"/>
         <source>Update Item</source>
         <translation>Ubah Item</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="222"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="238"/>
         <source>Items with barcode already exist : %1</source>
         <translation>Item dengan barcode sudah ada : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="235"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="253"/>
         <source>Item updated successfully</source>
         <translation>Item berhasil diubah</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="236"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="254"/>
         <source>Item added successfully</source>
         <translation>Item berhasil ditambah</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="246"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="312"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="343"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="482"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="513"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="552"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="264"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="336"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="366"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="525"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="556"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="595"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="258"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="276"/>
         <source>-- Select Unit --</source>
         <translation>-- Pilih Satuan --</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="261"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="279"/>
         <source>Price inserted successfully</source>
         <translation>Harga berhasil diinput</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="264"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="520"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="282"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="563"/>
         <source>Price updated successfully</source>
         <translation>Harga berhasil diedit</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="267"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="536"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="285"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="579"/>
         <source>Price deleted successfully</source>
         <translation>Harga berhasil dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="312"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="336"/>
         <source>Please fill required field</source>
         <translation>Silakan isi form dengan benar</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="343"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="366"/>
         <source>Box package not correctly filled</source>
         <translation>Box tidak diisi dengan benar</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="482"/>
-        <location filename="../libgui/item/additemdialog.cpp" line="513"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="525"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="556"/>
         <source>Quantity already exist</source>
         <translation>Quantity sudah ada</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="532"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="575"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="532"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="575"/>
         <source>Are you sure to delete the price?</source>
         <translation>Yakin menghapus harga?</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="552"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="595"/>
         <source>Package can not consist its own</source>
         <translation>Box tidak dapat berisi diri sendiri</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="250"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="268"/>
         <source>-- Select Suplier --</source>
         <translation>-- Pilih Suplier --</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="81"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="87"/>
         <source>Qty</source>
         <translation>Qty</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="82"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="88"/>
         <source>Sell Price</source>
         <translation>Harga Jual</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="83"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="89"/>
         <source>Discount
 Formula</source>
         <translation>Formula
 Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="84"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="90"/>
         <source>Discount</source>
         <translation>Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="85"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="91"/>
         <source>Final
 Price</source>
         <translation>Harga
 Akhir</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="101"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="107"/>
         <source>Barcode</source>
         <translation>Barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="102"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="108"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/item/additemdialog.cpp" line="254"/>
+        <location filename="../libgui/item/additemdialog.cpp" line="272"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
@@ -1814,7 +1820,7 @@ Akhir</translation>
         <location filename="../libgui/cashier/cashierwidget.cpp" line="216"/>
         <location filename="../libgui/cashier/cashierwidget.cpp" line="220"/>
         <location filename="../libgui/cashier/cashierwidget.cpp" line="226"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="424"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="426"/>
         <source>Error</source>
         <translation></translation>
     </message>
@@ -1844,116 +1850,116 @@ Akhir</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="248"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="249"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="250"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="251"/>
         <source>None</source>
         <translation>Kosong</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="275"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="277"/>
         <source>Edit count</source>
         <translation>Ubah qty</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="275"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="277"/>
         <source>Input new count</source>
         <translation>Masukkan jumlah baru</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="364"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="366"/>
         <source>Advance payment only for valid customer</source>
         <translation>Pembayaran kredit hanya untuk pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="424"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="426"/>
         <source>Please setting printer first</source>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="458"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="465"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="460"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="467"/>
         <source>Sub-total</source>
         <translation>Sub total</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="459"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="461"/>
         <source>Tax</source>
         <translation>Pajak</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="461"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="466"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="463"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="468"/>
         <source>Card Charge</source>
         <translation>Biaya Kartu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="462"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="468"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="464"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="470"/>
         <source>Total</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="471"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="473"/>
         <source>Payment</source>
         <translation>Bayar</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="472"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="474"/>
         <source>Change</source>
         <translation>Kembalian</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="474"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="476"/>
         <source>Card Number</source>
         <translation>No Kartu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="479"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="481"/>
         <source>Cust Number</source>
         <translation>No Pel</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="480"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="482"/>
         <source>Reward Poin</source>
         <translation>Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="483"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="485"/>
         <source>Credit</source>
         <translation>Hutang</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="515"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="517"/>
         <source>New transaction confirmation</source>
         <translation>Konfirmasi transaksi baru</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="515"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="517"/>
         <source>Are you sure want to ignore this transaction and start new one?</source>
         <translation>Anda yakin mengabaikan transaksi dan memulai transaksi baru?</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="538"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="540"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="538"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="540"/>
         <source>Your cart is not empty, do you want to ignore current cart?</source>
         <translation>Kerangjang belanja tidak kosong, yakin abaikan keranjang belanja?</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="560"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="562"/>
         <source>Input Customer</source>
         <translation>Masukkan Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="560"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="562"/>
         <source>Scan customer ID</source>
         <translation>Scan ID Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="571"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="573"/>
         <source>Customer reseted</source>
         <translation>Pelanggan telah direset</translation>
     </message>
@@ -2158,23 +2164,23 @@ Akhir</translation>
 <context>
     <name>LibGUI::CustomerAddDialog</name>
     <message>
-        <location filename="../libgui/customer/customeradddialog.cpp" line="67"/>
+        <location filename="../libgui/customer/customeradddialog.cpp" line="68"/>
         <source>Customer added successfully</source>
         <translation>Berhasil menambah pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customeradddialog.cpp" line="71"/>
+        <location filename="../libgui/customer/customeradddialog.cpp" line="72"/>
         <source>Customer updated successfully</source>
         <translation>Pelanggan berhasil diubah</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customeradddialog.cpp" line="76"/>
-        <location filename="../libgui/customer/customeradddialog.cpp" line="84"/>
+        <location filename="../libgui/customer/customeradddialog.cpp" line="77"/>
+        <location filename="../libgui/customer/customeradddialog.cpp" line="85"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customeradddialog.cpp" line="84"/>
+        <location filename="../libgui/customer/customeradddialog.cpp" line="85"/>
         <source>Number and name are required</source>
         <translation>Nomor dan nama harus diisi</translation>
     </message>
@@ -2366,33 +2372,38 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/customer/customerwidget.cpp" line="66"/>
+        <source>Email</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/customer/customerwidget.cpp" line="67"/>
         <source>Address</source>
         <translation>Alamat</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="67"/>
-        <location filename="../libgui/customer/customerwidget.cpp" line="82"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="68"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="85"/>
         <source>Reward</source>
         <translation>Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="68"/>
-        <location filename="../libgui/customer/customerwidget.cpp" line="77"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="69"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="80"/>
         <source>Credit</source>
         <translation>Piutang</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="98"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="101"/>
         <source>Customer deleted successfully</source>
         <translation>Berhasil menghapus pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="124"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="127"/>
         <source>Delete Confirmation</source>
         <translation>Konfirmasi menghapus</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="124"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="127"/>
         <source>Are you sure to delete the customer?</source>
         <translation>Yakin menghapus pelanggan?</translation>
     </message>
@@ -2593,9 +2604,13 @@ Akhir</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="175"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="176"/>
+        <source>The sistem will only make this item not visible in order to make the other data link to it still accessible. The stocks cards and item link will be removed. Are you sure to delete item?</source>
+        <translation>Kartu stok dan link ke item ini juga akan terhapus. Yakin untuk menghapus?</translation>
+    </message>
+    <message>
         <source>This will also delete the stock card. Are you sure to delete item?</source>
-        <translation>Ini akan menghapus kartu stok. Yakin hapus?</translation>
+        <translation type="vanished">Ini akan menghapus kartu stok. Yakin hapus?</translation>
     </message>
     <message>
         <source>Count</source>
@@ -2634,23 +2649,23 @@ Akhir</translation>
         <translation>Simpan sebagai CSV</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="137"/>
-        <location filename="../libgui/item/itemwidget.cpp" line="225"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="138"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="227"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="137"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="138"/>
         <source>Unable to save to file</source>
         <translation>Tidak dapat menghapus file</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="141"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="142"/>
         <source>Item imported successfully</source>
         <translation>Item berhasil diimport</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="175"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="176"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
@@ -2667,12 +2682,12 @@ Akhir</translation>
         <translation type="vanished">Hanya barang dengan stok 0 dapat dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="185"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="187"/>
         <source>Import items</source>
         <translation>Import item</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="225"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="227"/>
         <source>Please setting printer first</source>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
@@ -2769,159 +2784,159 @@ Akhir</translation>
 <context>
     <name>LibGUI::MainWindow</name>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="201"/>
+        <location filename="../libgui/mainwindow.cpp" line="202"/>
         <source>First setting</source>
         <translation>Pertama setting</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="201"/>
+        <location filename="../libgui/mainwindow.cpp" line="202"/>
         <source>Please set the machine ID on setting first before start using the application</source>
         <translation>Silakan setting mesin ID pada menu setting sebelum menggunakan aplikasi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="210"/>
+        <location filename="../libgui/mainwindow.cpp" line="211"/>
         <source>Success</source>
         <translation>Berhasil</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="210"/>
+        <location filename="../libgui/mainwindow.cpp" line="211"/>
         <source>Reset success, will restart application</source>
         <translation>Reset berhasil, aplikasi akan restart</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="220"/>
+        <location filename="../libgui/mainwindow.cpp" line="221"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="328"/>
+        <location filename="../libgui/mainwindow.cpp" line="329"/>
         <source>Setting</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="336"/>
+        <location filename="../libgui/mainwindow.cpp" line="337"/>
         <source>User</source>
         <translation>Pengguna</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="344"/>
+        <location filename="../libgui/mainwindow.cpp" line="345"/>
         <source>Suplier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="352"/>
+        <location filename="../libgui/mainwindow.cpp" line="353"/>
         <source>Cahsier</source>
         <translation>Kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="366"/>
+        <location filename="../libgui/mainwindow.cpp" line="367"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="374"/>
+        <location filename="../libgui/mainwindow.cpp" line="375"/>
         <source>Item</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="383"/>
+        <location filename="../libgui/mainwindow.cpp" line="384"/>
         <source>Purcase</source>
         <translation>Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="399"/>
+        <location filename="../libgui/mainwindow.cpp" line="400"/>
         <source>Pur : %1</source>
         <translation>Beli : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="408"/>
+        <location filename="../libgui/mainwindow.cpp" line="409"/>
         <source>Sales</source>
         <translation>Penjualan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="418"/>
+        <location filename="../libgui/mainwindow.cpp" line="419"/>
         <source>Items Sales</source>
         <translation>Penjualan Item</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="436"/>
+        <location filename="../libgui/mainwindow.cpp" line="437"/>
         <source>Customers</source>
         <translation>Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="450"/>
+        <location filename="../libgui/mainwindow.cpp" line="451"/>
         <source>Credit : %1</source>
         <translation>Piutang : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="463"/>
+        <location filename="../libgui/mainwindow.cpp" line="464"/>
         <source>Reward : %1</source>
         <translation>Poin : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="472"/>
+        <location filename="../libgui/mainwindow.cpp" line="473"/>
         <source>Machine</source>
         <translation>Mesin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="482"/>
+        <location filename="../libgui/mainwindow.cpp" line="483"/>
         <source>Reward</source>
         <translation>Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="492"/>
+        <location filename="../libgui/mainwindow.cpp" line="493"/>
         <source>Bank</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="502"/>
+        <location filename="../libgui/mainwindow.cpp" line="503"/>
         <source>Transaction</source>
         <translation>Transaksi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="512"/>
+        <location filename="../libgui/mainwindow.cpp" line="513"/>
         <source>Money</source>
         <translation>Keuangan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="528"/>
+        <location filename="../libgui/mainwindow.cpp" line="529"/>
         <source>Purchase Return</source>
         <translation>Retur Pembelian</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="544"/>
+        <location filename="../libgui/mainwindow.cpp" line="545"/>
         <source>Check Stock</source>
         <translation>Perbaikan Stok</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="554"/>
+        <location filename="../libgui/mainwindow.cpp" line="555"/>
         <source>Initial Stock</source>
         <translation>Stok Awal</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="564"/>
+        <location filename="../libgui/mainwindow.cpp" line="565"/>
         <source>Unit</source>
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="578"/>
+        <location filename="../libgui/mainwindow.cpp" line="579"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="578"/>
+        <location filename="../libgui/mainwindow.cpp" line="579"/>
         <source>Are you sure to reset your database?
 Please input your password to confirm</source>
         <translation>Yakin reset database?
 Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="593"/>
+        <location filename="../libgui/mainwindow.cpp" line="594"/>
         <source>Stock Card</source>
         <translation>Kartu Stok</translation>
     </message>
     <message>
-        <location filename="../libgui/mainwindow.cpp" line="603"/>
+        <location filename="../libgui/mainwindow.cpp" line="604"/>
         <source>Sold Return</source>
         <translation>Retur Penjualan</translation>
     </message>
@@ -4295,17 +4310,17 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Tambah suplier baru</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplieradddialog.cpp" line="61"/>
+        <location filename="../libgui/suplier/suplieradddialog.cpp" line="62"/>
         <source>Edit suplier</source>
         <translation>Ubah suplier</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplieradddialog.cpp" line="72"/>
+        <location filename="../libgui/suplier/suplieradddialog.cpp" line="73"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplieradddialog.cpp" line="72"/>
+        <location filename="../libgui/suplier/suplieradddialog.cpp" line="73"/>
         <source>Please fill all form</source>
         <translation>Silakan isi semua form</translation>
     </message>
@@ -4334,37 +4349,42 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/suplier/suplierwidget.cpp" line="54"/>
+        <source>Email</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="55"/>
         <source>Address</source>
         <translation>Alamat</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="73"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="75"/>
         <source>Suplier added successfully</source>
         <translation>Suplier berhasil ditambah</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="77"/>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="87"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="79"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="89"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="83"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="85"/>
         <source>Suplier updated successfully</source>
         <translation>Suplier berhasil diubah</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="92"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="94"/>
         <source>Suplier deleted successfully</source>
         <translation>Suplier berhasil dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="113"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="115"/>
         <source>Confirmation</source>
         <translation>Konfirmasi Hapus</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplierwidget.cpp" line="113"/>
+        <location filename="../libgui/suplier/suplierwidget.cpp" line="115"/>
         <source>Are you sure want to remove suplier?</source>
         <translation>Yakin hapus suplier?</translation>
     </message>
@@ -5359,6 +5379,63 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
 </context>
 <context>
+    <name>RestoreItemDialog</name>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="14"/>
+        <source>Restore Item Dialog</source>
+        <translation>Dialog Pemulihan Item</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="20"/>
+        <source>The item already existed in database, but it was deleted. You can restore this item by clicking the restore button and then update the item.</source>
+        <translation>Item sudah ada didatabase namun telah dihapus. Item dapat dikembalikan dengan klik pada tombol pulihkan.</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="45"/>
+        <source>Barcode</source>
+        <translation>Barcode</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="52"/>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="66"/>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="94"/>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="101"/>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="108"/>
+        <source>TextLabel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="59"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="73"/>
+        <source>Unit</source>
+        <translation>Satuan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="80"/>
+        <source>Category</source>
+        <translation>Kategori</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="87"/>
+        <source>Suplier</source>
+        <translation>Suplier</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="145"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/restoreitemdialog.ui" line="155"/>
+        <source>Restore</source>
+        <translation>Pulihkan</translation>
+    </message>
+</context>
+<context>
     <name>ReturnAddDialog</name>
     <message>
         <location filename="../libgui/purchase/returnadddialog.ui" line="14"/>
@@ -6104,12 +6181,18 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Kode suplier</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplieradddialog.ui" line="123"/>
+        <location filename="../libgui/suplier/suplieradddialog.ui" line="93"/>
+        <location filename="../libgui/suplier/suplieradddialog.ui" line="100"/>
+        <source>Email</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/suplier/suplieradddialog.ui" line="137"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../libgui/suplier/suplieradddialog.ui" line="133"/>
+        <location filename="../libgui/suplier/suplieradddialog.ui" line="147"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>

@@ -62,11 +62,12 @@ private:
     int mBarcodeOtherLinkRequest = -1;
     double mPackBuyPrice;
     bool mIsCloseAfter = false;
+    bool mIsFromSave = false;
     QString mCurrentUnit;
     QVariantList mPriceList;
     QString mCurrentBarcode;
 
-    void saveData(bool close = false);
+    void saveData();
     int getItemFlagFromCheckbox();
     void applyItemFlagToCheckbox(int flag);
 

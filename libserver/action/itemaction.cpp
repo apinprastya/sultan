@@ -131,12 +131,12 @@ Message ItemAction::del(Message *msg)
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
     mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(!mDb->del(mTableName)) {
+    if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}, {"stock", 0}})) {
         message.setError(mDb->lastError().text());
-    } else {
-        mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
-        mDb->where("barcode = ", msg->data("barcode"))->del("itemlinks");
     }
+    mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
+    mDb->where("barcode = ", msg->data("barcode"))->del("itemlinks");
+    mDb->where("barcode_link = ", msg->data("barcode"))->del("itemlinks");
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
             mDb->roolback();
@@ -151,6 +151,7 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
     LibG::Message message(msg);
     const QString &barcode = msg->data("barcode").toString();
     //get item detail
+    if(hasFlag(SOFT_DELETE) && !msg->hasData("withdeleted")) mDb->where("deleted_at IS NULL");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
     mDb->table(mTableName)->where("barcode = ", barcode);
     DbResult res = mDb->exec();
