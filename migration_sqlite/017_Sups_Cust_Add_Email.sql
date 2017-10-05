@@ -1,0 +1,3 @@
+ALTER TABLE customers ADD COLUMN `email` VARCHAR(255) NOT NULL DEFAULT '';
+-- separator
+ALTER TABLE supliers ADD COLUMN `email` VARCHAR(255) NOT NULL DEFAULT '';

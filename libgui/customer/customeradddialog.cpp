@@ -58,6 +58,7 @@ void CustomerAddDialog::fill(const QVariantMap &data)
     ui->lineNumber->setText(data["number"].toString());
     ui->linePhone->setText(data["phone"].toString());
     ui->plainAddress->setPlainText(data["address"].toString());
+    ui->lineEmail->setText(data["email"].toString());
 }
 
 void CustomerAddDialog::messageReceived(LibG::Message *msg)
@@ -90,6 +91,7 @@ void CustomerAddDialog::saveClicked()
     data.insert("name", ui->lineName->text());
     data.insert("phone", ui->linePhone->text());
     data.insert("address", ui->plainAddress->toPlainText());
+    data.insert("email", ui->lineEmail->text());
     if(mId < 0) {
         msg.setData(data);
     } else {

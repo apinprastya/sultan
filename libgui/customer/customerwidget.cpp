@@ -63,11 +63,14 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("number", tr("Number"));
     model->addColumn("name", tr("Name"));
     model->addColumn("phone", tr("Phone"));
+    model->addColumn("email", tr("Email"));
     model->addColumn("address", tr("Address"));
     model->addColumnMoney("reward", tr("Reward"));
     model->addColumnMoney("credit", tr("Credit"));
     model->addHeaderFilter("number", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("phone", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    model->addHeaderFilter("email", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);

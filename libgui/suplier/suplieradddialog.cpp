@@ -55,6 +55,7 @@ void SuplierAddDialog::fill(const QVariantMap &data)
     ui->lineCode->setText(data["code"].toString());
     ui->linePhone->setText(data["phone"].toString());
     ui->textAddress->setPlainText(data["address"].toString());
+    ui->lineEmail->setText(data["email"].toString());
     ui->lineName->setFocus(Qt::TabFocusReason);
     ui->pushSave->setEnabled(true);
     mId = data["id"].toInt();
@@ -77,6 +78,7 @@ void SuplierAddDialog::saveClicked()
     data["code"] = ui->lineCode->text();
     data["phone"] = ui->linePhone->text();
     data["address"] = ui->textAddress->toPlainText();
+    data["email"] = ui->lineEmail->text();
     emit saveData(data, mId);
     ui->pushSave->setDisabled(true);
 }
