@@ -34,6 +34,7 @@ public:
     LibG::Message prices(LibG::Message *msg);
     LibG::Message exportData(LibG::Message *msg);
     LibG::Message importData(LibG::Message *msg);
+    LibG::Message summary(LibG::Message *msg);
 
 protected:
     void selectAndJoin() override;

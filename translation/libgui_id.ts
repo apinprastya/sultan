@@ -2553,62 +2553,72 @@ Akhir</translation>
 <context>
     <name>LibGUI::ItemWidget</name>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="63"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="62"/>
+        <source>Stock Value</source>
+        <translation>Nilai Stock</translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/itemwidget.cpp" line="62"/>
+        <source>loading...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/item/itemwidget.cpp" line="66"/>
         <source>Barcode</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="64"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="67"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="65"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="68"/>
         <source>Buy Price</source>
         <translation>Harga Beli</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="66"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="69"/>
         <source>Sell Price</source>
         <translation>Harga Jual</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="67"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="70"/>
         <source>Stock</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="68"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="71"/>
         <source>Unit</source>
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="69"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="72"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="70"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="73"/>
         <source>Suplier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="80"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="83"/>
         <source>Stock Card</source>
         <translation>Kartu Stok</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="85"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="88"/>
         <source>Export</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="90"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="93"/>
         <source>Import</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="176"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="186"/>
         <source>The sistem will only make this item not visible in order to make the other data link to it still accessible. The stocks cards and item link will be removed. Are you sure to delete item?</source>
         <translation>Kartu stok dan link ke item ini juga akan terhapus. Yakin untuk menghapus?</translation>
     </message>
@@ -2633,43 +2643,43 @@ Akhir</translation>
         <translation type="vanished">Harga - Diskon</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="122"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="130"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="124"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="132"/>
         <source>Price deleted successfully</source>
         <translation>Harga berhasil dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="127"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="135"/>
         <source>Item deleted successfully</source>
         <translation>Item berhasil dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="130"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="138"/>
         <source>Save as CSV</source>
         <translation>Simpan sebagai CSV</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="138"/>
-        <location filename="../libgui/item/itemwidget.cpp" line="227"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="146"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="243"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="138"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="146"/>
         <source>Unable to save to file</source>
         <translation>Tidak dapat menghapus file</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="142"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="150"/>
         <source>Item imported successfully</source>
         <translation>Item berhasil diimport</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="176"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="186"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
@@ -2686,12 +2696,12 @@ Akhir</translation>
         <translation type="vanished">Hanya barang dengan stok 0 dapat dihapus</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="187"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="197"/>
         <source>Import items</source>
         <translation>Import item</translation>
     </message>
     <message>
-        <location filename="../libgui/item/itemwidget.cpp" line="227"/>
+        <location filename="../libgui/item/itemwidget.cpp" line="243"/>
         <source>Please setting printer first</source>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>

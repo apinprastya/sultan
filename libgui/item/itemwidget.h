@@ -33,6 +33,7 @@ class TableWidget;
 class TableItem;
 class AddItemDialog;
 class AddPriceDialog;
+class TileWidget;
 
 class ItemWidget : public QWidget, public LibG::MessageHandler
 {
@@ -49,9 +50,10 @@ private:
     TableWidget *mMainTable;
     AddItemDialog *mAddDialog;
     AddPriceDialog *mPriceDialog;
+    double mCurrentBuyPrice;
+    TileWidget *mStockValue;
     QString mCurrentBarcode;
     QString mCurrentName;
-    double mCurrentBuyPrice;
 
 private slots:
     void mainTableSelectionChanges();
@@ -62,6 +64,7 @@ private slots:
     void exportClicked();
     void mainTableKeyPressed(QObject *, QKeyEvent *event);
     void openStockCard();
+    void reloadSummary();
 
 private:
     void printPrice(TableItem *item);

@@ -39,6 +39,7 @@ ItemAction::ItemAction():
     mFunctionMap.insert(MSG_COMMAND::CASHIER_PRICE, std::bind(&ItemAction::prices, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&ItemAction::summary, this, std::placeholders::_1));
 }
 
 Message ItemAction::insert(Message *msg)
@@ -315,6 +316,17 @@ Message ItemAction::importData(Message *msg)
     if(mDb->isSupportTransaction()) {
         if(!mDb->commit()) mDb->roolback();
     }
+    return message;
+}
+
+Message ItemAction::summary(Message *msg)
+{
+    Message message(msg);
+    DbResult res = mDb->select("sum(stock * buy_price) as total")->get(mTableName);
+    if(!res.isEmpty())
+        message.addData("total", res.first()["total"]);
+    else
+        message.addData("total", 0);
     return message;
 }
 

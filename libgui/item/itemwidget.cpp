@@ -39,6 +39,7 @@
 #include "global_setting_const.h"
 #include "addpricedialog.h"
 #include "stockcarddialog.h"
+#include "tilewidget.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -53,10 +54,12 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui(new Ui::ItemWidget),
     mMainTable(new TableWidget(this)),
     mAddDialog(new AddItemDialog(bus, this)),
-    mPriceDialog(new AddPriceDialog(bus, this))
+    mPriceDialog(new AddPriceDialog(bus, this)),
+    mStockValue(new TileWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
+    mStockValue->setTitleValue(tr("Stock Value"), tr("loading..."));
     mMainTable->initCrudButton();
     auto model = mMainTable->getModel();
     model->setMessageBus(bus);
@@ -92,6 +95,10 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(button, SIGNAL(clicked(bool)), SLOT(importClicked()));
     mMainTable->addActionButton(button);
     model->refresh();
+    auto hor = new QHBoxLayout();
+    hor->addWidget(mStockValue);
+    hor->addStretch();
+    ui->verticalLayoutTop->addLayout(hor);
     ui->verticalLayoutTop->addWidget(mMainTable);
 
     connect(mMainTable->getTableView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(mainTableSelectionChanges()));
@@ -99,6 +106,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
     connect(mMainTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteItemClicked(QModelIndex)));
     connect(mAddDialog, SIGNAL(success()), mMainTable->getModel(), SLOT(refresh()));
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(reloadSummary()));
 
     auto key = new KeyEvent(this);
     key->addConsumeKey(Qt::Key_P);
@@ -140,6 +148,8 @@ void ItemWidget::messageReceived(LibG::Message *msg)
         }
     } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Item imported successfully"));
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::SUMMARY)) {
+        mStockValue->setValue(Preference::formatMoney(msg->data("total").toDouble()));
     }
 }
 
@@ -218,6 +228,12 @@ void ItemWidget::openStockCard()
         StockCardDialog dialog(item->data("barcode").toString(), mMessageBus);
         dialog.exec();
     }
+}
+
+void ItemWidget::reloadSummary()
+{
+    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::SUMMARY);
+    sendMessage(&msg);
 }
 
 void ItemWidget::printPrice(TableItem *item)
