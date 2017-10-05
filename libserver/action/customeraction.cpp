@@ -32,7 +32,7 @@ using namespace LibDB;
 CustomerAction::CustomerAction():
     ServerAction("customers", "id")
 {
-    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
+    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE | BEFORE_DELETE;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&CustomerAction::summary, this, std::placeholders::_1));
 }
 
@@ -44,4 +44,13 @@ LibG::Message CustomerAction::summary(LibG::Message *msg)
     DbResult res = mDb->clone()->select("sum(credit) as credit, sum(reward) as reward")->exec();
     message.setData(res.first());
     return message;
+}
+
+bool CustomerAction::beforeDelete(const QVariantMap &oldData, Message *retMsg)
+{
+    if(oldData["credit"].toDouble() != 0) {
+        retMsg->setError(QObject::tr("Customer credit must 0 when delete the customer"));
+        return false;
+    }
+    return true;
 }

@@ -29,6 +29,9 @@ class CustomerAction : public ServerAction
 public:
     CustomerAction();
     LibG::Message summary(LibG::Message *msg);
+
+protected:
+    bool beforeDelete(const QVariantMap &oldData, LibG::Message *retMsg) override;
 };
 
 }

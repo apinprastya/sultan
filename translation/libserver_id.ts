@@ -35,12 +35,12 @@
         <translation>Poin dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="93"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="94"/>
         <source>Income</source>
         <translation>Pemasukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="93"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="94"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
     </message>
@@ -56,17 +56,17 @@
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="158"/>
+        <location filename="../libserver/action/itemaction.cpp" line="159"/>
         <source>Item not found</source>
         <translation>Item tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="164"/>
+        <location filename="../libserver/action/itemaction.cpp" line="165"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
     </message>
     <message>
-        <location filename="../libserver/action/databaseaction.cpp" line="73"/>
+        <location filename="../libserver/action/databaseaction.cpp" line="74"/>
         <source>User id not found</source>
         <translation>User tidak ditemukan</translation>
     </message>
@@ -84,6 +84,11 @@
         <location filename="../libserver/action/soldreturnaction.cpp" line="46"/>
         <source>Sold Return : %1</source>
         <translation>Retur Penjualan: %1</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/customeraction.cpp" line="52"/>
+        <source>Customer credit must 0 when delete the customer</source>
+        <translation>Piutang pelanggan harus 0 jika ingin menghapus</translation>
     </message>
 </context>
 </TS>

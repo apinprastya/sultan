@@ -100,6 +100,8 @@ void CustomerWidget::messageReceived(LibG::Message *msg)
         if(msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Customer deleted successfully"));
             mTableWidget->getModel()->refresh();
+        } else {
+            FlashMessageManager::showError(msg->data("error").toString());
         }
     } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY)) {
         mTileCredit->setValue(Preference::formatMoney(msg->data("credit").toDouble()));
@@ -124,7 +126,7 @@ void CustomerWidget::deleteClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete the customer?"));
+    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Make sure the credit is 0 before delete. Are you sure to delete the customer?"));
     if(ret == QMessageBox::Yes) {
         Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL);
         msg.addData("id", item->id);

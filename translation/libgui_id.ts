@@ -2398,14 +2398,18 @@ Akhir</translation>
         <translation>Berhasil menghapus pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="127"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="129"/>
         <source>Delete Confirmation</source>
         <translation>Konfirmasi menghapus</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerwidget.cpp" line="127"/>
+        <location filename="../libgui/customer/customerwidget.cpp" line="129"/>
+        <source>Make sure the credit is 0 before delete. Are you sure to delete the customer?</source>
+        <translation>Pastikan piutang pelanggan sudah 0. Yakin hapus?</translation>
+    </message>
+    <message>
         <source>Are you sure to delete the customer?</source>
-        <translation>Yakin menghapus pelanggan?</translation>
+        <translation type="vanished">Yakin menghapus pelanggan?</translation>
     </message>
 </context>
 <context>
