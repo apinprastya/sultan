@@ -92,7 +92,8 @@ SOURCES += \
     $$PWD/report/stockcardwidget.cpp \
     $$PWD/item/stockcarddialog.cpp \
     $$PWD/soldreturn/solditemreturnwidget.cpp \
-    $$PWD/soldreturn/addsoldreturndialog.cpp
+    $$PWD/soldreturn/addsoldreturndialog.cpp \
+    $$PWD/item/restoreitemdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -188,7 +189,8 @@ HEADERS += \
     $$PWD/report/stockcardwidget.h \
     $$PWD/item/stockcarddialog.h \
     $$PWD/soldreturn/solditemreturnwidget.h \
-    $$PWD/soldreturn/addsoldreturndialog.h
+    $$PWD/soldreturn/addsoldreturndialog.h \
+    $$PWD/item/restoreitemdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -247,4 +249,5 @@ FORMS += \
     $$PWD/main/settingdialog.ui \
     $$PWD/cashier/editpricecountdialog.ui \
     $$PWD/item/stockcarddialog.ui \
-    $$PWD/soldreturn/addsoldreturndialog.ui
+    $$PWD/soldreturn/addsoldreturndialog.ui \
+    $$PWD/item/restoreitemdialog.ui

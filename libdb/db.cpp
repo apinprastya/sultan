@@ -473,13 +473,8 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
         if(dbname.isEmpty()) dbname = "sultan.db";
         if(!dbname.endsWith(".db")) dbname += ".db";
         if(dirpath.isEmpty()) {
-#ifdef Q_OS_WIN32
-            dir.mkdir("sultan");
-            dir.cd("sultan");
-#else
             dir.mkdir(".sultan");
             dir.cd(".sultan");
-#endif
         }
         database.setDatabaseName(dir.absoluteFilePath(dbname));
         qDebug() << TAG << "SQLite database path :" << dir.absoluteFilePath(dbname);

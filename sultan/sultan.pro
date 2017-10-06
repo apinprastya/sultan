@@ -59,7 +59,7 @@ macx {
     DESTDIR_WIN ~= s,/,\\,g
     copymigration_sqlite.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\migration_sqlite $${DESTDIR_WIN}\migration_sqlite)
     copymigration_mysql.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\migration_mysql $${DESTDIR_WIN}\migration_mysql)
-    copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\translation\*.qm $${DESTDIR_WIN})
+    copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\translation\lib*.qm $${DESTDIR_WIN})
 } else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
