@@ -3,7 +3,7 @@
 
 using namespace LibGUIQML;
 
-MainWindowQML::MainWindowQML(QObject *parent) :
+MainWindowQML::MainWindowQML(LibG::MessageBus *bus, QObject *parent) :
     QObject(parent),
     mQmlEngine(new QQmlApplicationEngine(this))
 {
@@ -46,6 +46,11 @@ void MainWindowQML::guiMessage(int id, const QString &str)
 }
 
 void MainWindowQML::setSettingSocketOpenClose(std::function<void (const QString &, int)> openCon, std::function<void ()> closeCon)
+{
+
+}
+
+void MainWindowQML::messageReceived(LibG::Message *msg)
 {
 
 }

@@ -64,7 +64,7 @@ Core::Core(QObject *parent) :
     mMainWindow(new GuiDummy())
 #else
     mMainWindow(new LibGUI::MainWindow(mMessageBus)),
-    mWindowQml(new LibGUIQML::MainWindowQML())
+    mWindowQml(new LibGUIQML::MainWindowQML(mMessageBus))
 #endif
 {
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));

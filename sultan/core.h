@@ -49,7 +49,6 @@ private:
     LibServer::MainServer *mMainServer;
     LibG::MessageBus *mMessageBus;
     LibG::AbstractSultanGUI *mMainWindow;
-    LibG::AbstractSultanGUI *mWindowQml;
     SocketClient *mSettingSocketClient = nullptr;
 
 protected:
