@@ -23,7 +23,7 @@ public:
     void reset();
 
 protected:
-    void messageReceived(LibG::Message *msg);
+    void messageReceived(LibG::Message *msg) override;
     void showEvent(QShowEvent *event) override;
 
 private:

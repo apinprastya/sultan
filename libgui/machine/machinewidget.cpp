@@ -28,6 +28,7 @@
 #include "tableview.h"
 #include "guiutil.h"
 #include "flashmessagemanager.h"
+#include "addmachinedialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -46,7 +47,7 @@ MachineWidget::MachineWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
-    model->addColumn("id", tr("ID"), Qt::AlignCenter);
+    model->addColumn("code", tr("Code"));
     model->addColumn("name", tr("Name"));
     model->setTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
@@ -76,25 +77,26 @@ void MachineWidget::messageReceived(Message *msg)
 
 void MachineWidget::addClicked()
 {
-    const QString &name = QInputDialog::getText(this, tr("Add new machine"), tr("Input machine name"));
-    if(!name.isEmpty()) {
-        Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::INSERT);
-        msg.addData("name", name);
-        sendMessage(&msg);
-    }
+    AddMachineDialog dialog(mMessageBus, this);
+    dialog.exec();
+    mTableWidget->getModel()->refresh();
 }
 
 void MachineWidget::editClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    const QString &name = QInputDialog::getText(this, tr("Edit machine"), tr("Input machine name"), QLineEdit::Normal, item->data("name").toString());
+    AddMachineDialog dialog(mMessageBus, this);
+    dialog.fill(item->data());
+    dialog.exec();
+    mTableWidget->getModel()->refresh();
+    /*const QString &name = QInputDialog::getText(this, tr("Edit machine"), tr("Input machine name"), QLineEdit::Normal, item->data("name").toString());
     if(!name.isEmpty() && name.compare(item->data("name").toString())) {
         Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
         msg.addData("data", QVariantMap{{"name", name}});
         sendMessage(&msg);
-    }
+    }*/
 }
 
 void MachineWidget::deleteClicked(const QModelIndex &index)

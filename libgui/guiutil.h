@@ -35,7 +35,7 @@ public:
     static bool anyEmpty(const QList<QWidget*> &lists);
     static void setColumnWidth(QTableView *table, const QList<int> &widths);
     static QString toHtml(QString value);
-    static void selectCombo(QComboBox *combo, const QVariant &value);
+    static void selectCombo(QComboBox *combo, const QVariant &value, const QString &key = "");
     static void selectComboByText(QComboBox *combo, const QString &value);
     static void clearAll(const QList<QWidget*> &lists);
     static void enableWidget(bool enable, const QList<QWidget*> &lists);

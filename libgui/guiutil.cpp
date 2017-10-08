@@ -59,13 +59,20 @@ QString GuiUtil::toHtml(QString value)
     return value.replace("\n" , "<br>");
 }
 
-void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value)
+void GuiUtil::selectCombo(QComboBox *combo, const QVariant &value, const QString &key)
 {
     if(!value.isValid()) return;
     for(int i = 0; i < combo->count(); i++) {
-        if(combo->itemData(i) == value) {
-            combo->setCurrentIndex(i);
-            return;
+        if(key.isEmpty()) {
+            if(combo->itemData(i) == value) {
+                combo->setCurrentIndex(i);
+                return;
+            }
+        } else {
+            if(combo->itemData(i).toMap()[key] == value) {
+                combo->setCurrentIndex(i);
+                return;
+            }
         }
     }
 }

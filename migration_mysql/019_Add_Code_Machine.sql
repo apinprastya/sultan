@@ -1,0 +1,3 @@
+ALTER TABLE `machines` ADD COLUMN `code` VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE `machines` ADD CONSTRAIT `CODEMACHINE` UNIQUE (code);
+UPDATE `machines` SET code = name;

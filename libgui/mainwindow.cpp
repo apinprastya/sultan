@@ -201,6 +201,10 @@ void MainWindow::showEvent(QShowEvent *event)
     if(Preference::getInt(SETTING::MACHINE_ID) == 0) {
         QMessageBox::warning(this, tr("First setting"), tr("Please set the machine ID on setting first before start using the application"));
         openSetting();
+    } else {
+        Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::GET);
+        msg.addData("id", Preference::getInt(SETTING::MACHINE_ID));
+        sendMessage(&msg);
     }
 }
 
@@ -220,6 +224,9 @@ void MainWindow::messageReceived(Message *msg)
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::GET)) {
+        Preference::setValue(SETTING::MACHINE_CODE, msg->data("code"));
+        Preference::setValue(SETTING::MACHINE_NAME, msg->data("name"));
     }
 }
 

@@ -147,7 +147,8 @@ void SettingWidget::saveClicked()
     //market name
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
-    Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toInt());
+    Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toMap()["id"]);
+    Preference::setValue(SETTING::MACHINE_CODE, ui->comboMachine->currentData().toMap()["code"]);
     Preference::setValue(SETTING::MACHINE_NAME, ui->comboMachine->currentText());
     //taxes
     Preference::setValue(SETTING::USE_TAX, ui->groupBoxTax->isChecked());
@@ -215,8 +216,8 @@ void SettingWidget::messageReceived(Message *msg)
         const QVariantList &list = msg->data("data").toList();
         for(auto d : list) {
             const QVariantMap &data = d.toMap();
-            ui->comboMachine->addItem(data["name"].toString(), data["id"].toInt());
+            ui->comboMachine->addItem(data["name"].toString(), data);
         }
-        GuiUtil::selectCombo(ui->comboMachine, Preference::getInt(SETTING::MACHINE_ID, 0));
+        GuiUtil::selectCombo(ui->comboMachine, Preference::getInt(SETTING::MACHINE_ID, 0), "id");
     }
 }

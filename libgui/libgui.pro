@@ -142,7 +142,8 @@ SOURCES += \
     item/stockcarddialog.cpp \
     soldreturn/solditemreturnwidget.cpp \
     soldreturn/addsoldreturndialog.cpp \
-    item/restoreitemdialog.cpp
+    item/restoreitemdialog.cpp \
+    machine/addmachinedialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -239,7 +240,8 @@ HEADERS += \
     item/stockcarddialog.h \
     soldreturn/solditemreturnwidget.h \
     soldreturn/addsoldreturndialog.h \
-    item/restoreitemdialog.h
+    item/restoreitemdialog.h \
+    machine/addmachinedialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -299,4 +301,5 @@ FORMS += \
     cashier/editpricecountdialog.ui \
     item/stockcarddialog.ui \
     soldreturn/addsoldreturndialog.ui \
-    item/restoreitemdialog.ui
+    item/restoreitemdialog.ui \
+    machine/addmachinedialog.ui

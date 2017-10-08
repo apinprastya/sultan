@@ -108,7 +108,7 @@ double Util::calculateDiscount(const QString &formula, double value)
 
 QString Util::genSoldNumber()
 {
-    QString name = Preference::getString(SETTING::MACHINE_NAME);
+    QString name = Preference::getString(SETTING::MACHINE_CODE);
     name.replace(QChar(' '), QChar('_'));
     const QString &now = QDate::currentDate().toString("yyMMdd");
     if(NEXTVAL == 0) {
@@ -123,7 +123,7 @@ QString Util::genSoldNumber()
     int val = NEXTVAL;
     NEXTVAL++;
     Preference::setValue(SETTING::NUMBER_VALUE, NEXTVAL);
-    const QString &ret = QString("%1-%2").arg(name).arg(val, 3, 16, QChar('0'));
+    const QString &ret = QString("%1-%2%3").arg(name).arg(now).arg(val, 3, 16, QChar('0'));
     return ret;
 }
 
