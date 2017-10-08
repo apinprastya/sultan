@@ -89,7 +89,7 @@ void ItemUtil::insertStock(const QString &barcode, const QString &number, int ty
     DbResult links = mDb->where("barcode_link = ", barcode)->where("type = ", ITEM_LINK_TYPE::BOX)->get("itemlinks");
     for(int i = 0; i < links.size(); i++) {
         const QVariantMap &link = links.data(i);
-        int c = link["count_link"].toFloat();
+        float c = link["count_link"].toFloat();
         data["barcode"] = link["barcode"];
         if(type == STOCK_CARD_TYPE::SOLD) {
             data["count"] = -(count / c);
@@ -100,7 +100,7 @@ void ItemUtil::insertStock(const QString &barcode, const QString &number, int ty
     links = mDb->where("barcode = ", barcode)->get("itemlinks");
     for(int i = 0; i < links.size(); i++) {
         const QVariantMap &link = links.data(i);
-        int c = link["count_link"].toFloat();
+        float c = link["count_link"].toFloat();
         data["barcode"] = link["barcode_link"];
         if(type == STOCK_CARD_TYPE::SOLD) {
             data["count"] = -(count * c);
@@ -128,14 +128,14 @@ void ItemUtil::updateStockCardCount(const QString &barcode, float count, int typ
     DbResult links = mDb->where("barcode_link = ", barcode)->where("type = ", ITEM_LINK_TYPE::BOX)->get("itemlinks");
     for(int i = 0; i < links.size(); i++) {
         const QVariantMap &link = links.data(i);
-        int c = link["count_link"].toFloat();
+        float c = link["count_link"].toFloat();
         updateStockCardCount(link["barcode"].toString(), count / c, type, link_id, recursive);
     }
     //third : update items link stock below it
     links = mDb->where("barcode = ", barcode)->get("itemlinks");
     for(int i = 0; i < links.size(); i++) {
         const QVariantMap &link = links.data(i);
-        int c = link["count_link"].toFloat();
+        float c = link["count_link"].toFloat();
         updateStockCardCount(link["barcode"].toString(), count * c, type, link_id, recursive);
     }
 }
