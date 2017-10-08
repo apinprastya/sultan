@@ -69,14 +69,14 @@ void SoldReturnAction::afterUpdate(const QVariantMap &oldData, const QVariantMap
                          {"link_type", TRANSACTION_LINK_TYPE::SOLD_RETURN}, {"transaction_total", -newData["money_returned"].toDouble()},
                          {"user_id", newData["user_id"]}, {"machine_id", newData["machine_id"]},
                          {"bank_id", newData["bank_id"]}, {"money_total", -newData["money_returned"].toDouble()},
-                         {"detail", QObject::tr("Purchase Return : %1").arg(newData["barcode"].toString())}};
+                         {"detail", QObject::tr("Sold Return : %1").arg(newData["barcode"].toString())}};
             mDb->insert("transactions", d);
         }
     } else if(newStatus == PURCHASE_RETURN_STATUS::RETURNED) {
         QVariantMap d{{"date", newData["return_date"]}, {"number", newData["barcode"]},
                      {"transaction_total", -newData["money_returned"].toDouble()}, {"machine_id", newData["machine_id"]},
                      {"bank_id", newData["bank_id"]}, {"money_total", -newData["money_returned"].toDouble()},
-                     {"detail", QObject::tr("Purchase Return : %1").arg(newData["barcode"].toString())}};
+                     {"detail", QObject::tr("Sold Return : %1").arg(newData["barcode"].toString())}};
         mDb->where("link_type =", TRANSACTION_LINK_TYPE::SOLD_RETURN)->where("link_id =", newData["id"])->
                 update("transactions", d);
         if(newRet != oldRet)

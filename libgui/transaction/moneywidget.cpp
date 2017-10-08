@@ -68,6 +68,8 @@ MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
         case TRANSACTION_LINK_TYPE::SOLD: return tr("Sold");
         case TRANSACTION_LINK_TYPE::PURCHASE: return tr("Purchase");
         case TRANSACTION_LINK_TYPE::CUSTOMER_CREDIT: return tr("Credit");
+        case TRANSACTION_LINK_TYPE::BUY_RETURN: return tr("Purchase return");
+        case TRANSACTION_LINK_TYPE::SOLD_RETURN: return tr("Sold return");
         }
         return QString();
     });
@@ -137,6 +139,8 @@ void LibGUI::MoneyWidget::showEvent(QShowEvent *e)
     combo->addItem(tr("Sold"), TRANSACTION_LINK_TYPE::SOLD);
     combo->addItem(tr("Purchase"), TRANSACTION_LINK_TYPE::PURCHASE);
     combo->addItem(tr("Credit"), TRANSACTION_LINK_TYPE::CUSTOMER_CREDIT);
+    combo->addItem(tr("Purchase return"), TRANSACTION_LINK_TYPE::BUY_RETURN);
+    combo->addItem(tr("Sold return"), TRANSACTION_LINK_TYPE::SOLD_RETURN);
 }
 
 void LibGUI::MoneyWidget::refreshSummary()

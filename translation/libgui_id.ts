@@ -3018,7 +3018,7 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/moneywidget.cpp" line="53"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="83"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="85"/>
         <source>Total</source>
         <translation></translation>
     </message>
@@ -3034,62 +3034,74 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/moneywidget.cpp" line="67"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="136"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="138"/>
         <source>Transaction</source>
         <translation>Transaksi</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/moneywidget.cpp" line="68"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="137"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="139"/>
         <source>Sold</source>
         <translation>Terjual</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/moneywidget.cpp" line="69"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="138"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="140"/>
         <source>Purchase</source>
         <translation>Pembelian</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/moneywidget.cpp" line="70"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="139"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="141"/>
         <source>Credit</source>
         <translation>Piutang</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="74"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="71"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="142"/>
+        <source>Purchase return</source>
+        <translation>Retur Pembelian</translation>
+    </message>
+    <message>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="72"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="143"/>
+        <source>Sold return</source>
+        <translation>Retur Penjualan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="76"/>
         <source>Number</source>
         <translation>Nomor</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="75"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="77"/>
         <source>Bank</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="77"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="117"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="79"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="119"/>
         <source>Cash</source>
         <translation>Tunai</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="80"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="82"/>
         <source>Machine</source>
         <translation>Mesin</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="81"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="83"/>
         <source>User</source>
         <translation>Pengguna</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="82"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="84"/>
         <source>Detail</source>
         <translation>Detil</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="116"/>
-        <location filename="../libgui/transaction/moneywidget.cpp" line="135"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="118"/>
+        <location filename="../libgui/transaction/moneywidget.cpp" line="137"/>
         <source>All</source>
         <translation>Semua</translation>
     </message>
@@ -4202,12 +4214,12 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Catatan</translation>
     </message>
     <message>
-        <location filename="../libgui/soldreturn/solditemreturnwidget.cpp" line="103"/>
+        <location filename="../libgui/soldreturn/solditemreturnwidget.cpp" line="108"/>
         <source>Confirmation remove</source>
         <translation>Konfirmasi Hapus</translation>
     </message>
     <message>
-        <location filename="../libgui/soldreturn/solditemreturnwidget.cpp" line="103"/>
+        <location filename="../libgui/soldreturn/solditemreturnwidget.cpp" line="108"/>
         <source>Are you sure to delete the item?</source>
         <translation>Yakin hapus item?</translation>
     </message>
