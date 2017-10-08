@@ -78,8 +78,11 @@ SoldItemReturnWidget::SoldItemReturnWidget(LibG::MessageBus *bus, QWidget *paren
 void SoldItemReturnWidget::messageReceived(Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::SOLDRETURN, MSG_COMMAND::SUMMARY)) {
-        if(msg->isSuccess())
+        if(msg->isSuccess()) {
             mTotalDebt->setValue(Preference::formatMoney(msg->data("total").toDouble()));
+        }
+    } else if(msg->isTypeCommand(MSG_TYPE::SOLDRETURN, MSG_COMMAND::DEL)) {
+        mTableWidget->getModel()->refresh();
     }
 }
 
@@ -87,6 +90,7 @@ void SoldItemReturnWidget::addClicked()
 {
     AddSoldReturnDialog dialog(mMessageBus, this);
     dialog.exec();
+    mTableWidget->getModel()->refresh();
 }
 
 void SoldItemReturnWidget::updateClicked(const QModelIndex &index)
@@ -95,6 +99,7 @@ void SoldItemReturnWidget::updateClicked(const QModelIndex &index)
     AddSoldReturnDialog dialog(mMessageBus, this);
     dialog.fill(item->data());
     dialog.exec();
+    mTableWidget->getModel()->refresh();
 }
 
 void SoldItemReturnWidget::deleteClicked(const QModelIndex &index)
