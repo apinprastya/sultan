@@ -196,7 +196,8 @@ HEADERS += \
     $$PWD/item/restoreitemdialog.h \
     $$PWD/machine/addmachinedialog.h \
     $$PWD/cashier/cashierreportdialog.h \
-    $$PWD/cashier/customercreditpaymentdialog.h
+    $$PWD/cashier/customercreditpaymentdialog.h \
+    $$PWD/tabcloseablewidget.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

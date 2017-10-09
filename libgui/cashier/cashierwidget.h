@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include "customer/customer.h"
+#include "tabcloseablewidget.h"
 #include <QWidget>
 
 namespace Ui {
@@ -36,7 +37,7 @@ class AdvancePaymentDialog;
 class PayCashlessDialog;
 class CashierItem;
 
-class CashierWidget : public QWidget, public LibG::MessageHandler
+class CashierWidget : public QWidget, public LibG::MessageHandler, public TabCloseableWidget
 {
     Q_OBJECT
 
@@ -44,6 +45,7 @@ public:
     CashierWidget(LibG::MessageBus *bus, QWidget *parent = 0);
     ~CashierWidget();
     void showEvent(QShowEvent *event) override;
+    bool requestClose() override;
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -64,6 +66,9 @@ private:
     void updateCustomerLabel();
     double getTax();
     void updateItem(CashierItem *item);
+
+signals:
+    void transactionDone();
 
 private slots:
     void barcodeEntered();
@@ -89,6 +94,8 @@ private slots:
     void openSearchCustomer();
     void openReport();
     void openCustomerCreditPayment();
+    void focusBarcode();
+    void focusTable();
 };
 
 }

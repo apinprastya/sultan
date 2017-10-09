@@ -31,16 +31,29 @@ namespace LibGUI {
 class GUISHARED_EXPORT TabWidget : public QTabWidget
 {
     Q_OBJECT
-    public:
-        TabWidget(QWidget *parent = nullptr);
-        void tbnAddTab(QWidget *widget, const QString &name);
-        void tbnAddTab(QWidget *widget, const QString &name, const QString &iconName);
-        void tbnRemoveTab(int index);
-        bool isTabAvailable(std::function<bool(QWidget *)> func);
-        void closeAllTabAndFree();
+public:
+    enum Type { Root, Purchase, Cashier };
+    TabWidget(QWidget *parent = nullptr);
+    TabWidget(int type, QWidget *parent = nullptr);
+    void tbnAddTab(QWidget *widget, const QString &name);
+    void tbnAddTab(QWidget *widget, const QString &name, const QString &iconName);
+    bool isTabAvailable(std::function<bool(QWidget *)> func);
+    void closeAllTabAndFree();
+    inline int getType() { return mType; }
+    inline void setNewWidgetFunc(std::function<QWidget*()> func) { mNewWidgetFunc = func; }
 
-    private:
-        QLabel *mLabel;
+private:
+    int mType = Root;
+    int mCounter = 1;
+    QLabel *mLabel = nullptr;
+    std::function<QWidget*()> mNewWidgetFunc = nullptr;
+
+public slots:
+    void tbnRemoveTab(int index);
+    void tbnRemoveTab();
+    void newTab();
+    void nextTab();
+    void prevTab();
 };
 
 }

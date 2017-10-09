@@ -101,6 +101,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
+    new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F6), this, SLOT(openPreviousTransaction()));
     new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
@@ -109,11 +110,15 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
+    //new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
+    //new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
+    new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
+    new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
     new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F3), this, SLOT(openSearchCustomer()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), this, SLOT(openCustomerCreditPayment()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Up), this, SLOT(focusTable()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down), this, SLOT(focusBarcode()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -130,6 +135,16 @@ void CashierWidget::showEvent(QShowEvent *event)
     if(!isTax) ui->widgetTax->hide();
     else ui->widgetTax->show();
     QWidget::showEvent(event);
+}
+
+bool CashierWidget::requestClose()
+{
+    if(!mModel->isEmpty()) {
+        int ret = QMessageBox::question(this, tr("Close confirmation"),
+                                        tr("Your cart is not empty. Are you sure to close?"));
+        return ret == QMessageBox::Yes;
+    }
+    return true;
 }
 
 void CashierWidget::messageReceived(LibG::Message *msg)
@@ -168,7 +183,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         dialog.exec();
         mModel->reset();
         resetCustomer(true);
-        if(mSaveSlot >= 0) removeSlot(mSaveSlot);
+        emit transactionDone();
     } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY)) {
         const QList<QVariant> &list = msg->data("data").toList();
         if(list.isEmpty()) {
@@ -448,8 +463,6 @@ void CashierWidget::printBill(const QVariantMap &data)
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
         QVariantMap m = v.toMap();
-        int flag = m["flag"].toInt();
-        if((flag & ITEM_FLAG::ITEM_LINK) != 0) continue;
         escp->leftText(m["name"].toString())->newLine();
         QString s = QString("%1 x %2").
                 arg(Preference::formatMoney(m["count"].toFloat())).
@@ -517,12 +530,8 @@ void CashierWidget::openPreviousTransaction()
 void CashierWidget::newTransaction()
 {
     if(mModel->isEmpty()) return;
-    if(mSaveSlot >= 0) {
-        saveToSlot(mSaveSlot);
-    } else {
-        int res = QMessageBox::question(this, tr("New transaction confirmation"), tr("Are you sure want to ignore this transaction and start new one?"));
-        if(res != QMessageBox::Yes) return;
-    }
+    int res = QMessageBox::question(this, tr("New transaction confirmation"), tr("Are you sure want to ignore this transaction and start new one?"));
+    if(res != QMessageBox::Yes) return;
     mModel->reset();
     resetCustomer(true);
     mSaveSlot = -1;
@@ -614,4 +623,15 @@ void CashierWidget::openCustomerCreditPayment()
 {
     CustomerCreditPaymentDialog dialog(mMessageBus, this);
     dialog.exec();
+}
+
+void CashierWidget::focusBarcode()
+{
+    ui->lineBarcode->setFocus();
+    ui->lineBarcode->selectAll();
+}
+
+void CashierWidget::focusTable()
+{
+    ui->tableView->setFocus();
 }

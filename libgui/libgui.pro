@@ -245,7 +245,8 @@ HEADERS += \
     item/restoreitemdialog.h \
     machine/addmachinedialog.h \
     cashier/cashierreportdialog.h \
-    cashier/customercreditpaymentdialog.h
+    cashier/customercreditpaymentdialog.h \
+    tabcloseablewidget.h
 
 FORMS += \
     mainwindow.ui \

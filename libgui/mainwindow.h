@@ -76,7 +76,6 @@ private slots:
     void loginSuccess();
     void logout();
     void showWindowFullScreen();
-    void closeTab(int index);
     void closeCurrentTab();
     void nextTab();
     void prevTab();

@@ -32,6 +32,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     ui->tableWidget->verticalHeader()->hide();
     ui->tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Key")));
     ui->tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem(tr("Detail")));
+    ui->tableWidget->setColumnWidth(0, 150);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     addRow("F1", tr("Open this help"));
     addRow("F2", tr("Search items"));
@@ -47,9 +48,13 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("F12", tr("Cashier Report"));
     addRow("Ctrl + N", tr("Clear current cart and start new transaction"));
     addRow("Ctrl + Del", tr("Clear current cart and start new transaction"));
-    addRow("Ctrl + S", tr("Save current cart to slot"));
-    addRow("Ctrl + O", tr("Load cart from slot"));
+    //addRow("Ctrl + S", tr("Save current cart to slot"));
+    //addRow("Ctrl + O", tr("Load cart from slot"));
     addRow("Ctrl + P", tr("Customer credit payment"));
+    //addRow("Ctrl + S", tr("Save current cart to slot"));
+    //addRow("Ctrl + O", tr("Load cart from slot"));
+    addRow("Ctrl + Arrow Up", tr("Focus to table"));
+    addRow("Ctrl + Arrow Down", tr("Focus to barcode input"));
     addRow("PgDn", tr("Edit last inserted item"));
 }
 

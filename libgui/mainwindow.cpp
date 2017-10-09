@@ -297,17 +297,10 @@ void MainWindow::showWindowFullScreen()
         showFullScreen();
 }
 
-void MainWindow::closeTab(int index)
-{
-    auto widget = ui->tabWidget->widget(index);
-    ui->tabWidget->tbnRemoveTab(index);
-    widget->deleteLater();
-}
-
 void MainWindow::closeCurrentTab()
 {
     if(ui->tabWidget->count() > 0)
-        closeTab(ui->tabWidget->currentIndex());
+        ui->tabWidget->tbnRemoveTab(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::nextTab()
@@ -355,9 +348,21 @@ void MainWindow::openSuplier()
 void MainWindow::openCashier()
 {
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
-        return (dynamic_cast<CashierWidget*>(widget) != nullptr);
-    }))
-        ui->tabWidget->tbnAddTab(new CashierWidget(mMessageBus, this), tr("Cahsier"), ":/images/16x16/computer-arrow.png");
+        auto w = dynamic_cast<TabWidget*>(widget);
+        if(w != nullptr) {
+            if(w->getType() == TabWidget::Cashier) return true;
+        }
+        return false;
+    })) {
+        auto tab = new TabWidget(TabWidget::Cashier, this);
+        tab->setNewWidgetFunc([=]() -> QWidget* {
+            auto w = new CashierWidget(mMessageBus, this);
+            connect(w, SIGNAL(transactionDone()), tab, SLOT(tbnRemoveTab()));
+            return w;
+        });
+        tab->newTab();
+        ui->tabWidget->tbnAddTab(tab, tr("Cahsier"), ":/images/16x16/computer-arrow.png");
+    }
 }
 
 void MainWindow::openAbout()
@@ -385,11 +390,31 @@ void MainWindow::openItem()
 void MainWindow::openPurchase()
 {
     if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
-        return (dynamic_cast<PurchaseWidget*>(widget) != nullptr);
+        auto w = dynamic_cast<TabWidget*>(widget);
+        if(w != nullptr) {
+            if(w->getType() == TabWidget::Purchase) {
+                w->setCurrentIndex(0);
+                return true;
+            }
+        }
+        return false;
     })) {
-        auto widget = new PurchaseWidget(mMessageBus, this);
-        ui->tabWidget->tbnAddTab(widget, tr("Purcase"), ":/images/16x16/baggage-cart.png");
-        connect(widget, SIGNAL(requestOpenPurchaseWidget(QVariantMap)), SLOT(openPurchaseItem(QVariantMap)));
+        auto tab = new TabWidget(TabWidget::Purchase, this);
+        auto widget = new PurchaseWidget(mMessageBus, tab);
+        tab->tbnAddTab(widget, tr("Purchase"));
+        ui->tabWidget->tbnAddTab(tab, tr("Purchase"), ":/images/16x16/baggage-cart.png");
+        connect(widget, &PurchaseWidget::requestOpenPurchaseWidget, [=](const QVariantMap &data) {
+            int id = data["id"].toInt();
+            for(int i = 0; i < tab->count(); i++) {
+                auto widget = dynamic_cast<PurchaseItemWidget*>(tab->widget(i));
+                if(widget != nullptr && widget->getId() == id) {
+                    tab->setCurrentIndex(i);
+                    return;
+                }
+            }
+            auto w = new PurchaseItemWidget(data, mMessageBus, this);
+            tab->tbnAddTab(w, data["number"].toString());
+        });
     }
 }
 
