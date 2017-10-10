@@ -444,6 +444,8 @@ void CashierWidget::printBill(const QVariantMap &data)
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
         QVariantMap m = v.toMap();
+        int flag = m["flag"].toInt();
+        if((flag & ITEM_FLAG::ITEM_LINK) != 0) continue;
         escp->leftText(m["name"].toString())->newLine();
         QString s = QString("%1 x %2").
                 arg(Preference::formatMoney(m["count"].toFloat())).

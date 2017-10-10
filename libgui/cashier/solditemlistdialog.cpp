@@ -53,6 +53,7 @@ SoldItemListDialog::SoldItemListDialog(const QVariantMap &data, LibG::MessageBus
     model->addColumnMoney("discount", tr("Discount"));
     model->addColumnMoney("total", tr("Total"));
     model->setFilter("sold_id", COMPARE::EQUAL, data["id"]);
+    model->setFilter("flag", COMPARE::FLAG_DISABLE, ITEM_FLAG::ITEM_LINK);
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::QUERY);
     model->setSort("id asc");
     ui->tableWidget->setupTable();
