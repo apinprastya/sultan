@@ -29,6 +29,11 @@ protected:
 
 private:
     QQmlApplicationEngine *mQmlEngine;
+
+signals:
+    void signalShowMessage(const QString &msg);
+    void signalShowLogin();
+    void signalShowRestartError(const QString &title, const QString &msg);
 };
 
 }

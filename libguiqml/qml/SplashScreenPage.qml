@@ -3,7 +3,11 @@ import QtQuick.Controls 2.0
 import Qt.labs.settings 1.0
 
 Page {
-    id: root
+    id: splashroot
+
+    background: Rectangle {
+        color: "#F0F0F0"
+    }
 
     Settings {
         id: settings
@@ -29,21 +33,20 @@ Page {
         visible: true
     }
 
-    /*Timer {
-        id: timer
-        interval: 500
-        running: false
-        repeat: false
-        onTriggered: {
-            if(settings.firstRun)
-                root.StackView.view.replace(Util.getQmlPath("FirstSettingPage.qml"))
-            else
-                root.StackView.view.replace(Util.getQmlPath("CheckConnectionPage.qml"))
+    Connections {
+        target: CCore
+        onSignalShowMessage: {
+            message.text = msg
         }
-    }*/
+    }
+
+    Connections {
+        target: CCore
+        onSignalShowLogin: {
+            stackView.replace("Login.qml")
+        }
+    }
 
     Component.onCompleted: {
-        //timer.start()
-        console.log("DONE")
     }
 }
