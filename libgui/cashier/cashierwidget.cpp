@@ -46,6 +46,7 @@
 #include "util.h"
 #include "searchcustomerdialog.h"
 #include "editpricecountdialog.h"
+#include "cashierreportdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -110,6 +111,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
+    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -598,4 +600,10 @@ void CashierWidget::openSearchCustomer()
         msg.addFilter("number", COMPARE::EQUAL, dialog.getSelectedData()["number"].toString());
         sendMessage(&msg);
     }
+}
+
+void CashierWidget::openReport()
+{
+    CashierReportDialog dialog(mMessageBus, this);
+    dialog.exec();
 }

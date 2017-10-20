@@ -35,6 +35,7 @@ TransactionAction::TransactionAction():
     ServerAction("transactions", "id")
 {
     mFlag = USE_TRANSACTION;
+    mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&TransactionAction::summaryCashier, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_TRANSACTION, std::bind(&TransactionAction::summaryTransaction, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SUMMARY_MONEY, std::bind(&TransactionAction::summaryMoney, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&TransactionAction::exportData, this, std::placeholders::_1));
@@ -98,6 +99,43 @@ Message TransactionAction::exportData(Message *msg)
         start += limit;
     }
     message.addData("data", arr);
+    return message;
+}
+
+Message TransactionAction::summaryCashier(Message *msg)
+{
+    LibG::Message message(msg);
+    int machineid = msg->data("machine_id").toInt();
+    //get the users
+    mDb->where("transactions.date >= ", msg->data("start"))->where("transactions.date < ", msg->data("end"))->
+            where("transactions.machine_id = ", machineid);
+    DbResult res = mDb->clone()->select("DISTINCT(user_id), users.name as name")->
+            join("LEFT JOIN users ON users.id = transactions.user_id")->
+            get("transactions");
+    if(res.isEmpty()) return message;
+    QVariantList l;
+    for(int i = 0; i < res.size(); i++) {
+        QVariantMap d{{"user", res.data(i)["name"]}};
+        DbResult r = mDb->clone()->select("link_type, SUM(money_total) as total")->where("transactions.user_id =", res.data(i)["user_id"])->group("transactions.type")->get("transactions");
+        d["type"] = r.data();
+        r = mDb->clone()->select("transactions.bank_id, banks.name as bank, SUM(transactions.money_total) as total")->
+                join("LEFT JOIN banks ON banks.id = transactions.bank_id")->
+                where("transactions.user_id =", res.data(i)["user_id"])->
+                group("transactions.bank_id")->get("transactions");
+        d["bank"] = r.data();
+        l.append(d);
+    }
+    {
+        QVariantMap d{{"user", QObject::tr("All")}};
+        DbResult r = mDb->clone()->select("link_type, SUM(money_total) as total")->group("transactions.type")->get("transactions");
+        d["type"] = r.data();
+        r = mDb->clone()->select("transactions.bank_id, banks.name as bank, SUM(transactions.money_total) as total")->
+                join("LEFT JOIN banks ON banks.id = transactions.bank_id")->
+                group("transactions.bank_id")->get("transactions");
+        d["bank"] = r.data();
+        l.append(d);
+    }
+    message.addData("data", l);
     return message;
 }
 

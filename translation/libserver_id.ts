@@ -35,14 +35,19 @@
         <translation>Poin dari penjualan : %1</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="94"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="95"/>
         <source>Income</source>
         <translation>Pemasukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/transactionaction.cpp" line="94"/>
+        <location filename="../libserver/action/transactionaction.cpp" line="95"/>
         <source>Expense</source>
         <translation>Pengeluaran</translation>
+    </message>
+    <message>
+        <location filename="../libserver/action/transactionaction.cpp" line="129"/>
+        <source>All</source>
+        <translation>Semua</translation>
     </message>
     <message>
         <location filename="../libserver/action/sellpriceactions.cpp" line="41"/>
@@ -56,12 +61,12 @@
         <translation>Item dengan id tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="159"/>
+        <location filename="../libserver/action/itemaction.cpp" line="160"/>
         <source>Item not found</source>
         <translation>Item tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libserver/action/itemaction.cpp" line="165"/>
+        <location filename="../libserver/action/itemaction.cpp" line="166"/>
         <source>Item has no price</source>
         <translation>Item tidak memiliki harga</translation>
     </message>
@@ -74,14 +79,14 @@
         <location filename="../libserver/action/purchasereturnaction.cpp" line="70"/>
         <location filename="../libserver/action/purchasereturnaction.cpp" line="94"/>
         <location filename="../libserver/action/purchasereturnaction.cpp" line="101"/>
-        <location filename="../libserver/action/soldreturnaction.cpp" line="72"/>
-        <location filename="../libserver/action/soldreturnaction.cpp" line="79"/>
         <source>Purchase Return : %1</source>
         <translation>Retur pembelian : %1</translation>
     </message>
     <message>
         <location filename="../libserver/action/soldreturnaction.cpp" line="39"/>
         <location filename="../libserver/action/soldreturnaction.cpp" line="46"/>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="72"/>
+        <location filename="../libserver/action/soldreturnaction.cpp" line="79"/>
         <source>Sold Return : %1</source>
         <translation>Retur Penjualan: %1</translation>
     </message>
