@@ -1835,22 +1835,27 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="47"/>
+        <source>Cashier Report</source>
+        <translation>Laporan Kasir</translation>
+    </message>
+    <message>
         <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="48"/>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="49"/>
         <source>Clear current cart and start new transaction</source>
         <translation>Hapus transaksi dan mulai transaksi baru</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="49"/>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="50"/>
         <source>Save current cart to slot</source>
         <translation>Simpan transaksi ke slot penyimpanan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="50"/>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="51"/>
         <source>Load cart from slot</source>
         <translation>Muat belanja dari slot</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="51"/>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="52"/>
         <source>Edit last inserted item</source>
         <translation>Edit item terakhir</translation>
     </message>
