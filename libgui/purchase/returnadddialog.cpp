@@ -136,11 +136,10 @@ void ReturnAddDialog::purchaseItemFocused()
 {
     int suplier = ui->comboSuplier->currentData().toInt();
     if(suplier <= 0) return;
+    ui->comboSuplier->setFocus();
     PurchaseItemSelectionDialog dialog(mMessageBus, suplier, &mItem, this);
     dialog.exec();
-    if(mItem.barcode.isEmpty()) {
-        close();
-    } else {
+    if(!mItem.barcode.isEmpty()) {
         fillField();
     }
 }
