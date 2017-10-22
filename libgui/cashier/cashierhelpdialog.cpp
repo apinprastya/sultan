@@ -49,6 +49,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("Ctrl + Del", tr("Clear current cart and start new transaction"));
     addRow("Ctrl + S", tr("Save current cart to slot"));
     addRow("Ctrl + O", tr("Load cart from slot"));
+    addRow("Ctrl + P", tr("Customer credit payment"));
     addRow("PgDn", tr("Edit last inserted item"));
 }
 

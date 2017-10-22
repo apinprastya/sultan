@@ -95,7 +95,8 @@ SOURCES += \
     $$PWD/soldreturn/addsoldreturndialog.cpp \
     $$PWD/item/restoreitemdialog.cpp \
     $$PWD/machine/addmachinedialog.cpp \
-    $$PWD/cashier/cashierreportdialog.cpp
+    $$PWD/cashier/cashierreportdialog.cpp \
+    $$PWD/cashier/customercreditpaymentdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -194,7 +195,8 @@ HEADERS += \
     $$PWD/soldreturn/addsoldreturndialog.h \
     $$PWD/item/restoreitemdialog.h \
     $$PWD/machine/addmachinedialog.h \
-    $$PWD/cashier/cashierreportdialog.h
+    $$PWD/cashier/cashierreportdialog.h \
+    $$PWD/cashier/customercreditpaymentdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -256,4 +258,5 @@ FORMS += \
     $$PWD/soldreturn/addsoldreturndialog.ui \
     $$PWD/item/restoreitemdialog.ui \
     $$PWD/machine/addmachinedialog.ui \
-    $$PWD/cashier/cashierreportdialog.ui
+    $$PWD/cashier/cashierreportdialog.ui \
+    $$PWD/cashier/customercreditpaymentdialog.ui

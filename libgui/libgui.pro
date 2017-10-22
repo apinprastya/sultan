@@ -144,7 +144,8 @@ SOURCES += \
     soldreturn/addsoldreturndialog.cpp \
     item/restoreitemdialog.cpp \
     machine/addmachinedialog.cpp \
-    cashier/cashierreportdialog.cpp
+    cashier/cashierreportdialog.cpp \
+    cashier/customercreditpaymentdialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -243,7 +244,8 @@ HEADERS += \
     soldreturn/addsoldreturndialog.h \
     item/restoreitemdialog.h \
     machine/addmachinedialog.h \
-    cashier/cashierreportdialog.h
+    cashier/cashierreportdialog.h \
+    cashier/customercreditpaymentdialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -305,4 +307,5 @@ FORMS += \
     soldreturn/addsoldreturndialog.ui \
     item/restoreitemdialog.ui \
     machine/addmachinedialog.ui \
-    cashier/cashierreportdialog.ui
+    cashier/cashierreportdialog.ui \
+    cashier/customercreditpaymentdialog.ui

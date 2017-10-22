@@ -47,6 +47,7 @@
 #include "searchcustomerdialog.h"
 #include "editpricecountdialog.h"
 #include "cashierreportdialog.h"
+#include "customercreditpaymentdialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -95,23 +96,24 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double)), SLOT(payRequested(int,double)));
     connect(mPayCashlessDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(updateCurrentItem()));
+    new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
+    new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
+    new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F5), this, SLOT(openDrawer()));
-    new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F6), this, SLOT(openPreviousTransaction()));
+    new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
+    new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
+    new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(saveCartTriggered()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(loadCartTriggered()));
-    new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
-    new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3), this, SLOT(resetCustomer()));
     new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F3), this, SLOT(openSearchCustomer()));
-    new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
-    new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
-    new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
-    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), this, SLOT(openCustomerCreditPayment()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
 }
@@ -605,5 +607,11 @@ void CashierWidget::openSearchCustomer()
 void CashierWidget::openReport()
 {
     CashierReportDialog dialog(mMessageBus, this);
+    dialog.exec();
+}
+
+void CashierWidget::openCustomerCreditPayment()
+{
+    CustomerCreditPaymentDialog dialog(mMessageBus, this);
     dialog.exec();
 }

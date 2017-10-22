@@ -88,6 +88,7 @@ private slots:
     void openCheckPrice();
     void openSearchCustomer();
     void openReport();
+    void openCustomerCreditPayment();
 };
 
 }
