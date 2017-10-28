@@ -263,4 +263,5 @@ FORMS += \
     $$PWD/machine/addmachinedialog.ui \
     $$PWD/cashier/cashierreportdialog.ui \
     $$PWD/cashier/customercreditpaymentdialog.ui \
-    $$PWD/item/addingridientdialog.ui
+    $$PWD/item/addingridientdialog.ui \
+    $$PWD/report/datefromtowidget.ui
