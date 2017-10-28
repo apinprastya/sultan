@@ -19,6 +19,7 @@
  */
 #include "reportitemwidget.h"
 #include "ui_normalwidget.h"
+#include "ui_datefromtowidget.h"
 #include "tablewidget.h"
 #include "tablemodel.h"
 #include "tableview.h"
@@ -34,10 +35,14 @@ using namespace LibG;
 ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NormalWidget),
+    mDateWidget(new Ui::DateStartEndWidget),
     mTableWidget(new TableWidget(this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
+    auto widget = new QWidget(this);
+    mDateWidget->setupUi(widget);
+    ui->horizontalLayout->addWidget(widget);
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh);
     ui->labelTitle->setText(tr("Item sales"));
@@ -54,13 +59,14 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_ITEM_REPORT);
     model->setTypeCommandOne(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::GET);
-    QDate prev = QDate::currentDate().addDays(-7);
-    model->setFilter("0$DATE(solditems.created_at)", COMPARE::GREATER_EQUAL, prev);
-    model->setFilter("1$DATE(solditems.created_at)", COMPARE::LESS_EQUAL, QDate::currentDate());
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 100 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    model->refresh();
+    mDateWidget->dateEnd->setDate(QDate::currentDate());
+    mDateWidget->dateStart->setDate(QDate::currentDate().addDays(-7));
+    connect(mDateWidget->dateStart, SIGNAL(dateChanged(QDate)), SLOT(refreshTable()));
+    connect(mDateWidget->dateEnd, SIGNAL(dateChanged(QDate)), SLOT(refreshTable()));
+    refreshTable();
 }
 
 ReportItemWidget::~ReportItemWidget()
@@ -71,4 +77,12 @@ ReportItemWidget::~ReportItemWidget()
 void ReportItemWidget::messageReceived(LibG::Message */*msg*/)
 {
 
+}
+
+void ReportItemWidget::refreshTable()
+{
+    auto model = mTableWidget->getModel();
+    model->setFilter("0$DATE(solditems.created_at)", COMPARE::GREATER_EQUAL, mDateWidget->dateStart->date());
+    model->setFilter("1$DATE(solditems.created_at)", COMPARE::LESS_EQUAL, mDateWidget->dateEnd->date());
+    model->refresh();
 }

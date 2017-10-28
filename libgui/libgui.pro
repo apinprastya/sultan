@@ -312,4 +312,5 @@ FORMS += \
     machine/addmachinedialog.ui \
     cashier/cashierreportdialog.ui \
     cashier/customercreditpaymentdialog.ui \
-    item/addingridientdialog.ui
+    item/addingridientdialog.ui \
+    report/datefromtowidget.ui

@@ -25,6 +25,7 @@
 
 namespace Ui {
 class NormalWidget;
+class DateStartEndWidget;
 }
 
 namespace LibGUI {
@@ -43,7 +44,11 @@ protected:
 
 private:
     Ui::NormalWidget *ui;
+    Ui::DateStartEndWidget *mDateWidget;
     TableWidget *mTableWidget;
+
+private slots:
+    void refreshTable();
 };
 
 }
