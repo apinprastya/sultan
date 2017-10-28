@@ -7,7 +7,8 @@ SOURCES += \
     $$PWD/messagebus.cpp \
     $$PWD/usersession.cpp \
     $$PWD/permissionhelper.cpp \
-    $$PWD/util.cpp
+    $$PWD/util.cpp \
+    $$PWD/abstractsultangui.cpp
 
 HEADERS += \ 
     $$PWD/global_global.h \
@@ -20,4 +21,5 @@ HEADERS += \
     $$PWD/messagebus.h \
     $$PWD/usersession.h \
     $$PWD/permissionhelper.h \
-    $$PWD/util.h
+    $$PWD/util.h \
+    $$PWD/abstractsultangui.h
