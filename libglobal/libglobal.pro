@@ -44,7 +44,8 @@ SOURCES += \
     messagebus.cpp \
     usersession.cpp \
     permissionhelper.cpp \
-    util.cpp
+    util.cpp \
+    abstractsultangui.cpp
 
 HEADERS += \ 
     global_global.h \

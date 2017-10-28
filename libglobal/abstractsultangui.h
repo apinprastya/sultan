@@ -10,7 +10,7 @@ namespace LibG {
 class GLOBALSHARED_EXPORT AbstractSultanGUI
 {
 public:
-    virtual ~AbstractSultanGUI() {}
+    virtual ~AbstractSultanGUI();
     virtual void showSplashScreen() = 0;
     virtual void hideSplashScreen() = 0;
     virtual void splashShowMessage(const QString &msg) = 0;
