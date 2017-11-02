@@ -22,6 +22,7 @@
 #include "guiutil.h"
 #include "global_constant.h"
 #include "message.h"
+#include "util.h"
 #include "flashmessagemanager.h"
 #include <QMessageBox>
 
@@ -87,8 +88,8 @@ void CustomerAddDialog::saveClicked()
     }
     Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::INSERT);
     QVariantMap data;
-    data.insert("number", ui->lineNumber->text());
-    data.insert("name", ui->lineName->text());
+    data.insert("number", Util::capitalize(ui->lineNumber->text()));
+    data.insert("name", Util::capitalize(ui->lineName->text()));
     data.insert("phone", ui->linePhone->text());
     data.insert("address", ui->plainAddress->toPlainText());
     data.insert("email", ui->lineEmail->text());

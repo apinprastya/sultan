@@ -136,3 +136,9 @@ QString Util::appDir()
 {
     return sAppDir;
 }
+
+QString Util::capitalize(const QString &str)
+{
+    bool cap = Preference::getBool(SETTING::CAPITALIZE);
+    return cap ? str.toUpper() : str;
+}

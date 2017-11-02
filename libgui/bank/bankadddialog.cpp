@@ -22,6 +22,7 @@
 #include "flashmessagemanager.h"
 #include "message.h"
 #include "global_constant.h"
+#include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -76,7 +77,7 @@ void BankAddDialog::saveClicked()
         return;
     }
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::INSERT);
-    QVariantMap d{{"name", ui->lineName->text()}, {"debit_charge_formula", ui->lineDebit->text()},
+    QVariantMap d{{"name", Util::capitalize(ui->lineName->text())}, {"debit_charge_formula", ui->lineDebit->text()},
                   {"credit_charge_formula", ui->lineCredit->text()}};
     if(mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);

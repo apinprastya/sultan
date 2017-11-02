@@ -48,6 +48,7 @@ namespace SETTING {
 
     const QString APPLICATION_LANGUAGE          = QStringLiteral("application/language");
     const QString CASHIER_NAMEBASED             = QStringLiteral("application/name_based");
+    const QString CAPITALIZE                    = QStringLiteral("application/capitalize");
     const QString LOCALE_LANGUAGE               = QStringLiteral("application/locale_language");
     const QString LOCALE_COUNTRY                = QStringLiteral("application/locale_country");
     const QString LOCALE_USE_SIGN               = QStringLiteral("application/locale_use_sign");

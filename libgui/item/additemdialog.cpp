@@ -366,7 +366,7 @@ void AddItemDialog::saveData()
     }
     QVariantMap data;
     int flag = getItemFlagFromCheckbox();
-    data["name"] = ui->lineName->text();
+    data["name"] = Util::capitalize(ui->lineName->text());
     data["category_id"] = ui->comboCategory->currentData().toInt();
     data["suplier_id"] = ui->comboSuplier->currentData().toInt();
     data["sell_price"] = ui->doubleSellPrice->value();

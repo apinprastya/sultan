@@ -20,6 +20,7 @@
 #include "categotyadddialog.h"
 #include "ui_categoryadddialog.h"
 #include "guiutil.h"
+#include "util.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -81,8 +82,8 @@ void CategoryAddDialog::saveClicked()
         return;
     }
     QVariantMap data;
-    data.insert("name", ui->lineName->text());
-    data.insert("code", ui->lineCode->text());
+    data.insert("name", LibG::Util::capitalize(ui->lineName->text()));
+    data.insert("code", LibG::Util::capitalize(ui->lineCode->text()));
     if(ui->comboParent->isEnabled())
         data.insert("parent_id", ui->comboParent->currentData().toInt());
     ui->pushSave->setEnabled(false);

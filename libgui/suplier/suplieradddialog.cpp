@@ -20,6 +20,7 @@
 #include "suplieradddialog.h"
 #include "ui_suplieradddialog.h"
 #include "guiutil.h"
+#include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
@@ -74,8 +75,8 @@ void SuplierAddDialog::saveClicked()
         return;
     }
     QVariantMap data;
-    data["name"] = ui->lineName->text();
-    data["code"] = ui->lineCode->text();
+    data["name"] = LibG::Util::capitalize(ui->lineName->text());
+    data["code"] = LibG::Util::capitalize(ui->lineCode->text());
     data["phone"] = ui->linePhone->text();
     data["address"] = ui->textAddress->toPlainText();
     data["email"] = ui->lineEmail->text();

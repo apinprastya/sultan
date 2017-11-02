@@ -3,6 +3,7 @@
 #include "flashmessagemanager.h"
 #include "message.h"
 #include "global_constant.h"
+#include "util.h"
 
 using namespace LibGUI;
 using namespace LibG;
@@ -53,7 +54,7 @@ void AddMachineDialog::saveClicked()
         FlashMessageManager::showError(tr("Code can not contains space"));
         return;
     }
-    QVariantMap d{{"code", ui->lineCode->text()}, {"name", ui->lineName->text()}};
+    QVariantMap d{{"code", Util::capitalize(ui->lineCode->text())}, {"name", Util::capitalize(ui->lineName->text())}};
     Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::INSERT);
     if(mId <= 0) {
         msg.setData(d);

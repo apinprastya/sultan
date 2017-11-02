@@ -9,6 +9,7 @@
 #include "tableview.h"
 #include "headerwidget.h"
 #include "flashmessagemanager.h"
+#include "util.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <QInputDialog>
@@ -64,7 +65,7 @@ void UnitWidget::addClicked()
     const QString &name = QInputDialog::getText(this, tr("Add new unit"), tr("Input name"));
     if(!name.isEmpty()) {
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::INSERT);
-        msg.addData("name", name);
+        msg.addData("name", Util::capitalize(name));
         sendMessage(&msg);
     }
 }
@@ -76,7 +77,7 @@ void UnitWidget::editClicked(const QModelIndex &index)
     if(!name.isEmpty()) {
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
-        msg.addData("data", QVariantMap{{"name", name}});
+        msg.addData("data", QVariantMap{{"name", Util::capitalize(name)}});
         sendMessage(&msg);
     }
 }

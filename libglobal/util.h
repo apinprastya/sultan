@@ -39,6 +39,7 @@ public:
     static QString genSoldNumber();
     static bool hasFlag(int flag, int tocheck);
     static QString appDir();
+    static QString capitalize(const QString &str);
 
 private:
 };

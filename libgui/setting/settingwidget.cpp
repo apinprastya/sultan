@@ -71,6 +71,7 @@ void SettingWidget::setupAppliaction()
     ui->lineSalesTax->setText(Preference::getString(SETTING::TAX_VALUE));
 
     ui->groupNameBased->setChecked(Preference::getBool(SETTING::CASHIER_NAMEBASED));
+    ui->groupCapitalize->setChecked(Preference::getBool(SETTING::CAPITALIZE));
 }
 
 void SettingWidget::setupLocale()
@@ -154,6 +155,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::USE_TAX, ui->groupBoxTax->isChecked());
     Preference::setValue(SETTING::TAX_VALUE, ui->lineSalesTax->text());
     Preference::setValue(SETTING::CASHIER_NAMEBASED, ui->groupNameBased->isChecked());
+    Preference::setValue(SETTING::CAPITALIZE, ui->groupCapitalize->isChecked());
     //locale
     Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());

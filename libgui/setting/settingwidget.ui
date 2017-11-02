@@ -78,7 +78,7 @@
             <x>0</x>
             <y>0</y>
             <width>647</width>
-            <height>447</height>
+            <height>458</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -187,6 +187,28 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="groupCapitalize">
+             <property name="title">
+              <string>Capitalize input</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <item>
+               <widget class="QLabel" name="label_27">
+                <property name="text">
+                 <string>Field name, code will be capitalize automatically when saved.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_3">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -224,7 +246,7 @@
             <x>0</x>
             <y>0</y>
             <width>647</width>
-            <height>447</height>
+            <height>458</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -398,8 +420,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>627</width>
-            <height>511</height>
+            <width>633</width>
+            <height>472</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
