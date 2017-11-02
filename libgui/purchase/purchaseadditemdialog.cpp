@@ -51,7 +51,9 @@ PurchaseAddItemDialog::PurchaseAddItemDialog(LibG::MessageBus *bus, int purchase
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(saveAgainClicked()));
     connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
-    connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(calculateDiscount()));
+    connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(unitPriceChanged()));
+    connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(unitPriceChanged()));
+    connect(ui->doubleTotal, SIGNAL(valueChanged(double)), SLOT(totalPriceChanged()));
     connect(ui->lineDiscountFormula, SIGNAL(textChanged(QString)), SLOT(calculateDiscount()));
     connect(ui->pushAddNewItem, SIGNAL(clicked(bool)), SLOT(addNewItemClicked()));
     connect(ui->doubleSellPrice, SIGNAL(valueChanged(double)), SLOT(calculateMargin()));
@@ -69,10 +71,10 @@ void PurchaseAddItemDialog::reset()
 {
     GuiUtil::clearAll(QList<QWidget*>() << ui->lineBarcode << ui->labelName <<
                       ui->doubleBuyPrice << ui->doubleCount <<
-                      ui->doubleSellPrice << ui->doublePrice);
+                      ui->doubleSellPrice << ui->doublePrice << ui->doubleTotal);
     GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleCount <<
                           ui->doublePrice << ui->pushSave <<
-                          ui->pushSaveAgain << ui->lineDiscountFormula);
+                          ui->pushSaveAgain << ui->lineDiscountFormula << ui->doubleTotal);
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->lineBarcode->setReadOnly(false);
     ui->lineDiscountFormula->clear();
@@ -124,7 +126,7 @@ void PurchaseAddItemDialog::messageReceived(LibG::Message *msg)
             ui->doubleSellPrice->setValue(mSellPrice);
             GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleCount <<
                                   ui->doublePrice << ui->pushSave <<
-                                  ui->pushSaveAgain << ui->lineDiscountFormula);
+                                  ui->pushSaveAgain << ui->lineDiscountFormula << ui->doubleTotal);
             ui->doubleCount->setFocus(Qt::TabFocusReason);
             getPurchaseItem(ui->lineBarcode->text());
         } else {
@@ -245,6 +247,22 @@ void PurchaseAddItemDialog::saveClicked()
 {
     mIsAgain = false;
     save();
+}
+
+void PurchaseAddItemDialog::unitPriceChanged()
+{
+    ui->doubleTotal->blockSignals(true);
+    ui->doubleTotal->setValue(ui->doubleCount->value() * ui->doublePrice->value());
+    ui->doubleTotal->blockSignals(false);
+    calculateDiscount();
+}
+
+void PurchaseAddItemDialog::totalPriceChanged()
+{
+    ui->doublePrice->blockSignals(true);
+    ui->doublePrice->setValue(ui->doubleTotal->value() / ui->doubleCount->value());
+    ui->doublePrice->blockSignals(false);
+    calculateDiscount();
 }
 
 void PurchaseAddItemDialog::calculateDiscount()

@@ -74,6 +74,8 @@ private slots:
     void barcodeDone();
     void saveAgainClicked();
     void saveClicked();
+    void unitPriceChanged();
+    void totalPriceChanged();
     void calculateDiscount();
     void calculateBuyPriceSuggestion();
     void addNewItemClicked();
