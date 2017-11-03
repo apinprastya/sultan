@@ -42,11 +42,12 @@ Message DashboardAction::tile(Message *msg)
     debt += res.first()["total"].toDouble();
     data["credit"] = credit;
     //sales 1 month
-    res = mDb->select("COALESCE(sum(final), 0) as total")->where("DATE(created_at) >= ", start)->where("DATE(created_at) <= ", end)->get("solditems");
+    res = mDb->select("COALESCE(sum(final), 0) as total")->where("DATE(created_at) >= ", start)->
+            where("DATE(created_at) <= ", end)->where(QString("(flag & %1) = 0").arg(ITEM_FLAG::ITEM_LINK))->get("solditems");
     data["sales"] = res.first()["total"];
     //margin 1 month
-    res = mDb->select("(COALESCE(sum(final), 0) - COALESCE(sum(count * buy_price), 0)) as total")->where("DATE(created_at) >= ", start)->
-            where("DATE(created_at) <= ", end)->get("solditems");
+    res = mDb->select("COALESCE(sum(final - buy_price), 0) as total")->where("DATE(created_at) >= ", start)->
+            where("DATE(created_at) <= ", end)->where(QString("(flag & %1) = 0").arg(ITEM_FLAG::ITEM_LINK))->get("solditems");
     data["sales"] = res.first()["total"];
     message.setData(data);
     return message;
