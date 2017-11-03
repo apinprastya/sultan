@@ -71,7 +71,8 @@ SOURCES += \
     util/itemutil.cpp \
     action/soldreturnaction.cpp \
     util/configutil.cpp \
-    action/configaction.cpp
+    action/configaction.cpp \
+    action/dashboardaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -104,4 +105,5 @@ HEADERS += \
     util/itemutil.h \
     action/soldreturnaction.h \
     util/configutil.h \
-    action/configaction.h
+    action/configaction.h \
+    action/dashboardaction.h

@@ -22,6 +22,15 @@
 
 using namespace LibGUI;
 
+TileWidget::TileWidget(const QString &title, QWidget *parent):
+    QWidget(parent),
+    ui(new Ui::TileWidget)
+{
+    ui->setupUi(this);
+    ui->labelTitle->setText(title);
+    ui->labelValue->setText(tr("loading..."));
+}
+
 TileWidget::TileWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TileWidget)

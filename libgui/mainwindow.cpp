@@ -53,6 +53,7 @@
 #include "unit/unitwidget.h"
 #include "report/stockcardwidget.h"
 #include "soldreturn/solditemreturnwidget.h"
+#include "dashboard/dashboardwidget.h"
 #include "preference.h"
 #include "global_setting_const.h"
 #ifdef USE_DATE_SETTING
@@ -116,6 +117,7 @@ void MainWindow::setup()
     ui->actionPurchase->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
     ui->actionPurchaseReturn->setEnabled(UserSession::hasPermission(PERMISSION::PURCASHE));
     ui->action_Items->setEnabled(UserSession::hasPermission(PERMISSION::ITEM_RW));
+    ui->actionDashboard->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionItems->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->actionSales->setEnabled(UserSession::hasPermission(PERMISSION::REPORT));
     ui->action_Banks->setEnabled(UserSession::hasPermission(PERMISSION::BANK));
@@ -268,6 +270,7 @@ void MainWindow::setupConnection()
     connect(ui->actionDate_Setting, SIGNAL(triggered(bool)), SLOT(openDateSetting()));
     connect(ui->action_Reset_Database, SIGNAL(triggered(bool)), SLOT(resetDatabase()));
     connect(ui->actionSold_Return, SIGNAL(triggered(bool)), SLOT(openSoldReturn()));
+    connect(ui->actionDashboard, SIGNAL(triggered(bool)), SLOT(openDashboard()));
     //connect(ui->action_Stock_Card, SIGNAL(triggered(bool)), SLOT(openStockCard()));
 }
 
@@ -637,5 +640,15 @@ void MainWindow::openSoldReturn()
     })) {
         auto widget = new SoldItemReturnWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Sold Return"), ":/images/16x16/wooden-arrow.png");
+    }
+}
+
+void MainWindow::openDashboard()
+{
+    if(!ui->tabWidget->isTabAvailable([](QWidget* widget) -> bool {
+        return (dynamic_cast<DashboardWidget*>(widget) != nullptr);
+    })) {
+        auto widget = new DashboardWidget(mMessageBus, this);
+        ui->tabWidget->tbnAddTab(widget, tr("Dashboard"), ":/images/16x16/wooden-arrow.png");
     }
 }

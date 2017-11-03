@@ -97,6 +97,7 @@ namespace MSG_TYPE {
     const int ITEMLINK          = 23;
     const int SOLDRETURN        = 24;
     const int CONFIG            = 25;
+    const int DASHBOARD         = 26;
     const int BROADCAST         = 255;
 }
 
@@ -121,6 +122,11 @@ namespace MSG_COMMAND {
     const int SUMMARY_MONEY             = 30;
     const int RESET                     = 31;
     const int CONFIG_INSERT_UPDATE      = 32;
+//dashboard
+    const int DASH_TILE                 = 40;
+    const int DASH_SALES                = 41;
+    const int DASH_STOCK                = 42;
+    const int DASH_DEBT                 = 43;
 }
 
 namespace MSG_BROADCAST {

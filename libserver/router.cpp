@@ -46,6 +46,7 @@
 #include "action/itemlinkaction.h"
 #include "action/soldreturnaction.h"
 #include "action/configaction.h"
+#include "action/dashboardaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -127,6 +128,8 @@ ServerAction *Router::getServerAction(int type)
         return new SoldReturnAction();
     case MSG_TYPE::CONFIG:
         return new ConfigAction();
+    case MSG_TYPE::DASHBOARD:
+        return new DashboardAction();
     }
     return nullptr;
 }

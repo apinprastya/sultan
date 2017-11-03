@@ -33,6 +33,7 @@ class TileWidget : public QWidget
     Q_OBJECT
 
 public:
+    TileWidget(const QString &title, QWidget *parent = 0);
     TileWidget(QWidget *parent = 0);
     ~TileWidget();
     void setTitle(const QString &title);

@@ -282,6 +282,11 @@
     <string>&amp;Sold Return</string>
    </property>
   </action>
+  <action name="actionDashboard">
+   <property name="text">
+    <string>Dashboard</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

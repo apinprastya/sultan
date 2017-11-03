@@ -109,6 +109,7 @@ private slots:
     void resetDatabase();
     void openStockCard();
     void openSoldReturn();
+    void openDashboard();
 };
 
 }
