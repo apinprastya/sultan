@@ -196,6 +196,7 @@ void AddItemDialog::openBarcode(const QString &barcode)
 void AddItemDialog::fill(const QVariantMap &data)
 {
     int flag = data["flag"].toInt();
+    applyItemFlagToCheckbox(flag);
     ui->lineBarcode->setText(data["barcode"].toString());
     ui->lineName->setText(data["name"].toString());
     if((flag & ITEM_FLAG::PACKAGE) == 0)
@@ -209,7 +210,6 @@ void AddItemDialog::fill(const QVariantMap &data)
     mCurrentSuplier = data["suplier_id"].toInt();
     mCUrrentCategory = data["category_id"].toInt();
     mCurrentUnit = data["unit"].toString();
-    applyItemFlagToCheckbox(flag);
     mIsOk = true;
     ui->tablePrice->getModel()->setAsLocal(false);
     ui->tablePrice->getModel()->setFilter("barcode", COMPARE::EQUAL, data["barcode"].toString());
@@ -507,8 +507,8 @@ void AddItemDialog::checkWidget()
     ui->checkIngridient->setEnabled(ui->checkSell->isChecked() && !ui->checkPackage->isChecked());
     ui->checkPackage->setEnabled(ui->checkSell->isChecked() && !ui->checkIngridient->isChecked());
     ui->checkPurchase->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
-    ui->doubleBuyPrice->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
-    ui->doubleStock->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
+    ui->doubleBuyPrice->setEnabled(!mIsUpdate && !ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
+    ui->doubleStock->setEnabled(!mIsUpdate && !ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
     if(sender == ui->checkSell) {
         ui->checkEditPrice->setChecked(false);
         ui->checkIngridient->setChecked(false);
@@ -644,6 +644,7 @@ void AddItemDialog::getItemPrice()
 
 double AddItemDialog::updatePackagePrice()
 {
+    if(!ui->checkPackage->isChecked()) return 0;
     double total = 0;
     float count = ui->doublePackageQty->value();
     ui->doubleBuyPrice->setValue(mPackBuyPrice * count);
@@ -748,6 +749,7 @@ void AddItemDialog::deleteIngridient(const QModelIndex &index)
 
 void AddItemDialog::calculateIngridientPrice()
 {
+    if(!ui->checkIngridient->isChecked()) return;
     auto rdata = ui->tableIngridient->getModel()->getRowData();
     double buyPrice = 0;
     double sellPrice = 0;
