@@ -55,15 +55,18 @@ Message DashboardAction::tile(Message *msg)
 
 Message DashboardAction::sales(Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }
 
 Message DashboardAction::stock(Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }
 
 Message DashboardAction::debt(Message *msg)
 {
-
+    LibG::Message message(msg);
+    return message;
 }

@@ -25,6 +25,7 @@ DashboardWidget::DashboardWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->tileLayout->addWidget(mCredit);
     ui->tileLayout->addWidget(mSales);
     ui->tileLayout->addWidget(mMargin);
+    ui->tileLayout->addStretch();
     Message msg(MSG_TYPE::DASHBOARD, MSG_COMMAND::DASH_TILE);
     msg.addData("start", Util::getBeginningOfMonth());
     msg.addData("end", QDate::currentDate());
