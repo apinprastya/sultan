@@ -142,3 +142,11 @@ QString Util::capitalize(const QString &str)
     bool cap = Preference::getBool(SETTING::CAPITALIZE);
     return cap ? str.toUpper() : str;
 }
+
+QString Util::elide(const QString &str, int length)
+{
+    if(length <= 5 || str.length() <= length) return str;
+    bool isOdd = ((length % 2) != 0);
+    int l = (length / 2) - 1;
+    return QString("%1..%2").arg(str.left(isOdd ? l + 1 : l)).arg(str.right(l));
+}

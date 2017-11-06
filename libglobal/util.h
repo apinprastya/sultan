@@ -40,6 +40,7 @@ public:
     static bool hasFlag(int flag, int tocheck);
     static QString appDir();
     static QString capitalize(const QString &str);
+    static QString elide(const QString &str, int length);
 
 private:
 };

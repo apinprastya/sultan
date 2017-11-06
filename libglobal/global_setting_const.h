@@ -69,6 +69,7 @@ namespace SETTING {
     const QString PRINTER_CASHIER_AUTOCUT       = QStringLiteral("printer/cashier_autocut");
     const QString PRINTER_CASHIER_KICK          = QStringLiteral("printer/cashier_kick");
     const QString PRINTER_CASHIER_LINEFEED      = QStringLiteral("printer/cashier_linefeed");
+    const QString PRINTER_CASHIER_BARCODE_LEN   = QStringLiteral("printer/cashier_barcodelen");
 
     const QString PRINTER_CASHIER_PRICE_LINEFEED      = QStringLiteral("printer/cashier_price_linefeed");
 

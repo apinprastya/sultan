@@ -451,6 +451,7 @@ void CashierWidget::printBill(const QVariantMap &data)
     const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
     const QString &subtitle = Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul");
     const QString &footer = Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar");
+    int barcodelen = Preference::getInt(SETTING::PRINTER_CASHIER_BARCODE_LEN, 15);
     int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
@@ -463,7 +464,9 @@ void CashierWidget::printBill(const QVariantMap &data)
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
         QVariantMap m = v.toMap();
-        escp->leftText(m["name"].toString())->newLine();
+        QString name = QString("%1 - %2").arg(Util::elide(m["barcode"].toString(), barcodelen)).arg(m["name"].toString());
+        if(name.length() > cpi12) name = name.left(cpi12);
+        escp->leftText(name)->newLine();
         QString s = QString("%1 x %2").
                 arg(Preference::formatMoney(m["count"].toFloat())).
                  arg(Preference::formatMoney(m["price"].toDouble()));

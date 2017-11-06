@@ -54,7 +54,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
@@ -421,7 +421,7 @@
             <x>0</x>
             <y>0</y>
             <width>633</width>
-            <height>472</height>
+            <height>500</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -573,43 +573,60 @@
                   </property>
                  </widget>
                 </item>
-                <item row="10" column="0">
+                <item row="11" column="0">
                  <widget class="QLabel" name="label_20">
                   <property name="text">
                    <string>Auto Cut</string>
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="0">
+                <item row="10" column="0">
                  <widget class="QLabel" name="label_21">
                   <property name="text">
                    <string>Open Drawer</string>
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="1">
+                <item row="10" column="1">
                  <widget class="QCheckBox" name="checkPrintCashierDrawer">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="10" column="1">
+                <item row="11" column="1">
                  <widget class="QCheckBox" name="checkPrintCashierCut">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="0">
+                <item row="9" column="0">
                  <widget class="QLabel" name="label_23">
                   <property name="text">
                    <string>Line Feed After</string>
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="1">
+                <item row="9" column="1">
                  <widget class="QSpinBox" name="spinCashierLinefeed"/>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>Barcode Max Length</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <widget class="QSpinBox" name="spinBarcodeLength">
+                  <property name="minimum">
+                   <number>4</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
