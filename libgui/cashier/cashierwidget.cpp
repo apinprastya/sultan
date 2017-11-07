@@ -287,7 +287,7 @@ void CashierWidget::updateItem(CashierItem *item)
             QVariantList &prices = mModel->getPrices(item->barcode);
             QVariantMap price = prices[0].toMap();
             price["price"] = dialog.getPrice();
-            price["formula_discount"] = dialog.getDiscountFormula();
+            price["discount_formula"] = dialog.getDiscountFormula();
             prices[0] = price;
             mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag);
         }
