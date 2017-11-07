@@ -131,6 +131,7 @@ void CashierReportDialog::print()
         const QVariantMap &d = mData[i].toMap();
         const QVariantList &t = d["type"].toList();
         const QVariantList &b = d["bank"].toList();
+        escp->column(QList<int>());
         escp->bold(true)->leftText(tr("User : %1").arg(d["user"].toString()))->newLine()->newLine();
         escp->leftText(tr("By Type"))->bold(false)->newLine();
         for(int j = 0; j < t.size(); j++) {
@@ -138,6 +139,7 @@ void CashierReportDialog::print()
             int type = d1["link_type"].toInt();
             escp->column(QList<int>{50, 50})->leftText(getType(type))->rightText(Preference::formatMoney(d1["total"].toDouble()))->newLine();
         }
+        escp->column(QList<int>());
         escp->newLine()->bold(true)->leftText(tr("By Bank"))->bold(false)->newLine();
         for(int j = 0; j < b.size(); j++) {
             const QVariantMap &d1 = b[j].toMap();
@@ -145,6 +147,7 @@ void CashierReportDialog::print()
             escp->column(QList<int>{50, 50})->leftText(bank.isEmpty() ? tr("Cash") : bank)->
                     rightText(Preference::formatMoney(d1["total"].toDouble()))->newLine();
         }
+        escp->column(QList<int>());
         escp->line()->newLine();
     }
     escp->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
