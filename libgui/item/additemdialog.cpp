@@ -507,7 +507,7 @@ void AddItemDialog::checkWidget()
     ui->checkIngridient->setEnabled(ui->checkSell->isChecked() && !ui->checkPackage->isChecked());
     ui->checkPackage->setEnabled(ui->checkSell->isChecked() && !ui->checkIngridient->isChecked());
     ui->checkPurchase->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
-    ui->doubleBuyPrice->setEnabled(!mIsUpdate && !ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
+    ui->doubleBuyPrice->setEnabled(!ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
     ui->doubleStock->setEnabled(!mIsUpdate && !ui->checkPackage->isChecked() && !ui->checkIngridient->isChecked());
     if(sender == ui->checkSell) {
         ui->checkEditPrice->setChecked(false);
