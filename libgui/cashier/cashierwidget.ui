@@ -210,6 +210,9 @@ border: 1px solid #ababab;</string>
      <property name="gridStyle">
       <enum>Qt::DashLine</enum>
      </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
    <item>

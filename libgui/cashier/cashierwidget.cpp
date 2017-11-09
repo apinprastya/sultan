@@ -76,7 +76,6 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     setMessageBus(bus);
     ui->verticalLayout->setAlignment(Qt::AlignTop);
     ui->tableView->setModel(mModel);
-    ui->tableView->verticalHeader()->hide();
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -171,7 +170,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             }
         }
         ui->labelPrice->setText(Preference::formatMoney(price));
-        mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt());
+        mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt(), QString());
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
@@ -279,23 +278,17 @@ double CashierWidget::getTax()
 
 void CashierWidget::updateItem(CashierItem *item)
 {
-    if((item->itemFlag & ITEM_FLAG::EDITABLE_PRICE) != 0) {
-        EditPriceCountDialog dialog(mMessageBus, this);
-        dialog.setup(item->barcode, item->count, item->price, item->discount_formula);
-        dialog.exec();
-        if(dialog.isOk()) {
-            QVariantList &prices = mModel->getPrices(item->barcode);
-            QVariantMap price = prices[0].toMap();
-            price["price"] = dialog.getPrice();
-            price["discount_formula"] = dialog.getDiscountFormula();
-            prices[0] = price;
-            mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag);
-        }
-    } else {
-        bool ok = false;
-        double count = QInputDialog::getDouble(this, tr("Edit count"), tr("Input new count"), item->count, 0, 1000000, 1, &ok);
-        if(ok)
-            mModel->addItem(count - item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag);
+    EditPriceCountDialog dialog(mMessageBus, this);
+    dialog.setup(item->barcode, item->count, item->price, item->discount_formula, item->note, item->itemFlag);
+    dialog.exec();
+    if(dialog.isOk()) {
+        QVariantList &prices = mModel->getPrices(item->barcode);
+        QVariantMap price = prices[0].toMap();
+        price["price"] = dialog.getPrice();
+        price["discount_formula"] = dialog.getDiscountFormula();
+        prices[0] = price;
+        mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag, dialog.getNote());
+        ui->tableView->resizeRowsToContents();
     }
 }
 
@@ -360,7 +353,7 @@ void CashierWidget::tableKeyPressed(QObject */*sender*/, QKeyEvent *event)
         if(item->isReturn()) {
             mModel->removeReturn(item);
         } else {
-            mModel->addItem(-item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag);
+            mModel->addItem(-item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag, QString());
         }
     }
 }
@@ -470,8 +463,10 @@ void CashierWidget::printBill(const QVariantMap &data)
     for(auto v : l) {
         QVariantMap m = v.toMap();
         QString name = QString("%1 - %2").arg(Util::elide(m["barcode"].toString(), barcodelen)).arg(m["name"].toString());
+        const QString &note = m["note"].toString();
         if(name.length() > cpi12) name = name.left(cpi12);
         escp->leftText(name)->newLine();
+        if(!note.isEmpty()) escp->leftText(QString("* %1").arg(note))->newLine();
         QString s = QString("%1 x %2").
                 arg(Preference::formatMoney(m["count"].toFloat())).
                  arg(Preference::formatMoney(m["price"].toDouble()));

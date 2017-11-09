@@ -24,14 +24,18 @@ EditPriceCountDialog::~EditPriceCountDialog()
     delete ui;
 }
 
-void EditPriceCountDialog::setup(const QString &barcode, float count, double price, const QString disc)
+void EditPriceCountDialog::setup(const QString &barcode, float count, double price, const QString disc, const QString &note, int flag)
 {
     ui->doubleCount->setValue(count);
     ui->doublePrice->setValue(price);
     ui->lineDiscount->setText(disc);
+    ui->plainNote->setPlainText(note);
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE);
     msg.addData("barcode", barcode);
     sendMessage(&msg);
+    ui->doublePrice->setEnabled((flag & ITEM_FLAG::EDITABLE_PRICE) != 0);
+    ui->lineDiscount->setEnabled((flag & ITEM_FLAG::EDITABLE_PRICE) != 0);
+    ui->plainNote->setEnabled((flag & ITEM_FLAG::REQUIRE_NOTE) != 0);
     ui->doubleCount->selectAll();
 }
 
@@ -40,6 +44,11 @@ float EditPriceCountDialog::getCount() { return ui->doubleCount->value(); }
 double EditPriceCountDialog::getPrice() { return ui->doublePrice->value(); }
 
 QString EditPriceCountDialog::getDiscountFormula() { return ui->lineDiscount->text(); }
+
+QString EditPriceCountDialog::getNote()
+{
+    return ui->plainNote->toPlainText();
+}
 
 void EditPriceCountDialog::messageReceived(LibG::Message *msg)
 {

@@ -91,7 +91,6 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     connect(ui->tablePrice, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
     ui->toolBoxPrice->setCurrentIndex(0);
     //this is temporary
-    ui->checkNote->setEnabled(false);
     ui->checkProduct->setEnabled(false);
     //item links table
     model = ui->tableItemLink->getModel();

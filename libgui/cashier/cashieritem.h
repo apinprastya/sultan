@@ -49,6 +49,7 @@ public:
     QString name;
     QString discount_formula;
     QString unit;
+    QString note;
     CashierItem();
     CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
     CashierItem(const QString &name, const QString &barcode, float count, double price, double discount,  const QString &unit, int flag);
@@ -60,6 +61,7 @@ public:
     inline bool hasFlag(int flag) { return (this->flag & flag) != 0; }
     inline bool isReturn() { return hasFlag(Return); }
     inline bool isReturned() { return hasFlag(Returned); }
+    inline void setNote(const QString &note) { this->note = note; }
 };
 
 }

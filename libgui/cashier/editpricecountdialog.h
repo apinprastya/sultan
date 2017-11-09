@@ -17,11 +17,12 @@ class EditPriceCountDialog : public QDialog, public LibG::MessageHandler
 public:
     EditPriceCountDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~EditPriceCountDialog();
-    void setup(const QString &barcode, float count, double price, const QString disc);
+    void setup(const QString &barcode, float count, double price, const QString disc, const QString &note, int flag);
     inline bool isOk() { return mIsOk; }
     float getCount();
     double getPrice();
     QString getDiscountFormula();
+    QString getNote();
 
 protected:
     void messageReceived(LibG::Message *msg) override;

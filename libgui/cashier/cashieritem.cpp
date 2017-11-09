@@ -68,6 +68,7 @@ void CashierItem::fill(const QVariantMap &data)
     linkId = data["link_id"].toInt();
     buyPrice = data["buy_price"].toDouble();
     unit = data["unit"].toString();
+    note = data["note"].toString();
 }
 
 QVariantMap CashierItem::toMap()
@@ -85,6 +86,7 @@ QVariantMap CashierItem::toMap()
     data.insert("link_id", linkId);
     data.insert("buy_price", buyPrice);
     data.insert("unit", unit);
+    data.insert("note", note);
     return data;
 }
 
@@ -116,4 +118,5 @@ void CashierItem::fill(CashierItem *another)
     linkId = another->linkId;
     buyPrice = another->buyPrice;
     unit = another->unit;
+    if(!another->note.isNull()) note = another->note;
 }
