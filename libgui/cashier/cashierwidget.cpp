@@ -456,9 +456,14 @@ void CashierWidget::printBill(const QVariantMap &data)
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
-    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12()->
-            centerText(subtitle)->newLine(2);
-    escp->leftText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
+    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12();
+    if(subtitle.contains("\n")) {
+        const QStringList &l = subtitle.split("\n");
+        for(int i = 0; i < l.size(); i++) escp->centerText(l[i])->newLine();
+    } else {
+        escp->centerText(subtitle);
+    }
+    escp->newLine(2)->leftText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
     escp->column(QList<int>{50, 50})->leftText(data["number"].toString())->rightText(UserSession::username());
     escp->newLine()->column(QList<int>())->line(QChar('='));
     const QVariantList &l = data["cart"].toList();

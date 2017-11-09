@@ -112,7 +112,7 @@ void SettingWidget::setupPrinter()
     ui->comboPrintCashier->setCurrentText(Preference::getString(SETTING::PRINTER_CASHIER_NAME));
     ui->linePrintCashierDevice->setText(Preference::getString(SETTING::PRINTER_CASHIER_DEVICE));
     ui->linePrintCashierTitle->setText(Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket"));
-    ui->linePrintCashierSubtitle->setText(Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul"));
+    ui->plainPrintCashierSubtitle->setPlainText(Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul"));
     ui->plainPrintCashierFooter->setPlainText(Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar"));
     ui->spinCashierCpi10->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32));
     ui->spinCashierCpi12->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40));
@@ -169,7 +169,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_NAME, ui->comboPrintCashier->currentText());
     Preference::setValue(SETTING::PRINTER_CASHIER_DEVICE, ui->linePrintCashierDevice->text());
     Preference::setValue(SETTING::PRINTER_CASHIER_TITLE, ui->linePrintCashierTitle->text());
-    Preference::setValue(SETTING::PRINTER_CASHIER_SUBTITLE, ui->linePrintCashierSubtitle->text());
+    Preference::setValue(SETTING::PRINTER_CASHIER_SUBTITLE, ui->plainPrintCashierSubtitle->toPlainText());
     Preference::setValue(SETTING::PRINTER_CASHIER_FOOTER, ui->plainPrintCashierFooter->toPlainText());
     Preference::setValue(SETTING::PRINTER_CASHIER_CPI10, ui->spinCashierCpi10->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_CPI12, ui->spinCashierCpi12->value());
