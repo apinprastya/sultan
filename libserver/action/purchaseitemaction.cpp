@@ -62,9 +62,9 @@ LibG::Message PurchaseItemAction::insert(LibG::Message *msg)
         message.setData(res.first());
         float stock = msg->data("count").toFloat();
         const QString &barcode = msg->data("barcode").toString();
-        mDb->exec(QString("UPDATE items SET buy_price = %1 WHERE barcode = %2").arg(QString::number(buyPrice)).arg(barcode));
+        mDb->exec(QString("UPDATE items SET buy_price = %1 WHERE barcode = '%2'").arg(QString::number(buyPrice)).arg(barcode));
         if(editSellPrice) {
-            mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = %4 AND count = %5").
+            mDb->exec(QString("UPDATE sellprices SET price = %1, discount = %2, final = %3 WHERE barcode = '%4' AND count = %5").
                       arg(sellPrice).arg(discount).arg(final).arg(barcode).arg(count));
         }
         updatePurchaseTotal(msg->data("purchase_id").toInt());
