@@ -340,6 +340,9 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::UPDATE)) {
         FlashMessageManager::showMessage(tr("Ingridient item updated successfully"));
         ui->tableIngridient->getModel()->refresh();
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::INSERT)) {
+        FlashMessageManager::showMessage(tr("Ingridient item inserted successfully"));
+        ui->tableIngridient->getModel()->refresh();
     }
 }
 
@@ -703,7 +706,8 @@ void AddItemDialog::addIngridient()
         calculateIngridientPrice();
     } else {
         Message msg(MSG_TYPE::ITEMLINK, MSG_COMMAND::INSERT);
-        msg.setData(data);
+        msg.setData(QVariantMap{{"barcode", ui->lineBarcode->text()}, {"type", ITEM_LINK_TYPE::INGRIDIENT},
+                    {"barcode_link", data["barcode_link"]}, {"count_link", data["count_link"]}});
         sendMessage(&msg);
     }
 }
