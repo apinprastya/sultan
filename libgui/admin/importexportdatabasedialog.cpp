@@ -210,6 +210,6 @@ void ImportExportDatabaseDialog::onFileDownloaded(const QByteArray &data)
 {
     Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT);
     msg.addData("version", qApp->applicationVersion());
-    msg.addData("data", data);
+    msg.addData("data", data.toBase64());
     sendMessage(&msg);
 }
