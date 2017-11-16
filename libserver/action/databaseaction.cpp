@@ -140,7 +140,7 @@ QByteArray DatabaseAction::exportData()
                 QMapIterator<QString, QVariant> it(d);
                 while (it.hasNext()) {
                     it.next();
-                    stream << it.value().toString() << ";";
+                    stream << it.value().toString().replace(";", "#$").replace("\n", "#%") << ";";
                 }
                 stream << "\n";
             }
@@ -193,7 +193,7 @@ void DatabaseAction::importData(const QString &fileName, const QString &version,
                 QVariantMap d;
                 for(int i = 0; i < columns.size(); i++) {
                     if(!lsplit[i].isEmpty())
-                        d.insert(columns[i], lsplit[i].toString());
+                        d.insert(columns[i], lsplit[i].toString().replace("#$", ";").replace("#%", "\n"));
                 }
                 if(!mDb->insert(tableName, d))
                     qWarning() << "[IMPORT] " << mDb->lastError().text();
