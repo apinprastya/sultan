@@ -88,20 +88,22 @@ double Util::calculateDiscount(const QString &formula, double value)
     double retVal = 0;
     const QStringList &l = formula.split("+");
     for(const QString &val : l) {
+        double locDisc = 0;
         if(val.endsWith("%")) {
             bool ok = false;
             double disc = val.mid(0, val.size() - 1).toDouble(&ok);
             if(ok) {
-                retVal += value * disc / 100;
+                locDisc = value * disc / 100;
+                retVal += locDisc;
             }
         } else {
             bool ok = false;
-            double disc = val.toDouble(&ok);
+            locDisc = val.toDouble(&ok);
             if(ok) {
-                retVal += disc;
+                retVal += locDisc;
             }
         }
-        value -= retVal;
+        value -= locDisc;
     }
     return retVal;
 }
