@@ -96,6 +96,7 @@ private slots:
     void openCustomerCreditPayment();
     void focusBarcode();
     void focusTable();
+    void addNonStockTransaction();
 };
 
 }

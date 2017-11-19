@@ -48,6 +48,7 @@
 #include "editpricecountdialog.h"
 #include "cashierreportdialog.h"
 #include "customercreditpaymentdialog.h"
+#include "transaction/addtransactiondialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -105,6 +106,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F7), this, SLOT(openCheckPrice()));
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
+    new QShortcut(QKeySequence(Qt::Key_F10), this, SLOT(addNonStockTransaction()));
     new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
@@ -637,4 +639,10 @@ void CashierWidget::focusBarcode()
 void CashierWidget::focusTable()
 {
     ui->tableView->setFocus();
+}
+
+void CashierWidget::addNonStockTransaction()
+{
+    AddTransactionDialog dialog(mMessageBus, this);
+    dialog.exec();
 }

@@ -45,14 +45,11 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("F7", tr("Check Prices"));
     addRow("F8", tr("Non full customer payment"));
     addRow("F9", tr("Cashless payment"));
+    addRow("F10", tr("Add non stock transaction"));
     addRow("F12", tr("Cashier Report"));
     addRow("Ctrl + N", tr("Clear current cart and start new transaction"));
     addRow("Ctrl + Del", tr("Clear current cart and start new transaction"));
-    //addRow("Ctrl + S", tr("Save current cart to slot"));
-    //addRow("Ctrl + O", tr("Load cart from slot"));
     addRow("Ctrl + P", tr("Customer credit payment"));
-    //addRow("Ctrl + S", tr("Save current cart to slot"));
-    //addRow("Ctrl + O", tr("Load cart from slot"));
     addRow("Ctrl + Arrow Up", tr("Focus to table"));
     addRow("Ctrl + Arrow Down", tr("Focus to barcode input"));
     addRow("PgDn", tr("Edit last inserted item"));
