@@ -49,7 +49,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -77,18 +77,12 @@
     <property name="title">
      <string>&amp;Inventory</string>
     </property>
-    <widget class="QMenu" name="menuC_ustomer">
-     <property name="title">
-      <string>C&amp;ustomer</string>
-     </property>
-     <addaction name="action_Customer_List"/>
-     <addaction name="actionReward_Setting"/>
-    </widget>
     <addaction name="action_Category"/>
     <addaction name="action_Suplier"/>
     <addaction name="action_Items"/>
     <addaction name="separator"/>
-    <addaction name="menuC_ustomer"/>
+    <addaction name="action_Customer_List"/>
+    <addaction name="actionReward_Setting"/>
     <addaction name="separator"/>
     <addaction name="action_Banks"/>
     <addaction name="actionUnits"/>
