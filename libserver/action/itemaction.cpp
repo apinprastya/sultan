@@ -53,7 +53,7 @@ Message ItemAction::insert(Message *msg)
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
-        DbResult res = mDb->where("barcode = ", mDb->lastInsertedId())->get(mTableName);
+        DbResult res = mDb->where("barcode = ", mDb->isSQLite() ? msg->data("barcode") : mDb->lastInsertedId())->get(mTableName);
         float count = msg->data("stock").toFloat();
         message.setData(res.first());
         if((flag & ITEM_FLAG::MULTIPRICE) == 0) {

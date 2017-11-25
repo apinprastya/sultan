@@ -234,3 +234,8 @@ void Message::keepFilter(const QStringList &list)
     }
     mData["filter"] = newFilter;
 }
+
+QString Message::getErrorString()
+{
+    return mData["error"].toString();
+}

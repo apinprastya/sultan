@@ -36,6 +36,7 @@ class PayCashDialog;
 class AdvancePaymentDialog;
 class PayCashlessDialog;
 class CashierItem;
+class AddItemUnavailableDialog;
 
 class CashierWidget : public QWidget, public LibG::MessageHandler, public TabCloseableWidget
 {
@@ -58,6 +59,8 @@ private:
     int mSaveSlot = -1;
     AdvancePaymentDialog *mAdvancePaymentDialog;
     PayCashlessDialog *mPayCashlessDialog;
+    AddItemUnavailableDialog *mAddItemDialog;
+    QString mLastBarcode;
 
     void cutPaper();
     void saveToSlot(int slot);
@@ -97,6 +100,7 @@ private slots:
     void focusBarcode();
     void focusTable();
     void addNonStockTransaction();
+    void addNewItem(const QVariantMap &data);
 };
 
 }

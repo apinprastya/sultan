@@ -97,7 +97,8 @@ SOURCES += \
     $$PWD/machine/addmachinedialog.cpp \
     $$PWD/cashier/cashierreportdialog.cpp \
     $$PWD/cashier/customercreditpaymentdialog.cpp \
-    $$PWD/item/addingridientdialog.cpp
+    $$PWD/item/addingridientdialog.cpp \
+    $$PWD/cashier/additemunavailabledialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -199,7 +200,8 @@ HEADERS += \
     $$PWD/cashier/cashierreportdialog.h \
     $$PWD/cashier/customercreditpaymentdialog.h \
     $$PWD/tabcloseablewidget.h \
-    $$PWD/item/addingridientdialog.h
+    $$PWD/item/addingridientdialog.h \
+    $$PWD/cashier/additemunavailabledialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -264,4 +266,5 @@ FORMS += \
     $$PWD/cashier/cashierreportdialog.ui \
     $$PWD/cashier/customercreditpaymentdialog.ui \
     $$PWD/item/addingridientdialog.ui \
-    $$PWD/report/datefromtowidget.ui
+    $$PWD/report/datefromtowidget.ui \
+    $$PWD/cashier/additemunavailabledialog.ui

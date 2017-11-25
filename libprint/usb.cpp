@@ -1,3 +1,8 @@
+/*
+ * Most of the code here are copied from CUPS
+ * https://github.com/apple/cups/blob/master/backend/usb-libusb.c
+ * */
+
 #include "usb.h"
 #ifdef USE_LIBUSB
 #include <libusb-1.0/libusb.h>

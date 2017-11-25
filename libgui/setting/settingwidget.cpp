@@ -26,6 +26,7 @@
 #include "guiutil.h"
 #include "printtestdialog.h"
 #include "message.h"
+#include "guiutil.h"
 #include <QMetaEnum>
 #include <QDebug>
 
@@ -48,6 +49,7 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
     setupAppliaction();
     setupLocale();
     setupPrinter();
+    setupCashier();
     ui->pushPrintTest->hide();
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged()));
     connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
@@ -55,6 +57,13 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
     sendMessage(&msg);
+    Message msg2(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
+    sendMessage(&msg2);
+    Message msg3(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY);
+    sendMessage(&msg3);
+    Message msg4(MSG_TYPE::UNIT, MSG_COMMAND::QUERY);
+    sendMessage(&msg4);
+    checkWidget();
 }
 
 SettingWidget::~SettingWidget()
@@ -144,6 +153,20 @@ void SettingWidget::setupPrinter()
     ui->checkShowBarcode->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_SHOW_BARCODE));
 }
 
+void SettingWidget::setupCashier()
+{
+    ui->groupCAI->setChecked(Preference::getBool(SETTING::CAI_ENABLE));
+    ui->checkCAISuplier->setChecked(Preference::getBool(SETTING::CAI_SUPLIER));
+    ui->checkCAICategory->setChecked(Preference::getBool(SETTING::CAI_CATEGORY));
+    ui->checkCAIUnit->setChecked(Preference::getBool(SETTING::CAI_UNIT));
+    ui->checkCAIBuyPrice->setChecked(Preference::getBool(SETTING::CAI_MARGIN));
+    ui->doubleCAIBuyPrice->setValue(Preference::getDouble(SETTING::CAI_DEFAULT_MARGIN));
+    connect(ui->checkCAISuplier, SIGNAL(toggled(bool)), SLOT(checkWidget()));
+    connect(ui->checkCAICategory, SIGNAL(toggled(bool)), SLOT(checkWidget()));
+    connect(ui->checkCAIUnit, SIGNAL(toggled(bool)), SLOT(checkWidget()));
+    connect(ui->checkCAIBuyPrice, SIGNAL(toggled(bool)), SLOT(checkWidget()));
+}
+
 void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value)
 {
     for(int i = 0; i < combo->count(); i++) {
@@ -208,6 +231,16 @@ void SettingWidget::saveClicked()
         Preference::setValue(SETTING::PRINTER_CASHIER_VENDOR_ID, mUsbDevices[cur].vendorId);
     }
 #endif
+    //cashier
+    Preference::setValue(SETTING::CAI_ENABLE, ui->groupCAI->isChecked());
+    Preference::setValue(SETTING::CAI_SUPLIER, ui->checkCAISuplier->isChecked());
+    Preference::setValue(SETTING::CAI_CATEGORY, ui->checkCAICategory->isChecked());
+    Preference::setValue(SETTING::CAI_UNIT, ui->checkCAIUnit->isChecked());
+    Preference::setValue(SETTING::CAI_MARGIN, ui->checkCAIBuyPrice->isChecked());
+    Preference::setValue(SETTING::CAI_DEFAULT_SUPLIER, ui->comboCAISuplier->currentData());
+    Preference::setValue(SETTING::CAI_DEFAULT_CATEGORY, ui->comboCAICategory->currentData());
+    Preference::setValue(SETTING::CAI_DEFAULT_UNIT, ui->comboCAIUnit->currentData());
+    Preference::setValue(SETTING::CAI_DEFAULT_MARGIN, ui->doubleCAIBuyPrice->value());
     Preference::sync();
     Preference::applyApplicationSetting();
 }
@@ -242,6 +275,14 @@ void SettingWidget::localeLanguageChanged()
     }
 }
 
+void SettingWidget::checkWidget()
+{
+    ui->comboCAISuplier->setEnabled(ui->checkCAISuplier->isChecked());
+    ui->comboCAICategory->setEnabled(ui->checkCAICategory->isChecked());
+    ui->comboCAIUnit->setEnabled(ui->checkCAIUnit->isChecked());
+    ui->doubleCAIBuyPrice->setEnabled(ui->checkCAIBuyPrice->isChecked());
+}
+
 void SettingWidget::messageReceived(Message *msg)
 {
     if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY)) {
@@ -253,5 +294,17 @@ void SettingWidget::messageReceived(Message *msg)
             ui->comboMachine->addItem(data["name"].toString(), data);
         }
         GuiUtil::selectCombo(ui->comboMachine, Preference::getInt(SETTING::MACHINE_ID, 0), "id");
+    } else if(msg->isTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY)) {
+        const QVariantList &list = msg->data("data").toList();
+        GuiUtil::populateCombo(ui->comboCAISuplier, list, tr("-- Select Suplier --"));
+        GuiUtil::selectCombo(ui->comboCAISuplier, Preference::getInt(SETTING::CAI_DEFAULT_SUPLIER));
+    } else if(msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
+        const QVariantList &list = msg->data("data").toList();
+        GuiUtil::populateCombo(ui->comboCAICategory, list, tr("-- Select Category --"));
+        GuiUtil::selectCombo(ui->comboCAICategory, Preference::getInt(SETTING::CAI_DEFAULT_CATEGORY));
+    } else if(msg->isTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY)) {
+        const QVariantList &list = msg->data("data").toList();
+        GuiUtil::populateCombo(ui->comboCAIUnit, list, tr("-- Select Unit --"));
+        GuiUtil::selectCombo(ui->comboCAIUnit, Preference::getInt(SETTING::CAI_DEFAULT_UNIT));
     }
 }

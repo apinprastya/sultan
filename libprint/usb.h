@@ -1,3 +1,8 @@
+/*
+ * Most of the code here are copied from CUPS
+ * https://github.com/apple/cups/blob/master/backend/usb-libusb.c
+ * */
+
 #ifndef USB_H
 #define USB_H
 

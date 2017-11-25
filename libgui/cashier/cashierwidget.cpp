@@ -48,6 +48,7 @@
 #include "cashierreportdialog.h"
 #include "customercreditpaymentdialog.h"
 #include "transaction/addtransactiondialog.h"
+#include "additemunavailabledialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -59,6 +60,7 @@
 #include <QStringBuilder>
 #include <QDebug>
 #include <functional>
+#include <QTimer>
 
 using namespace LibG;
 using namespace LibGUI;
@@ -70,7 +72,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     mModel(new CashierTableModel(bus, this)),
     mPayCashDialog(new PayCashDialog(this)),
     mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this)),
-    mPayCashlessDialog(new PayCashlessDialog(bus, this))
+    mPayCashlessDialog(new PayCashlessDialog(bus, this)),
+    mAddItemDialog(new AddItemUnavailableDialog(bus, this))
 {
     ui->setupUi(this);
     setMessageBus(bus);
@@ -105,7 +108,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_F10), this, SLOT(addNonStockTransaction()));
-    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
+    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openUnavailableItem()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
@@ -116,6 +119,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down), this, SLOT(focusBarcode()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
+    connect(mAddItemDialog, SIGNAL(addNewItem(QVariantMap)), SLOT(addNewItem(QVariantMap)));
 }
 
 CashierWidget::~CashierWidget()
@@ -145,9 +149,17 @@ bool CashierWidget::requestClose()
 void CashierWidget::messageReceived(LibG::Message *msg)
 {
     if(!msg->isSuccess()) {
-        QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
-        if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE))
+        if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
             ui->lineBarcode->selectAll();
+            if(Preference::getBool(SETTING::CAI_ENABLE)) {
+                if(!mLastBarcode.isEmpty())
+                    mAddItemDialog->openBarcode(mLastBarcode);
+            } else {
+                QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+            }
+        } else {
+            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
+        }
         return;
     }
     if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
@@ -188,6 +200,9 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             mModel->fillCustomer(d);
             updateCustomerLabel();
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::INSERT)) {
+        mAddItemDialog->hide();
+        barcodeEntered();
     }
 }
 
@@ -299,6 +314,7 @@ void CashierWidget::barcodeEntered()
     } else {
         mCount = 1.0f;
     }
+    mLastBarcode = barcode;
     if(Preference::getBool(SETTING::CASHIER_NAMEBASED)) {
         SearchItemDialog dialog(mMessageBus, false, this);
         dialog.setNameField(ui->lineBarcode->text());
@@ -638,4 +654,11 @@ void CashierWidget::addNonStockTransaction()
 {
     AddTransactionDialog dialog(mMessageBus, this);
     dialog.exec();
+}
+
+void CashierWidget::addNewItem(const QVariantMap &data)
+{
+    LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::INSERT);
+    msg.setData(data);
+    sendMessage(&msg);
 }

@@ -77,6 +77,11 @@ bool Preference::getBool(const QString &key, bool def)
     return sInstance->mSetting->value(key, def).toBool();
 }
 
+double Preference::getDouble(const QString &key, double def)
+{
+    return sInstance->mSetting->value(key, def).toDouble();
+}
+
 void Preference::sync()
 {
     sInstance->mSetting->sync();

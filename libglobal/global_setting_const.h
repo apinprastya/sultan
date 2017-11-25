@@ -75,6 +75,16 @@ namespace SETTING {
     const QString PRINTER_CASHIER_BARCODE_LEN   = QStringLiteral("printer/cashier_barcodelen");
     const QString PRINTER_CASHIER_SHOW_BARCODE  = QStringLiteral("printer/cashier_show_barcode");
 
+    const QString CAI_ENABLE                    = QStringLiteral("cashier/cai_enable");
+    const QString CAI_DEFAULT_SUPLIER           = QStringLiteral("cashier/cai_default_suplier");
+    const QString CAI_SUPLIER                   = QStringLiteral("cashier/cai_suplier");
+    const QString CAI_DEFAULT_CATEGORY          = QStringLiteral("cashier/cai_default_category");
+    const QString CAI_CATEGORY                  = QStringLiteral("cashier/cai_category");
+    const QString CAI_DEFAULT_UNIT              = QStringLiteral("cashier/cai_default_unit");
+    const QString CAI_UNIT                      = QStringLiteral("cashier/cai_unit");
+    const QString CAI_DEFAULT_MARGIN            = QStringLiteral("cashier/cai_default_margin");
+    const QString CAI_MARGIN                    = QStringLiteral("cashier/cai_margin");
+
     const QString PRINTER_CASHIER_PRICE_LINEFEED      = QStringLiteral("printer/cashier_price_linefeed");
 
     const QString NUMBER_DATE                   = QStringLiteral("number/date");

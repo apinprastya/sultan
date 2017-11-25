@@ -51,6 +51,7 @@ private:
     void setupAppliaction();
     void setupLocale();
     void setupPrinter();
+    void setupCashier();
     void setCurrentCombo(QComboBox *combo, QVariant value);
 
 private slots:
@@ -60,6 +61,7 @@ private slots:
     void tabChanged();
     void printTestClicked();
     void localeLanguageChanged();
+    void checkWidget();
 
 protected:
     void messageReceived(LibG::Message *msg) override;

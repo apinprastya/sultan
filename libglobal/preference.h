@@ -37,6 +37,7 @@ public:
     static int getInt(const QString &key, int def = 0);
     static QString getString(const QString &key, const QString &def = QString());
     static bool getBool(const QString &key, bool def = false);
+    static double getDouble(const QString &key, double def = 0.0f);
     static void sync();
 
     static void applyApplicationSetting();

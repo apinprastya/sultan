@@ -91,13 +91,14 @@ public:
     bool roolback();
     inline bool isSupportTransaction() { return mSupportTransaction; }
     inline Db *clearSelect() { mSelect.clear(); return this; }
+    bool isSQLite();
 
 private:
     static QStringList mCreated;
     static QStringList mUpdate;
     static QStringList mSoftDelete;
     static bool DEBUG;
-    bool mSupportTransaction;
+    bool mSupportTransaction = false;
     QString mWhere;
     QString mSelect;
     QString mJoin;

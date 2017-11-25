@@ -150,7 +150,8 @@ SOURCES += \
     machine/addmachinedialog.cpp \
     cashier/cashierreportdialog.cpp \
     cashier/customercreditpaymentdialog.cpp \
-    item/addingridientdialog.cpp
+    item/addingridientdialog.cpp \
+    cashier/additemunavailabledialog.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -252,7 +253,8 @@ HEADERS += \
     cashier/cashierreportdialog.h \
     cashier/customercreditpaymentdialog.h \
     tabcloseablewidget.h \
-    item/addingridientdialog.h
+    item/addingridientdialog.h \
+    cashier/additemunavailabledialog.h
 
 FORMS += \
     mainwindow.ui \
@@ -317,4 +319,5 @@ FORMS += \
     cashier/cashierreportdialog.ui \
     cashier/customercreditpaymentdialog.ui \
     item/addingridientdialog.ui \
-    report/datefromtowidget.ui
+    report/datefromtowidget.ui \
+    cashier/additemunavailabledialog.ui

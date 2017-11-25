@@ -91,6 +91,8 @@ public:
     void addFilter(const QString &key, int type, const QVariant &data);
     QVariant getFilter(const QString &key);
     void keepFilter(const QStringList &list);
+
+    QString getErrorString();
 };
 
 }

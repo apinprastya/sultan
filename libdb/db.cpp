@@ -435,6 +435,11 @@ bool Db::roolback()
     return getDatabase().rollback();
 }
 
+bool Db::isSQLite()
+{
+    return DBTYPE.compare("SQLITE") == 0;
+}
+
 QSqlDatabase Db::getDatabase()
 {
     if(mDatabasePool.hasLocalData()) {
@@ -451,7 +456,10 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
     auto database = getDatabase();
     if(database.isOpen()) {
         if(newConnection) database.close();
-        else return true;
+        else {
+            mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);
+            return true;
+        }
     }
     bool ret = false;
     if(DBTYPE == "MYSQL") {
