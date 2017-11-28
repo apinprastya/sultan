@@ -419,9 +419,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-60</y>
             <width>633</width>
-            <height>548</height>
+            <height>569</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -470,9 +470,56 @@
                   </property>
                  </widget>
                 </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_18">
+                  <property name="text">
+                   <string>CPI 10 Width</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="spinCashierCpi10">
+                  <property name="minimum">
+                   <number>20</number>
+                  </property>
+                  <property name="maximum">
+                   <number>1000</number>
+                  </property>
+                  <property name="value">
+                   <number>33</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_19">
+                  <property name="text">
+                   <string>CPI 12 Width</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QSpinBox" name="spinCashierCpi12">
+                  <property name="minimum">
+                   <number>20</number>
+                  </property>
+                  <property name="maximum">
+                   <number>1000</number>
+                  </property>
+                  <property name="value">
+                   <number>40</number>
+                  </property>
+                 </widget>
+                </item>
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_13">
                   <property name="text">
+                   <string>Title</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLineEdit" name="linePrintCashierTitle">
+                  <property name="placeholderText">
                    <string>Title</string>
                   </property>
                  </widget>
@@ -484,17 +531,29 @@
                   </property>
                  </widget>
                 </item>
+                <item row="6" column="1">
+                 <widget class="QPlainTextEdit" name="plainPrintCashierSubtitle">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>75</height>
+                   </size>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Subtitle</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="7" column="0">
                  <widget class="QLabel" name="label_15">
                   <property name="text">
                    <string>Footer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QLineEdit" name="linePrintCashierTitle">
-                  <property name="placeholderText">
-                   <string>Title</string>
                   </property>
                  </widget>
                 </item>
@@ -526,84 +585,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_18">
-                  <property name="text">
-                   <string>CPI 10 Width</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_19">
-                  <property name="text">
-                   <string>CPI 12 Width</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QSpinBox" name="spinCashierCpi10">
-                  <property name="minimum">
-                   <number>20</number>
-                  </property>
-                  <property name="maximum">
-                   <number>1000</number>
-                  </property>
-                  <property name="value">
-                   <number>33</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QSpinBox" name="spinCashierCpi12">
-                  <property name="minimum">
-                   <number>20</number>
-                  </property>
-                  <property name="maximum">
-                   <number>1000</number>
-                  </property>
-                  <property name="value">
-                   <number>40</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="0">
-                 <widget class="QLabel" name="label_20">
-                  <property name="text">
-                   <string>Auto Cut</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="0">
-                 <widget class="QLabel" name="label_21">
-                  <property name="text">
-                   <string>Open Drawer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="1">
-                 <widget class="QCheckBox" name="checkPrintCashierDrawer">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="1">
-                 <widget class="QCheckBox" name="checkPrintCashierCut">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="0">
-                 <widget class="QLabel" name="label_23">
-                  <property name="text">
-                   <string>Line Feed After</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="1">
-                 <widget class="QSpinBox" name="spinCashierLinefeed"/>
-                </item>
                 <item row="8" column="0">
                  <widget class="QLabel" name="label_28">
                   <property name="text">
@@ -621,22 +602,55 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="1">
-                 <widget class="QPlainTextEdit" name="plainPrintCashierSubtitle">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>Line Feed After</string>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>75</height>
-                   </size>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QSpinBox" name="spinCashierLinefeed"/>
+                </item>
+                <item row="10" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>Open Drawer</string>
                   </property>
-                  <property name="placeholderText">
-                   <string>Subtitle</string>
+                 </widget>
+                </item>
+                <item row="10" column="1">
+                 <widget class="QCheckBox" name="checkPrintCashierDrawer">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>Auto Cut</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="1">
+                 <widget class="QCheckBox" name="checkPrintCashierCut">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>Show barcode</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="1">
+                 <widget class="QCheckBox" name="checkShowBarcode">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>

@@ -75,7 +75,7 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
         case 0: return index.row() + 1;
         case 1: return item->barcode;
         case 2: {
-            if(!item->note.isNull())
+            if(!item->note.isEmpty())
                 return QString("%1 \n* %2").arg(item->name).arg(item->note);
             return item->name;
         }
