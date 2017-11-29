@@ -39,7 +39,11 @@ macx {
     !contains(CONFIG, NO_PRINTER_SPOOL) {
         LIBS += -lcups
     } else {
-        DEFINES+=NO_PRINTER_SPOOL
+        DEFINES += NO_PRINTER_SPOOL
+    }
+    contains(CONFIG, USE_LIBUSB) {
+        DEFINES+=USE_LIBUSB
+        LIBS += -lusb-1.0
     }
     QMAKE_LIBDIR = $$OUT_PWD/../bin/ $$QMAKE_LIBDIR
 }
@@ -49,7 +53,8 @@ SOURCES += \
     printer.cpp \
     printtestdialog.cpp \
     escptable.cpp \
-    barcode.cpp
+    barcode.cpp \
+    usb.cpp
 
 HEADERS += \
     print_constant.h \
@@ -58,7 +63,8 @@ HEADERS += \
     printer.h \
     printtestdialog.h \
     escptable.h \
-    barcode.h
+    barcode.h \
+    usb.h
 
 FORMS += \
     printtestdialog.ui

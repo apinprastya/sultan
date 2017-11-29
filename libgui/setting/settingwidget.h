@@ -21,6 +21,7 @@
 #define SETTINGWIDGET_H
 
 #include "messagehandler.h"
+#include "usb.h"
 #include <QWidget>
 #include <QMap>
 #include <QLocale>
@@ -46,6 +47,7 @@ private:
     QMap<QString, QLocale::Language> mLocaleLanguage;
     QMap<QString, QLocale::Country> mLocaleCountry;
     QList<QLocale> mAllLocales;
+    QList<UsbDevice> mUsbDevices;
     void setupAppliaction();
     void setupLocale();
     void setupPrinter();

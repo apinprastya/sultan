@@ -44,6 +44,10 @@ macx {
 } else {
     DESTDIR = ../bin
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    contains(CONFIG, USE_LIBUSB) {
+        DEFINES+=USE_LIBUSB
+        LIBS += -lusb-1.0
+    }
 }
 
 TRANSLATIONS = ../translation/libgui_id.ts

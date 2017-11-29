@@ -4,7 +4,8 @@ SOURCES += \
     $$PWD/printer.cpp \
     $$PWD/printtestdialog.cpp \
     $$PWD/escptable.cpp \
-    $$PWD/barcode.cpp
+    $$PWD/barcode.cpp \
+    $$PWD/usb.cpp
 
 HEADERS += \
     $$PWD/print_constant.h \
@@ -13,7 +14,8 @@ HEADERS += \
     $$PWD/printer.h \
     $$PWD/printtestdialog.h \
     $$PWD/escptable.h \
-    $$PWD/barcode.h
+    $$PWD/barcode.h \
+    $$PWD/usb.h
 
 FORMS += \
     $$PWD/printtestdialog.ui

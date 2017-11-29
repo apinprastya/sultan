@@ -24,7 +24,7 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "escp.h"
-#include "printer.h"
+#include "guiutil.h"
 #include <QDateTime>
 #include <QStringBuilder>
 #include <QMessageBox>
@@ -134,8 +134,6 @@ void CashierReportDialog::print()
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
         return;
     }
-    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
-    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
@@ -170,10 +168,10 @@ void CashierReportDialog::print()
         escp->line()->newLine();
     }
     escp->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
-    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    GuiUtil::print(escp->data());
     if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
         const QString &command = Escp::cutPaperCommand();
-        Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, command, type);
+        GuiUtil::print(command);
     }
     delete escp;
 }

@@ -134,8 +134,6 @@ void CustomerRewardWidget::print(const QVariantMap &data)
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
         return;
     }
-    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
-    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
     int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
@@ -154,11 +152,10 @@ void CustomerRewardWidget::print(const QVariantMap &data)
     escp->leftText(tr("Reward Exchange"))->rightText(Preference::formatMoney(-data["reward"].toDouble()))->newLine();
     escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(data["detail"].toString())->newLine();
     escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
-    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    GuiUtil::print(escp->data());
     delete escp;
     if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
         const QString &command = LibPrint::Escp::cutPaperCommand();
-        LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
-                               command, type);
+        GuiUtil::print(command);
     }
 }

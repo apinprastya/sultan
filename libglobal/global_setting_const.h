@@ -61,6 +61,9 @@ namespace SETTING {
     const QString PRINTER_CASHIER_TYPE          = QStringLiteral("printer/cashier_type");
     const QString PRINTER_CASHIER_NAME          = QStringLiteral("printer/cashier_name");
     const QString PRINTER_CASHIER_DEVICE        = QStringLiteral("printer/cashier_device");
+    const QString PRINTER_CASHIER_PRODUK_ID     = QStringLiteral("printer/cashier_usb_produk_id");
+    const QString PRINTER_CASHIER_VENDOR_ID     = QStringLiteral("printer/cashier_usb_vendor_id");
+    const QString PRINTER_CASHIER_USB_NAME      = QStringLiteral("printer/cashier_usb_name");
     const QString PRINTER_CASHIER_TITLE         = QStringLiteral("printer/cashier_title");
     const QString PRINTER_CASHIER_SUBTITLE      = QStringLiteral("printer/cashier_subtitle");
     const QString PRINTER_CASHIER_FOOTER        = QStringLiteral("printer/cashier_footer");

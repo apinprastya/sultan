@@ -104,6 +104,26 @@ void SettingWidget::setupPrinter()
     ui->comboPrintCashierType->addItem(tr("Device Printer"), PRINT_TYPE::DEVICE);
 #ifndef NO_PRINTER_SPOOL
     ui->comboPrintCashierType->addItem(tr("Spool Printer"), PRINT_TYPE::SPOOL);
+#else
+    ui->labelPrinter->hide();
+    ui->comboPrintCashier->hide();
+#endif
+#ifdef USE_LIBUSB
+    ui->comboPrintCashierType->addItem(tr("USB Printer"), PRINT_TYPE::USB);
+    mUsbDevices = Usb::getUsbPrinterList();
+    ui->comboUsb->clear();
+    uint16_t vendorId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_VENDOR_ID);
+    uint16_t produkId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_PRODUK_ID);
+    int curSel = 0;
+    for(int i = 0; i < mUsbDevices.size(); i++) {
+        ui->comboUsb->addItem(mUsbDevices[i].name);
+        if(vendorId == mUsbDevices[i].vendorId && produkId == mUsbDevices[i].productId)
+            curSel = i;
+    }
+    ui->comboUsb->setCurrentIndex(curSel);
+#else
+    ui->comboUsb->hide();
+    ui->labelUsb->hide();
 #endif
     ui->comboPrintCashier->addItems(Printer::instance()->getPrintList());
     connect(ui->comboPrintCashierType, SIGNAL(currentIndexChanged(int)), SLOT(cashierPrintTypeChanged()));
@@ -142,7 +162,8 @@ void SettingWidget::signChanged()
 void SettingWidget::cashierPrintTypeChanged()
 {
     ui->comboPrintCashier->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::SPOOL);
-    ui->linePrintCashierDevice->setDisabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::SPOOL);
+    ui->linePrintCashierDevice->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::DEVICE);
+    ui->comboUsb->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::USB);
 }
 
 void SettingWidget::saveClicked()
@@ -180,6 +201,13 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, ui->spinCashierPriceLinefeed->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_BARCODE_LEN, ui->spinBarcodeLength->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_SHOW_BARCODE, ui->checkShowBarcode->isChecked());
+#ifdef USE_LIBUSB
+    int cur = ui->comboUsb->currentIndex();
+    if(ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {
+        Preference::setValue(SETTING::PRINTER_CASHIER_PRODUK_ID, mUsbDevices[cur].productId);
+        Preference::setValue(SETTING::PRINTER_CASHIER_VENDOR_ID, mUsbDevices[cur].vendorId);
+    }
+#endif
     Preference::sync();
     Preference::applyApplicationSetting();
 }

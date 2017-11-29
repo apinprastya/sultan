@@ -30,7 +30,6 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "usersession.h"
-#include "printer.h"
 #include "escp.h"
 #include "paymentcashsuccessdialog.h"
 #include "searchitemdialog.h"
@@ -196,9 +195,7 @@ void CashierWidget::cutPaper()
 {
     if(!Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) return;
     const QString &command = Escp::cutPaperCommand();
-    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
-    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
-                               command, type);
+    GuiUtil::print(command);
 }
 
 void CashierWidget::saveToSlot(int slot)
@@ -383,9 +380,7 @@ void CashierWidget::openDrawer()
 {
     if(!Preference::getBool(SETTING::PRINTER_CASHIER_KICK)) return;
     const QString &command = Escp::openDrawerCommand();
-    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE);
-    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
-                               command, type);
+    GuiUtil::print(command);
 }
 
 void CashierWidget::updateCurrentItem()
@@ -508,7 +503,7 @@ void CashierWidget::printBill(const QVariantMap &data)
         }
     }
     escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
-    Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    GuiUtil::print(escp->data());
     delete escp;
     cutPaper();
 }

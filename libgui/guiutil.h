@@ -41,6 +41,7 @@ public:
     static void enableWidget(bool enable, const QList<QWidget*> &lists);
     static bool isWidgetFocused(QWidget *widget);
     static void populateCombo(QComboBox *combo, const QVariantList &list, const QString &holder);
+    static void print(const QString &data);
 };
 
 }

@@ -34,7 +34,7 @@ public :
     static Printer *instance();
     static void destroy();
     QStringList getPrintList();
-    void print(const QString &printName, const QString &data, int type = 1);
+    void print(const QString &printName, const QString &data, int type = 1, uint16_t vendorId = 0, uint16_t produckId = 0);
 };
 
 }

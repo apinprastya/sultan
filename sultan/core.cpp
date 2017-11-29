@@ -31,6 +31,9 @@
 #include "usersession.h"
 #include "mainwindow.h"
 #include "util.h"
+#ifdef USE_LIBUSB
+#include "usb.h"
+#endif
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
@@ -60,12 +63,18 @@ Core::Core(QObject *parent) :
     qApp->setWindowIcon(QIcon(":/images/icon_64.png"));
 #endif
     Util::init(qApp->applicationDirPath());
+#ifdef USE_LIBUSB
+    Usb::init();
+#endif
 }
 
 Core::~Core()
 {
     qDebug() << TAG << "Application Exited";
     Preference::destroy();
+#ifdef USE_LIBUSB
+    Usb::destroy();
+#endif
     if(mMainWindow) delete mMainWindow;
     UserSession::destroy();
 }

@@ -129,6 +129,7 @@ namespace GUI_MESSAGE {
 namespace PRINT_TYPE {
     const int DEVICE    = 0;
     const int SPOOL     = 1;
+    const int USB       = 2;
 }
 
 namespace FILTER {

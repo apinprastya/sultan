@@ -18,6 +18,10 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "guiutil.h"
+#include "printer.h"
+#include "global_constant.h"
+#include "preference.h"
+#include "global_setting_const.h"
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QComboBox>
@@ -28,6 +32,7 @@
 #include <QApplication>
 
 using namespace LibGUI;
+using namespace LibG;
 
 bool GuiUtil::anyEmpty(const QList<QWidget *> &lists)
 {
@@ -125,4 +130,14 @@ void GuiUtil::populateCombo(QComboBox *combo, const QVariantList &list, const QS
         const QVariantMap &m = d.toMap();
         combo->addItem(m["name"].toString(), m["id"].toInt());
     }
+}
+
+void GuiUtil::print(const QString &data)
+{
+    int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
+    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
+    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
+    uint16_t vendorId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_VENDOR_ID);
+    uint16_t produckId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_PRODUK_ID);
+    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, data, type, vendorId, produckId);
 }

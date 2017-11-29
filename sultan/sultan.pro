@@ -71,6 +71,10 @@ macx {
             DEFINES+=NO_PRINTER_SPOOL
         }
     }
+    contains(CONFIG, USE_LIBUSB) {
+        DEFINES+=USE_LIBUSB
+        LIBS += -lusb-1.0
+    }
     DESTDIR = ../bin
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $${OUT_PWD}/../bin/)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $${OUT_PWD}/../bin/)

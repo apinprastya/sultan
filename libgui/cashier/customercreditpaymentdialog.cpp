@@ -29,7 +29,7 @@
 #include "flashmessagemanager.h"
 #include "usersession.h"
 #include "escp.h"
-#include "printer.h"
+#include "guiutil.h"
 #include "dbutil.h"
 #include <QDateTime>
 #include <QMessageBox>
@@ -127,12 +127,11 @@ void CustomerCreditPaymentDialog::printData(const QVariantMap &d)
     escp->leftText(tr("Payment"))->rightText(Preference::formatMoney(-d["credit"].toDouble()))->newLine();
     escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(d["detail"].toString())->newLine();
     escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
-    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, escp->data(), type);
+    GuiUtil::print(escp->data());
     delete escp;
     if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
         const QString &command = LibPrint::Escp::cutPaperCommand();
-        LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? Preference::getString(SETTING::PRINTER_CASHIER_DEVICE) : Preference::getString(SETTING::PRINTER_CASHIER_NAME),
-                               command, type);
+        GuiUtil::print(command);
     }
 }
 

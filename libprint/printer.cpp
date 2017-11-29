@@ -21,6 +21,9 @@
 #include "preference.h"
 #include "global_constant.h"
 #include "global_setting_const.h"
+#ifdef USE_LIBUSB
+#include "usb.h"
+#endif
 #include <QPrinterInfo>
 #include <QByteArray>
 #include <QFile>
@@ -61,7 +64,7 @@ QStringList Printer::getPrintList()
     return QPrinterInfo::availablePrinterNames();
 }
 
-void Printer::print(const QString &printName, const QString &data, int type)
+void Printer::print(const QString &printName, const QString &data, int type, uint16_t vendorId, uint16_t produckId)
 {
 #ifdef Q_OS_WIN
     wchar_t printerName[256];
@@ -113,7 +116,7 @@ void Printer::print(const QString &printName, const QString &data, int type)
         if(file.open(QFile::WriteOnly)) {
             file.write(data.toLocal8Bit());
         }
-    } else {
+    } else if(type == PRINT_TYPE::SPOOL) {
 #ifndef NO_PRINTER_SPOOL
         int jobId = 0;
         jobId = cupsCreateJob(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), "Sultan print", 0, NULL);
@@ -122,6 +125,10 @@ void Printer::print(const QString &printName, const QString &data, int type)
             cupsWriteRequestData(CUPS_HTTP_DEFAULT, data.toStdString().c_str(), data.length());
             cupsFinishDocument(CUPS_HTTP_DEFAULT, printName.toStdString().c_str());
         }
+#endif
+    } else if(type == PRINT_TYPE::USB) {
+#ifdef USE_LIBUSB
+        Usb::sendData(vendorId, produckId, data.toUtf8());
 #endif
     }
 #endif
