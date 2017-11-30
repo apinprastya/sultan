@@ -148,7 +148,7 @@ void CategoryWidget::deleteClicked()
 {
     auto item = mTreeWidget->currentItem();
     if(item != nullptr) {
-        int ret = QMessageBox::question(this, tr("Delete confirmation"), tr("Sure to delete category?"));
+        int ret = QMessageBox::question(this, tr("Delete confirmation"), tr("This will also delete the childrens. Sure to delete category?"));
         if(ret == QMessageBox::Yes) {
             mDeletedId = item->data(0, Qt::UserRole).toInt();
             Message msg(MSG_TYPE::CATEGORY, MSG_COMMAND::DEL);

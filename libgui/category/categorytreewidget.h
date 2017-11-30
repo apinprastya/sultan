@@ -49,6 +49,7 @@ private:
     QList<QTreeWidgetItem*> mItems;
     QTreeWidgetItem *getItemWithId(int id);
     void populateData(QTreeWidgetItem* item, QList<CategoryData> &data, int pos);
+    void cleanChild(QTreeWidgetItem* item);
 };
 
 }

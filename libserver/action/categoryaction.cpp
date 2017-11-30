@@ -19,6 +19,7 @@
  */
 #include "categoryaction.h"
 #include "db.h"
+#include <QDateTime>
 
 using namespace LibServer;
 using namespace LibDB;
@@ -26,7 +27,7 @@ using namespace LibDB;
 CategoryAction::CategoryAction():
     ServerAction("categories", "id")
 {
-    mFlag = AFTER_INSERT | HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
+    mFlag = AFTER_INSERT | HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE | AFTER_DELETE;
 }
 
 void CategoryAction::afterInsert(const QVariantMap &data)
@@ -35,6 +36,11 @@ void CategoryAction::afterInsert(const QVariantMap &data)
     if(data["parent_id"].toInt() != 0) {
         parentAddChild(data["parent_id"].toInt(), data["id"].toInt());
     }
+}
+
+void CategoryAction::afterDelete(const QVariantMap &oldData)
+{
+    mDb->where("parent_id = ", oldData["id"])->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}});
 }
 
 void CategoryAction::parentAddChild(int parent, int child)

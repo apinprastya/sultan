@@ -90,6 +90,7 @@ void CategoryTreeWidget::deleteItem(int id)
         if(item->parent() != nullptr) {
             item->parent()->removeChild(item);
         }
+        cleanChild(item);
         delete item;
     }
 }
@@ -130,5 +131,14 @@ void CategoryTreeWidget::populateData(QTreeWidgetItem *item, QList<CategoryData>
                             n, item->child(i)->data(1, Qt::DisplayRole).toString());
             data.append(d1);
         }
+    }
+}
+
+void CategoryTreeWidget::cleanChild(QTreeWidgetItem *item)
+{
+    mItems.removeOne(item);
+    for(auto i : mItems) {
+        if(i->parent() == item)
+            cleanChild(i);
     }
 }

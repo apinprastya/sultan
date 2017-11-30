@@ -1776,39 +1776,39 @@ Akhir</translation>
 <context>
     <name>LibGUI::AddItemUnavailableDialog</name>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="55"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="75"/>
         <source>-- Select Suplier --</source>
         <translation>-- Pilih Suplier --</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="60"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="80"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="65"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="85"/>
         <source>-- Select Unit --</source>
         <translation>-- Pilih Satuan --</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="75"/>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="80"/>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="85"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="95"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="100"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="105"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="75"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="95"/>
         <source>Name must be filled</source>
         <translation>Nama harus diisi</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="80"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="100"/>
         <source>Please select correct suplier, category, and unit</source>
         <translation>Silakan pilih suplier, kategori dan unit</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="85"/>
+        <location filename="../libgui/cashier/additemunavailabledialog.cpp" line="105"/>
         <source>Price and buy price must greater than 0</source>
         <translation>Harga jual dan beli harus lebih besar dari 0</translation>
     </message>
@@ -2545,8 +2545,12 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/category/categorywidget.cpp" line="151"/>
+        <source>This will also delete the childrens. Sure to delete category?</source>
+        <translation>Anak kategori akan terhapus. Yakin untuk hapus kategori?</translation>
+    </message>
+    <message>
         <source>Sure to delete category?</source>
-        <translation>Yakin hapus kategori?</translation>
+        <translation type="vanished">Yakin hapus kategori?</translation>
     </message>
 </context>
 <context>
@@ -3050,12 +3054,12 @@ Akhir</translation>
 <context>
     <name>LibGUI::ImportExportDatabaseDialog</name>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="75"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="76"/>
         <source>Save exported database</source>
         <translation>Simpan database</translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="92"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="93"/>
         <source>Import success</source>
         <translation>Import berhasil</translation>
     </message>
@@ -3064,27 +3068,27 @@ Akhir</translation>
         <translation type="vanished">Import berhasil, aplikasi butuh restart.</translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="92"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="93"/>
         <source>Import success. Application need to restart.</source>
         <translation>Import berhasil. Aplikasi akan restart.</translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="102"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="103"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="138"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="139"/>
         <source>Import database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="162"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="163"/>
         <source>Google Auth</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="162"/>
+        <location filename="../libgui/admin/importexportdatabasedialog.cpp" line="163"/>
         <source>Google Auth Failed</source>
         <translation>Google auth gagal</translation>
     </message>
@@ -4615,37 +4619,37 @@ Silakan masukkan password untuk konfirmasi</translation>
 <context>
     <name>LibGUI::SettingWidget</name>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="113"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="114"/>
         <source>Device Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="115"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="120"/>
         <source>Spool Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="121"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="126"/>
         <source>USB Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="290"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="295"/>
         <source>-- Select Machine --</source>
         <translation>-- Pilih mesin --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="299"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="304"/>
         <source>-- Select Suplier --</source>
         <translation>-- Pilih Suplier --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="303"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="308"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="307"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="312"/>
         <source>-- Select Unit --</source>
         <translation>-- Pilih Satuan --</translation>
     </message>

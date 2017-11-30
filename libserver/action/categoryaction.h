@@ -31,6 +31,7 @@ public:
 
 protected:
     void afterInsert(const QVariantMap &data) override;
+    void afterDelete(const QVariantMap &oldData) override;
     void parentAddChild(int parent, int child);
 };
 
