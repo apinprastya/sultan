@@ -21,10 +21,13 @@
 #include "ui_browserdialog.h"
 #include <QLineEdit>
 #include <QProgressBar>
+#include <QUrl>
+#ifdef USE_EMBED_BROWSER
 #ifndef USE_WEBENGINE
 #include <QWebView>
 #else
 #include <QWebEngineView>
+#endif
 #endif
 
 using namespace LibGUI;
@@ -32,16 +35,20 @@ using namespace LibGUI;
 BrowserDialog::BrowserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BrowserDialog),
-    mLineAddress(new QLineEdit(this)),
+    mLineAddress(new QLineEdit(this))
+#ifdef USE_EMBED_BROWSER
 #ifndef USE_WEBENGINE
-    mWebView(new QWebView(this))
+    ,mWebView(new QWebView(this))
 #else
-    mWebView(new QWebEngineView(this))
+    ,mWebView(new QWebEngineView(this))
+#endif
 #endif
 {
     ui->setupUi(this);
     ui->verticalLayout->addWidget(mLineAddress);
+#ifdef USE_EMBED_BROWSER
     ui->verticalLayout->addWidget(mWebView);
+#endif
     mLineAddress->setReadOnly(true);
 }
 
@@ -52,6 +59,8 @@ BrowserDialog::~BrowserDialog()
 
 void BrowserDialog::setUrl(const QUrl &url)
 {
+#ifdef USE_EMBED_BROWSER
     mWebView->load(url);
+#endif
     mLineAddress->setText(url.toString());
 }

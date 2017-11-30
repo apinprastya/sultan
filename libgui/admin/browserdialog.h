@@ -24,10 +24,12 @@
 
 class QLineEdit;
 
+#ifdef USE_EMBED_BROWSER
 #ifndef USE_WEBENGINE
 class QWebView;
 #else
 class QWebEngineView;
+#endif
 #endif
 
 namespace Ui {
@@ -48,10 +50,12 @@ public:
 private:
     Ui::BrowserDialog *ui;
     QLineEdit *mLineAddress;
+#ifdef USE_EMBED_BROWSER
 #ifndef USE_WEBENGINE
     QWebView *mWebView;
 #else
     QWebEngineView *mWebView;
+#endif
 #endif
 };
 

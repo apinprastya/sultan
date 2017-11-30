@@ -30,6 +30,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QProcess>
+#include <QDesktopServices>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -178,14 +179,21 @@ void ImportExportDatabaseDialog::onLinkingSuccess()
 
 void ImportExportDatabaseDialog::onOpenBrowser(const QUrl &url)
 {
+#ifdef USE_EMBED_BROWSER
     mBrowser->setUrl(url);
     mBrowser->show();
+#else
+    QDesktopServices::openUrl(url);
+#endif
 }
 
 void ImportExportDatabaseDialog::onCloseBrowser()
 {
     mGDriveInProcess = false;
+#ifdef USE_EMBED_BROWSER
     mBrowser->hide();
+#else
+#endif
 }
 
 void ImportExportDatabaseDialog::uploadGDriveDone()

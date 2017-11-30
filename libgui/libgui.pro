@@ -10,11 +10,14 @@ INSTALLS += target
 
 QT += core gui widgets network sql
 
-CONFIG(USE_WEBENGINE) {
-    QT += webenginewidgets
-    DEFINES += USE_WEBENGINE
-} else {
-    QT += webkitwidgets
+CONFIG(USE_EMBED_BROWSER) {
+    DEFINES+=USE_EMBED_BROWSER
+    CONFIG(USE_WEBENGINE) {
+        QT += webenginewidgets
+        DEFINES += USE_WEBENGINE
+    } else {
+        QT += webkitwidgets
+    }
 }
 
 CONFIG(static) {
