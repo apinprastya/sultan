@@ -33,6 +33,10 @@ contains(CONFIG, SINGLEBIN) {
     include(../libgui/libgui.pri)
 }
 
+CONFIG(NO_PRINTER_DEVICE) {
+    DEFINES+=NO_PRINTER_DEVICE
+}
+
 macx {
     QMAKE_LIBDIR += $$OUT_PWD/../bin/Sultan.app/Contents/Frameworks
     LIBS += -framework Foundation

@@ -110,7 +110,12 @@ void SettingWidget::setupLocale()
 
 void SettingWidget::setupPrinter()
 {
+#ifndef NO_PRINTER_DEVICE
     ui->comboPrintCashierType->addItem(tr("Device Printer"), PRINT_TYPE::DEVICE);
+#else
+    ui->linePrintCashierDevice->hide();
+    ui->labelPrinterDevice->hide();
+#endif
 #ifndef NO_PRINTER_SPOOL
     ui->comboPrintCashierType->addItem(tr("Spool Printer"), PRINT_TYPE::SPOOL);
 #else
