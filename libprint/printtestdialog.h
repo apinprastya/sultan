@@ -21,6 +21,7 @@
 #define PRINTTESTDIALOG_H
 
 #include "print_global.h"
+#include "usb.h"
 #include <QDialog>
 
 namespace Ui {
@@ -39,6 +40,7 @@ public:
 
 private:
     Ui::PrintTestDialog *ui;
+    QList<UsbDevice> mUsbDevices;
 
 private slots:
     void printClicked();

@@ -40,9 +40,13 @@ PrintTestDialog::PrintTestDialog(QWidget *parent) :
     connect(ui->pushPrint, SIGNAL(clicked(bool)), SLOT(printClicked()));
     ui->comboType->addItem(QLatin1String("Device"), PRINT_TYPE::DEVICE);
     ui->comboType->addItem(QLatin1String("Spool"), PRINT_TYPE::SPOOL);
+    ui->comboType->addItem(QLatin1String("USB"), PRINT_TYPE::USB);
     connect(ui->comboType, SIGNAL(currentIndexChanged(int)), SLOT(updateEnable()));
     connect(ui->pushOpenDrawer, SIGNAL(clicked(bool)), SLOT(openDrawer()));
     updateEnable();
+    mUsbDevices = Usb::getUsbPrinterList();
+    for(int i = 0; i < mUsbDevices.size(); i++)
+        ui->comboUSB->addItem(mUsbDevices[i].name);
 }
 
 PrintTestDialog::~PrintTestDialog()
@@ -92,9 +96,15 @@ void PrintTestDialog::printClicked()
         QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
         return;
     }
-    if(ui->checkDrawer->isChecked()) Printer::instance()->print(printName, Escp::openDrawerCommand(), type);
+    uint16_t vendorId = 0;
+    uint16_t productId = 0;
+    if(mUsbDevices.size() > 0) {
+        vendorId = mUsbDevices[ui->comboUSB->currentIndex()].vendorId;
+        productId = mUsbDevices[ui->comboUSB->currentIndex()].productId;
+    }
+    if(ui->checkDrawer->isChecked()) Printer::instance()->print(printName, Escp::openDrawerCommand(), type, vendorId, productId);
     Printer::instance()->print(printName, e.data(), type);
-    if(ui->checkCut->isChecked()) Printer::instance()->print(printName, Escp::cutPaperCommand());
+    if(ui->checkCut->isChecked()) Printer::instance()->print(printName, Escp::cutPaperCommand(), type, vendorId, productId);
 }
 
 void PrintTestDialog::updateEnable()
@@ -102,9 +112,15 @@ void PrintTestDialog::updateEnable()
     if(ui->comboType->currentIndex() == 0) {
         ui->comboPrint->setEnabled(false);
         ui->lineDevice->setEnabled(true);
-    } else {
+        ui->comboUSB->setEnabled(false);
+    } else if(ui->comboType->currentIndex() == 1){
         ui->comboPrint->setEnabled(true);
         ui->lineDevice->setEnabled(false);
+        ui->comboUSB->setEnabled(false);
+    } else {
+        ui->comboPrint->setEnabled(false);
+        ui->lineDevice->setEnabled(false);
+        ui->comboUSB->setEnabled(true);
     }
 }
 
@@ -116,5 +132,11 @@ void PrintTestDialog::openDrawer()
         QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
         return;
     }
-    Printer::instance()->print(printName, Escp::openDrawerCommand(), type);
+    uint16_t vendorId = 0;
+    uint16_t productId = 0;
+    if(mUsbDevices.size() > 0) {
+        vendorId = mUsbDevices[ui->comboUSB->currentIndex()].vendorId;
+        productId = mUsbDevices[ui->comboUSB->currentIndex()].productId;
+    }
+    Printer::instance()->print(printName, Escp::openDrawerCommand(), type, vendorId, productId);
 }
