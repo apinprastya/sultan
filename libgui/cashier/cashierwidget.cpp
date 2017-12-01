@@ -90,7 +90,13 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     keyevent->addConsumeKey(Qt::Key_Return);
     keyevent->addConsumeKey(Qt::Key_Delete);
     ui->tableView->installEventFilter(keyevent);
+    auto barcodeEvent = new KeyEvent(ui->lineBarcode);
+    barcodeEvent->setModifier(Qt::ControlModifier);
+    barcodeEvent->addConsumeKey(Qt::Key_Return);
+    barcodeEvent->addConsumeKey(Qt::Key_Enter);
+    ui->lineBarcode->installEventFilter(barcodeEvent);
     connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(barcodeEntered()));
+    connect(barcodeEvent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(barcodeWithCtrlPressed()));
     connect(mModel, SIGNAL(totalChanged(double)), SLOT(totalChanged(double)));
     connect(mModel, SIGNAL(selectRow(QModelIndex)), SLOT(selectRow(QModelIndex)));
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
@@ -301,7 +307,12 @@ void CashierWidget::updateItem(CashierItem *item)
     }
 }
 
-void CashierWidget::barcodeEntered()
+void CashierWidget::barcodeWithCtrlPressed()
+{
+    barcodeEntered(true);
+}
+
+void CashierWidget::barcodeEntered(bool isControlPressed)
 {
     QString barcode = ui->lineBarcode->text();
     if(barcode.isEmpty()) return;
@@ -315,7 +326,8 @@ void CashierWidget::barcodeEntered()
         mCount = 1.0f;
     }
     mLastBarcode = barcode;
-    if(Preference::getBool(SETTING::CASHIER_NAMEBASED)) {
+    if((Preference::getBool(SETTING::CASHIER_NAMEBASED) && !isControlPressed) ||
+            (!Preference::getBool(SETTING::CASHIER_NAMEBASED) && isControlPressed)) {
         SearchItemDialog dialog(mMessageBus, false, this);
         dialog.setNameField(ui->lineBarcode->text());
         dialog.exec();

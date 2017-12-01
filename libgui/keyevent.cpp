@@ -48,6 +48,8 @@ bool KeyEvent::eventFilter(QObject *obj, QEvent *event)
         }
         for(int i = 0; i < mConsumeKey.size(); i++) {
             if(mConsumeKey[i] == keyEvent->key()) {
+                if(mModifiers != Qt::NoModifier && (keyEvent->modifiers() & mModifiers) != mModifiers)
+                    return QObject::eventFilter(obj, event);
                 emit keyPressed(obj, keyEvent);
                 return true;
             }

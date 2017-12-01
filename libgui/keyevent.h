@@ -36,6 +36,7 @@ public:
     void addConsumeKey(Qt::Key key);
     inline void setFocusEvent(bool value) { mFocusEvent = value; }
     inline void setClickEvent(bool value) { mClickEvent = value; }
+    inline void setModifier(Qt::KeyboardModifiers modifier) { mModifiers = modifier; }
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -43,6 +44,7 @@ protected:
 private:
     bool mFocusEvent = false;
     bool mClickEvent = false;
+    Qt::KeyboardModifiers mModifiers;
     QList<Qt::Key> mDiscardKey;
     QList<Qt::Key> mConsumeKey;
 

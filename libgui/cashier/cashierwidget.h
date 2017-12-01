@@ -74,7 +74,8 @@ signals:
     void transactionDone();
 
 private slots:
-    void barcodeEntered();
+    void barcodeWithCtrlPressed();
+    void barcodeEntered(bool isControlPressed = false);
     void totalChanged(double value);
     void selectRow(const QModelIndex &index);
     void tableKeyPressed(QObject *sender, QKeyEvent *event);
