@@ -184,7 +184,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         mPayCashDialog->hide();
         mAdvancePaymentDialog->hide();
         mPayCashlessDialog->hide();
-        openDrawer();
+        if(Preference::getBool(SETTING::PRINTER_CASHIER_KICK)) openDrawer();
         printBill(data);
         PaymentCashSuccessDialog dialog(data, this);
         dialog.exec();
@@ -394,7 +394,6 @@ void CashierWidget::payAdvance()
 
 void CashierWidget::openDrawer()
 {
-    if(!Preference::getBool(SETTING::PRINTER_CASHIER_KICK)) return;
     const QString &command = Escp::openDrawerCommand();
     GuiUtil::print(command);
 }
