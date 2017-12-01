@@ -8,11 +8,13 @@ import (
     "runtime"
     "os/exec"
     "os/user"
+    "time"
 )
 
 func main() {
 	usr, _ := user.Current()
     dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	time.Sleep(time.Second)
     if runtime.GOOS == "windows" {
 	    if _, err := os.Stat(dir + "/update/sultan.zip"); !os.IsNotExist(err) {
 	        Unzip(dir + "/update/sultan.zip", dir)      
@@ -23,7 +25,7 @@ func main() {
     	if _, err := os.Stat(usr.HomeDir + "/.sultan/sultan.zip"); !os.IsNotExist(err) {
 	        Unzip(usr.HomeDir + "/.sultan/sultan.zip", dir)
 	    }
-        c := exec.Command(dir + "/Sultan")
+        c := exec.Command(dir + "/Sultan.sh")
         c.Start()
     }
 }
