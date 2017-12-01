@@ -25,6 +25,7 @@
 #include "guiutil.h"
 #include "preference.h"
 #include "global_setting_const.h"
+#include "util.h"
 
 #include <QMessageBox>
 #include <QDebug>
@@ -108,8 +109,8 @@ void AddItemUnavailableDialog::saveClicked()
     int flag = ITEM_FLAG::CALCULATE_STOCK | ITEM_FLAG::PURCHASE | ITEM_FLAG::SELLABLE;
     QVariantMap d{{"barcode", ui->lineBarcode->text()}, {"count", 1}, {"price", ui->doublePrice->value()},
                 {"discount_formula", ""}, {"discount", 0}, {"final", ui->doublePrice->value()}};
-    emit addNewItem(QVariantMap{{"barcode", ui->lineBarcode->text()},
-                    {"name", ui->lineName->text()}, {"category_id", ui->comboCategory->currentData()}, {"suplier_id", ui->comboSuplier->currentData()},
+    emit addNewItem(QVariantMap{{"barcode", ui->lineBarcode->text()}, {"name", Util::capitalize(ui->lineName->text())},
+                    {"category_id", ui->comboCategory->currentData()}, {"suplier_id", ui->comboSuplier->currentData()},
                     {"flag", flag}, {"unit", ui->comboUnit->currentText()}, {"buy_price", ui->doubleBuyPrice->value()},
                     {"sell_price", d}});
     ui->pushSave->setEnabled(false);
