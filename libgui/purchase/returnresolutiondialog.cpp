@@ -36,6 +36,8 @@ ReturnResolutionDialog::ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *p
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
+    sendMessage(&msg);
 }
 
 ReturnResolutionDialog::~ReturnResolutionDialog()
@@ -71,6 +73,13 @@ void ReturnResolutionDialog::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
+    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        ui->comboBank->addItem("Cash", 0);
+        const QVariantList &l = msg->data("data").toList();
+        for(auto v : l) {
+            const QVariantMap &m = v.toMap();
+            ui->comboBank->addItem(m["name"].toString(), m["id"]);
+        }
     }
 }
 
@@ -78,7 +87,7 @@ void ReturnResolutionDialog::saveClicked()
 {
     QVariantMap data{{"status", ui->checkReturned->isChecked() ? PURCHASE_RETURN_STATUS::RETURNED : PURCHASE_RETURN_STATUS::UNRETURN},
                      {"item_returned", ui->doubleItem->value()}, {"money_returned", ui->doubleMoney->value()},
-                     {"return_date", ui->dateReturned->date()}};
+                     {"return_date", ui->dateReturned->date()}, {"bank_id", ui->comboBank->currentData()}};
     Message msg(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::UPDATE);
     msg.addData("id", mId);
     msg.addData("data", data);
