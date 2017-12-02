@@ -39,9 +39,10 @@ AutoUpdateDialog::AutoUpdateDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     mGroupWidget << ui->line << ui->line_2 << ui->labelNV << ui->labelCV << ui->labelCurrentVersion << ui->labelNewVersion <<
-                    ui->pushUpdate << ui->progressBar;
+                    ui->pushUpdate;
     for(auto widget : mGroupWidget)
         widget->hide();
+    ui->progressBar->hide();
     adjustSize();
 #ifdef Q_OS_WIN32
     mArc = "win32";
@@ -105,6 +106,7 @@ void AutoUpdateDialog::updateClicked()
 {
     QNetworkRequest request(QUrl(LibG::CONSTANT::URL_DOWNLOAD.arg(mNewVersion).arg(mArc).arg(qVersion())));
     auto reply = mNetworkManager->get(request);
+    ui->progressBar->show();
     connect(reply, SIGNAL(finished()), SLOT(downloadDone()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)), SLOT(downloadProgress(qint64,qint64)));
