@@ -331,6 +331,7 @@ Message ItemAction::summary(Message *msg)
 {
     Message message(msg);
     DbResult res = mDb->select("sum(stock * buy_price) as total")->
+            where("stock > 0")->
             where(QString("(flag & %1) = 0").arg(ITEM_FLAG::PACKAGE))->
             where(QString("(flag & %1) = 0").arg(ITEM_FLAG::HAS_INGRIDIENT))->get(mTableName);
     if(!res.isEmpty())
