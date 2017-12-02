@@ -78,7 +78,7 @@ void ItemUtil::insertStock(const QString &barcode, const QString &number, int ty
     int itemFlag = item["flag"].toInt();
     const QString &name = item["name"].toString();
     float lastStock = 0;
-    if((itemFlag | ITEM_FLAG::CALCULATE_STOCK) != 0) {
+    if((itemFlag & ITEM_FLAG::CALCULATE_STOCK) != 0) {
         if(type != STOCK_CARD_TYPE::INITIAL_STOCK) {
             DbResult lastsc = mDb->where("barcode = ", barcode)->sort("id DESC")->limit(1)->get("stockcards");
             if(!lastsc.isEmpty())
