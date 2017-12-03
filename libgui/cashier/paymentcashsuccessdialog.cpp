@@ -37,7 +37,10 @@ PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWid
     if(type == PAYMENT::CASH) {
         ui->labelTotal->setText(LibG::Preference::formatMoney(total));
         ui->labelPayment->setText(LibG::Preference::formatMoney(payment));
-        ui->labelChange->setText(LibG::Preference::formatMoney(total - payment));
+        ui->labelChange->setText(LibG::Preference::formatMoney(qAbs(total - payment)));
+        if(total > payment) {
+            ui->labelChange_2->setText(tr("Credit"));
+        }
     } else {
         ui->labelTotal_2->setText(tr("Sub Total"));
         ui->labelTotal->setText(Preference::formatMoney(data["subtotal"].toDouble()));
