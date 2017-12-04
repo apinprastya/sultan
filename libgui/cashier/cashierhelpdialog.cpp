@@ -52,6 +52,9 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("Ctrl + P", tr("Customer credit payment"));
     addRow("Ctrl + Arrow Up", tr("Focus to table"));
     addRow("Ctrl + Arrow Down", tr("Focus to barcode input"));
+    addRow("Ctrl + T", tr("Open new cashier session"));
+    addRow("Ctrl + PgUp", tr("Go to previous cashier session"));
+    addRow("Ctrl + PgDn", tr("Go to next cashier session"));
     addRow("PgDn", tr("Edit last inserted item"));
 }
 

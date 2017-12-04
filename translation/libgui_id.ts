@@ -2188,6 +2188,21 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="55"/>
+        <source>Open new cashier session</source>
+        <translation>Buka tab sesi kasir baru</translation>
+    </message>
+    <message>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="56"/>
+        <source>Go to previous cashier session</source>
+        <translation>Pindah ke tab sesi kasir sebelumnya</translation>
+    </message>
+    <message>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="57"/>
+        <source>Go to next cashier session</source>
+        <translation>Buka ke tab sesi kasir selanjutnya</translation>
+    </message>
+    <message>
+        <location filename="../libgui/cashier/cashierhelpdialog.cpp" line="58"/>
         <source>Edit last inserted item</source>
         <translation>Edit item terakhir</translation>
     </message>

@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QShortcut>
 #include <QApplication>
+#include <QDebug>
 
 using namespace LibGUI;
 
@@ -93,6 +94,9 @@ void TabWidget::tbnRemoveTab(int index)
                 }
             }
         }
+    } else if(mType == Cashier) {
+        auto tc = dynamic_cast<TabCloseableWidget*>(widget(index));
+        if(tc != nullptr && !tc->requestClose()) return;
     }
     widget(index)->deleteLater();
     removeTab(index);

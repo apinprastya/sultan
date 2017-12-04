@@ -114,7 +114,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_F8), this, SLOT(payAdvance()));
     new QShortcut(QKeySequence(Qt::Key_F9), this, SLOT(payCashless()));
     new QShortcut(QKeySequence(Qt::Key_F10), this, SLOT(addNonStockTransaction()));
-    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openUnavailableItem()));
+    new QShortcut(QKeySequence(Qt::Key_F12), this, SLOT(openReport()));
     new QShortcut(QKeySequence(Qt::Key_PageDown), this, SLOT(updateCurrentItem()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete), this, SLOT(newTransaction()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this, SLOT(newTransaction()));
