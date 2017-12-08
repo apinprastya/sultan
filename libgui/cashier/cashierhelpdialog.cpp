@@ -55,6 +55,7 @@ CashierHelpDialog::CashierHelpDialog(QWidget *parent) :
     addRow("Ctrl + T", tr("Open new cashier session"));
     addRow("Ctrl + PgUp", tr("Go to previous cashier session"));
     addRow("Ctrl + PgDn", tr("Go to next cashier session"));
+    addRow("Ctrl + Plus", tr("Add auto item"));
     addRow("PgDn", tr("Edit last inserted item"));
 }
 

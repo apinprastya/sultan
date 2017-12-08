@@ -123,6 +123,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), this, SLOT(openCustomerCreditPayment()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Up), this, SLOT(focusTable()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down), this, SLOT(focusBarcode()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), this, SLOT(addNewItemNoBarcode()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
     connect(mAddItemDialog, SIGNAL(addNewItem(QVariantMap)), SLOT(addNewItem(QVariantMap)));
@@ -207,6 +208,8 @@ void CashierWidget::messageReceived(LibG::Message *msg)
             updateCustomerLabel();
         }
     } else if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::INSERT)) {
+        if(mAddItemDialog->isAuto())
+            ui->lineBarcode->setText(msg->data("barcode").toString());
         mAddItemDialog->hide();
         barcodeEntered();
     }
@@ -672,4 +675,9 @@ void CashierWidget::addNewItem(const QVariantMap &data)
     LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::INSERT);
     msg.setData(data);
     sendMessage(&msg);
+}
+
+void CashierWidget::addNewItemNoBarcode()
+{
+    mAddItemDialog->openAutoBarcode();
 }

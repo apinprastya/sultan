@@ -50,6 +50,18 @@ AddItemUnavailableDialog::~AddItemUnavailableDialog()
 
 void AddItemUnavailableDialog::openBarcode(const QString &barcode)
 {
+    mIsAutoBarcode = false;
+    fill(barcode);
+}
+
+void AddItemUnavailableDialog::openAutoBarcode()
+{
+    mIsAutoBarcode = true;
+    fill("AUTO");
+}
+
+void AddItemUnavailableDialog::fill(const QString &barcode)
+{
     ui->lineBarcode->setText(barcode);
     ui->lineBarcode->setReadOnly(true);
     ui->lineName->setFocus(Qt::TabFocusReason);
@@ -112,7 +124,7 @@ void AddItemUnavailableDialog::saveClicked()
     emit addNewItem(QVariantMap{{"barcode", ui->lineBarcode->text()}, {"name", Util::capitalize(ui->lineName->text())},
                     {"category_id", ui->comboCategory->currentData()}, {"suplier_id", ui->comboSuplier->currentData()},
                     {"flag", flag}, {"unit", ui->comboUnit->currentText()}, {"buy_price", ui->doubleBuyPrice->value()},
-                    {"sell_price", d}});
+                                {"sell_price", d}, {"autobarcode", mIsAutoBarcode}});
     ui->pushSave->setEnabled(false);
 }
 

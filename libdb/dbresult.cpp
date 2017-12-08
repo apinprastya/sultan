@@ -23,6 +23,10 @@
 
 using namespace LibDB;
 
+DbResult::DbResult()
+{
+}
+
 DbResult::DbResult(const QList<QVariant> &data):
     mData(data)
 {

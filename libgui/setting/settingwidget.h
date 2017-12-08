@@ -39,7 +39,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    explicit SettingWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    SettingWidget(LibG::MessageBus *bus, QWidget *parent = 0);
     ~SettingWidget();
 
 private:
@@ -53,6 +53,8 @@ private:
     void setupPrinter();
     void setupCashier();
     void setCurrentCombo(QComboBox *combo, QVariant value);
+    void updateFromDBConfig(const QVariantList &data);
+    void saveToDbConfig();
 
 private slots:
     void signChanged();

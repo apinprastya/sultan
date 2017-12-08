@@ -102,6 +102,7 @@ private slots:
     void focusTable();
     void addNonStockTransaction();
     void addNewItem(const QVariantMap &data);
+    void addNewItemNoBarcode();
 };
 
 }

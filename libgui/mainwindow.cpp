@@ -93,6 +93,7 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent) :
 #ifdef FLASHMESSAGE_USE_PARENT
     FlashMessageManager::setParent(this);
 #endif
+    setAlwaysListen(MSG_TYPE::BROADCAST);
 }
 
 MainWindow::~MainWindow()
@@ -227,6 +228,8 @@ void MainWindow::messageReceived(Message *msg)
     } else if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::GET)) {
         Preference::setValue(SETTING::MACHINE_CODE, msg->data("code"));
         Preference::setValue(SETTING::MACHINE_NAME, msg->data("name"));
+    } else if(msg->isType(MSG_TYPE::BROADCAST)) {
+        //TODO: update local cache setting
     }
 }
 

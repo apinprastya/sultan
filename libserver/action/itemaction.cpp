@@ -23,6 +23,7 @@
 #include "queryhelper.h"
 #include "util.h"
 #include "util/itemutil.h"
+#include "util/configutil.h"
 #include <QStringRef>
 #include <QStringBuilder>
 #include <QDataStream>
@@ -46,10 +47,28 @@ Message ItemAction::insert(Message *msg)
 {
     LibG::Message message(msg);
     const int flag = msg->data("flag").toInt();
-    const QVariant &sellPrice = msg->takeData("sell_price");
+    QVariant sellPrice = msg->takeData("sell_price");
+    bool isAutoBarcde = msg->takeData("autobarcode").toBool();
     QVariantMap box = msg->takeData("box").toMap();
     QVariantList ingridients = msg->takeData("ingridients").toList();
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
+    if(isAutoBarcde) {
+        int bCounter = ConfigUtil::getIntConfig(mDb, CONFIG_DB::AUTOBARCODE_COUNTER, 0);
+        int digit = ConfigUtil::getIntConfig(mDb, CONFIG_DB::AUTOBARCODE_DIGIT, 4);
+        if(digit < 3) digit = 3;
+        const QString &prefix = ConfigUtil::getStringConfig(mDb, CONFIG_DB::AUTOBARCODE_PREFIX, QString());
+        DbResult r;
+        do {
+            bCounter++;
+            const QString &barcode = QString("%1%2").arg(prefix).arg(bCounter, digit, 10, QChar('0'));
+            r = mDb->where("barcode = ", barcode)->get("items");
+            msg->addData("barcode", barcode);
+        } while(!r.isEmpty());
+        ConfigUtil::setConfig(mDb, CONFIG_DB::AUTOBARCODE_COUNTER, bCounter);
+        QVariantMap sp = sellPrice.toMap();
+        sp["barcode"] = msg->data("barcode");
+        sellPrice = sp;
+    }
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {

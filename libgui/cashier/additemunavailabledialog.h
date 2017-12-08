@@ -38,11 +38,16 @@ public:
     AddItemUnavailableDialog(LibG::MessageBus *bus, QWidget *parent = 0);
     ~AddItemUnavailableDialog();
     void openBarcode(const QString &barcode);
+    void openAutoBarcode();
     inline bool isOk() { return mIsOk; }
+    inline bool isAuto() { return mIsAutoBarcode; }
 
 private:
     Ui::AddItemUnavailableDialog *ui;
     bool mIsOk = false;
+    bool mIsAutoBarcode = false;
+
+    void fill(const QString &barcode);
 
 protected:
     void messageReceived(LibG::Message *msg) override;

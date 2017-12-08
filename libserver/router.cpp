@@ -45,6 +45,7 @@
 #include "action/stockcardaction.h"
 #include "action/itemlinkaction.h"
 #include "action/soldreturnaction.h"
+#include "action/configaction.h"
 #include "db.h"
 #include "queryhelper.h"
 #include <QStringBuilder>
@@ -124,6 +125,8 @@ ServerAction *Router::getServerAction(int type)
         return new ItemLinkAction();
     case MSG_TYPE::SOLDRETURN:
         return new SoldReturnAction();
+    case MSG_TYPE::CONFIG:
+        return new ConfigAction();
     }
     return nullptr;
 }

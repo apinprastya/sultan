@@ -96,6 +96,7 @@ namespace MSG_TYPE {
     const int STOCKCARD         = 22;
     const int ITEMLINK          = 23;
     const int SOLDRETURN        = 24;
+    const int CONFIG            = 25;
     const int BROADCAST         = 255;
 }
 
@@ -119,6 +120,7 @@ namespace MSG_COMMAND {
     const int SUMMARY_TRANSACTION       = 29;
     const int SUMMARY_MONEY             = 30;
     const int RESET                     = 31;
+    const int CONFIG_INSERT_UPDATE      = 32;
 }
 
 namespace MSG_BROADCAST {
@@ -234,6 +236,12 @@ namespace STOCK_CARD_TYPE {
 namespace ITEM_LINK_TYPE {
     const int BOX           = 0;
     const int INGRIDIENT    = 1;
+}
+
+namespace CONFIG_DB {
+    const int AUTOBARCODE_COUNTER       = 1;
+    const int AUTOBARCODE_DIGIT         = 2;
+    const int AUTOBARCODE_PREFIX        = 3;
 }
 
 }

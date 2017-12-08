@@ -69,7 +69,9 @@ SOURCES += \
     action/stockcardaction.cpp \
     action/itemlinkaction.cpp \
     util/itemutil.cpp \
-    action/soldreturnaction.cpp
+    action/soldreturnaction.cpp \
+    util/configutil.cpp \
+    action/configaction.cpp
 
 HEADERS += \ 
     server_global.h \
@@ -100,4 +102,6 @@ HEADERS += \
     action/stockcardaction.h \
     action/itemlinkaction.h \
     util/itemutil.h \
-    action/soldreturnaction.h
+    action/soldreturnaction.h \
+    util/configutil.h \
+    action/configaction.h

@@ -64,7 +64,7 @@ int MessageHandler::sendMessage(Message *msg)
     return msg->getUniqueId();
 }
 
-void MessageHandler::alwaysListen(int msg_type)
+void MessageHandler::setAlwaysListen(int msg_type)
 {
     if(!mAlwaysListen.contains(msg_type)) {
         mAlwaysListen.append(msg_type);

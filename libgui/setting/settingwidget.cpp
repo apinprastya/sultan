@@ -63,6 +63,8 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
     sendMessage(&msg3);
     Message msg4(MSG_TYPE::UNIT, MSG_COMMAND::QUERY);
     sendMessage(&msg4);
+    Message msg5(MSG_TYPE::CONFIG, MSG_COMMAND::QUERY);
+    sendMessage(&msg5);
     checkWidget();
 }
 
@@ -182,6 +184,32 @@ void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value)
     }
 }
 
+void SettingWidget::updateFromDBConfig(const QVariantList &data)
+{
+    for(int i = 0; i < data.size(); i++) {
+        const QVariantMap &d = data[i].toMap();
+        int id = d["id"].toInt();
+        switch(id) {
+        case CONFIG_DB::AUTOBARCODE_DIGIT:
+            ui->spinCABarcodeLength->setValue(d["value"].toInt());
+            break;
+        case CONFIG_DB::AUTOBARCODE_PREFIX:
+            ui->lineCABarcodePrefix->setText(d["value"].toString());
+            break;
+        }
+    }
+}
+
+void SettingWidget::saveToDbConfig()
+{
+    QVariantList list;
+    list.append(QVariantMap{{"id", CONFIG_DB::AUTOBARCODE_DIGIT}, {"value", ui->spinCABarcodeLength->value()}});
+    list.append(QVariantMap{{"id", CONFIG_DB::AUTOBARCODE_PREFIX}, {"value", ui->lineCABarcodePrefix->text()}});
+    Message msg(MSG_TYPE::CONFIG, MSG_COMMAND::CONFIG_INSERT_UPDATE);
+    msg.addData("data", list);
+    sendMessage(&msg);
+}
+
 void SettingWidget::signChanged()
 {
     ui->lineSign->setEnabled(ui->checkSign->isChecked());
@@ -196,6 +224,7 @@ void SettingWidget::cashierPrintTypeChanged()
 
 void SettingWidget::saveClicked()
 {
+    saveToDbConfig();
     //market name
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
@@ -311,5 +340,11 @@ void SettingWidget::messageReceived(Message *msg)
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCAIUnit, list, tr("-- Select Unit --"));
         GuiUtil::selectCombo(ui->comboCAIUnit, Preference::getInt(SETTING::CAI_DEFAULT_UNIT));
+    } else if(msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::QUERY)) {
+        const QVariantList &list = msg->data("data").toList();
+        updateFromDBConfig(list);
+    } else if(msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::CONFIG_INSERT_UPDATE)) {
+        Message msg2(MSG_TYPE::BROADCAST, MSG_BROADCAST::SETTING_CHANGES);
+        sendMessage(&msg2);
     }
 }

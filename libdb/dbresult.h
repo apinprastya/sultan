@@ -31,6 +31,7 @@ namespace LibDB {
 class DBSHARED_EXPORT DbResult
 {
 public:
+    DbResult();
     DbResult(const QList<QVariant> &data);
     inline bool isEmpty() { return mData.isEmpty(); }
     QVariantMap first();
