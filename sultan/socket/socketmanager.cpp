@@ -20,6 +20,7 @@
 #include "socketmanager.h"
 #include "sockethandler.h"
 #include "message.h"
+#include "global_constant.h"
 #include <QWebSocket>
 #include <QWebSocketServer>
 #include <QDebug>
@@ -52,7 +53,7 @@ void SocketManager::newConnection()
         qDebug() << TAG << "New socket connection" << socket->peerAddress().toString() << socket->peerPort();
         mHandlers.insert(handler->getId(), handler);
         connect(handler, SIGNAL(disconnect()), SLOT(clientDisconnect()));
-        connect(handler, SIGNAL(newMessage(LibG::Message*)), SIGNAL(receivedMessage(LibG::Message*)));
+        connect(handler, SIGNAL(newMessage(LibG::Message*)), SLOT(processMessageFromClient(LibG::Message*)));
     }
 }
 
@@ -60,11 +61,21 @@ void SocketManager::clientDisconnect()
 {
     auto handler = static_cast<SocketHandler*>(QObject::sender());
     mHandlers.remove(handler->getId());
-    qDebug() << "Client disconnect" << handler->getSocket()->peerAddress().toString();
+    qDebug() << TAG << "Client disconnect" << handler->getSocket()->peerAddress().toString();
 }
 
 void SocketManager::sendToClient(LibG::Message *msg)
 {
     if(mHandlers.contains(msg->getSocketId()))
         mHandlers[msg->getSocketId()]->sendMessage(msg);
+}
+
+void SocketManager::processMessageFromClient(LibG::Message *msg)
+{
+    if(msg->isType(LibG::MSG_TYPE::BROADCAST)) {
+        for(int i = 0; i < mHandlers.size(); i++)
+            mHandlers[i]->sendMessage(msg);
+    } else {
+        emit receivedMessage(msg);
+    }
 }

@@ -48,6 +48,7 @@ private slots:
 
 public slots:
     void sendToClient(LibG::Message *msg);
+    void processMessageFromClient(LibG::Message *msg);
 
 signals:
     void receivedMessage(LibG::Message *msg);

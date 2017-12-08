@@ -96,6 +96,7 @@ namespace MSG_TYPE {
     const int STOCKCARD         = 22;
     const int ITEMLINK          = 23;
     const int SOLDRETURN        = 24;
+    const int BROADCAST         = 255;
 }
 
 namespace MSG_COMMAND {
@@ -118,6 +119,10 @@ namespace MSG_COMMAND {
     const int SUMMARY_TRANSACTION       = 29;
     const int SUMMARY_MONEY             = 30;
     const int RESET                     = 31;
+}
+
+namespace MSG_BROADCAST {
+    const int SETTING_CHANGES           = 0;
 }
 
 namespace GUI_MESSAGE {

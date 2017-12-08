@@ -45,7 +45,9 @@ void MessageHandler::setMessageBus(MessageBus *bus)
 
 bool MessageHandler::consumeMessage(Message *msg)
 {
-    if(mInterests.contains(msg->getUniqueId())) {
+    if(mAlwaysListen.contains(msg->type())) {
+        messageReceived(msg);
+    } else if(mInterests.contains(msg->getUniqueId())) {
         mInterests.removeOne(msg->getUniqueId());
         messageReceived(msg);
         return true;
@@ -60,4 +62,16 @@ int MessageHandler::sendMessage(Message *msg)
     mInterests.append(unique);
     mMessageBus->sendMessage(msg);
     return msg->getUniqueId();
+}
+
+void MessageHandler::alwaysListen(int msg_type)
+{
+    if(!mAlwaysListen.contains(msg_type)) {
+        mAlwaysListen.append(msg_type);
+    }
+}
+
+void MessageHandler::removeAlwaysListern(int msg_type)
+{
+    mAlwaysListen.removeOne(msg_type);
 }

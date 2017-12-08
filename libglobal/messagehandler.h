@@ -37,10 +37,13 @@ public:
     bool consumeMessage(Message *msg);
     void clearInterested();
     int sendMessage(Message *msg);
+    void alwaysListen(int msg_type);
+    void removeAlwaysListern(int msg_type);
 
 protected:
     MessageBus *mMessageBus;
     QList<int> mInterests;
+    QList<int> mAlwaysListen;
 
     virtual void messageReceived(Message *msg) = 0;
 };
