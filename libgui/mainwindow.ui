@@ -113,6 +113,8 @@
     <property name="title">
      <string>&amp;Report</string>
     </property>
+    <addaction name="actionDashboard"/>
+    <addaction name="separator"/>
     <addaction name="actionSales"/>
     <addaction name="actionItems"/>
     <addaction name="separator"/>
