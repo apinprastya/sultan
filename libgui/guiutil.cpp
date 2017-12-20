@@ -30,6 +30,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QApplication>
+#include <QtConcurrent>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -139,5 +140,7 @@ void GuiUtil::print(const QString &data)
     const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     uint16_t vendorId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_VENDOR_ID);
     uint16_t produckId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_PRODUK_ID);
-    LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, data, type, vendorId, produckId);
+    QtConcurrent::run(LibPrint::Printer::instance(), &LibPrint::Printer::print,
+                      type == PRINT_TYPE::DEVICE ? prDevice : prName, data, type, vendorId, produckId);
+    //LibPrint::Printer::instance()->print(type == PRINT_TYPE::DEVICE ? prDevice : prName, data, type, vendorId, produckId);
 }

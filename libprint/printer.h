@@ -22,6 +22,7 @@
 
 #include "print_global.h"
 #include <QStringList>
+#include <QMutex>
 
 namespace LibPrint {
 
@@ -29,6 +30,7 @@ class PRINTSHARED_EXPORT Printer
 {
 private:
     Printer();
+    QMutex mMutex;
 
 public :
     static Printer *instance();

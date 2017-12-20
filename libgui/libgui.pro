@@ -8,7 +8,7 @@ TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets network sql
+QT += core gui widgets network sql concurrent
 
 CONFIG(USE_EMBED_BROWSER) {
     DEFINES+=USE_EMBED_BROWSER

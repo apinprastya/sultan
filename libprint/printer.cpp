@@ -64,8 +64,10 @@ QStringList Printer::getPrintList()
     return QPrinterInfo::availablePrinterNames();
 }
 
+// this method is designed to be called from separated thread
 void Printer::print(const QString &printName, const QString &data, int type, uint16_t vendorId, uint16_t produckId)
 {
+    QMutexLocker locker(&mMutex);
 #ifdef Q_OS_WIN
     wchar_t printerName[256];
     printName.toWCharArray(printerName);
