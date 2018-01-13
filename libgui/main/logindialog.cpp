@@ -94,8 +94,8 @@ void LoginDialog::closeEvent(QCloseEvent *event)
             event->ignore();
             return;
         }
-        qApp->quit();
     }
+    qApp->quit();
     QDialog::closeEvent(event);
 }
 
