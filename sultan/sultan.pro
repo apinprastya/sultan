@@ -12,6 +12,9 @@ contains(CONFIG, SINGLEBIN) {
         }
     }
 }
+contains(CONFIG, SERVER_BUILD) {
+    DEFINES+=SERVER_BUILD
+}
 
 TARGET = Sultan
 TEMPLATE = app
@@ -19,18 +22,22 @@ TEMPLATE = app
 CONFIG += c++11
 
 contains(CONFIG, SINGLEBIN) {
-    include(../external_library/o2/src/src.pri)
     include(../libglobal/libglobal_src.pri)
-    include(../libprint/libprint_src.pri)
     include(../libdb/libdb_src.pri)
     include(../libserver/libserver_src.pri)
-    include(../libgui/libgui_src.pri)
+    !contains(CONFIG, SERVER_BUILD) {
+        include(../external_library/o2/src/src.pri)
+        include(../libprint/libprint_src.pri)
+        include(../libgui/libgui_src.pri)
+    }
 } else {
     include(../libglobal/libglobal.pri)
-    include(../libprint/libprint.pri)
     include(../libdb/libdb.pri)
     include(../libserver/libserver.pri)
-    include(../libgui/libgui.pri)
+    !contains(CONFIG, SERVER_BUILD) {
+        include(../libprint/libprint.pri)
+        include(../libgui/libgui.pri)
+    }
 }
 
 CONFIG(NO_PRINTER_DEVICE) {
@@ -48,6 +55,7 @@ macx {
     copymigration_sqlite.commands = $$quote(cp -R $${PWD}/../migration_sqlite $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $$OUT_PWD/../bin/Sultan.app/Contents/Resources)
     copytr.commands = $$quote(cp -R $${PWD}/../translation/*.qm $${OUT_PWD}/../bin/)
+    copysetting.commands = $(COPY) $${PWD}/../script/setting.json $${OUT_PWD}/../bin/
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
     contains(CONFIG, SINGLEBIN) {
@@ -67,6 +75,7 @@ macx {
     copymigration_sqlite.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\migration_sqlite $${DESTDIR_WIN}\migration_sqlite)
     copymigration_mysql.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\migration_mysql $${DESTDIR_WIN}\migration_mysql)
     copytr.commands = $$quote(cmd /c xcopy /S /I /Y $${PWD_WIN}\..\translation\lib*.qm $${DESTDIR_WIN})
+    copysetting.commands = $(COPY) $${PWD}/../script/setting.json $${OUT_PWD}/../bin/
 } else {
     QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     LIBS += -L$$OUT_PWD/../bin
@@ -87,13 +96,14 @@ macx {
     copymigration_mysql.commands = $$quote(cp -R $${PWD}/../migration_mysql $${OUT_PWD}/../bin/)
     copysh.commands = $$quote(cp -R $${PWD}/../script/Sultan.sh $${OUT_PWD}/../bin/)
     copytr.commands = $(COPY) $${PWD}/../translation/*.qm $${OUT_PWD}/../bin/
+    copysetting.commands = $(COPY) $${PWD}/../script/setting.json $${OUT_PWD}/../bin/
     QMAKE_EXTRA_TARGETS += copysh
     POST_TARGETDEPS += copysh
 }
 
 
-QMAKE_EXTRA_TARGETS += copymigration_sqlite copymigration_mysql copytr
-POST_TARGETDEPS += copymigration_sqlite copymigration_mysql copytr
+QMAKE_EXTRA_TARGETS += copymigration_sqlite copymigration_mysql copytr copysetting
+POST_TARGETDEPS += copymigration_sqlite copymigration_mysql copytr copysetting
 
 RESOURCES += sultan.qrc
 
@@ -103,12 +113,14 @@ SOURCES += main.cpp \
     core.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
-    socket/sockethandler.cpp
+    socket/sockethandler.cpp \
+    dummy/guidummy.cpp
 
 HEADERS  += \
     core.h \
     socket/socketmanager.h \
     socket/socketclient.h \
-    socket/sockethandler.h
+    socket/sockethandler.h \
+    dummy/guidummy.h
 
 FORMS +=

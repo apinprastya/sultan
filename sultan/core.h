@@ -56,6 +56,7 @@ private:
     SocketClient *mSettingSocketClient = nullptr;
 
 protected:
+    bool initConfigJson();
     bool migrationCallback(const QString &str);
 
 private slots:

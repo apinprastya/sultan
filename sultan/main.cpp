@@ -23,8 +23,12 @@ void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 
 int main(int argc, char *argv[])
 {
+#ifdef SERVER_BUILD
+    QCoreApplication a(argc, argv);
+#else
     QApplication a(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QLatin1String("Fusion")));
+#endif
     a.setApplicationName("sultan");
     a.setOrganizationName("lekapin");
     a.setApplicationVersion("17.12.01");

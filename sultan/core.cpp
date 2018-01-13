@@ -29,7 +29,11 @@
 #include "messagebus.h"
 #include "migration.h"
 #include "usersession.h"
+#ifndef SERVER_BUILD
 #include "mainwindow.h"
+#else
+#include "dummy/guidummy.h"
+#endif
 #include "util.h"
 #ifdef USE_LIBUSB
 #include "usb.h"
@@ -40,6 +44,8 @@
 #include <QStringBuilder>
 #include <QDate>
 #include <functional>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 
 using namespace LibG;
@@ -52,7 +58,11 @@ Core::Core(QObject *parent) :
     mSocketClient(new SocketClient(this)),
     mMainServer(nullptr),
     mMessageBus(new MessageBus(this)),
+#ifdef SERVER_BUILD
+    mMainWindow(new GuiDummy())
+#else
     mMainWindow(new LibGUI::MainWindow(mMessageBus))
+#endif
 {
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));
     connect(mSocketClient, SIGNAL(socketDisconnected()), SLOT(clientDisconnected()));
@@ -60,7 +70,9 @@ Core::Core(QObject *parent) :
     connect(mSocketClient, SIGNAL(messageReceived(LibG::Message*)), mMessageBus, SLOT(messageRecieved(LibG::Message*)));
     connect(mMessageBus, SIGNAL(newMessageToSend(LibG::Message*)), mSocketClient, SLOT(sendMessage(LibG::Message*)));
 #ifdef Q_OS_LINUX
+#ifndef SERVER_BUILD
     qApp->setWindowIcon(QIcon(":/images/icon_64.png"));
+#endif
 #endif
     Util::init(qApp->applicationDirPath());
 #ifdef USE_LIBUSB
@@ -82,7 +94,11 @@ Core::~Core()
 void Core::setup()
 {
     mMainWindow->showSplashScreen();
+#ifdef SERVER_BUILD
+    QTimer::singleShot(1, this, SLOT(init()));
+#else
     QTimer::singleShot(1000, this, SLOT(init()));
+#endif
     mMainWindow->setSettingSocketOpenClose([=](const QString &address, int port) {
         if(mSettingSocketClient == nullptr) {
             mSettingSocketClient = new SocketClient(this);
@@ -100,6 +116,34 @@ void Core::setup()
     });
 }
 
+bool Core::initConfigJson()
+{
+    QDir dir(qApp->applicationDirPath());
+    QFile file(dir.absoluteFilePath("setting.json"));
+    if(!file.exists()) {
+        qCritical() << "setting.json can not be found at " << dir.absoluteFilePath("setting.json");
+        qApp->exit(1);
+        return false;
+    }
+    if(!file.open(QFile::ReadOnly)) {
+        qCritical() << "Can not open setting file " << dir.absoluteFilePath("setting.json");
+        qApp->exit(2);
+        return false;
+    }
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+    Preference::setValue(SETTING::DATABASE, json.value("database").toString("SQLITE"));
+    Preference::setValue(SETTING::MYSQL_HOST, json.value("mysql_host").toString());
+    Preference::setValue(SETTING::MYSQL_USERNAME, json.value("mysql_username").toString());
+    Preference::setValue(SETTING::MYSQL_PASSWORD, json.value("mysql_password").toString());
+    Preference::setValue(SETTING::MYSQL_PORT, json.value("mysql_port").toInt());
+    Preference::setValue(SETTING::MYSQL_DB, json.value("mysql_dbname").toString());
+    Preference::setValue(SETTING::SQLITE_DBPATH, json.value("sqlite_db_path").toString());
+    Preference::setValue(SETTING::SQLITE_DBNAME, json.value("sqlite_db_name").toString());
+    Preference::setValue(SETTING::APP_PORT, json.value("app_port").toInt(4545));
+    Preference::setValue(SETTING::APP_TYPE, APPLICATION_TYPE::SERVER);
+    return true;
+}
+
 bool Core::migrationCallback(const QString &str)
 {
     Q_UNUSED(str)
@@ -108,6 +152,9 @@ bool Core::migrationCallback(const QString &str)
 
 void Core::init()
 {
+#ifdef SERVER_BUILD
+    if(!initConfigJson()) return;
+#endif
     qDebug() << TAG << "Initialize application";
     if(!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         //the setting is not OK, so open the setting
@@ -153,13 +200,18 @@ void Core::init()
             mSocketManager = new SocketManager(this);
             if(!mSocketManager->listen(Preference::getInt(SETTING::APP_PORT))) {
                 mMainWindow->showRestartError(tr("Server Socket Error"), tr("Port already in used.\nPossible another Sultan already openned"));
+#ifdef SERVER_BUILD
+                qApp->exit(100);
+#endif
                 return;
             }
             connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));
             connect(mMainServer, SIGNAL(messageReady(LibG::Message*)), mSocketManager, SLOT(sendToClient(LibG::Message*)));
             mMainWindow->splashShowMessage("Connecting to server ...");
             qApp->processEvents();
+#ifndef SERVER_BUILD
             QTimer::singleShot(10, this, SLOT(connectToServer()));
+#endif
         } else {
             mMainWindow->splashShowMessage("Connecting to server ...");
             qApp->processEvents();

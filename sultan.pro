@@ -2,12 +2,15 @@ TEMPLATE  = subdirs
 CONFIG   += ordered
 
 !contains(CONFIG, SINGLEBIN) {
-    SUBDIRS = \
+    SUBDIRS += \
         libglobal \
         libdb \
-        libserver \
-        libprint \
-        libgui \
+        libserver
+    !contains(CONFIG, SERVER_BUILD) {
+        SUBDIRS += \
+            libprint \
+            libgui \
+    }
 }
 
 SUBDIRS += sultan

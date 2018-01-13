@@ -38,10 +38,10 @@ SocketManager::SocketManager(QObject *parent):
 bool SocketManager::listen(int port)
 {
     bool ret = mServer->listen(QHostAddress::Any, port);
-    if(!ret) {
+    if(!ret)
         qCritical() << TAG << "Unable to start socket server :" << mServer->errorString();
-    }
-    qDebug() << TAG << "Server listening on port :" << port;
+    else
+        qDebug() << TAG << "Server listening on port :" << port;
     return ret;
 }
 
