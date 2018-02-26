@@ -69,11 +69,12 @@ Message ItemAction::insert(Message *msg)
         sp["barcode"] = msg->data("barcode");
         sellPrice = sp;
     }
+    float count = msg->data("stock").toFloat();
+    msg->addData("stock", 0);
     if(!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("barcode = ", mDb->isSQLite() ? msg->data("barcode") : mDb->lastInsertedId())->get(mTableName);
-        float count = msg->data("stock").toFloat();
         message.setData(res.first());
         if((flag & ITEM_FLAG::MULTIPRICE) == 0) {
             mDb->insert("sellprices", sellPrice.toMap());
