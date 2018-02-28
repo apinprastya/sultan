@@ -91,7 +91,7 @@ void PrintTestDialog::printClicked()
     e.leftText(QLatin1String("----------"));
     e.newLine(3);
     int type = ui->comboType->currentData().toInt();
-    QString printName = type == PRINT_TYPE::DEVICE ? ui->lineDevice->text() : ui->comboPrint->currentText();
+    QString printName = type == PRINT_TYPE::DEVICE ? ui->lineDevice->text() : PRINT_TYPE::SPOOL ? ui->comboPrint->currentText() : ui->comboUSB->currentText();
     if(printName.isEmpty()) {
         QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
         return;
