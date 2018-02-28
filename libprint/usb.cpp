@@ -204,7 +204,9 @@ QList<UsbDevice> Usb::getUsbPrinterList(UsbPrinter *printer)
                         libusb_close(handle);
                     }
                 }
-                libusb_free_config_descriptor(confptr);
+                //TODO : this code is caused crash, usb bad keyboard, this will cause memory leak
+                //just let it be for now, unless application not open setting over and over
+                //libusb_free_config_descriptor(confptr);
             }
         }
     }
