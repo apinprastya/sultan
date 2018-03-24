@@ -107,13 +107,12 @@ void CustomerCreditPaymentDialog::printData(const QVariantMap &d)
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
         return;
     }
-    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
-    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
     int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
             centerText(tr("Debt Payment"))->
             doubleHeight(false)->cpi12()->newLine(2);

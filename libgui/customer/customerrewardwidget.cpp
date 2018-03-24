@@ -139,6 +139,7 @@ void CustomerRewardWidget::print(const QVariantMap &data)
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
             centerText(tr("Reward Exchange"))->
             doubleHeight(false)->cpi12()->newLine(2);

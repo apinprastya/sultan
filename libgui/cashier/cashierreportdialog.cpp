@@ -138,6 +138,7 @@ void CashierReportDialog::print()
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
+    escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->doubleHeight(true)->centerText(tr("Cashier Report"))->newLine();
     escp->cpi12()->doubleHeight(false)->centerText(Preference::getString(SETTING::MACHINE_NAME))->newLine();
     escp->line();

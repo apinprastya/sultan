@@ -43,6 +43,7 @@ public:
         LEFT, CENTER, RIGHT
     };
     Escp(int type, int width10, int width12, int width15 = 0);
+    Escp *setCpi10Only(bool value);
     Escp *setWidth(int width);
     Escp *line(const QChar &ch = QChar(0x2d));
     Escp *newLine(int line = 1);
@@ -71,10 +72,11 @@ private:
     int mWidth15;
     int mWidth;
     int mCurCol;
-    QList<int> mColumn;
     int mRestWidth;
-    QString mData;
     int mNumLine;
+    bool mCpi10Only = false;
+    QList<int> mColumn;
+    QString mData;
 
     void init();
     int getCurrentWidth(int col);

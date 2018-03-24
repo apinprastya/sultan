@@ -27,7 +27,9 @@
 #include "printtestdialog.h"
 #include "message.h"
 #include "guiutil.h"
+#include "escp.h"
 #include <QMetaEnum>
+#include <QMessageBox>
 #include <QDebug>
 
 #define TAB_APPLICATION     0
@@ -158,6 +160,7 @@ void SettingWidget::setupPrinter()
     ui->spinCashierPriceLinefeed->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, 2));
     ui->spinBarcodeLength->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_BARCODE_LEN, 15));
     ui->checkShowBarcode->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_SHOW_BARCODE));
+    ui->checkOnly10->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
 }
 
 void SettingWidget::setupCashier()
@@ -258,6 +261,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, ui->spinCashierPriceLinefeed->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_BARCODE_LEN, ui->spinBarcodeLength->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_SHOW_BARCODE, ui->checkShowBarcode->isChecked());
+    Preference::setValue(SETTING::PRINTER_CASHIER_ONLY_CPI10, ui->checkOnly10->isChecked());
 #ifdef USE_LIBUSB
     int cur = ui->comboUsb->currentIndex();
     if(ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {
@@ -287,8 +291,40 @@ void SettingWidget::tabChanged()
 
 void SettingWidget::printTestClicked()
 {
-    LibPrint::PrintTestDialog dialog(this);
-    dialog.exec();
+    int type = ui->comboPrintCashierType->currentData().toInt();
+    Escp e(type, 20, 20);
+    QString str;
+    QString str2;
+    int counter = 1;
+    while(counter <= 100) {
+        str.append(QString::number(counter % 10));
+        counter++;
+    }
+    counter = 1;
+    while(counter <= 100) {
+        str2.append(QString::number(counter % 10));
+        counter++;
+    }
+    e.cpi10()->leftText("SULTAN TEST PAGE", true)->newLine()->line();
+    e.leftText("CPI 10 :", true)->newLine();
+    e.leftText(str, true)->newLine()->line();
+    e.cpi12()->leftText("CPI 12 :")->newLine();
+    e.leftText(str2, true)->newLine();
+    e.line()->newLine(ui->spinCashierLinefeed->value());
+    QString printName = type == PRINT_TYPE::DEVICE ? ui->linePrintCashierDevice->text() : PRINT_TYPE::SPOOL ? ui->comboPrintCashier->currentText() : ui->comboUsb->currentText();
+    if(printName.isEmpty()) {
+        QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
+        return;
+    }
+    uint16_t vendorId = 0;
+    uint16_t productId = 0;
+    if(mUsbDevices.size() > 0) {
+        vendorId = mUsbDevices[ui->comboUsb->currentIndex()].vendorId;
+        productId = mUsbDevices[ui->comboUsb->currentIndex()].productId;
+    }
+    if(ui->checkPrintCashierDrawer->isChecked()) Printer::instance()->print(printName, Escp::openDrawerCommand(), type, vendorId, productId);
+    Printer::instance()->print(printName, e.data(), type);
+    if(ui->checkPrintCashierCut->isChecked()) Printer::instance()->print(printName, Escp::cutPaperCommand(), type, vendorId, productId);
 }
 
 void SettingWidget::localeLanguageChanged()

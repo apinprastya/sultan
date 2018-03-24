@@ -461,8 +461,6 @@ void CashierWidget::printBill(const QVariantMap &data)
         return;
     }
     int paymentType = data["payment_type"].toInt();
-    const QString &prName = Preference::getString(SETTING::PRINTER_CASHIER_NAME);
-    const QString &prDevice = Preference::getString(SETTING::PRINTER_CASHIER_DEVICE);
     const QString &title = Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket");
     const QString &subtitle = Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul");
     const QString &footer = Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar");
@@ -472,6 +470,7 @@ void CashierWidget::printBill(const QVariantMap &data)
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
+    escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12();
     if(subtitle.contains("\n")) {
         const QStringList &l = subtitle.split("\n");

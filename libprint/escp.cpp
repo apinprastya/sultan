@@ -37,6 +37,12 @@ Escp::Escp(int type, int width10, int width12, int width15):
     init();
 }
 
+Escp *Escp::setCpi10Only(bool value)
+{
+    mCpi10Only = value;
+    return this;
+}
+
 Escp *Escp::setWidth(int width)
 {
     mWidth = width;
@@ -109,6 +115,7 @@ Escp *Escp::cpi10()
 
 Escp *Escp::cpi12()
 {
+    if(mCpi10Only) return this;
     mData.append(QChar(0x1B));
     mData.append(QChar(0x21));
     mMaster |= CPI;
@@ -119,6 +126,7 @@ Escp *Escp::cpi12()
 
 Escp *Escp::cpi15()
 {
+    if(mCpi10Only) return this;
     mData.append(QChar(0x1B));
     mData.append(QChar(0x67));
     return this;
@@ -241,10 +249,17 @@ int Escp::getCurrentWidth(int col)
     if(mColumn.size() > 0) {
         int w = mWidth - mColumn.size();
         if(col < mColumn.size()) {
+            if(col == mColumn.size() - 1) {
+                int h = 0;
+                for(int i = 0; i < mColumn.size() - 1; i++) {
+                    h += (w * mColumn[i] / 100);
+                }
+                return mWidth - h;
+            }
             return w * mColumn[col] / 100;
         }
     }
-    return 0;
+    return mWidth;
 }
 
 bool Escp::isTrue(int flag)

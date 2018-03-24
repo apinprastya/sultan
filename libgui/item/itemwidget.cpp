@@ -247,6 +247,7 @@ void ItemWidget::printPrice(TableItem *item)
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
 
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
+    escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->line(QChar('='))->newLine()->
             centerText(item->data("name").toString())->newLine()->
             centerText(Preference::formatMoney(item->data("sell_price").toDouble()))->newLine()->
