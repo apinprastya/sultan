@@ -32,13 +32,13 @@ class Db;
 class DBSHARED_EXPORT Migration
 {
 public:
-    static bool migrateAll(const QString &folder, const QString &dbtype, std::function<bool(const QString &)> afterCallback = nullptr);
+    static bool migrateAll(const QStringList &filelist, const QString &dbtype, std::function<bool(const QString &)> afterCallback = nullptr);
     static void setAfterMigrate(std::function<bool(const QString &)> afterCallback);
-    Migration(Db *db, const QString &folder, const QString &dbtype);
+    Migration(Db *db, const QStringList &filelist, const QString &dbtype);
 
 private:
     Db *mDb;
-    QDir mDir;
+    QStringList mFileNameList;
     QString mLastFile;
     QString mDbType;
     std::function<bool(const QString &)> mAfterMigrate = nullptr;

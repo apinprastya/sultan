@@ -27,10 +27,10 @@ using namespace LibDB;
 static QString TAG{"MIGRATION"};
 static std::function<bool(const QString &)> sAfterMigrate = nullptr;
 
-bool Migration::migrateAll(const QString &folder, const QString &dbtype, std::function<bool(const QString &)> afterCallback)
+bool Migration::migrateAll(const QStringList &filelist, const QString &dbtype, std::function<bool(const QString &)> afterCallback)
 {
     auto db = Db::createInstance(false, true);
-    Migration mg(db, folder, dbtype);
+    Migration mg(db, filelist, dbtype);
     mg.mAfterMigrate = afterCallback;
     return mg.migrate();
 }
@@ -40,9 +40,9 @@ void Migration::setAfterMigrate(std::function<bool (const QString &)> afterCallb
     sAfterMigrate = afterCallback;
 }
 
-Migration::Migration(Db *db, const QString &folder, const QString &dbtype):
+Migration::Migration(Db *db, const QStringList &filelist, const QString &dbtype):
     mDb(db),
-    mDir(QDir(folder)),
+    mFileNameList(filelist),
     mDbType(dbtype)
 {
     init();
@@ -50,15 +50,10 @@ Migration::Migration(Db *db, const QString &folder, const QString &dbtype):
 
 bool Migration::migrate()
 {
-    auto files = mDir.entryList(QDir::NoFilter, QDir::Name);
-    if(files.isEmpty()) {
-        qDebug() << TAG << "No file on folder";
-        return false;
-    }
     bool started = false;
     bool errorOccure = false;
     const QString oldLastFile = mLastFile;
-    for(const QString &file : files) {
+    for(const QString &file : mFileNameList) {
         if(!file.compare(".") || !file.compare("..")) continue;
         if(!started) {
             if(mLastFile.isEmpty()) {
@@ -113,7 +108,7 @@ void Migration::init()
 
 bool Migration::executeFile(const QString &filename)
 {
-    QFile file(mDir.absoluteFilePath(filename));
+    QFile file(filename);
     if(!file.open(QFile::ReadOnly)) {
         qCritical() << TAG << "Can not open file" << file.fileName();
         return false;

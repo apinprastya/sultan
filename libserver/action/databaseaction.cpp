@@ -31,6 +31,7 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QDir>
+#include <QDirIterator>
 #include <QDebug>
 
 using namespace LibServer;
@@ -224,17 +225,18 @@ void DatabaseAction::migrateUntil(const QString &version)
         mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
         mDb->exec("CREATE DATABASE " + Preference::getString(SETTING::MYSQL_DB));
     }
-    const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
-                "migration_mysql" : "migration_sqlite";
     auto func = [version](const QString &name) -> bool {
         const QString &ver = name.left(3);
         if(!ver.compare(version)) return false;
         return true;
     };
-#ifdef Q_OS_MAC
-    LibDB::Migration::migrateAll(Util::appDir() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE), func);
-#else
-    LibDB::Migration::migrateAll(Util::appDir() % "/" + migrationpath, Preference::getString(SETTING::DATABASE), func);
-#endif
+    QDirIterator it(QString(":/migration/%1").arg(Preference::getString(SETTING::DATABASE) == "MYSQL" ?
+                                                      "mysql" : "sqlite"), QDirIterator::Subdirectories);
+    QStringList sl;
+    while (it.hasNext()) {
+        sl.append(it.next());
+    }
+    sl.sort();
+    LibDB::Migration::migrateAll(sl, Preference::getString(SETTING::DATABASE), func);
 }
 

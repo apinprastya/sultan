@@ -46,6 +46,7 @@
 #include <functional>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDirIterator>
 #include <QDebug>
 
 using namespace LibG;
@@ -178,14 +179,15 @@ void Core::init()
             }
             mMainWindow->splashShowMessage("Migrate database ...");
             qApp->processEvents();
-            const QString migrationpath = Preference::getString(SETTING::DATABASE) == "MYSQL" ?
-                        "migration_mysql" : "migration_sqlite";
+            QDirIterator it(QString(":/migration/%1").arg(Preference::getString(SETTING::DATABASE) == "MYSQL" ?
+                                                              "mysql" : "sqlite"), QDirIterator::Subdirectories);
+            QStringList sl;
+            while (it.hasNext()) {
+                sl.append(it.next());
+            }
+            sl.sort();
              LibDB::Migration::setAfterMigrate(std::bind(&Core::migrationCallback, this, std::placeholders::_1));
-#ifdef Q_OS_MAC
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/../Resources/" % migrationpath, Preference::getString(SETTING::DATABASE))) {
-#else
-            if(!LibDB::Migration::migrateAll(qApp->applicationDirPath() % "/" + migrationpath, Preference::getString(SETTING::DATABASE))) {
-#endif
+            if(!LibDB::Migration::migrateAll(sl, Preference::getString(SETTING::DATABASE))) {
                 qCritical() << TAG << "Error migration";
                 mMainWindow->splashShowMessage("Migrate database failed");
                 qApp->processEvents();

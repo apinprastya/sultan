@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDateTime>
+#include <QDirIterator>
 #include <QDebug>
 
 static QTextStream sLogStream;
@@ -53,14 +54,13 @@ int main(int argc, char *argv[])
     sLogStream.setDevice(&file);
 #endif
 
-    QDir appDir(a.applicationDirPath());
     LibG::Preference::createInstance();
     const QString &lang = LibG::Preference::getString(LibG::SETTING::APPLICATION_LANGUAGE, "id");
     QTranslator tr[3];
     if(lang.compare("en")) {
-        QStringList trans{"sultan_", "libgui_", "libserver_"};
+        QStringList trans{":/translation/sultan_", ":/translation/libgui_", ":/translation/libserver_"};
         for(int i = 0; i < trans.count(); i++) {
-            if(tr[i].load(appDir.absoluteFilePath(trans[i] + lang)))
+            if(tr[i].load(trans[i] + lang))
                 a.installTranslator(&tr[i]);
         }
     }
