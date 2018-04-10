@@ -1,10 +1,13 @@
 QT       += core gui widgets sql websockets printsupport concurrent
 
-CONFIG(USE_WEBENGINE) {
-    QT += webenginewidgets
-    DEFINES += USE_WEBENGINE
-} else {
-    QT += webkitwidgets
+CONFIG(USE_EMBED_BROWSER) {
+    DEFINES+=USE_EMBED_BROWSER
+    CONFIG(USE_WEBENGINE) {
+        QT += webenginewidgets
+        DEFINES += USE_WEBENGINE
+    } else {
+        QT += webkitwidgets
+    }
 }
 
 TARGET = Sultan
