@@ -17,6 +17,7 @@ struct UsbDevice {
 };
 
 struct UsbPrinter {
+    bool isFound = false;
     struct libusb_device  *device;  /* Device info */
     int     conf,   /* Configuration */
                 origconf, /* Original configuration */

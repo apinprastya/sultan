@@ -127,6 +127,7 @@ QList<UsbDevice> Usb::getUsbPrinterList(UsbPrinter *printer)
         if(printer != nullptr) {
             if(devdesc.idProduct != printer->produkId && devdesc.idVendor != printer->vendorId) continue;
             printer->device = device;
+            printer->isFound = true;
         }
 
         for (conf = 0; conf < devdesc.bNumConfigurations; conf++) {
@@ -221,7 +222,7 @@ bool Usb::sendData(uint16_t vendorId, uint16_t produkId, const QByteArray &data)
     printer.produkId = produkId;
     printer.vendorId = vendorId;
     getUsbPrinterList(&printer);
-    if(printer.device != nullptr) {
+    if(printer.isFound) {
         int act = 0;
         open_device(&printer);
         libusb_bulk_transfer(printer.handle, printer.write_endp, (unsigned char*)data.data(), data.size(), &act, 0);
