@@ -20,9 +20,11 @@
 #include "paycashdialog.h"
 #include "ui_paycashdialog.h"
 #include "preference.h"
+#include "global_setting_const.h"
 #include "global_constant.h"
 #include <QLocale>
 #include <QMessageBox>
+#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -44,9 +46,9 @@ void PayCashDialog::fill(double total)
 {
     mTotal = total;
     ui->labelTotal->setText(Preference::formatMoney(total));
-    ui->lineEdit->setText(QString::number(total));
-    ui->lineEdit->selectAll();
+    ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
     ui->pushPay->setEnabled(true);
+    ui->lineEdit->selectAll();
 }
 
 void PayCashDialog::payClicked()
