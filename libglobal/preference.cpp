@@ -21,12 +21,18 @@
 #include "global_setting_const.h"
 #include <QLocale>
 
+//#define WIN_PORTABLE
+
 using namespace LibG;
 
 static Preference *sInstance = nullptr;
 
 Preference::Preference():
+#ifdef WIN_PORTABLE
+    mSetting(new QSettings(QLatin1String("sultan.ini"), QSettings::IniFormat))
+#else
     mSetting(new QSettings(QLatin1String("lekapin"), QLatin1String("sultan")))
+#endif
 {
 }
 
