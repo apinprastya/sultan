@@ -231,10 +231,7 @@ QString Escp::cutPaperCommand()
     d.append(QChar(0x1B));
     d.append(QChar(0x40));
     d.append(QChar(0x1B));
-    d.append(QChar(0x70));
-    d.append(QChar(0x1D));
-    d.append(QChar(0x56));
-    d.append(QChar(0x01));
+    d.append(QChar(0x69));
     return d;
 }
 
