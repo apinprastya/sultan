@@ -1,6 +1,6 @@
 include(../libglobal/libglobal.pri)
 
-QT += printsupport widgets
+QT += printsupport
 
 TEMPLATE = lib
 TARGET = print
@@ -51,7 +51,6 @@ macx {
 SOURCES += \
     escp.cpp \
     printer.cpp \
-    printtestdialog.cpp \
     escptable.cpp \
     barcode.cpp \
     usb.cpp
@@ -61,10 +60,8 @@ HEADERS += \
     print_global.h \
     escp.h \
     printer.h \
-    printtestdialog.h \
     escptable.h \
     barcode.h \
     usb.h
 
-FORMS += \
-    printtestdialog.ui
+FORMS +=

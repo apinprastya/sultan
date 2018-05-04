@@ -24,7 +24,6 @@
 #include "global_constant.h"
 #include "printer.h"
 #include "guiutil.h"
-#include "printtestdialog.h"
 #include "message.h"
 #include "guiutil.h"
 #include "escp.h"
