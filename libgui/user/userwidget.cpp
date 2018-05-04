@@ -129,8 +129,10 @@ void UserWidget::deleteClicked(const QModelIndex &index)
     auto item = static_cast<TableItem*>(index.internalPointer());
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove user?"));
     if(ret == QMessageBox::Yes) {
-        Message msg(MSG_TYPE::USER, MSG_COMMAND::DEL);
+        Message msg(MSG_TYPE::USER, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
+        msg.addData("data", QVariantMap{{"username", QString("%1_%2").arg(item->data("username").toString()).arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"))},
+                                        {"deleted_at", QDateTime::currentDateTime()}});
         sendMessage(&msg);
     }
 }
