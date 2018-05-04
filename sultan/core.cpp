@@ -63,8 +63,8 @@ Core::Core(QObject *parent) :
 #ifdef SERVER_BUILD
     mMainWindow(new GuiDummy())
 #else
-    mMainWindow(new LibGUI::MainWindow(mMessageBus)),
-    mWindowQml(new LibGUIQML::MainWindowQML(mMessageBus))
+    //mMainWindow(new LibGUI::MainWindow(mMessageBus)),
+    mMainWindow(new LibGUIQML::MainWindowQML(mMessageBus))
 #endif
 {
     connect(mSocketClient, SIGNAL(socketConnected()), SLOT(clientConnected()));

@@ -14,7 +14,7 @@ MainWindowQML::MainWindowQML(LibG::MessageBus *bus, QObject *parent) :
 void MainWindowQML::showSplashScreen()
 {
     mQmlEngine->rootContext()->setContextProperty("CCore", this);
-    mQmlEngine->load(QUrl("/media/data/Project/Qt/sultan/libguiqml/qml/main.qml"));
+    mQmlEngine->load(QUrl("qrc:/main.qml"));
 }
 
 void MainWindowQML::hideSplashScreen()

@@ -8,13 +8,16 @@ TARGET = guiqml
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets network sql quickcontrols2
+QT += core gui widgets network sql qml quickcontrols2
 
-CONFIG(USE_WEBENGINE) {
-    QT += webenginewidgets
-    DEFINES += USE_WEBENGINE
-} else {
-    QT += webkitwidgets
+CONFIG(USE_EMBED_BROWSER) {
+    DEFINES+=USE_EMBED_BROWSER
+    CONFIG(USE_WEBENGINE) {
+        QT += webenginewidgets
+        DEFINES += USE_WEBENGINE
+    } else {
+        QT += webkitwidgets
+    }
 }
 
 CONFIG(static) {
@@ -28,6 +31,8 @@ CONFIG(staticlib) {
 } else {
     DEFINES += GUIQML_LIBRARY
 }
+
+RESOURCES += qml/qml.qrc
 
 contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
 

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>main/FlashMessage.qml</file>
+        <file>main/Login.qml</file>
+        <file>main/SplashScreenPage.qml</file>
+    </qresource>
+</RCC>
