@@ -2216,7 +2216,7 @@ Akhir</translation>
     <name>LibGUI::CashierReportDialog</name>
     <message>
         <location filename="../libgui/cashier/cashierreportdialog.cpp" line="65"/>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="141"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="142"/>
         <source>Cashier Report</source>
         <translation>Laporan Kasir</translation>
     </message>
@@ -2232,19 +2232,19 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/cashier/cashierreportdialog.cpp" line="74"/>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="153"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="154"/>
         <source>By Type</source>
         <translation>Berdasarkan Tipe</translation>
     </message>
     <message>
         <location filename="../libgui/cashier/cashierreportdialog.cpp" line="83"/>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="160"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="161"/>
         <source>By Bank</source>
         <translation>Berdasarkan Bank</translation>
     </message>
     <message>
         <location filename="../libgui/cashier/cashierreportdialog.cpp" line="89"/>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="164"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="165"/>
         <source>Cash</source>
         <translation>Tunai</translation>
     </message>
@@ -2289,17 +2289,17 @@ Akhir</translation>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="144"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="145"/>
         <source>From : %1</source>
         <translation>Dari   : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="145"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="146"/>
         <source>To   : %1</source>
         <translation>Sampai : %1</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="152"/>
+        <location filename="../libgui/cashier/cashierreportdialog.cpp" line="153"/>
         <source>User : %1</source>
         <translation>Pengguna : %1</translation>
     </message>
@@ -2416,90 +2416,90 @@ Akhir</translation>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="507"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="514"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="506"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="513"/>
         <source>Sub-total</source>
         <translation>Sub total</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="508"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="507"/>
         <source>Tax</source>
         <translation>Pajak</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="510"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="515"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="509"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="514"/>
         <source>Card Charge</source>
         <translation>Biaya Kartu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="511"/>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="517"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="510"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="516"/>
         <source>Total</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="520"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="519"/>
         <source>Payment</source>
         <translation>Bayar</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="521"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="520"/>
         <source>Change</source>
         <translation>Kembalian</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="523"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="522"/>
         <source>Card Number</source>
         <translation>No Kartu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="528"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="527"/>
         <source>Cust Number</source>
         <translation>No Pel</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="529"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="528"/>
         <source>Reward Poin</source>
         <translation>Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="532"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="531"/>
         <source>Credit</source>
         <translation>Hutang</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="561"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="560"/>
         <source>New transaction confirmation</source>
         <translation>Konfirmasi transaksi baru</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="561"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="560"/>
         <source>Are you sure want to ignore this transaction and start new one?</source>
         <translation>Anda yakin mengabaikan transaksi dan memulai transaksi baru?</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="583"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="582"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="583"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="582"/>
         <source>Your cart is not empty, do you want to ignore current cart?</source>
         <translation>Kerangjang belanja tidak kosong, yakin abaikan keranjang belanja?</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="605"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="604"/>
         <source>Input Customer</source>
         <translation>Masukkan Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="605"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="604"/>
         <source>Scan customer ID</source>
         <translation>Scan ID Pelanggan</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/cashierwidget.cpp" line="616"/>
+        <location filename="../libgui/cashier/cashierwidget.cpp" line="615"/>
         <source>Customer reseted</source>
         <translation>Pelanggan telah direset</translation>
     </message>
@@ -2757,57 +2757,57 @@ Akhir</translation>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="118"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="117"/>
         <source>Debt Payment</source>
         <translation>Pembayaran Hutang</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="121"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="120"/>
         <source>Cust-ID</source>
         <translation>ID-Pel</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="122"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="121"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="123"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="122"/>
         <source>Rest Credit</source>
         <translation>Sisa Piutang</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="125"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="124"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="126"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="125"/>
         <source>Number</source>
         <translation>Nomor</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="127"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="126"/>
         <source>Payment</source>
         <translation>Pembayaran</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="128"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="127"/>
         <source>Detail :</source>
         <translation>Detil :</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="160"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="159"/>
         <source>Customer number is not correct, please check again</source>
         <translation>No pelanggan salah, silakan cek kembali</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="164"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="163"/>
         <source>Payment must &gt; 0</source>
         <translation>Pembayaran harus &gt; 0</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="172"/>
+        <location filename="../libgui/cashier/customercreditpaymentdialog.cpp" line="171"/>
         <source>Credit Payment</source>
         <translation>Pembayaran piutang</translation>
     </message>
@@ -2826,7 +2826,7 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/customer/customercreditwidget.cpp" line="70"/>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="153"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="154"/>
         <source>Number</source>
         <translation>Nomor</translation>
     </message>
@@ -2856,7 +2856,7 @@ Akhir</translation>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="145"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="146"/>
         <source>Debt Payment</source>
         <translation>Pembayaran Hutang</translation>
     </message>
@@ -2865,32 +2865,32 @@ Akhir</translation>
         <translation type="vanished">Pembayaran piutang</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="148"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="149"/>
         <source>Cust-ID</source>
         <translation>ID-Pel</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="149"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="150"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="150"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="151"/>
         <source>Rest Credit</source>
         <translation>Sisa Piutang</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="152"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="153"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="154"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="155"/>
         <source>Payment</source>
         <translation>Pembayaran</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customercreditwidget.cpp" line="155"/>
+        <location filename="../libgui/customer/customercreditwidget.cpp" line="156"/>
         <source>Detail :</source>
         <translation>Detil :</translation>
     </message>
@@ -2909,7 +2909,7 @@ Akhir</translation>
     </message>
     <message>
         <location filename="../libgui/customer/customerrewardwidget.cpp" line="71"/>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="151"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="152"/>
         <source>Number</source>
         <translation>Nomor</translation>
     </message>
@@ -2939,33 +2939,33 @@ Akhir</translation>
         <translation>Silakan setting printer terlebih dahulu</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="143"/>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="152"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="144"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="153"/>
         <source>Reward Exchange</source>
         <translation>Tukar Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="146"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="147"/>
         <source>Cust-ID</source>
         <translation>ID-Pel</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="147"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="148"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="148"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="149"/>
         <source>Total Reward</source>
         <translation>Total Poin</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="150"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="151"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="../libgui/customer/customerrewardwidget.cpp" line="153"/>
+        <location filename="../libgui/customer/customerrewardwidget.cpp" line="154"/>
         <source>Detail :</source>
         <translation>Detil :</translation>
     </message>
@@ -3683,12 +3683,12 @@ Silakan masukkan password untuk konfirmasi</translation>
 <context>
     <name>LibGUI::PayCashDialog</name>
     <message>
-        <location filename="../libgui/cashier/paycashdialog.cpp" line="56"/>
+        <location filename="../libgui/cashier/paycashdialog.cpp" line="58"/>
         <source>Error Payment</source>
         <translation>Error Pembayaran</translation>
     </message>
     <message>
-        <location filename="../libgui/cashier/paycashdialog.cpp" line="56"/>
+        <location filename="../libgui/cashier/paycashdialog.cpp" line="58"/>
         <source>Payment must bigger or equal to total</source>
         <translation>Pembayaran harus lebih besar atau sama dengan total</translation>
     </message>
@@ -4644,37 +4644,47 @@ Silakan masukkan password untuk konfirmasi</translation>
 <context>
     <name>LibGUI::SettingWidget</name>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="116"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="117"/>
         <source>Device Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="122"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="123"/>
         <source>Spool Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="128"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="129"/>
         <source>USB Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="324"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="315"/>
+        <source>Error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../libgui/setting/settingwidget.cpp" line="315"/>
+        <source>Please specify the printer</source>
+        <translation>Silakan pilih printer</translation>
+    </message>
+    <message>
+        <location filename="../libgui/setting/settingwidget.cpp" line="359"/>
         <source>-- Select Machine --</source>
         <translation>-- Pilih mesin --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="333"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="368"/>
         <source>-- Select Suplier --</source>
         <translation>-- Pilih Suplier --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="337"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="372"/>
         <source>-- Select Category --</source>
         <translation>-- Pilih Kategori --</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.cpp" line="341"/>
+        <location filename="../libgui/setting/settingwidget.cpp" line="376"/>
         <source>-- Select Unit --</source>
         <translation>-- Pilih Satuan --</translation>
     </message>
@@ -5309,7 +5319,7 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/user/userwidget.cpp" line="73"/>
-        <location filename="../libgui/user/userwidget.cpp" line="174"/>
+        <location filename="../libgui/user/userwidget.cpp" line="176"/>
         <source>Reset password</source>
         <translation>Reset password</translation>
     </message>
@@ -5321,8 +5331,8 @@ Silakan masukkan password untuk konfirmasi</translation>
     <message>
         <location filename="../libgui/user/userwidget.cpp" line="94"/>
         <location filename="../libgui/user/userwidget.cpp" line="104"/>
-        <location filename="../libgui/user/userwidget.cpp" line="157"/>
-        <location filename="../libgui/user/userwidget.cpp" line="171"/>
+        <location filename="../libgui/user/userwidget.cpp" line="159"/>
+        <location filename="../libgui/user/userwidget.cpp" line="173"/>
         <source>Error</source>
         <translation></translation>
     </message>
@@ -5347,13 +5357,13 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Yakin ingin menghapus pengguna?</translation>
     </message>
     <message>
-        <location filename="../libgui/user/userwidget.cpp" line="157"/>
-        <location filename="../libgui/user/userwidget.cpp" line="171"/>
+        <location filename="../libgui/user/userwidget.cpp" line="159"/>
+        <location filename="../libgui/user/userwidget.cpp" line="173"/>
         <source>You can&apos;t change your own</source>
         <translation>Tidak dapat mengubah diri sendiri</translation>
     </message>
     <message>
-        <location filename="../libgui/user/userwidget.cpp" line="174"/>
+        <location filename="../libgui/user/userwidget.cpp" line="176"/>
         <source>Input new password</source>
         <translation>Masukkan password baru</translation>
     </message>
@@ -6579,17 +6589,17 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Aplikasi</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="93"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="109"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="100"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="116"/>
         <source>Sub Name</source>
         <translation>Sub Nama</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="126"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="142"/>
         <source>Machine ID</source>
         <translation>ID Mesin</translation>
     </message>
@@ -6598,81 +6608,81 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation type="vanished">Pajak</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="150"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="166"/>
         <source>Sales Taxes</source>
         <translation>Pajak Penjualan</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="157"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="173"/>
         <source>Ex: 10%</source>
         <translation>Contoh: 10%</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="192"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="241"/>
         <source>Capitalize input</source>
         <translation>Otomatis kapital</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="204"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="253"/>
         <source>Field name, code will be capitalize automatically when saved.</source>
         <translation>Nama, kode pada input akan kapital secara otomatis ketika disimpan.</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="232"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="289"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="303"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="298"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="371"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="385"/>
         <source>Locale</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="256"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="264"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="338"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="346"/>
         <source>Application Language</source>
         <translation>Bahasa Aplikasi</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="279"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="361"/>
         <source>Require restart to apply</source>
         <translation>Membutuhkan restart</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="310"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="392"/>
         <source>Locale Country</source>
         <translation>Locale Negara</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="328"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="427"/>
         <source>Money</source>
         <translation>Keuangan</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="342"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="441"/>
         <source>Digit after decimal</source>
         <translation>Digit setelah desimal</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="356"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="455"/>
         <source>Use Sign</source>
         <translation>Gunakan tanda</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="370"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="469"/>
         <source>Sign</source>
         <translation>Tanda</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="377"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="476"/>
         <source>ex : Rp.</source>
         <translation>Contoh: Rp.</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="407"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="452"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="523"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="579"/>
         <source>Printer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="431"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="547"/>
         <source>Cashier Print</source>
         <translation>Print kasir</translation>
     </message>
@@ -6681,171 +6691,176 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation type="vanished">Printer Kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="138"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="154"/>
         <source>Ta&amp;xes</source>
         <translation>Pa&amp;jak</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="167"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="216"/>
         <source>Na&amp;me based</source>
         <translation>Menggunakan Na&amp;ma</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="179"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="228"/>
         <source>To input the order on chasier will use search of item name instead using barcode directly. When pressing enter and no item found, it will find the name of the item on search item dialog.</source>
         <translation>Untuk input belanja di kasir akan menggunakan fitur cari barang. Jadi ketika tekan enter maka akan membuka cari barang dan memilih barang dari dialog cari barang.</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="442"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="569"/>
         <source>Printer Type</source>
         <translation>Tipe Printer</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="462"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="589"/>
         <source>Printer Device</source>
         <translation>Device Printer</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="469"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="596"/>
         <source>ex: /dev/lp0</source>
         <translation>Contoh: /dev/usb/lp0</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="516"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="523"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="725"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="732"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="530"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="549"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="739"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="758"/>
         <source>Subtitle</source>
         <translation>Sub Judul</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="556"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="584"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="765"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="793"/>
         <source>Footer</source>
         <translation>Footer</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="476"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="603"/>
         <source>CPI 10 Width</source>
         <translation>Lebar CPI 10</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="496"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="623"/>
         <source>CPI 12 Width</source>
         <translation>Lebar CPI 12</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="632"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="667"/>
         <source>Auto Cut</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="618"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="653"/>
         <source>Open Drawer</source>
         <translation>Buka Laci</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="608"/>
-        <location filename="../libgui/setting/settingwidget.ui" line="684"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="643"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="847"/>
         <source>Line Feed After</source>
         <translation>Enter setelah akhir</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="591"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="814"/>
         <source>Barcode Max Length</source>
         <translation>Max Barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="646"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="800"/>
         <source>Show barcode</source>
         <translation>Tampilkan barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="660"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="681"/>
         <source>Usb Device</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="675"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="838"/>
         <source>Cashier Price Print</source>
         <translation>Print harga kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="715"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="878"/>
         <source>Cashier</source>
         <translation>Kasir</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="736"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="899"/>
         <source>Add item from cashier when unavailable</source>
         <translation>Tambah item dari kasir ketika tidak ditemukan</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="748"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="938"/>
         <source>Default suplier</source>
         <translation>Default suplier</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="755"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="962"/>
         <source>Default category</source>
         <translation>Default kategori</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="762"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="986"/>
         <source>Default unit</source>
         <translation>Default unit</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="769"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="924"/>
         <source>Use default suplier</source>
         <translation>Gunakan suplier default</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="776"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="691"/>
+        <source>Only CPI 10</source>
+        <translation>Hanya CPI 10</translation>
+    </message>
+    <message>
+        <location filename="../libgui/setting/settingwidget.ui" line="948"/>
         <source>Use default category</source>
         <translation>Gunakan kategori default</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="783"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="972"/>
         <source>Use default unit</source>
         <translation>Gunakan unit default</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="790"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1010"/>
         <source>Use default buy price</source>
         <translation>Gunakan harga beli default</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="797"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1024"/>
         <source>Buy price margin (%)</source>
         <translation>Harga beli default (%)</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="848"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1038"/>
         <source>Barcode prefix</source>
         <translation>Awalan barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="855"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1045"/>
         <source>Barcode prefix for new item</source>
         <translation>Awalan barcode untuk tambah item otomatis</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="862"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1052"/>
         <source>Barcode length</source>
         <translation>Panjang auto barcode</translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="924"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1118"/>
         <source>Print Test Page</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../libgui/setting/settingwidget.ui" line="931"/>
+        <location filename="../libgui/setting/settingwidget.ui" line="1125"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
