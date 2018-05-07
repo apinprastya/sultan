@@ -39,6 +39,7 @@ public:
     int sendMessage(Message *msg);
     void setAlwaysListen(int msg_type);
     void removeAlwaysListern(int msg_type);
+    inline MessageBus *getMessageBus() { return mMessageBus; }
 
 protected:
     MessageBus *mMessageBus;

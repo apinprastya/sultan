@@ -44,12 +44,13 @@ import QtQuick.Controls.Material 2.0
 import "main"
 
 ApplicationWindow {
-    id: window
+    id: root
     width:1024
     height: 768
-    property alias stackView: stackView
     visible: true
     Material.theme: Material.Light
+
+    property color dividerColor: "#b0b0b0"
 
     StackView {
         id: stackView

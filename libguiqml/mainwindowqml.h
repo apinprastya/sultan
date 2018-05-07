@@ -15,14 +15,15 @@ class GUIQMLSHARED_EXPORT MainWindowQML : public QObject, public LibG::AbstractS
     Q_OBJECT
 public:
     MainWindowQML(LibG::MessageBus *bus, QObject *parent = nullptr);
-    void showSplashScreen();
-    void hideSplashScreen();
-    void splashShowMessage(const QString &msg);
-    void showSetting();
-    void showMainWindow();
-    void showRestartError(const QString &title, const QString &msg);
-    void guiMessage(int id, const QString &str);
-    void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon);
+    static MainWindowQML *instance();
+    void showSplashScreen() override;
+    void hideSplashScreen() override;
+    void splashShowMessage(const QString &msg) override;
+    void showSetting() override;
+    void showMainWindow() override;
+    void showRestartError(const QString &title, const QString &msg) override;
+    void guiMessage(int id, const QString &str) override;
+    void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon) override;
 
 protected:
     void messageReceived(LibG::Message *msg) override;

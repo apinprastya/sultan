@@ -54,10 +54,14 @@ macx {
 #TRANSLATIONS = ../translation/libgui_id.ts
 
 SOURCES += \
-    mainwindowqml.cpp
+    mainwindowqml.cpp \
+    presenter/loginpresenter.cpp \
+    presenter/sultanpresenter.cpp
 
 HEADERS += \
     guiqml_global.h \
-    mainwindowqml.h
+    mainwindowqml.h \
+    presenter/loginpresenter.h \
+    presenter/sultanpresenter.h
 
 FORMS +=

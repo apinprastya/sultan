@@ -1,106 +1,92 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import Qt.labs.settings 1.0
+import QtQuick.Layouts 1.3
+import com.lekapin.presenter 0.1
+import QtQuick.Controls.Material 2.0
 
 Page {
     id: loginpage
-
-    Component.onCompleted: {
-    }
 
     background: Rectangle {
         color: "#F0F0F0"
     }
 
-    FlashMessage {
-        id: popup
+    LoginPresenter {
+        id: loginPresenter
     }
 
-    Frame {
-        id: frame
-        x: 220
-        y: 140
-        width: 500
-        height: 205
+    Rectangle {
+        width: parent.width < 500 ? parent.width - 10 : 500
+        height: parent.height < 200 ? parent.height - 10 : 200
+        color: "white"
+        radius: 2
+        border.width: 1
+        border.color: root.dividerColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        background: Rectangle {
-            color: "transparent"
-            border.color: "#808080"
-            radius: 10
-        }
+        RowLayout {
+            id: rowLayout
+            anchors.fill: parent
 
-        Image {
-            id: image
-            y: 38
-            width: 150
-            height: 150
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            source: "../../sultan/images/icon_512.png"
-        }
+            Image {
+                id: image
+                fillMode: Image.PreserveAspectFit
+                Layout.fillHeight: true
+                Layout.maximumWidth: 150
+                Layout.leftMargin: 10
+                Layout.rightMargin: 5
+                source: "qrc:/images/icon_256.png"
+            }
+            Rectangle {
+                width: 1
+                Layout.fillHeight: true
+                color: root.dividerColor
+            }
+            ColumnLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.leftMargin: 5
+                Layout.rightMargin: 10
+                Text {
+                    text: qsTr("Login")
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 20
+                    Layout.fillWidth: true
 
-        Rectangle {
-            id: rectangle
-            y: 0
-            width: 2
-            height: 176
-            color: "#808080"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: image.right
-            anchors.leftMargin: 6
-            border.color: "#808080"
-        }
-
-        Text {
-            id: text1
-            x: 164
-            y: 0
-            width: 312
-            height: 40
-            text: qsTr("Sultan Login")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 32
-        }
-
-        TextField {
-            id: username
-            x: 164
-            y: 46
-            width: 312
-            height: 40
-            placeholderText: "Username"
-        }
-
-        TextField {
-            id: password
-            x: 164
-            y: 92
-            width: 312
-            height: 40
-            placeholderText: "Password"
-            echoMode: TextInput.Password
-        }
-
-        Button {
-            id: loginButton
-            x: 164
-            y: 138
-            width: 312
-            height: 40
-            text: qsTr("Login")
-            onClicked: {
-                if(username.text == "" || password.text == "") {
-                    popup.message = "HOLA"
-                    popup.open()
-                    return
                 }
-
-                console.log("YES")
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    color: root.dividerColor
+                }
+                TextField {
+                    id: username
+                    placeholderText: qsTr("username")
+                    Layout.fillWidth: true
+                }
+                TextField {
+                    id: password
+                    placeholderText: qsTr("password")
+                    Layout.fillWidth: true
+                    echoMode: TextInput.Password
+                    passwordCharacter: '#'
+                }
+                Button {
+                    text: qsTr("Login")
+                    Layout.fillWidth: true
+                    Material.background: Material.Green
+                    Material.foreground: "white"
+                    Binding on enabled {
+                        value: username.text != "" && password.text != ""
+                    }
+                    onClicked: {
+                        loginPresenter.login(username.text, password.text)
+                    }
+                }
             }
         }
+
     }
 }
