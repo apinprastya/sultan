@@ -24,7 +24,10 @@ Message DashboardAction::tile(Message *msg)
     const QString &end = msg->data("end").toString();
     QVariantMap data;
     //stock value
-    DbResult res = mDb->select("COALESCE(sum(stock * buy_price), 0) as total")->get("items");
+    DbResult res = mDb->select("sum(stock * buy_price) as total")->
+            where("stock > 0")->
+            where(QString("(flag & %1) = 0").arg(ITEM_FLAG::PACKAGE))->
+            where(QString("(flag & %1) = 0").arg(ITEM_FLAG::HAS_INGRIDIENT))->get("items");
     data["stock_value"] = res.first()["total"];
     //debt : 1. suplier, 2. sold retur
     double debt = 0;
