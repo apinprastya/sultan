@@ -139,6 +139,20 @@ Escp *Escp::column(const QList<int> col)
     return this;
 }
 
+Escp *Escp::fullText(const QStringList &str)
+{
+    if(str.size() != 2) return this;
+    int tot = str[0].size() + str[1].size();
+    if(tot > mWidth) {
+        int diff = mWidth - tot + 1;
+        tot -= diff;
+        mData.append(str[0].left(str[0].size() - diff)).append(str[1].rightJustified(mWidth - tot, QChar(' ')));
+    } else {
+        mData.append(str[0]).append(str[1].rightJustified(mWidth - tot + str[1].size(), QChar(' ')));
+    }
+    return this;
+}
+
 Escp *Escp::leftText(const QString &str, bool overflow)
 {
     int w = mWidth;

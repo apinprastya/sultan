@@ -479,59 +479,64 @@ void CashierWidget::printBill(const QVariantMap &data)
         escp->centerText(subtitle);
     }
     escp->newLine(2)->leftText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
-    escp->column(QList<int>{50, 50})->leftText(data["number"].toString())->rightText(UserSession::username());
+    escp->fullText(QStringList{data["number"].toString(), UserSession::username()});
     escp->newLine()->column(QList<int>())->line(QChar('='));
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
         QVariantMap m = v.toMap();
         QString name;
+        float count = m["count"].toFloat();
+        double discount =m["discount"].toDouble();
+        const QString &total = Preference::formatMoney(m["final"].toDouble());
         if(useBarcode) name = QString("%1 - %2").arg(Util::elide(m["barcode"].toString(), barcodelen)).arg(m["name"].toString());
         else name = m["name"].toString();
+        if(count == 1.0f && discount == 0 && (name.size() + total.size() + 1) < escp->width()) {
+            escp->fullText(QStringList{name, total})->newLine();
+            continue;
+        }
         const QString &note = m["note"].toString();
-        if(name.length() > cpi12) name = name.left(cpi12);
+        if(name.length() > escp->width()) name = name.left(escp->width());
         escp->leftText(name)->newLine();
         if(!note.isEmpty()) escp->leftText(QString("* %1").arg(note))->newLine();
         QString s = QString("%1 x %2").
-                arg(Preference::formatMoney(m["count"].toFloat())).
+                arg(Preference::formatMoney(count)).
                  arg(Preference::formatMoney(m["price"].toDouble()));
         if(m["discount"].toDouble() != 0) {
-            s = s % " (" % Preference::formatMoney(-m["discount"].toDouble()) % ")";
+            s = s % " (" % Preference::formatMoney(-discount) % ")";
         }
-        escp->column(QList<int>{70, 30})->leftText(s);
-        escp->rightText(Preference::formatMoney(m["final"].toDouble()))->column(QList<int>())->newLine();
+        escp->fullText(QStringList{s, total})->newLine();
     }
-    escp->line();
-    escp->column(QList<int>{50, 50});
+    escp->line()->column(QList<int>());
     if(isTax) {
-        escp->leftText(tr("Sub-total"))->rightText(Preference::formatMoney(data["subtotal"].toDouble()))->newLine()->
-                leftText(tr("Tax"))->rightText(Preference::formatMoney(data["tax"].toDouble()))->newLine();
+        escp->fullText(QStringList{tr("Sub-total"), Preference::formatMoney(data["subtotal"].toDouble())})->newLine()->
+                fullText(QStringList{tr("Tax"), Preference::formatMoney(data["tax"].toDouble())})->newLine();
         if(paymentType == PAYMENT::NON_CASH)
-            escp->leftText(tr("Card Charge"))->rightText(Preference::formatMoney(data["additional_charge"].toDouble()))->newLine();
-        escp->leftText(tr("Total"))->rightText(Preference::formatMoney(data["total"].toDouble()))->newLine();
+            escp->fullText(QStringList{tr("Card Charge"), Preference::formatMoney(data["additional_charge"].toDouble())})->newLine();
+        escp->fullText(QStringList{tr("Total"), Preference::formatMoney(data["total"].toDouble())})->newLine();
     } else {
         if(paymentType == PAYMENT::NON_CASH) {
-            escp->leftText(tr("Sub-total"))->rightText(Preference::formatMoney(data["subtotal"].toDouble()))->newLine()->
-                leftText(tr("Card Charge"))->rightText(Preference::formatMoney(data["additional_charge"].toDouble()))->newLine();
+            escp->fullText(QStringList{tr("Sub-total"), Preference::formatMoney(data["subtotal"].toDouble())})->newLine()->
+                fullText(QStringList{tr("Card Charge"), Preference::formatMoney(data["additional_charge"].toDouble())})->newLine();
         }
-        escp->leftText(tr("Total"))->rightText(Preference::formatMoney(data["total"].toDouble()))->newLine();
+        escp->fullText(QStringList{tr("Total"), Preference::formatMoney(data["total"].toDouble())})->newLine();
     }
     if(paymentType == PAYMENT::CASH) {
-        escp->leftText(tr("Payment"))->rightText(Preference::formatMoney(data["payment"].toDouble()))->newLine()->
-            leftText(tr("Change"))->rightText(Preference::formatMoney(data["payment"].toDouble() - data["total"].toDouble()))->newLine();
+        escp->fullText(QStringList{tr("Payment"), Preference::formatMoney(data["payment"].toDouble())})->newLine()->
+            fullText(QStringList{tr("Change"), Preference::formatMoney(data["payment"].toDouble() - data["total"].toDouble())})->newLine();
     } else {
-        escp->leftText(tr("Card Number"))->rightText(data["card_number"].toString())->newLine();
+        escp->fullText(QStringList{tr("Card Number"), QString("xxxx-%1").arg(data["card_number"].toString().right(4))})->newLine();
     }
     escp->column(QList<int>())->doubleHeight(false);
     if(data.contains("customer")) {
         const QVariantMap &cust = data["customer"].toMap();
-        escp->line('=')->column(QList<int>{50, 50})->leftText(tr("Cust Number"))->rightText(cust["number"].toString())->newLine();
-        escp->leftText(tr("Reward Poin"))->rightText(QString::number(cust["reward"].toInt()))->newLine();
+        escp->line('=')->fullText(QStringList{tr("Cust Number"), cust["number"].toString()})->newLine();
+        escp->fullText(QStringList{tr("Reward Poin"), QString::number(cust["reward"].toInt())})->newLine();
         double credit = cust["credit"].toDouble();
         if(credit > 0) {
-            escp->leftText(tr("Credit"))->rightText(Preference::formatMoney(cust["credit"].toDouble()))->newLine();
+            escp->fullText(QStringList{tr("Credit"), Preference::formatMoney(cust["credit"].toDouble())})->newLine();
         }
     }
-    escp->column(QList<int>())->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
+    escp->doubleHeight(false)->line()->leftText(footer, true)->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     GuiUtil::print(escp->data());
     delete escp;
     cutPaper();

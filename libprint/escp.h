@@ -54,6 +54,7 @@ public:
     Escp *cpi12();
     Escp *cpi15();
     Escp *column(const QList<int> col);
+    Escp *fullText(const QStringList &str);
     Escp *leftText(const QString &str, bool overflow = false);
     Escp *centerText(const QString &str, bool overflow = false);
     Escp *rightText(const QString &str, bool overflow = false);
@@ -63,6 +64,7 @@ public:
     Escp *openDrawer();
     static QString openDrawerCommand();
     static QString cutPaperCommand();
+    inline int width() { return mWidth; }
 
 private:
     int mType;
