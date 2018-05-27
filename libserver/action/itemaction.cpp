@@ -137,6 +137,8 @@ Message ItemAction::update(Message *msg)
             } else if(res.size() > 1) {
                 mDb->where("barcode = ", msg->data("barcode"))->del("sellprices");
                 mDb->insert("sellprices", sp);
+            } else if(res.size() == 0) {
+                mDb->insert("sellprices", sp);
             }
             res = mDb->where("id = ", msg->data("id"))->get(mTableName);
             message.setData(res.first());

@@ -2,7 +2,6 @@ INCLUDEPATH += $$PWD
 SOURCES += \
     $$PWD/escp.cpp \
     $$PWD/printer.cpp \
-    $$PWD/printtestdialog.cpp \
     $$PWD/escptable.cpp \
     $$PWD/barcode.cpp \
     $$PWD/usb.cpp
@@ -12,10 +11,6 @@ HEADERS += \
     $$PWD/print_global.h \
     $$PWD/escp.h \
     $$PWD/printer.h \
-    $$PWD/printtestdialog.h \
     $$PWD/escptable.h \
     $$PWD/barcode.h \
     $$PWD/usb.h
-
-FORMS += \
-    $$PWD/printtestdialog.ui
