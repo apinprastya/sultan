@@ -8,7 +8,7 @@ TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets network sql concurrent
+QT += core gui widgets network sql concurrent charts
 
 CONFIG(USE_EMBED_BROWSER) {
     DEFINES+=USE_EMBED_BROWSER
@@ -163,7 +163,8 @@ SOURCES += \
     cashier/customercreditpaymentdialog.cpp \
     item/addingridientdialog.cpp \
     cashier/additemunavailabledialog.cpp \
-    dashboard/dashboardwidget.cpp
+    dashboard/dashboardwidget.cpp \
+    dashboard/dashboardchart.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -267,7 +268,8 @@ HEADERS += \
     tabcloseablewidget.h \
     item/addingridientdialog.h \
     cashier/additemunavailabledialog.h \
-    dashboard/dashboardwidget.h
+    dashboard/dashboardwidget.h \
+    dashboard/dashboardchart.h
 
 FORMS += \
     mainwindow.ui \
@@ -334,4 +336,5 @@ FORMS += \
     item/addingridientdialog.ui \
     report/datefromtowidget.ui \
     cashier/additemunavailabledialog.ui \
-    dashboard/dashboardwidget.ui
+    dashboard/dashboardwidget.ui \
+    dashboard/dashboardchart.ui

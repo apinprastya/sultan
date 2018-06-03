@@ -22,6 +22,7 @@
 
 #include "gui_global.h"
 #include <QTableView>
+#include <QHeaderView>
 
 namespace LibGUI {
 
