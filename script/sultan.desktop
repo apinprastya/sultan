@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=18.04.02
+Name=Sultan POS
+GenericName=Sultan POS
+Comment=Minimarket Point of Sales
+Type=Application
+Exec=/usr/bin/sultan
+Icon=/usr/share/doc/icon_512.png
+Categories=Office;Accessories;
+Keywords=ws;

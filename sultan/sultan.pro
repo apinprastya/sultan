@@ -79,6 +79,14 @@ macx {
     POST_TARGETDEPS += copysh
 }
 
+target.path = /usr/bin/$$[TARGET]
+icon.path = /usr/share/doc/sultan/
+icon.files += images/icon_512.png
+desktop.path = /usr/share/applications/
+desktop.files += $${PWD}/../script/sultan.desktop
+INSTALLS += target icon desktop
+
+
 RESOURCES += sultan.qrc sqlmigration.qrc translation.qrc
 
 TRANSLATIONS = ../translation/sultan_id.ts
