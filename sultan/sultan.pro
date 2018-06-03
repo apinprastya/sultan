@@ -10,7 +10,11 @@ CONFIG(USE_EMBED_BROWSER) {
     }
 }
 
-TARGET = Sultan
+win32 {
+    TARGET = Sultan
+} else {
+    TARGET = sultan
+}
 TEMPLATE = app
 
 CONFIG += c++11
