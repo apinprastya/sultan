@@ -23,6 +23,7 @@
 #include "messagehandler.h"
 #include "customer/customer.h"
 #include "tabcloseablewidget.h"
+#include "doublespinboxdelegate.h"
 #include <QWidget>
 
 namespace Ui {
@@ -104,6 +105,8 @@ private slots:
     void addNonStockTransaction();
     void addNewItem(const QVariantMap &data);
     void addNewItemNoBarcode();
+    void tableClicked(const QModelIndex &index);
+    void editRequest(const QModelIndex &index, const QVariant &value);
 };
 
 }

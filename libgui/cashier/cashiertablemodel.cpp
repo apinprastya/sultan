@@ -101,6 +101,21 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+bool CashierTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(role == Qt::EditRole) {
+        emit requestEdit(index, value);
+    }
+    return false;
+}
+
+Qt::ItemFlags CashierTableModel::flags(const QModelIndex &index) const
+{
+    //TODO: remove hardcoded here
+    if(index.column() == 3) return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    return QAbstractTableModel::flags(index);
+}
+
 QModelIndex CashierTableModel::index(int row, int column, const QModelIndex &/*parent*/) const
 {
     CashierItem *item = nullptr;

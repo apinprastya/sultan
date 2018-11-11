@@ -49,6 +49,7 @@
 #include "customercreditpaymentdialog.h"
 #include "transaction/addtransactiondialog.h"
 #include "additemunavailabledialog.h"
+#include "doublespinboxdelegate.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -105,6 +106,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mPayCashlessDialog, SIGNAL(requestPay(int,double,int)), SLOT(payRequested(int,double,int)));
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(updateCurrentItem()));
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payCash()));
+    connect(mModel, SIGNAL(requestEdit(QModelIndex,QVariant)), SLOT(editRequest(QModelIndex,QVariant)));
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
@@ -128,6 +130,13 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
     connect(mAddItemDialog, SIGNAL(addNewItem(QVariantMap)), SLOT(addNewItem(QVariantMap)));
+    auto inlineEdit = Preference::getBool(SETTING::INLINE_EDIT_QTY);
+    if(inlineEdit) {
+        qDebug() << "MASUK PAK EKO";
+        connect(ui->tableView, SIGNAL(clicked(QModelIndex)), SLOT(tableClicked(QModelIndex)));
+        auto delegate = new DoubleSpinBoxDelegate(ui->tableView);
+        ui->tableView->setItemDelegateForColumn(3, delegate);
+    }
 }
 
 CashierWidget::~CashierWidget()
@@ -532,7 +541,8 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->column(QList<int>())->doubleHeight(false);
     if(data.contains("customer")) {
         const QVariantMap &cust = data["customer"].toMap();
-        escp->line('=')->fullText(QStringList{tr("Cust Number"), cust["number"].toString()})->newLine();
+        escp->line('=')->leftText(QString("Cust number : %1").arg(cust["number"].toString()))->newLine();
+        escp->leftText(QString("Cust Name : %1").arg(cust["name"].toString()))->newLine();
         escp->fullText(QStringList{tr("Reward Poin"), QString::number(cust["reward"].toInt())})->newLine();
         double credit = cust["credit"].toDouble();
         if(credit > 0) {
@@ -687,4 +697,23 @@ void CashierWidget::addNewItem(const QVariantMap &data)
 void CashierWidget::addNewItemNoBarcode()
 {
     mAddItemDialog->openAutoBarcode();
+}
+
+void CashierWidget::tableClicked(const QModelIndex &index)
+{
+    if(index.isValid()) {
+        ui->tableView->edit(mModel->index(index.row(), 3, QModelIndex()));
+    }
+}
+
+void CashierWidget::editRequest(const QModelIndex &index, const QVariant &value)
+{
+    auto item = static_cast<CashierItem*>(index.internalPointer());
+    QVariantList &prices = mModel->getPrices(item->barcode);
+    QVariantMap price = prices[0].toMap();
+    price["price"] = item->price;
+    price["discount_formula"] = item->discount_formula;
+    prices[0] = price;
+    mModel->addItem(value.toFloat() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag, item->note);
+    ui->tableView->resizeRowsToContents();
 }

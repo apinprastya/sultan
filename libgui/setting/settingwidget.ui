@@ -54,7 +54,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
@@ -78,7 +78,7 @@
             <x>0</x>
             <y>0</y>
             <width>892</width>
-            <height>516</height>
+            <height>510</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -312,7 +312,7 @@
             <x>0</x>
             <y>0</y>
             <width>892</width>
-            <height>516</height>
+            <height>510</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -537,7 +537,7 @@
             <x>0</x>
             <y>0</y>
             <width>892</width>
-            <height>516</height>
+            <height>510</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -880,6 +880,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_14">
        <item>
         <widget class="QScrollArea" name="scrollArea_4">
+         <property name="styleSheet">
+          <string notr="true">background: white;</string>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -889,7 +892,7 @@
             <x>0</x>
             <y>0</y>
             <width>892</width>
-            <height>516</height>
+            <height>510</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1067,6 +1070,36 @@
                    </widget>
                   </item>
                  </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="title">
+              <string/>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_21">
+              <item>
+               <layout class="QFormLayout" name="formLayout_11">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_39">
+                  <property name="text">
+                   <string>Inline edit quantity</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="checkInlineEdit">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>

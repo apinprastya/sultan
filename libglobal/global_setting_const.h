@@ -85,6 +85,7 @@ namespace SETTING {
     const QString CAI_UNIT                      = QStringLiteral("cashier/cai_unit");
     const QString CAI_DEFAULT_MARGIN            = QStringLiteral("cashier/cai_default_margin");
     const QString CAI_MARGIN                    = QStringLiteral("cashier/cai_margin");
+    const QString INLINE_EDIT_QTY               = QStringLiteral("cashier/inline_edit_qty");
 
     const QString PRINTER_CASHIER_PRICE_LINEFEED      = QStringLiteral("printer/cashier_price_linefeed");
 

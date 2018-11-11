@@ -170,6 +170,7 @@ void SettingWidget::setupCashier()
     ui->checkCAIUnit->setChecked(Preference::getBool(SETTING::CAI_UNIT));
     ui->checkCAIBuyPrice->setChecked(Preference::getBool(SETTING::CAI_MARGIN));
     ui->doubleCAIBuyPrice->setValue(Preference::getDouble(SETTING::CAI_DEFAULT_MARGIN));
+    ui->checkInlineEdit->setChecked(Preference::getBool(SETTING::INLINE_EDIT_QTY));
     connect(ui->checkCAISuplier, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->checkCAICategory, SIGNAL(toggled(bool)), SLOT(checkWidget()));
     connect(ui->checkCAIUnit, SIGNAL(toggled(bool)), SLOT(checkWidget()));
@@ -261,6 +262,7 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::PRINTER_CASHIER_BARCODE_LEN, ui->spinBarcodeLength->value());
     Preference::setValue(SETTING::PRINTER_CASHIER_SHOW_BARCODE, ui->checkShowBarcode->isChecked());
     Preference::setValue(SETTING::PRINTER_CASHIER_ONLY_CPI10, ui->checkOnly10->isChecked());
+    Preference::setValue(SETTING::INLINE_EDIT_QTY, ui->checkInlineEdit->isChecked());
 #ifdef USE_LIBUSB
     int cur = ui->comboUsb->currentIndex();
     if(ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {

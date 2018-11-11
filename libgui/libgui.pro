@@ -162,7 +162,8 @@ SOURCES += \
     cashier/cashierreportdialog.cpp \
     cashier/customercreditpaymentdialog.cpp \
     item/addingridientdialog.cpp \
-    cashier/additemunavailabledialog.cpp
+    cashier/additemunavailabledialog.cpp \
+    doublespinboxdelegate.cpp
 
 HEADERS += \ 
     gui_global.h \
@@ -265,7 +266,8 @@ HEADERS += \
     cashier/customercreditpaymentdialog.h \
     tabcloseablewidget.h \
     item/addingridientdialog.h \
-    cashier/additemunavailabledialog.h
+    cashier/additemunavailabledialog.h \
+    doublespinboxdelegate.h
 
 FORMS += \
     mainwindow.ui \

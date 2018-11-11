@@ -37,8 +37,11 @@ public:
     static CashierTableModel *instance();
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
+
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     void addItem(float count, const QString &name, const QString &barcode, const QString &unit, const QVariantList &prices, int itemflag, const QString &note);
     CashierItem *addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount, const QString &unit, int flag);
@@ -76,6 +79,7 @@ signals:
     void totalChanged(double total);
     void selectRow(const QModelIndex &index);
     void poinChanged(int poin);
+    void requestEdit(const QModelIndex &index, const QVariant &value);
 };
 
 }
