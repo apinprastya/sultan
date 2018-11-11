@@ -49,7 +49,7 @@ private:
     Customer *mCustomer = nullptr;
 
 signals:
-    void payRequested(int type, double value);
+    void payRequested(int type, double value, int flag);
 
 private slots:
     void paymentValueChanged(const QString &value);

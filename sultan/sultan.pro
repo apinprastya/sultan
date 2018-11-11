@@ -71,7 +71,7 @@ macx {
     }
     contains(CONFIG, USE_LIBUSB) {
         DEFINES+=USE_LIBUSB
-        LIBS += -lusb-1.0
+        LIBS += -lusb-1.0 -ludev
     }
     DESTDIR = ../bin
     copysh.commands = $$quote(cp -R $${PWD}/../script/Sultan.sh $${OUT_PWD}/../bin/)

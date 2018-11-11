@@ -77,7 +77,7 @@ public:
     QVariant data(const QString &key);
     bool hasData(const QString &key);
 
-    void setError(const QString &error);
+    void setError(const QString &error, bool clearData = true);
 
     QJsonObject toJsonObject();
     QString toJsonString();

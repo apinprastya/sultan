@@ -134,10 +134,10 @@ bool Message::hasData(const QString &key)
     return mData.contains(key);
 }
 
-void Message::setError(const QString &error)
+void Message::setError(const QString &error, bool clearData)
 {
     setStatus(STATUS::ERROR);
-    mData.clear();
+    if(clearData) mData.clear();
     mData.insert("error", error);
 }
 

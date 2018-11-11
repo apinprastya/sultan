@@ -35,6 +35,7 @@ PayCashDialog::PayCashDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payClicked()));
+    connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
 PayCashDialog::~PayCashDialog()
@@ -48,10 +49,11 @@ void PayCashDialog::fill(double total)
     ui->labelTotal->setText(Preference::formatMoney(total));
     ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
     ui->pushPay->setEnabled(true);
+    ui->pushSave->setEnabled(true);
     ui->lineEdit->selectAll();
 }
 
-void PayCashDialog::payClicked()
+void PayCashDialog::saveTransaction()
 {
     double payment = ui->lineEdit->value();
     if(payment < mTotal) {
@@ -59,5 +61,17 @@ void PayCashDialog::payClicked()
         return;
     }
     ui->pushPay->setEnabled(false);
-    emit requestPay(PAYMENT::CASH, payment);
+    ui->pushSave->setEnabled(false);
+}
+
+void PayCashDialog::payClicked()
+{
+    saveTransaction();
+    emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 0);
+}
+
+void PayCashDialog::saveClicked()
+{
+    saveTransaction();
+    emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 1);
 }

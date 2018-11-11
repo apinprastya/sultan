@@ -56,7 +56,7 @@ private slots:
     void payClicked();
 
 signals:
-    void requestPay(int type, double payment);
+    void requestPay(int type, double payment, int flag);
 };
 
 }

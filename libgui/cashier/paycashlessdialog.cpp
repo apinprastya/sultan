@@ -105,5 +105,5 @@ void PayCashlessDialog::payClicked()
         return;
     }
     ui->pushSave->setEnabled(false);
-    emit requestPay(PAYMENT::NON_CASH, mAdditonal);
+    emit requestPay(PAYMENT::NON_CASH, mAdditonal, 0);
 }

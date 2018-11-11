@@ -57,6 +57,7 @@ private:
     CashierTableModel *mModel;
     PayCashDialog *mPayCashDialog;
     int mSaveSlot = -1;
+    int mPayFlag = 0;
     AdvancePaymentDialog *mAdvancePaymentDialog;
     PayCashlessDialog *mPayCashlessDialog;
     AddItemUnavailableDialog *mAddItemDialog;
@@ -84,7 +85,7 @@ private slots:
     void payAdvance();
     void openDrawer();
     void updateCurrentItem();
-    void payRequested(int type, double value);
+    void payRequested(int type, double value, int flag);
     void printBill(const QVariantMap &data);
     void openSearch();
     void openPreviousTransaction();

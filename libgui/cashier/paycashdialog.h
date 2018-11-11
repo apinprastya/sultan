@@ -42,12 +42,14 @@ private:
     Ui::PayCashDialog *ui;
     double mTotal = 0;
     std::function<bool(double)> mPayCallback;
+    void saveTransaction();
 
 private slots:
     void payClicked();
+    void saveClicked();
 
 signals:
-    void requestPay(int type, double payment);
+    void requestPay(int type, double payment, int flag);
 };
 
 }

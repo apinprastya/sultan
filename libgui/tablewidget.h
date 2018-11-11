@@ -22,6 +22,7 @@
 
 #include "gui_global.h"
 #include <QWidget>
+#include <QHeaderView>
 #include <QMap>
 
 class QHBoxLayout;

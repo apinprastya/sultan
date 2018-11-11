@@ -100,10 +100,11 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mModel, SIGNAL(totalChanged(double)), SLOT(totalChanged(double)));
     connect(mModel, SIGNAL(selectRow(QModelIndex)), SLOT(selectRow(QModelIndex)));
     connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableKeyPressed(QObject*,QKeyEvent*)));
-    connect(mPayCashDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
-    connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double)), SLOT(payRequested(int,double)));
-    connect(mPayCashlessDialog, SIGNAL(requestPay(int,double)), SLOT(payRequested(int,double)));
+    connect(mPayCashDialog, SIGNAL(requestPay(int,double,int)), SLOT(payRequested(int,double,int)));
+    connect(mAdvancePaymentDialog, SIGNAL(payRequested(int,double,int)), SLOT(payRequested(int,double,int)));
+    connect(mPayCashlessDialog, SIGNAL(requestPay(int,double,int)), SLOT(payRequested(int,double,int)));
     connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(updateCurrentItem()));
+    connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payCash()));
     new QShortcut(QKeySequence(Qt::Key_F1), this, SLOT(openHelp()));
     new QShortcut(QKeySequence(Qt::Key_F2), this, SLOT(openSearch()));
     new QShortcut(QKeySequence(Qt::Key_F3), this, SLOT(scanCustomer()));
@@ -158,6 +159,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
     if(!msg->isSuccess()) {
         if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
             ui->lineBarcode->selectAll();
+            qDebug() << msg->data();
             if(Preference::getBool(SETTING::CAI_ENABLE)) {
                 if(!mLastBarcode.isEmpty())
                     mAddItemDialog->openBarcode(mLastBarcode);
@@ -192,7 +194,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         mAdvancePaymentDialog->hide();
         mPayCashlessDialog->hide();
         if(Preference::getBool(SETTING::PRINTER_CASHIER_KICK)) openDrawer();
-        printBill(data);
+        if(mPayFlag == 0) printBill(data);
         PaymentCashSuccessDialog dialog(data, this);
         dialog.exec();
         mModel->reset();
@@ -422,9 +424,10 @@ void CashierWidget::updateCurrentItem()
     updateItem(item);
 }
 
-void CashierWidget::payRequested(int type, double value)
+void CashierWidget::payRequested(int type, double value, int flag)
 {
     QVariantMap data;
+    mPayFlag = flag;
     double tax = getTax();
     data.insert("number", Util::genSoldNumber());
     data.insert("cart", mModel->getCart());
@@ -473,7 +476,7 @@ void CashierWidget::printBill(const QVariantMap &data)
     escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->doubleHeight(false)->cpi12();
     if(subtitle.contains("\n")) {
-        const QStringList &l = subtitle.split("\n");
+        const QStringList &l = subtitle.trimmed().split("\n");
         for(int i = 0; i < l.size(); i++) escp->centerText(l[i])->newLine();
     } else {
         escp->centerText(subtitle);

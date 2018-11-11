@@ -193,7 +193,7 @@ LibG::Message ItemAction::prices(LibG::Message *msg)
         mDb->table("sellprices")->where("barcode = ", barcode);
         res = mDb->exec();
         if(res.isEmpty()) {
-            message.setError(QObject::tr("Item has no price"));
+            message.setError(QObject::tr("Item has no price"), false);
         } else {
             message.addData("prices", res.data());
         }

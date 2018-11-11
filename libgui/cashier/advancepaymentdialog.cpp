@@ -81,5 +81,5 @@ void AdvancePaymentDialog::payClicked()
         return;
     }
     ui->pushPay->setEnabled(false);
-    emit payRequested(PAYMENT::CASH, val);
+    emit payRequested(PAYMENT::CASH, val, 0);
 }
