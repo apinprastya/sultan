@@ -206,7 +206,7 @@ void TableModel::filterChanged(int index, const QVariant &value)
         if(value.canConvert(QVariant::Map)) {
             const QVariantMap &map = value.toMap();
             if(!mDateTimeISO) {
-                mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"].toDateTime().toString("dd-MM-yyyy hh:mm:ss"));
+                mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"].toDateTime().toString("yyyy-MM-dd hh:mm:ss"));
                 mQuery.setFilter("1$" + key, COMPARE::LESS_EQUAL, map["end"].toDateTime().toString("yyyy-MM-dd hh:mm:ss"));
             } else {
                 mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"]);
