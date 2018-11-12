@@ -103,7 +103,7 @@ QVariant CashierTableModel::data(const QModelIndex &index, int role) const
 
 bool CashierTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == Qt::EditRole) {
+    if(role == Qt::EditRole && mEnableInlineEdit) {
         emit requestEdit(index, value);
     }
     return false;
@@ -112,7 +112,7 @@ bool CashierTableModel::setData(const QModelIndex &index, const QVariant &value,
 Qt::ItemFlags CashierTableModel::flags(const QModelIndex &index) const
 {
     //TODO: remove hardcoded here
-    if(index.column() == 3) return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    if(index.column() == 3 && mEnableInlineEdit) return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
     return QAbstractTableModel::flags(index);
 }
 

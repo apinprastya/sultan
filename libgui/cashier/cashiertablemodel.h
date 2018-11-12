@@ -56,6 +56,7 @@ public:
     CashierItem *getItemWithFlag(const QString &barcode, int flag);
     void removeReturn(CashierItem *item);
     inline QVariantList &getPrices(const QString &barcode) { return mPrices[barcode]; }
+    void setEnableInlineEdit(bool val) { mEnableInlineEdit = val; }
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -65,6 +66,7 @@ private:
     QStringList mHeaders;
     QMap<QString, QVariantList> mPrices;
     double mTotal = 0;
+    bool mEnableInlineEdit = false;
     Customer mCurrentCustomer;
     QMap<double, int> mRewardPoins;
     int mPoin = 0;

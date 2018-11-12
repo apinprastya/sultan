@@ -195,6 +195,11 @@ border: 1px solid #ababab;</string>
    </item>
    <item>
     <widget class="QTableView" name="tableView">
+     <property name="styleSheet">
+      <string notr="true">QTableView::item {
+  padding: 5px;
+}</string>
+     </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>
      </property>

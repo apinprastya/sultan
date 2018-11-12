@@ -135,6 +135,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
         connect(ui->tableView, SIGNAL(clicked(QModelIndex)), SLOT(tableClicked(QModelIndex)));
         auto delegate = new DoubleSpinBoxDelegate(ui->tableView);
         ui->tableView->setItemDelegateForColumn(3, delegate);
+        mModel->setEnableInlineEdit(true);
     }
 }
 
@@ -195,6 +196,7 @@ void CashierWidget::messageReceived(LibG::Message *msg)
         }
         ui->labelPrice->setText(Preference::formatMoney(price));
         mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt(), QString());
+        ui->tableView->resizeRowsToContents();
     } else if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
         mPayCashDialog->hide();
