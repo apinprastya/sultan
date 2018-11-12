@@ -132,7 +132,6 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mAddItemDialog, SIGNAL(addNewItem(QVariantMap)), SLOT(addNewItem(QVariantMap)));
     auto inlineEdit = Preference::getBool(SETTING::INLINE_EDIT_QTY);
     if(inlineEdit) {
-        qDebug() << "MASUK PAK EKO";
         connect(ui->tableView, SIGNAL(clicked(QModelIndex)), SLOT(tableClicked(QModelIndex)));
         auto delegate = new DoubleSpinBoxDelegate(ui->tableView);
         ui->tableView->setItemDelegateForColumn(3, delegate);
@@ -168,7 +167,6 @@ void CashierWidget::messageReceived(LibG::Message *msg)
     if(!msg->isSuccess()) {
         if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
             ui->lineBarcode->selectAll();
-            qDebug() << msg->data();
             if(Preference::getBool(SETTING::CAI_ENABLE)) {
                 if(!mLastBarcode.isEmpty())
                     mAddItemDialog->openBarcode(mLastBarcode);
@@ -496,6 +494,8 @@ void CashierWidget::printBill(const QVariantMap &data)
     const QVariantList &l = data["cart"].toList();
     for(auto v : l) {
         QVariantMap m = v.toMap();
+        int flag = m["flag"].toInt();
+        if((flag & ITEM_FLAG::ITEM_LINK) != 0) continue;
         QString name;
         float count = m["count"].toFloat();
         double discount =m["discount"].toDouble();
