@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>236</width>
+    <width>315</width>
     <height>45</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <widget class="QDateEdit" name="dateStart">
+    <widget class="QDateTimeEdit" name="dateStart">
      <property name="calendarPopup">
       <bool>true</bool>
      </property>
@@ -35,7 +35,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QDateEdit" name="dateEnd">
+    <widget class="QDateTimeEdit" name="dateEnd">
      <property name="calendarPopup">
       <bool>true</bool>
      </property>

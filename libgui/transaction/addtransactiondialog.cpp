@@ -43,7 +43,7 @@ AddTransactionDialog::AddTransactionDialog(LibG::MessageBus *bus, QWidget *paren
     ui->comboType->addItem(tr("Expense"), TRANSACTION_TYPE::EXPENSE);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     ui->doubleTotal->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
-    ui->dateEdit->setDate(QDate::currentDate());
+    ui->dateEdit->setDateTime(QDateTime::currentDateTime());
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
     sendMessage(&msg);
 }
@@ -68,7 +68,7 @@ void AddTransactionDialog::fill(const QVariantMap &data)
     ui->lineNumber->setText(data["number"].toString());
     ui->doubleTotal->setValue(type == TRANSACTION_TYPE::EXPENSE ? -total : total);
     ui->plainDetail->setPlainText(data["detail"].toString());
-    ui->dateEdit->setDate(LibDB::DBUtil::sqlDateToDate(data["date"].toString()));
+    ui->dateEdit->setDateTime(LibDB::DBUtil::sqlDateToDateTime(data["date"].toString()));
     mBankId = data["bank_id"].toInt();
 }
 
@@ -114,7 +114,7 @@ void AddTransactionDialog::saveClicked()
                      {"transaction_total", total}, {"money_total", total},
                      {"link_type", TRANSACTION_LINK_TYPE::TRANSACTION},
                      {"number", ui->lineNumber->text()},
-                     {"date", ui->dateEdit->date()},
+                     {"date", ui->dateEdit->dateTime()},
                      {"machine_id", Preference::getInt(SETTING::MACHINE_ID)},
                      {"user_id", UserSession::id()},
                      {"bank_id", ui->comboBank->currentData()}};

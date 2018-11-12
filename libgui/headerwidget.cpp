@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
-#include <QDateEdit>
+#include <QDateTimeEdit>
 
 using namespace LibGUI;
 
@@ -54,12 +54,12 @@ HeaderWidget::HeaderWidget(int index, int type, const QString &title, QWidget *p
         lay->addWidget(mDateEdit);
         connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateChanged()));
     } else if(type == DateStartEnd) {
-        mDateEdit = new QDateEdit(this);
+        mDateEdit = new QDateTimeEdit(this);
         mDateEdit->setCalendarPopup(true);
         mDateEdit->setStyleSheet(STYLE);
         lay->addWidget(mDateEdit);
         connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateStartEndChanged()));
-        mDateEnd = new QDateEdit(this);
+        mDateEnd = new QDateTimeEdit(this);
         mDateEnd->setCalendarPopup(true);
         mDateEnd->setStyleSheet(STYLE);
         lay->addWidget(mDateEnd);
@@ -86,7 +86,7 @@ void HeaderWidget::dateChanged()
 void HeaderWidget::dateStartEndChanged()
 {
     QVariantMap map;
-    map.insert("start", mDateEdit->date());
-    map.insert("end", mDateEnd->date());
+    map.insert("start", mDateEdit->dateTime());
+    map.insert("end", mDateEnd->dateTime());
     emit filterValueChanged(mIndex, map);
 }

@@ -67,6 +67,7 @@ public:
     void appendItem(TableItem* item);
     void removeItem(TableItem *item);
     inline RowData* getRowData() { return &mData; }
+    inline void setDateTimeISO(bool value) { mDateTimeISO = value; }
 
 public slots:
     void refresh();
@@ -78,6 +79,7 @@ protected:
 
 protected:
     int mNumRow;
+    bool mDateTimeISO = false;
     RowData mData;
     QList<QString> mHeaders;
     QList<QString> mColumns;

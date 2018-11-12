@@ -102,13 +102,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDateEdit" name="dateEdit">
-       <property name="calendarPopup">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
@@ -118,6 +111,9 @@
      </item>
      <item row="3" column="1">
       <widget class="QComboBox" name="comboBank"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QDateTimeEdit" name="dateEdit"/>
      </item>
     </layout>
    </item>
@@ -174,8 +170,8 @@
   <tabstop>comboBank</tabstop>
   <tabstop>doubleTotal</tabstop>
   <tabstop>plainDetail</tabstop>
-  <tabstop>pushSave</tabstop>
   <tabstop>pushCancel</tabstop>
+  <tabstop>pushSave</tabstop>
  </tabstops>
  <resources/>
  <connections>

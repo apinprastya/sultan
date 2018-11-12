@@ -27,7 +27,7 @@
 #include "global_constant.h"
 #include "db_constant.h"
 #include "guiutil.h"
-#include <QDate>
+#include <QDateTime>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -62,10 +62,12 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 100 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    mDateWidget->dateEnd->setDate(QDate::currentDate());
-    mDateWidget->dateStart->setDate(QDate::currentDate().addDays(-7));
-    connect(mDateWidget->dateStart, SIGNAL(dateChanged(QDate)), SLOT(refreshTable()));
-    connect(mDateWidget->dateEnd, SIGNAL(dateChanged(QDate)), SLOT(refreshTable()));
+    auto now = QDateTime::currentDateTime();
+    now.setTime(QTime(23, 59, 59));
+    mDateWidget->dateEnd->setDateTime(now);
+    mDateWidget->dateStart->setDateTime(now.addDays(-7));
+    connect(mDateWidget->dateStart, SIGNAL(dateTimeChanged(QDateTime)), SLOT(refreshTable()));
+    connect(mDateWidget->dateEnd, SIGNAL(dateTimeChanged(QDateTime)), SLOT(refreshTable()));
     refreshTable();
 }
 
@@ -82,7 +84,7 @@ void ReportItemWidget::messageReceived(LibG::Message */*msg*/)
 void ReportItemWidget::refreshTable()
 {
     auto model = mTableWidget->getModel();
-    model->setFilter("0$DATE(solditems.created_at)", COMPARE::GREATER_EQUAL, mDateWidget->dateStart->date());
-    model->setFilter("1$DATE(solditems.created_at)", COMPARE::LESS_EQUAL, mDateWidget->dateEnd->date());
+    model->setFilter("0$solditems.created_at", COMPARE::GREATER_EQUAL, mDateWidget->dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    model->setFilter("1$solditems.created_at", COMPARE::LESS_EQUAL, mDateWidget->dateEnd->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     model->refresh();
 }

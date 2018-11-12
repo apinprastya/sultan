@@ -24,6 +24,7 @@
 #include "message.h"
 #include "preference.h"
 #include "db_constant.h"
+#include <QDateTime>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -204,8 +205,13 @@ void TableModel::filterChanged(int index, const QVariant &value)
     } else if(filter.compare == FilterBetweenDate) {
         if(value.canConvert(QVariant::Map)) {
             const QVariantMap &map = value.toMap();
-            mQuery.setFilter("0$DATE(" + key + ")", COMPARE::GREATER_EQUAL, map["start"]);
-            mQuery.setFilter("1$DATE(" + key + ")", COMPARE::LESS_EQUAL, map["end"]);
+            if(!mDateTimeISO) {
+                mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"].toDateTime().toString("dd-MM-yyyy hh:mm:ss"));
+                mQuery.setFilter("1$" + key, COMPARE::LESS_EQUAL, map["end"].toDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+            } else {
+                mQuery.setFilter("0$" + key, COMPARE::GREATER_EQUAL, map["start"]);
+                mQuery.setFilter("1$" + key, COMPARE::LESS_EQUAL, map["end"]);
+            }
         }
     } else if(filter.compare == FilterCategory) {
         if((value.canConvert(QVariant::String) && value.toString().isEmpty()) ||

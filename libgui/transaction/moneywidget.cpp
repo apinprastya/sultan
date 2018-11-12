@@ -58,6 +58,7 @@ MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
 
     mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh);
     auto model = mTableWidget->getModel();
+    model->setDateTimeISO(true);
     model->setMessageBus(bus);
     model->addColumn("date", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
         return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy hh:mm");

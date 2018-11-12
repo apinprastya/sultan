@@ -26,7 +26,7 @@
 
 class QLineEdit;
 class QComboBox;
-class QDateEdit;
+class QDateTimeEdit;
 
 namespace LibGUI {
 
@@ -42,8 +42,8 @@ public:
     HeaderWidget(int index, int type, const QString &title, QWidget *parent = nullptr);
     inline QLineEdit *getLineEdit() { return mLineEdit; }
     inline QComboBox *getComboBox() { return mComboBox; }
-    inline QDateEdit *getDateEdit() { return mDateEdit; }
-    inline QDateEdit *getDateEnd() { return mDateEnd; }
+    inline QDateTimeEdit *getDateEdit() { return mDateEdit; }
+    inline QDateTimeEdit *getDateEnd() { return mDateEnd; }
 
 signals:
     void filterValueChanged(int index, QVariant value);
@@ -52,8 +52,8 @@ private:
     int mIndex;
     QLineEdit *mLineEdit = nullptr;
     QComboBox *mComboBox = nullptr;
-    QDateEdit *mDateEdit = nullptr;
-    QDateEdit *mDateEnd = nullptr;
+    QDateTimeEdit *mDateEdit = nullptr;
+    QDateTimeEdit *mDateEnd = nullptr;
 
 private slots:
     void lineEditDone();
