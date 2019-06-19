@@ -60,12 +60,13 @@ Db::~Db()
     }
 }
 
-Db *Db::createInstance(bool checkDBName, bool newConnection)
+Db *Db::createInstance(bool checkDBName, bool newConnection, QString *err)
 {
     Db* db = new Db();
     if(db->init(DBSETTING.host, DBSETTING.port, DBSETTING.username, DBSETTING.password, DBSETTING.dbName, checkDBName, newConnection))
         return db;
     qCritical() << TAG << "Error openning database connection :" << db->lastError().text();
+    if(err != nullptr) *err = db->lastError().text();
     delete db;
     return nullptr;
 }
@@ -82,9 +83,10 @@ bool Db::setDbSetting(const QString &host, int port, const QString &username, co
 
 bool Db::checkConnection(QString &error)
 {
-    auto db = createInstance(true);
+    QString err;
+    auto db = createInstance(true, false, &err);
     if(db == nullptr) {
-        error = db->lastError().text();
+        error = err;
         return false;
     }
     delete db;

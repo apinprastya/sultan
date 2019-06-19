@@ -56,7 +56,7 @@ private:
     Db();
 public:
     ~Db();
-    static Db *createInstance(bool checkDBName = false, bool newConnection = false);
+    static Db *createInstance(bool checkDBName = false, bool newConnection = false, QString *err = nullptr);
     static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
     static bool checkConnection(QString &error);
     static void setDatabaseType(const QString &db);

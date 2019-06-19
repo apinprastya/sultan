@@ -231,4 +231,5 @@ bool Usb::sendData(uint16_t vendorId, uint16_t produkId, const QByteArray &data)
         return false;
     }
 #endif
+    return true;
 }
