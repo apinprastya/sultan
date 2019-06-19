@@ -23,6 +23,7 @@
 #include "util.h"
 #include "message.h"
 #include "global_constant.h"
+#include "global_setting_const.h"
 #include <cmath>
 #include <QLocale>
 #include <QDebug>
@@ -301,7 +302,25 @@ QList<int> CashierTableModel::rowOfBarcode(const QString &barcode)
 QList<CashierItem *> CashierTableModel::calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit, int itemFlag, const QString &note)
 {
     QList<CashierItem*> retVal;
+    bool useMinimum = Preference::getBool(SETTING::MULTIPLE_MINIMUM, false);
     const QVariantList &prices = mPrices[barcode];
+    if(useMinimum) {
+        for(int i = prices.count() - 1; i >= 0; i--) {
+            const QVariantMap &p = prices[i].toMap();
+            const float &c = p["count"].toFloat();
+            if(i == 0 || c <= count) {
+                const double &price = p["price"].toDouble();
+                const QString &discformula = p["discount_formula"].toString();
+                double disc = Util::calculateDiscount(discformula, price);
+                CashierItem *item = new CashierItem(name, barcode, count, price, price * count, discformula, disc, (price - disc) * count, unit);
+                item->itemFlag = itemFlag;
+                item->note = note;
+                retVal << item;
+                break;
+            }
+        }
+        return retVal;
+    }
     if(prices.size() == 1) {
         const double &price = prices[0].toMap()["price"].toDouble();
         const QString &discformula = prices[0].toMap()["discount_formula"].toString();
