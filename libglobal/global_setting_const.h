@@ -39,6 +39,7 @@ namespace SETTING {
     const QString SERVER_PORT                   = QStringLiteral("global/server_port");
     const QString SQLITE_DBPATH                 = QStringLiteral("global/sqlite_db_path");
     const QString SQLITE_DBNAME                 = QStringLiteral("global/sqlite_db_name");
+    const QString RESETDB                       = QStringLiteral("global/dontchangeme");
 
     const QString MARKET_NAME                   = QStringLiteral("application/market_name");
     const QString MARKET_SUBNAME                = QStringLiteral("application/market_subname");

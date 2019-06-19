@@ -488,6 +488,8 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
         } else {
             dir.setPath(dirpath);
         }
+        bool reset = Preference::getBool(SETTING::RESETDB, false);
+        if(reset) QFile::remove(dir.absoluteFilePath(dbname));
         database.setDatabaseName(dir.absoluteFilePath(dbname));
         qDebug() << TAG << "SQLite database path :" << dir.absoluteFilePath(dbname);
         ret = database.open();

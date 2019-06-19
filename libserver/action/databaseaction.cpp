@@ -88,12 +88,12 @@ Message DatabaseAction::resetDatabase(Message *msg)
                 if(!dbname.endsWith(".db")) dbname += ".db";
                 if(dirpath.isEmpty()) {
 #ifdef Q_OS_WIN32
-                    dir.cd("sultan");
+                    dir.cd(".sultan");
 #else
                     dir.cd(".sultan");
 #endif
                 }
-                QFile::remove(dir.absoluteFilePath(dbname));
+                Preference::setValue(SETTING::RESETDB, true);
             } else {
                 mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
             }
