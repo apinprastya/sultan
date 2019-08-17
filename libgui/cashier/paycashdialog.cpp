@@ -22,6 +22,7 @@
 #include "preference.h"
 #include "global_setting_const.h"
 #include "global_constant.h"
+#include "util.h"
 #include <QLocale>
 #include <QMessageBox>
 #include <QDebug>
@@ -56,7 +57,7 @@ void PayCashDialog::fill(double total)
 void PayCashDialog::saveTransaction()
 {
     double payment = ui->lineEdit->value();
-    if(payment < mTotal) {
+    if(Util::roundDouble(payment) < Util::roundDouble(mTotal)) {
         QMessageBox::critical(this, tr("Error Payment"), tr("Payment must bigger or equal to total"));
         return;
     }

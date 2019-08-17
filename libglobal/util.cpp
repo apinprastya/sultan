@@ -152,3 +152,9 @@ QString Util::elide(const QString &str, int length)
     int l = (length / 2) - 1;
     return QString("%1..%2").arg(str.left(isOdd ? l + 1 : l)).arg(str.right(l));
 }
+
+double Util::roundDouble(double val)
+{
+    qint64 v = (qint64)(val * 1000);
+    return ((double)v) / 1000;
+}

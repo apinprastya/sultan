@@ -114,3 +114,8 @@ QString Preference::formatMoney(float val)
 {
     return QLocale().toString(val, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL));
 }
+
+QString Preference::formatFloat(float val)
+{
+    return QLocale().toString(val, 'f', 2);
+}
