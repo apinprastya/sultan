@@ -205,7 +205,20 @@ Message ItemAction::exportData(Message *msg)
 {
     LibG::Message message(msg);
     QString arr;
-    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;\n");
+    arr.append("VERSION ").append(msg->data("version").toString()).append("\n");
+    /*DbResult cats = mDb->table("categories")->where("deleted_at IS NULL")->exec();
+    arr.append("###CATEGORY\n");
+    arr.append("id;name;code;parent_id;hierarchy;\n");
+    for(int i = 0; i < cats.size(); i++) {
+        const QVariantMap &d = cats.data(i);
+        arr.append(d["id"].toString() % ";");
+        arr.append(d["name"].toString() % ";");
+        arr.append(d["code"].toString() % ";");
+        arr.append(QString::number(d["parent_id"].toInt()) % ";");
+        arr.append(d["hierarchy"].toString() % "\n");
+    }*/
+    arr.append("###ITEM\n");
+    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit;\n");
     mDb->table(mTableName);
     mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
                 (select count from sellprices where barcode = items.barcode limit 1) as count1, \
@@ -247,7 +260,10 @@ Message ItemAction::exportData(Message *msg)
             arr.append((flag & ITEM_FLAG::PURCHASE) == 0 ? "0;" : "1;");
             arr.append((flag & ITEM_FLAG::PACKAGE) == 0 ? "0;" : "1;");
             arr.append((flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;\n" : "1;\n");
+            arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;" : "1;");
+            arr.append(d["unit"].toString());
+            arr.append("\n");
+            qDebug() << d;
         }
         start += limit;
     }
@@ -271,21 +287,38 @@ Message ItemAction::importData(Message *msg)
     LibG::Message message(msg);
     const QString &d = msg->data("data").toString();
     const QVector<QStringRef> &vec = d.splitRef("\n", QString::SkipEmptyParts);
-    int state = 0; //0: item, 1: link
+    int state = 0; //0: category, 1: item, 2: link
     bool headerOk = false;
+    int version = 0;
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     for(int i = 0; i < vec.size(); i++) {
-        if(!vec[i].compare(QStringLiteral("###LINK"))) {
+        if(i == 0) {
+            if(vec[i].startsWith("VERSION")) {
+                const QVector<QStringRef> sp = vec[i].split(" ");
+                if(sp.size() > 1) version = sp[1].toString().replace(".", "").toInt();
+                continue;
+            }
+        }
+        if(vec[i].startsWith(QStringLiteral("###CATEGORY"))) {
+            state = 0;
+            headerOk = false;
+            i++;
+            continue;
+        } else if(vec[i].startsWith(QStringLiteral("###ITEM"))) {
             headerOk = false;
             state = 1;
+            i++;
             continue;
-        }
-        if(!headerOk) {
-            headerOk = true;
+        } else if(vec[i].startsWith(QStringLiteral("###LINK"))) {
+            headerOk = false;
+            state = 2;
+            i++;
             continue;
         }
         const QVector<QStringRef> &row = vec[i].split(";");
         if(state == 0) {
+
+        } else if(state == 1) {
             int cat = 0;
             int sup = 0;
             int flag = 0;
@@ -313,7 +346,7 @@ Message ItemAction::importData(Message *msg)
             }
             const QVariantMap ins{{"suplier_id", sup}, {"category_id", cat}, {"barcode", row[0].toString()},
                                   {"name", row[1].toString()}, {"stock", row[4].toFloat()},
-                                  {"buy_price", row[5].toDouble()}, {"flag", flag}};
+                                  {"buy_price", row[5].toDouble()}, {"flag", flag}, {"unit", row[21].toString()}};
             if(mDb->insert(mTableName, ins)) {
                 for(int i = 0; i < 3; i++) {
                     if(row.size() <= (8 + (3 * i))) continue;
@@ -332,7 +365,7 @@ Message ItemAction::importData(Message *msg)
                     mDb->insert("sellprices", sellprice);
                 }
             }
-        } else if(state == 1) {
+        } else if(state == 2) {
             const QString &barcode = row[0].toString();
             const QString &barcode_link = row[2].toString();
             const QString &count_link = row[3].toString();

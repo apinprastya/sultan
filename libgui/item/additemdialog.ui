@@ -227,7 +227,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="price">
         <attribute name="title">
@@ -285,8 +285,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>442</width>
-              <height>327</height>
+              <width>440</width>
+              <height>336</height>
              </rect>
             </property>
             <attribute name="label">
@@ -405,8 +405,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>131</width>
-              <height>69</height>
+              <width>104</width>
+              <height>61</height>
              </rect>
             </property>
             <attribute name="label">

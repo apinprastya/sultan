@@ -206,6 +206,7 @@ void ItemWidget::importClicked()
 void ItemWidget::exportClicked()
 {
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT);
+    msg.addData("version", qApp->applicationVersion());
     sendMessage(&msg);
 }
 
