@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 #endif
     a.setApplicationName("sultan");
     a.setOrganizationName("lekapin");
-    a.setApplicationVersion("18.04.01");
+    a.setApplicationVersion("19.08.01");
 
 #ifndef QT_DEBUG
     QDir dir = QDir::home();

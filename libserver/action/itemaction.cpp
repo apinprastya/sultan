@@ -36,7 +36,7 @@ using namespace LibDB;
 ItemAction::ItemAction():
     ServerAction("items", "barcode")
 {
-    mFlag = USE_TRANSACTION | SOFT_DELETE;
+    mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::CASHIER_PRICE, std::bind(&ItemAction::prices, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));
@@ -162,8 +162,14 @@ Message ItemAction::del(Message *msg)
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
     mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}, {"stock", 0}})) {
-        message.setError(mDb->lastError().text());
+    if(hasFlag(SOFT_DELETE)) {
+        if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}, {"stock", 0}})) {
+            message.setError(mDb->lastError().text());
+        }
+    } else {
+        if(!mDb->del(mTableName)) {
+            message.setError(mDb->lastError().text());
+        }
     }
     mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
     mDb->where("barcode = ", msg->data("barcode"))->del("itemlinks");
