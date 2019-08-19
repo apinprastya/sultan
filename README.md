@@ -36,3 +36,6 @@ Please consider to give a star when clone this repository
 
 ## License
 GPL. See [LICENSE](https://github.com/apinprastya/sultan/blob/master/LICENSE)
+
+## Contribution
+Any contribution are welcome
