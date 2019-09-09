@@ -212,7 +212,7 @@ Message ItemAction::exportData(Message *msg)
     LibG::Message message(msg);
     QString arr;
     arr.append("VERSION ").append(msg->data("version").toString()).append("\n");
-    /*DbResult cats = mDb->table("categories")->where("deleted_at IS NULL")->exec();
+    DbResult cats = mDb->table("categories")->where("deleted_at IS NULL")->exec();
     arr.append("###CATEGORY\n");
     arr.append("id;name;code;parent_id;hierarchy;\n");
     for(int i = 0; i < cats.size(); i++) {
@@ -222,7 +222,19 @@ Message ItemAction::exportData(Message *msg)
         arr.append(d["code"].toString() % ";");
         arr.append(QString::number(d["parent_id"].toInt()) % ";");
         arr.append(d["hierarchy"].toString() % "\n");
-    }*/
+    }
+    DbResult sups = mDb->table("supliers")->where("deleted_at IS NULL")->exec();
+    arr.append("###SUPPLIER\n");
+    arr.append("id;name;code;address;phone;email;\n");
+    for(int i = 0; i < sups.size(); i++) {
+        const QVariantMap &d = sups.data(i);
+        arr.append(d["id"].toString() % ";");
+        arr.append(d["name"].toString() % ";");
+        arr.append(d["code"].toString() % ";");
+        arr.append(d["address"].toString() % ";");
+        arr.append(d["phone"].toString() % ";");
+        arr.append(d["email"].toString() % ";\n");
+    }
     arr.append("###ITEM\n");
     arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit;\n");
     mDb->table(mTableName);
@@ -294,7 +306,6 @@ Message ItemAction::importData(Message *msg)
     const QString &d = msg->data("data").toString();
     const QVector<QStringRef> &vec = d.splitRef("\n", QString::SkipEmptyParts);
     int state = 0; //0: category, 1: item, 2: link
-    bool headerOk = false;
     int version = 0;
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     for(int i = 0; i < vec.size(); i++) {
@@ -302,28 +313,40 @@ Message ItemAction::importData(Message *msg)
             if(vec[i].startsWith("VERSION")) {
                 const QVector<QStringRef> sp = vec[i].split(" ");
                 if(sp.size() > 1) version = sp[1].toString().replace(".", "").toInt();
+                mDb->truncateTable("categories");
+                mDb->truncateTable("supliers");
+                mDb->truncateTable("items");
+                mDb->truncateTable("sellprices");
+                mDb->truncateTable("itemlinks");
                 continue;
+            } else {
+                state = 1;
             }
         }
         if(vec[i].startsWith(QStringLiteral("###CATEGORY"))) {
             state = 0;
-            headerOk = false;
             i++;
             continue;
         } else if(vec[i].startsWith(QStringLiteral("###ITEM"))) {
-            headerOk = false;
             state = 1;
             i++;
             continue;
         } else if(vec[i].startsWith(QStringLiteral("###LINK"))) {
-            headerOk = false;
             state = 2;
+            i++;
+            continue;
+        } else if(vec[i].startsWith(QStringLiteral("###SUPPLIER"))) {
+            state = 3;
             i++;
             continue;
         }
         const QVector<QStringRef> &row = vec[i].split(";");
         if(state == 0) {
-
+            const QString &name = row[1].toString();
+            const QString &code = row[2].toString();
+            const QString &hierarcy = row[4].toString();
+            const int parentId = row[3].toInt();
+            mDb->insert("categories", QVariantMap{{"name", name}, {"code", code}, {"hierarchy", hierarcy}, {"parent_id", parentId}});
         } else if(state == 1) {
             int cat = 0;
             int sup = 0;
@@ -380,6 +403,14 @@ Message ItemAction::importData(Message *msg)
             if(res.isEmpty()) {
                 mDb->insert("itemlinks", QVariantMap{{"barcode", barcode}, {"barcode_link", barcode_link}, {"type", type}, {"count_link", count_link}});
             }
+        } else if(state == 3) {
+            const QString &name = row[1].toString();
+            const QString &code = row[2].toString();
+            const QString &address = row[3].toString();
+            const QString &phone = row[4].toString();
+            const QString &email = row[5].toString();
+            mDb->insert("supliers", QVariantMap{{"name", name}, {"code", code}, {"address", address},
+                                               {"phone", phone}, {"email", email}});
         }
     }
     if(mDb->isSupportTransaction()) {

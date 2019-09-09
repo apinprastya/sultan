@@ -92,6 +92,7 @@ public:
     inline bool isSupportTransaction() { return mSupportTransaction; }
     inline Db *clearSelect() { mSelect.clear(); return this; }
     bool isSQLite();
+    bool truncateTable(const QString &table);
 
 private:
     static QStringList mCreated;

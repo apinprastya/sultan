@@ -194,13 +194,16 @@ The stocks cards and item link will be removed. Are you sure to delete item?"));
 
 void ItemWidget::importClicked()
 {
-    const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.csv");
-    if(fileName.isEmpty()) return;
-    QFile file(fileName);
-    if(!file.open(QFile::ReadOnly)) return;
-    Message msg(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT);
-    msg.addData("data", QString::fromUtf8(file.readAll()));
-    sendMessage(&msg);
+    int res = QMessageBox::question(this, "Confirmation", "Your current item, category and category will be wipe out. Sure to continue import?");
+    if(res == QMessageBox::Yes) {
+        const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.csv");
+        if(fileName.isEmpty()) return;
+        QFile file(fileName);
+        if(!file.open(QFile::ReadOnly)) return;
+        Message msg(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT);
+        msg.addData("data", QString::fromUtf8(file.readAll()));
+        sendMessage(&msg);
+    }
 }
 
 void ItemWidget::exportClicked()

@@ -64,6 +64,7 @@ macx {
 TRANSLATIONS = ../translation/libgui_id.ts
 
 SOURCES += \
+    item/importitemdialog.cpp \
     mainwindow.cpp \
     tabwidget.cpp \
     setting/settingwidget.cpp \
@@ -165,8 +166,9 @@ SOURCES += \
     cashier/additemunavailabledialog.cpp \
     doublespinboxdelegate.cpp
 
-HEADERS += \ 
+HEADERS += \
     gui_global.h \
+    item/importitemdialog.h \
     mainwindow.h \
     tabwidget.h \
     setting/settingwidget.h \
@@ -270,6 +272,7 @@ HEADERS += \
     doublespinboxdelegate.h
 
 FORMS += \
+    item/importitemdialog.ui \
     mainwindow.ui \
     setting/settingwidget.ui \
     normalwidget.ui \
