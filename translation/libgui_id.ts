@@ -5225,6 +5225,8 @@ Silakan masukkan password untuk konfirmasi</translation>
     </message>
     <message>
         <location filename="../libgui/transaction/transactionwidget.cpp" line="144"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="185"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="199"/>
         <source>Error</source>
         <translation></translation>
     </message>
@@ -5239,12 +5241,22 @@ Silakan masukkan password untuk konfirmasi</translation>
         <translation>Semua</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="196"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="185"/>
+        <source>Can not edit transaction from cashier, use sale return instead</source>
+        <translation>Tidak dapat mengubah transaksi dari kasir, silakan gunakan return penjualan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="199"/>
+        <source>Can not remote transaction from cashier, use sale return instead</source>
+        <translation>Tidak dapat menghapus transaksi dari kasir, silakan gunakan return penjualan</translation>
+    </message>
+    <message>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="202"/>
         <source>Confirmation</source>
         <translation>Konfirmasi</translation>
     </message>
     <message>
-        <location filename="../libgui/transaction/transactionwidget.cpp" line="196"/>
+        <location filename="../libgui/transaction/transactionwidget.cpp" line="202"/>
         <source>Are you sure want to remove transaction?</source>
         <translation>Yakin menghapus transaksi?</translation>
     </message>

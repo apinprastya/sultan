@@ -181,7 +181,10 @@ void TransactionWidget::editClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) return;
+    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
+        QMessageBox::critical(this, tr("Error"), tr("Can not edit transaction from cashier, use sale return instead"));
+        return;
+    }
     AddTransactionDialog dialog(mMessageBus, this);
     dialog.fill(item->data());
     dialog.exec();
@@ -192,7 +195,10 @@ void TransactionWidget::deleteClicked(const QModelIndex &index)
 {
     if(!index.isValid()) return;
     auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) return;
+    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
+        QMessageBox::critical(this, tr("Error"), tr("Can not remote transaction from cashier, use sale return instead"));
+        return;
+    }
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove transaction?"));
     if(ret == QMessageBox::Yes) {
         Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL);
