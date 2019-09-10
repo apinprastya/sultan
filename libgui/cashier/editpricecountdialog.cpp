@@ -36,6 +36,7 @@ EditPriceCountDialog::EditPriceCountDialog(MessageBus *bus, QWidget *parent) :
     connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(updatePrice()));
     connect(ui->lineDiscount, SIGNAL(textChanged(QString)), SLOT(updatePrice()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    ui->doubleCount->setNative(true);
 }
 
 EditPriceCountDialog::~EditPriceCountDialog()

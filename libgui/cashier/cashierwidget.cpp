@@ -563,7 +563,7 @@ void CashierWidget::openSearch()
     dialog.exec();
     const QString &barcode = dialog.getSelectedBarcode();
     if(barcode.isEmpty()) return;
-    ui->lineBarcode->setText(barcode);
+    ui->lineBarcode->setText(QString("%1%2").arg(ui->lineBarcode->text()).arg(barcode));
     barcodeEntered();
 }
 

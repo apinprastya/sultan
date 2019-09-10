@@ -32,6 +32,11 @@ public:
     MoneyLineEdit(QWidget *parent = nullptr);
     ~MoneyLineEdit();
     double value();
+    void setValue(double value);
+    inline void setNative(bool value) { mIsNative = value; }
+
+private:
+    bool mIsNative = false;
 
 private slots:
     void textHasChanged(const QString &value);

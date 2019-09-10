@@ -47,12 +47,25 @@ double MoneyLineEdit::value()
     return locale.toDouble(val);
 }
 
+void MoneyLineEdit::setValue(double value)
+{
+    QLocale locale;
+    if(locale.decimalPoint() == QChar(','))
+        setText(QString::number(value).replace(".", ","));
+    else
+        setText(QString::number(value));
+}
+
 void MoneyLineEdit::textHasChanged(const QString &value)
 {
     blockSignals(true);
     QString str = value;
     QLocale locale;
-    if(!str.endsWith(",")) {
+    if(str.endsWith(".") && locale.decimalPoint() == QChar(',')) {
+        str = str.left(str.length() - 1).append(locale.decimalPoint());
+        setText(str);
+    }
+    if(!str.endsWith(",") && !mIsNative) {
         str = str.replace(locale.groupSeparator(), "");
         if(str.isEmpty()) setText(str);
         else setText(LibG::Preference::formatMoney(locale.toDouble(str)));
