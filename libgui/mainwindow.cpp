@@ -72,6 +72,8 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QProcess>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 
 using namespace LibGUI;
@@ -270,6 +272,8 @@ void MainWindow::setupConnection()
     connect(ui->action_Reset_Database, SIGNAL(triggered(bool)), SLOT(resetDatabase()));
     connect(ui->actionSold_Return, SIGNAL(triggered(bool)), SLOT(openSoldReturn()));
     //connect(ui->action_Stock_Card, SIGNAL(triggered(bool)), SLOT(openStockCard()));
+    ui->actionCheck_Update->setVisible(false);
+    connect(&mNam, SIGNAL(finished(QNetworkReply*)), SLOT(httpRequestDone(QNetworkReply*)));
 }
 
 void MainWindow::loginSuccess()
@@ -285,6 +289,8 @@ void MainWindow::loginSuccess()
     showMaximized();
 #endif
 #endif
+    QNetworkRequest req(QUrl("https://firestore.googleapis.com/v1beta1/projects/testpro-61e0d/databases/(default)/documents/version/version"));
+    mNam.get(req);
 }
 
 void MainWindow::logout()
@@ -639,4 +645,15 @@ void MainWindow::openSoldReturn()
         auto widget = new SoldItemReturnWidget(mMessageBus, this);
         ui->tabWidget->tbnAddTab(widget, tr("Sold Return"), ":/images/16x16/wooden-arrow.png");
     }
+}
+
+void MainWindow::httpRequestDone(QNetworkReply *reply)
+{
+    const QJsonObject &doc = QJsonDocument::fromJson(reply->readAll()).object();
+    const QJsonObject &fields = doc.value("fields").toObject();
+    const QString &version = fields.value("current").toObject().value("stringValue").toString().replace(".", "");
+    const QString &appVersion = qApp->applicationVersion().replace(".", "");
+    if(version.toInt() > appVersion.toInt())
+        QMessageBox::information(this, tr("New Version"), tr("New version is available. Please check on %1").
+                                 arg("<a href=https://sultan.lekapin.com/download>https://sultan.lekapin.com/download</a>"));
 }

@@ -24,6 +24,8 @@
 #include "abstractsultangui.h"
 #include "gui_global.h"
 #include <QMainWindow>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 namespace Ui {
 class MainWindow;
@@ -69,6 +71,7 @@ private:
     StatusBarWidget *mStatusBar;
     Splash *mSplashUi;
     LoginDialog *mLoginDialog;
+    QNetworkAccessManager mNam;
 
     void setupConnection();
 
@@ -109,6 +112,7 @@ private slots:
     void resetDatabase();
     void openStockCard();
     void openSoldReturn();
+    void httpRequestDone(QNetworkReply *reply);
 };
 
 }
