@@ -309,10 +309,12 @@ Message ItemAction::importData(Message *msg)
     int version = 0;
     if(mDb->isSupportTransaction()) mDb->beginTransaction();
     for(int i = 0; i < vec.size(); i++) {
+        QString str = vec[i].toString().replace("\"", "");
+        QStringRef sRef(&str);
         if(i == 0) {
-            if(vec[i].startsWith("VERSION")) {
-                const QVector<QStringRef> sp = vec[i].split(" ");
-                if(sp.size() > 1) version = sp[1].toString().replace(".", "").toInt();
+            if(sRef.startsWith("VERSION")) {
+                const QVector<QStringRef> sp = sRef.split(" ");
+                if(sp.size() > 1) version = sp[1].toString().replace(".", "").replace(";", "").toInt();
                 mDb->truncateTable("categories");
                 mDb->truncateTable("supliers");
                 mDb->truncateTable("items");
@@ -323,24 +325,24 @@ Message ItemAction::importData(Message *msg)
                 state = 1;
             }
         }
-        if(vec[i].startsWith(QStringLiteral("###CATEGORY"))) {
+        if(sRef.startsWith(QStringLiteral("###CATEGORY"))) {
             state = 0;
             i++;
             continue;
-        } else if(vec[i].startsWith(QStringLiteral("###ITEM"))) {
+        } else if(sRef.startsWith(QStringLiteral("###ITEM"))) {
             state = 1;
             i++;
             continue;
-        } else if(vec[i].startsWith(QStringLiteral("###LINK"))) {
+        } else if(sRef.startsWith(QStringLiteral("###LINK"))) {
             state = 2;
             i++;
             continue;
-        } else if(vec[i].startsWith(QStringLiteral("###SUPPLIER"))) {
+        } else if(sRef.startsWith(QStringLiteral("###SUPPLIER"))) {
             state = 3;
             i++;
             continue;
         }
-        const QVector<QStringRef> &row = vec[i].split(";");
+        const QVector<QStringRef> &row = sRef.split(";");
         if(state == 0) {
             const QString &name = row[1].toString();
             const QString &code = row[2].toString();
