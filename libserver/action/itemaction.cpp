@@ -218,10 +218,10 @@ Message ItemAction::exportData(Message *msg)
     for(int i = 0; i < cats.size(); i++) {
         const QVariantMap &d = cats.data(i);
         arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString() % ";");
-        arr.append(d["code"].toString() % ";");
+        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
+        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
         arr.append(QString::number(d["parent_id"].toInt()) % ";");
-        arr.append(d["hierarchy"].toString() % "\n");
+        arr.append(d["hierarchy"].toString().trimmed() % "\n");
     }
     DbResult sups = mDb->table("supliers")->where("deleted_at IS NULL")->exec();
     arr.append("###SUPPLIER\n");
@@ -229,11 +229,11 @@ Message ItemAction::exportData(Message *msg)
     for(int i = 0; i < sups.size(); i++) {
         const QVariantMap &d = sups.data(i);
         arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString() % ";");
-        arr.append(d["code"].toString() % ";");
-        arr.append(d["address"].toString() % ";");
-        arr.append(d["phone"].toString() % ";");
-        arr.append(d["email"].toString() % ";\n");
+        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
+        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
+        arr.append(d["address"].toString().trimmed().replace("\n", "") % ";");
+        arr.append(d["phone"].toString().trimmed().replace("\n", "") % ";");
+        arr.append(d["email"].toString().trimmed() % ";\n");
     }
     arr.append("###ITEM\n");
     arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit;\n");
@@ -258,10 +258,10 @@ Message ItemAction::exportData(Message *msg)
         for(int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
             int flag = d["flag"].toInt();
-            arr.append(d["barcode"].toString() % ";");
-            arr.append(d["name"].toString() % ";");
-            arr.append(d["category"].toString() % ";");
-            arr.append(d["suplier"].toString() % ";");
+            arr.append(d["barcode"].toString().trimmed().replace("\n", "") % ";");
+            arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
+            arr.append(d["category"].toString().trimmed().replace("\n", "") % ";");
+            arr.append(d["suplier"].toString().trimmed().replace("\n", "") % ";");
             arr.append(d["stock"].toString() % ";");
             arr.append(d["buy_price"].toString() % ";");
             arr.append(d["count1"].toString() % ";");
@@ -279,7 +279,7 @@ Message ItemAction::exportData(Message *msg)
             arr.append((flag & ITEM_FLAG::PACKAGE) == 0 ? "0;" : "1;");
             arr.append((flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0;" : "1;");
             arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;" : "1;");
-            arr.append(d["unit"].toString());
+            arr.append(d["unit"].toString().trimmed());
             arr.append("\n");
             qDebug() << d;
         }
@@ -291,9 +291,9 @@ Message ItemAction::exportData(Message *msg)
     DbResult linkres = mDb->reset()->get("itemlinks");
     for(int i = 0; i < linkres.size(); i++) {
         const QVariantMap &d = linkres.data(i);
-        arr.append(d["barcode"].toString() % ";");
+        arr.append(d["barcode"].toString().trimmed() % ";");
         arr.append(d["type"].toString() % ";");
-        arr.append(d["barcode_link"].toString() % ";");
+        arr.append(d["barcode_link"].toString().trimmed() % ";");
         arr.append(d["count_link"].toString() % ";\n");
     }
     message.addData("data", arr);
