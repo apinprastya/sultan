@@ -368,7 +368,7 @@ void AddItemDialog::saveData()
     }
     QVariantMap data;
     int flag = getItemFlagFromCheckbox();
-    data["name"] = Util::capitalize(ui->lineName->text());
+    data["name"] = Util::capitalize(ui->lineName->text().trimmed().replace("\n", ""));
     data["category_id"] = ui->comboCategory->currentData().toInt();
     data["suplier_id"] = ui->comboSuplier->currentData().toInt();
     data["sell_price"] = ui->doubleSellPrice->value();
@@ -414,7 +414,7 @@ void AddItemDialog::saveData()
         msg.addData("data", data);
     } else {
         data["stock"] = ui->doubleStock->value();
-        data["barcode"] = ui->lineBarcode->text();
+        data["barcode"] = ui->lineBarcode->text().trimmed().replace("\n", "");
         msg.setData(data);
     }
     sendMessage(&msg);
