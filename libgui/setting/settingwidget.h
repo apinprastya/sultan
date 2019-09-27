@@ -39,7 +39,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    SettingWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    SettingWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SettingWidget();
 
 private:

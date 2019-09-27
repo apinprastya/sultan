@@ -40,7 +40,7 @@ class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    ImportExportDatabaseDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ImportExportDatabaseDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ImportExportDatabaseDialog();
 
 protected:

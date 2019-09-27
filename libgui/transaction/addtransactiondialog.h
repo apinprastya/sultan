@@ -34,7 +34,7 @@ class AddTransactionDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddTransactionDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddTransactionDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddTransactionDialog();
     void reset();
     void fill(const QVariantMap &data);

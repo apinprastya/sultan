@@ -99,7 +99,8 @@ SOURCES += \
     $$PWD/cashier/customercreditpaymentdialog.cpp \
     $$PWD/item/addingridientdialog.cpp \
     $$PWD/cashier/additemunavailabledialog.cpp \
-	$$PWD/doublespinboxdelegate.cpp
+    $$PWD/doublespinboxdelegate.cpp \
+    $$PWD/paginationwidget.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -203,7 +204,8 @@ HEADERS += \
     $$PWD/tabcloseablewidget.h \
     $$PWD/item/addingridientdialog.h \
     $$PWD/cashier/additemunavailabledialog.h \
-	$$PWD/doublespinboxdelegate.h 
+    $$PWD/doublespinboxdelegate.h \
+    $$PWD/paginationwidget.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -269,4 +271,5 @@ FORMS += \
     $$PWD/cashier/customercreditpaymentdialog.ui \
     $$PWD/item/addingridientdialog.ui \
     $$PWD/report/datefromtowidget.ui \
-    $$PWD/cashier/additemunavailabledialog.ui
+    $$PWD/cashier/additemunavailabledialog.ui \
+    $$PWD/paginationwidget.ui

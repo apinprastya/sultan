@@ -34,7 +34,7 @@ class PayCashDialog : public QDialog
     Q_OBJECT
 
 public:
-    PayCashDialog(QWidget *parent = 0);
+    PayCashDialog(QWidget *parent = nullptr);
     ~PayCashDialog();
     void fill(double total);
 

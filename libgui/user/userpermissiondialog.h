@@ -32,7 +32,7 @@ class UserPermissionDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserPermissionDialog(const QVariantMap &data, QWidget *parent = 0);
+    UserPermissionDialog(const QVariantMap &data, QWidget *parent = nullptr);
     ~UserPermissionDialog();
 
 private:

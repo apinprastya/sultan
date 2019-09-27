@@ -34,7 +34,7 @@ class BankAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    BankAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    BankAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~BankAddDialog();
     void reset();
     void fill(const QVariantMap &data);

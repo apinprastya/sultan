@@ -34,7 +34,7 @@ class AddSoldReturnDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddSoldReturnDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddSoldReturnDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddSoldReturnDialog();
     void fill(const QVariantMap &data);
 

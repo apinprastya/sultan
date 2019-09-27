@@ -114,7 +114,7 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
 }
 
 void TransactionWidget::messageReceived(LibG::Message *msg)
@@ -191,18 +191,22 @@ void TransactionWidget::editClicked(const QModelIndex &index)
     mTableWidget->getModel()->refresh();
 }
 
-void TransactionWidget::deleteClicked(const QModelIndex &index)
+void TransactionWidget::deleteClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
-        QMessageBox::critical(this, tr("Error"), tr("Can not remote transaction from cashier, use sale return instead"));
-        return;
+    if(index.empty()) return;
+    QVariantList ids;
+    for(int i = 0; i < index.size(); i++) {
+        auto item = static_cast<TableItem*>(index[i].internalPointer());
+        ids.append(item->id);
+        if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
+            QMessageBox::critical(this, tr("Error"), tr("Can not remote transaction from cashier, use sale return instead"));
+            return;
+        }
     }
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove transaction?"));
     if(ret == QMessageBox::Yes) {
         Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

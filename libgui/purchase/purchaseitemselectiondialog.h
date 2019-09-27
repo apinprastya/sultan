@@ -35,7 +35,7 @@ class PurchaseItemSelectionDialog : public QDialog
     Q_OBJECT
 
 public:
-    PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item, QWidget *parent = 0);
+    PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item, QWidget *parent = nullptr);
     ~PurchaseItemSelectionDialog();
 
 private:

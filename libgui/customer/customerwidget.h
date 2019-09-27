@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class NormalWidget;
@@ -37,7 +38,7 @@ class CustomerWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CustomerWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -51,7 +52,7 @@ private:
 private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndexList &index);
     void customerAdded();
     void customerUpdated(int id);
     void creditClicked();

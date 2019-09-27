@@ -32,6 +32,7 @@ namespace LibGUI {
 
 class TableView;
 class TableModel;
+class PaginationWidget;
 
 class TableWidget : public QWidget
 {
@@ -41,7 +42,7 @@ public:
         Refresh, Add, Delete, Update, Unknown
     };
 
-    TableWidget(QWidget *parent = 0, bool useStandartHeader = false);
+    TableWidget(QWidget *parent = nullptr, bool useStandartHeader = false);
     ~TableWidget();
     void initButton(const QList<ButtonType> buttons);
     void initCrudButton();
@@ -49,14 +50,17 @@ public:
     void setupTable();
     inline TableModel *getModel() { return mModel; }
     inline TableView *getTableView() { return mTableView; }
+    inline PaginationWidget *getPaginationWidget() { return mPaginationWidget; }
     QPushButton *addActionButton(const QIcon &icon);
     inline void addEnableNoSelect(QPushButton *btn) { mEnableNoSelect.append(btn); }
     inline void setEnableDoubleClickUpdate(bool value) { mEnableDoubleClickUpdate = value; }
+    void setDefaultPerPage(int index);
 
 private:
     TableView *mTableView;
     TableModel *mModel;
     QHBoxLayout *mActionLayout;
+    PaginationWidget *mPaginationWidget;
     QMap<int, QPushButton*> mActionButton;
     QList<QPushButton*> mEnableNoSelect;
     bool mEnableDoubleClickUpdate = true;
@@ -69,7 +73,7 @@ signals:
     void tableRefreshed();
     void addClicked();
     void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndexList &index);
 
 private slots:
     void actionClicked();

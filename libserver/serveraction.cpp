@@ -122,23 +122,30 @@ LibG::Message ServerAction::del(LibG::Message *msg)
     LibG::Message message(msg);
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
-    DbResult res = mDb->where(mIdField % " = ", msg->data(mIdField))->get(mTableName);
-    if(hasFlag(BEFORE_DELETE)) {
-        if(!res.isEmpty() && !beforeDelete(res.first(), &message)) return message;
-    }
-    mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(hasFlag(SOFT_DELETE)) {
-        if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}})) {
-            message.setError(mDb->lastError().text());
+    QVariantList ids;
+    if(msg->data(mIdField).canConvert<QString>())
+        ids.append(msg->data(mIdField));
+    else
+        ids = msg->data(mIdField).toList();
+    for(int i = 0; i < ids.size(); i++) {
+        DbResult res = mDb->where(mIdField % " = ", ids[i])->get(mTableName);
+        if(hasFlag(BEFORE_DELETE)) {
+            if(!res.isEmpty() && !beforeDelete(res.first(), &message)) return message;
         }
-    } else {
-        if(!mDb->del(mTableName)) {
-            message.setError(mDb->lastError().text());
+        mDb->where(mIdField % " = ", ids[i]);
+        if(hasFlag(SOFT_DELETE)) {
+            if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}})) {
+                message.setError(mDb->lastError().text());
+            }
+        } else {
+            if(!mDb->del(mTableName)) {
+                message.setError(mDb->lastError().text());
+            }
         }
-    }
-    if(hasFlag(AFTER_DELETE)) {
-        if(!res.isEmpty())
-            afterDelete(res.first());
+        if(hasFlag(AFTER_DELETE)) {
+            if(!res.isEmpty())
+                afterDelete(res.first());
+        }
     }
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {

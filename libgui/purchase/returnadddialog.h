@@ -35,7 +35,7 @@ class ReturnAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    ReturnAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ReturnAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReturnAddDialog();
     void reset();
     void fill(const QVariantMap &data);

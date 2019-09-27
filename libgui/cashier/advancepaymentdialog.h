@@ -36,7 +36,7 @@ class AdvancePaymentDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AdvancePaymentDialog();
     void setup(double total, Customer *cust);
 

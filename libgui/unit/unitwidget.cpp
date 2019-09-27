@@ -57,7 +57,7 @@ UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
     //connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
 }
 
@@ -101,13 +101,18 @@ void UnitWidget::editClicked(const QModelIndex &index)
     }
 }
 
-void UnitWidget::deleteClicked(const QModelIndex &index)
+void UnitWidget::deleteClicked(const QModelIndexList &index)
 {
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove unit?"));
     if(ret == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
+        }
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

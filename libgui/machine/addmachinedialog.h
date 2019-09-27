@@ -34,7 +34,7 @@ class AddMachineDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddMachineDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddMachineDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddMachineDialog();
     void fill(const QVariantMap &data);
 

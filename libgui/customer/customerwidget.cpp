@@ -88,7 +88,7 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(button, SIGNAL(clicked(bool)), SLOT(rewardClicked()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
     connect(mAddDialog, SIGNAL(customerAdded()), SLOT(customerAdded()));
     connect(mAddDialog, SIGNAL(customerUpdated(int)), SLOT(customerUpdated(int)));
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
@@ -122,14 +122,18 @@ void CustomerWidget::updateClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
-void CustomerWidget::deleteClicked(const QModelIndex &index)
+void CustomerWidget::deleteClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Make sure the credit is 0 before delete. Are you sure to delete the customer?"));
     if(ret == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
+        }
         Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

@@ -33,7 +33,7 @@ class UserAddDialog : public QDialog
     Q_OBJECT
 
 public:
-    UserAddDialog(QWidget *parent = 0);
+    UserAddDialog(QWidget *parent = nullptr);
     ~UserAddDialog();
     void reset();
     void fill(const QVariantMap &data);

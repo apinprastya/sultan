@@ -65,6 +65,7 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
+    mTableWidget->getTableView()->setSelectionMode(QAbstractItemView::SingleSelection);
     model->refresh();
     auto button = mTableWidget->addActionButton(QIcon(":/images/16x16/key.png"));
     button->setToolTip(tr("Permission"));
@@ -74,7 +75,7 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(button, SIGNAL(clicked(bool)), SLOT(resetPasswordClicked()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
     connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
 }
 
@@ -124,11 +125,12 @@ void UserWidget::updateClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
-void UserWidget::deleteClicked(const QModelIndex &index)
+void UserWidget::deleteClicked(const QModelIndexList &index)
 {
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove user?"));
     if(ret == QMessageBox::Yes) {
+        auto item = static_cast<TableItem*>(index[0].internalPointer());
         Message msg(MSG_TYPE::USER, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
         msg.addData("data", QVariantMap{{"username", QString("%1_%2").arg(item->data("username").toString()).arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"))},

@@ -32,7 +32,7 @@ class TableView : public QTableView
 {
     Q_OBJECT
 public:
-    TableView(QWidget *parent = 0, bool useStandartHeader = false);
+    TableView(QWidget *parent = nullptr, bool useStandartHeader = false);
     HeaderWidget *getHeaderWidget(int index);
     void setUseStandardHeader(bool value);
 

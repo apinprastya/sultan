@@ -33,7 +33,7 @@ class ReturnItemAddDialog : public QDialog
     Q_OBJECT
 
 public:
-    ReturnItemAddDialog(QWidget *parent = 0);
+    ReturnItemAddDialog(QWidget *parent = nullptr);
     ~ReturnItemAddDialog();
     void fill(const QVariantMap &d);
 

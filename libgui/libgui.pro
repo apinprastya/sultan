@@ -66,6 +66,7 @@ TRANSLATIONS = ../translation/libgui_id.ts
 SOURCES += \
     item/importitemdialog.cpp \
     mainwindow.cpp \
+    paginationwidget.cpp \
     tabwidget.cpp \
     setting/settingwidget.cpp \
     user/userwidget.cpp \
@@ -170,6 +171,7 @@ HEADERS += \
     gui_global.h \
     item/importitemdialog.h \
     mainwindow.h \
+    paginationwidget.h \
     tabwidget.h \
     setting/settingwidget.h \
     user/userwidget.h \
@@ -274,6 +276,7 @@ HEADERS += \
 FORMS += \
     item/importitemdialog.ui \
     mainwindow.ui \
+    paginationwidget.ui \
     setting/settingwidget.ui \
     normalwidget.ui \
     suplier/suplieradddialog.ui \

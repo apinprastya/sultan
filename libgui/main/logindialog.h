@@ -34,7 +34,7 @@ class LoginDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    LoginDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    LoginDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~LoginDialog();
     void reset();
     void showDialog();

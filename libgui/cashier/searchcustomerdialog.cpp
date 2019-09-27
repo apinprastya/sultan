@@ -51,6 +51,7 @@ SearchCustomerDialog::SearchCustomerDialog(LibG::MessageBus *bus, QWidget *paren
     model->addColumnMoney("reward", tr("Reward"));
     model->addColumnMoney("credit", tr("Credit"));
     model->setTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY);
+    ui->table->setDefaultPerPage(3);
     ui->table->setupTable();
     connect(ui->lineName, SIGNAL(returnPressed()), SLOT(nameDone()));
     GuiUtil::setColumnWidth(ui->table->getTableView(), QList<int>() << 80 << 100 << 100 << 100 << 100 << 100);

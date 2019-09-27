@@ -33,7 +33,7 @@ class RestoreItemDialog : public QDialog
     Q_OBJECT
 
 public:
-    RestoreItemDialog(const QVariantMap &data, QWidget *parent = 0);
+    RestoreItemDialog(const QVariantMap &data, QWidget *parent = nullptr);
     ~RestoreItemDialog();
     inline bool isOk() { return mIsOk; }
 

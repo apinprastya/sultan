@@ -36,7 +36,7 @@ class SettingDialog : public QDialog
     Q_OBJECT
 
 public:
-    SettingDialog(QWidget *parent = 0);
+    SettingDialog(QWidget *parent = nullptr);
     ~SettingDialog();
     void showDialog();
     static void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon);

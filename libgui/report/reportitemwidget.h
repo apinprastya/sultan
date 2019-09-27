@@ -36,7 +36,7 @@ class ReportItemWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    ReportItemWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    ReportItemWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReportItemWidget();
 
 protected:

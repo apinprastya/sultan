@@ -48,7 +48,7 @@ class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHand
     Q_OBJECT
 
 public:
-    MainWindow(LibG::MessageBus *bus, QWidget *parent = 0);
+    MainWindow(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~MainWindow();
     void setup();
     void showSplashScreen() override;

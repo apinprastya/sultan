@@ -18,7 +18,7 @@ class InitialStockAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    InitialStockAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    InitialStockAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~InitialStockAddDialog();
     void reset();
 

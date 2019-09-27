@@ -34,7 +34,7 @@ class RewardAddDialog : public QDialog, LibG::MessageHandler
     Q_OBJECT
 
 public:
-    RewardAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    RewardAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~RewardAddDialog();
     void reset();
     void fill(const QVariantMap &data);

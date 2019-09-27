@@ -84,7 +84,7 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     ui->verticalLayout->addWidget(mTableWidget);
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(delClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(delClicked(QModelIndexList)));
     connect(mAddDialog, SIGNAL(addSuccess()), mTableWidget->getModel(), SLOT(refresh()));
     connect(mAddDialog, SIGNAL(updateSuccess(QVariant)), model, SLOT(resfreshOne(QVariant)));
     connect(mAddDialog, SIGNAL(updateSuccess(QVariant)), SLOT(refreshSummary()));
@@ -126,16 +126,19 @@ void PurchaseItemWidget::updateClicked(const QModelIndex &index)
     }
 }
 
-void PurchaseItemWidget::delClicked(const QModelIndex &index)
+void PurchaseItemWidget::delClicked(const QModelIndexList &index)
 {
-    if(index.isValid()) {
-        auto item = static_cast<TableItem*>(index.internalPointer());
-        int res = QMessageBox::question(this, tr("Confirmation remove"), tr("Are you sure to delete the item?"));
-        if(res == QMessageBox::Yes) {
-            Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL);
-            msg.addData("id", item->id);
-            sendMessage(&msg);
+    if(index.empty()) return;
+    int res = QMessageBox::question(this, tr("Confirmation remove"), tr("Are you sure to delete the item?"));
+    if(res == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
         }
+        Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL);
+        msg.addData("id", ids);
+        sendMessage(&msg);
     }
 }
 

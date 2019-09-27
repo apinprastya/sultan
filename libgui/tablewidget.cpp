@@ -21,10 +21,12 @@
 #include "tableview.h"
 #include "tablemodel.h"
 #include "horizontalheader.h"
+#include "paginationwidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QHeaderView>
+#include <QDebug>
 
 using namespace LibGUI;
 
@@ -45,23 +47,28 @@ static QMap<int, QString> BTNTOOLTIP{
 TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     QWidget(parent),
     mTableView(new TableView(this, useStandartHeader)),
-    mModel(new TableModel(this, useStandartHeader))
+    mModel(new TableModel(this, useStandartHeader)),
+    mPaginationWidget(new PaginationWidget(this))
 {
     auto mainLayout = new QVBoxLayout();
     mainLayout->setMargin(0);
     mainLayout->addWidget(mTableView);
     mActionLayout = new QHBoxLayout();
+    mActionLayout->addWidget(mPaginationWidget);
     mActionLayout->addStretch();
     mainLayout->addLayout(mActionLayout);
     setLayout(mainLayout);
     mTableView->setModel(mModel);
     mTableView->verticalHeader()->hide();
     mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mTableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     auto header = static_cast<HorizontalHeader*>(mTableView->horizontalHeader());
     connect(header, SIGNAL(filterValueChanged(int,QVariant)), mModel, SLOT(filterChanged(int,QVariant)));
     connect(mTableView, SIGNAL(clicked(QModelIndex)), SLOT(tableSelected()));
     connect(mTableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
+    connect(mPaginationWidget, SIGNAL(pageChanged(int)), mModel, SLOT(loadPage(int)));
+    connect(mModel, SIGNAL(maxPageChanged(int)), mPaginationWidget, SLOT(setMaxPage(int)));
+    connect(mPaginationWidget, &PaginationWidget::perPageChanged, mModel, &TableModel::setPerPageCount);
 }
 
 TableWidget::~TableWidget()
@@ -100,6 +107,13 @@ void TableWidget::setupTable()
 QPushButton *TableWidget::addActionButton(const QIcon &icon)
 {
     return addActionButton(icon, Unknown);
+}
+
+void TableWidget::setDefaultPerPage(int index)
+{
+    static QMap<int, int> pageMap{{0, 10}, {1, 25}, {2, 50}, {3, 100}};
+    mModel->setPerPageCount(pageMap[index]);
+    mPaginationWidget->setCurrentPerPage(index, true);
 }
 
 QPushButton *TableWidget::addActionButton(const QString &path, int type)
@@ -147,8 +161,11 @@ void TableWidget::actionClicked()
             emit updateClicked(mTableView->currentIndex());
         break;
     case Delete:
-        if(mTableView->currentIndex().isValid())
-            emit deleteClicked(mTableView->currentIndex());
+        /*if(mTableView->currentIndex().isValid())
+            emit deleteClicked(mTableView->currentIndex());*/
+        if(!mTableView->selectionModel()->selectedRows().empty()) {
+            emit deleteClicked(mTableView->selectionModel()->selectedRows());
+        }
         break;
     }
 }

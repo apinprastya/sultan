@@ -34,7 +34,7 @@ Barcode::Barcode()
 {
 }
 
-bool Barcode::print(const QString &name, const QString &barcode, int price, int copies)
+bool Barcode::print(const QString &/*name*/, const QString &/*barcode*/, int /*price*/, int /*copies*/)
 {
     auto pluginsDir = QDir(qApp->applicationDirPath());
     QFile file(pluginsDir.absoluteFilePath(QLatin1String("barcode.zpl")));
@@ -57,7 +57,7 @@ bool Barcode::print(const QString &name, const QString &barcode, int price, int 
     return true;
 }
 
-bool Barcode::print(const QList<BarcodePrintData> &data)
+bool Barcode::print(const QList<BarcodePrintData> &/*data*/)
 {
     auto pluginsDir = QDir(qApp->applicationDirPath());
     QFile file(pluginsDir.absoluteFilePath(QLatin1String("barcode.zpl")));

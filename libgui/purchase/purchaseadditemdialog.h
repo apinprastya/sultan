@@ -35,7 +35,7 @@ class PurchaseAddItemDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    PurchaseAddItemDialog(LibG::MessageBus *bus, int purchaseId, QWidget *parent = 0);
+    PurchaseAddItemDialog(LibG::MessageBus *bus, int purchaseId, QWidget *parent = nullptr);
     ~PurchaseAddItemDialog();
     void reset();
     void fill(const QVariantMap &data);

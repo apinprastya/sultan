@@ -58,7 +58,7 @@ RewardWidget::RewardWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
     connect(ui->tableExchange, SIGNAL(addClicked()), SLOT(addExchangeClicked()));
     connect(ui->tableExchange, SIGNAL(updateClicked(QModelIndex)), SLOT(updateExchangeClicked(QModelIndex)));
-    connect(ui->tableExchange, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteExchangeClicked(QModelIndex)));
+    connect(ui->tableExchange, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteExchangeClicked(QModelIndexList)));
 
     ui->tablePoin->initCrudButton();
     ui->tablePoin->getTableView()->setUseStandardHeader(true);
@@ -74,7 +74,7 @@ RewardWidget::RewardWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
     connect(ui->tablePoin, SIGNAL(addClicked()), SLOT(addPoinClicked()));
     connect(ui->tablePoin, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePoinClicked(QModelIndex)));
-    connect(ui->tablePoin, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePoinClicked(QModelIndex)));
+    connect(ui->tablePoin, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deletePoinClicked(QModelIndexList)));
 }
 
 void RewardWidget::messageReceived(LibG::Message *msg)
@@ -108,14 +108,18 @@ void RewardWidget::updateExchangeClicked(const QModelIndex &index)
     ui->tableExchange->getModel()->refresh();
 }
 
-void RewardWidget::deleteExchangeClicked(const QModelIndex &index)
+void RewardWidget::deleteExchangeClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete?"));
     if(ret == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
+        }
         Message msg(MSG_TYPE::REWARD, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }
@@ -139,14 +143,18 @@ void RewardWidget::updatePoinClicked(const QModelIndex &index)
     ui->tablePoin->getModel()->refresh();
 }
 
-void RewardWidget::deletePoinClicked(const QModelIndex &index)
+void RewardWidget::deletePoinClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete?"));
     if(ret == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
+        }
         Message msg(MSG_TYPE::REWARD_POIN, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

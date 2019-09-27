@@ -38,7 +38,7 @@ class SearchCustomerDialog : public QDialog
     Q_OBJECT
 
 public:
-    SearchCustomerDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    SearchCustomerDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SearchCustomerDialog();
     inline QVariantMap getSelectedData() { return mSelectedData; }
     inline bool isOk() { return mIsOk; }

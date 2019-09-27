@@ -34,7 +34,7 @@ class AddPoinDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent = 0);
+    AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent = nullptr);
     ~AddPoinDialog();
 
 private:

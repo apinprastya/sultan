@@ -93,7 +93,7 @@ PurchaseReturnWidget::PurchaseReturnWidget(MessageBus *bus, QWidget *parent) :
 
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
     connect(model, SIGNAL(firstDataLoaded()), SLOT(getSummary()));
 }
 
@@ -141,13 +141,18 @@ void PurchaseReturnWidget::updateClicked(const QModelIndex &index)
     mTableWidget->getModel()->refresh();
 }
 
-void PurchaseReturnWidget::deleteClicked(const QModelIndex &index)
+void PurchaseReturnWidget::deleteClicked(const QModelIndexList &index)
 {
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
     int res = QMessageBox::question(this, tr("Confirmation remove"), tr("Are you sure to delete the item?"));
     if(res == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.append(item->id);
+        }
         Message msg(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

@@ -59,7 +59,7 @@ BankWidget::BankWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->refresh();
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
-    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteClicked(QModelIndex)));
+    connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
 }
 
 void BankWidget::messageReceived(LibG::Message *msg)
@@ -91,14 +91,17 @@ void BankWidget::updateClicked(const QModelIndex &index)
     mTableWidget->getModel()->refresh();
 }
 
-void BankWidget::deleteClicked(const QModelIndex &index)
+void BankWidget::deleteClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete the bank?"));
+    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete selected the bank?"));
     if(ret == QMessageBox::Yes) {
+        QList<QVariant> ids;
+        for(int i = 0; i < index.length(); i++) {
+            auto item = static_cast<TableItem*>(index[i].internalPointer());
+            ids.push_back(item->id);
+        }
         Message msg(MSG_TYPE::BANK, MSG_COMMAND::DEL);
-        msg.addData("id", item->id);
+        msg.addData("id", ids);
         sendMessage(&msg);
     }
 }

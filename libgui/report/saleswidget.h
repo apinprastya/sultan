@@ -35,7 +35,7 @@ class SalesWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    SalesWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    SalesWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg) override;

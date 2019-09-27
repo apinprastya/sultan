@@ -35,7 +35,7 @@ class SoldItemListDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = 0);
+    SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SoldItemListDialog();
     inline bool isOk() { return mIsOk; }
     inline QVariantMap getData() { return mData; }

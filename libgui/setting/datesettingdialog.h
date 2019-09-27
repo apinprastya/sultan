@@ -33,7 +33,7 @@ class DateSettingDialog : public QDialog
     Q_OBJECT
 
 public:
-    DateSettingDialog(QWidget *parent = 0);
+    DateSettingDialog(QWidget *parent = nullptr);
     ~DateSettingDialog();
     void closeEvent(QCloseEvent *event) override;
 

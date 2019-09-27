@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class NormalWidget;
@@ -38,7 +39,7 @@ class PurchaseItemWidget : public QWidget, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = 0);
+    PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~PurchaseItemWidget();
     inline int getId() { return mId; }
 
@@ -57,7 +58,7 @@ protected:
 private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
-    void delClicked(const QModelIndex &index);
+    void delClicked(const QModelIndexList &index);
     void refreshSummary();
 };
 

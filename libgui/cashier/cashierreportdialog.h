@@ -34,7 +34,7 @@ class CashierReportDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    CashierReportDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    CashierReportDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CashierReportDialog();
 
 protected:

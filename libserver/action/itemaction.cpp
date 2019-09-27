@@ -161,19 +161,27 @@ Message ItemAction::del(Message *msg)
     LibG::Message message(msg);
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
-    mDb->where(mIdField % " = ", msg->data(mIdField));
-    if(hasFlag(SOFT_DELETE)) {
-        if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}, {"stock", 0}})) {
-            message.setError(mDb->lastError().text());
+    QVariantList ids;
+    if(msg->data(mIdField).canConvert<QString>())
+        ids.append(msg->data(mIdField));
+    else
+        ids = msg->data(mIdField).toList();
+    for(int i = 0; i < ids.size(); i++) {
+        mDb->where(mIdField % " = ", ids[i]);
+        if(hasFlag(SOFT_DELETE)) {
+            if(!mDb->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}, {"stock", 0}})) {
+                message.setError(mDb->lastError().text());
+            }
+        } else {
+            if(!mDb->del(mTableName)) {
+                message.setError(mDb->lastError().text());
+            }
         }
-    } else {
-        if(!mDb->del(mTableName)) {
-            message.setError(mDb->lastError().text());
-        }
+        mDb->where("barcode = ", ids[i])->del("stockcards");
+        mDb->where("barcode = ", ids[i])->del("itemlinks");
+        mDb->where("barcode_link = ", ids[i])->del("itemlinks");
     }
-    mDb->where("barcode = ", msg->data("barcode"))->del("stockcards");
-    mDb->where("barcode = ", msg->data("barcode"))->del("itemlinks");
-    mDb->where("barcode_link = ", msg->data("barcode"))->del("itemlinks");
+
     if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
         if(!mDb->commit()) {
             mDb->roolback();

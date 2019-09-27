@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class NormalWidget;
@@ -35,7 +36,7 @@ class BankWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    BankWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    BankWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -47,7 +48,7 @@ private:
 private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndexList &index);
 };
 
 }

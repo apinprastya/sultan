@@ -32,17 +32,16 @@ using namespace LibG;
 
 TableModel::TableModel(QObject *parent, bool useStandartHeader):
     QAbstractTableModel(parent),
-    mNumRow(0),
     mUseStandartHeader(useStandartHeader)
 {
     mIsLoaded = false;
-    mQuery.setLimit(LibG::CONFIG::ITEMS_PER_LOAD);
-    connect(this, SIGNAL(loadMore(int)), SLOT(loadPage(int)));
+    mNumRow = 0;
+    mQuery.setLimit(mPerPage);
 }
 
 int TableModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return mNumRow;
+    return mRowCount;
 }
 
 int TableModel::columnCount(const QModelIndex &/*parent*/) const
@@ -56,14 +55,14 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     if(role == Qt::DisplayRole) {
         const int row = index.row();
-        if(!mIsLocal && !mData.exist(row + LibG::CONFIG::ITEMS_PER_LOAD))
+        /*if(!mIsLocal && !mData.exist(row + LibG::CONFIG::ITEMS_PER_LOAD))
             emit loadMore((row + LibG::CONFIG::ITEMS_PER_LOAD) / LibG::CONFIG::ITEMS_PER_LOAD);
         if(!mIsLocal && (row - LibG::CONFIG::ITEMS_PER_LOAD) > 0 && !mData.exist(row - LibG::CONFIG::ITEMS_PER_LOAD))
             emit loadMore((row - LibG::CONFIG::ITEMS_PER_LOAD) / LibG::CONFIG::ITEMS_PER_LOAD);
         if(!mIsLocal && !mData.exist(row)) {
             emit loadMore(row / LibG::CONFIG::ITEMS_PER_LOAD);
             return QVariant(QLatin1String("loading..."));
-        }
+        }*/
         auto item = mData[row];
         if(mFormater.contains(mColumns[index.column()]))
             return mFormater[mColumns[index.column()]](item, mColumns[index.column()]);
@@ -107,8 +106,7 @@ void TableModel::reset()
     beginResetModel();
     mIsLoaded = false;
     mData.clearAndRelease();
-    mNumRow = 0;
-    mPageStatus.clear();
+    mRowCount = 0;
     endResetModel();
 }
 
@@ -152,6 +150,7 @@ void TableModel::appendItem(TableItem *item)
     beginInsertRows(QModelIndex(), mData.size(), mData.size());
     mData.append(item);
     mNumRow++;
+    mRowCount++;
     endInsertRows();
 }
 
@@ -161,7 +160,17 @@ void TableModel::removeItem(TableItem *item)
     beginRemoveRows(QModelIndex(), row, row);
     mData.removeAndRelease(row);
     mNumRow--;
+    mRowCount--;
     endRemoveRows();
+}
+
+void TableModel::setPerPageCount(int value)
+{
+    mQuery.setLimit(value);
+    mPerPage = value;
+    mCurrentPage = 0;
+    mNumRow = 0;
+    this->refresh();
 }
 
 void TableModel::refresh()
@@ -169,8 +178,7 @@ void TableModel::refresh()
     if(mIsLocal) {
         emit dataChanged(createIndex(0, 0), createIndex(mNumRow, mHeaders.size()));
     } else {
-        reset();
-        loadPage();
+        loadPage(mCurrentPage);
     }
 }
 
@@ -236,11 +244,10 @@ void TableModel::messageReceived(LibG::Message *msg)
 
 void TableModel::loadPage(int page)
 {
-    if(page != 0 && mQuery.getLimit() <= 0) return;
-    if(mPageStatus.value(page) != None) return;
-    mPageStatus[page] = Loading;
+    reset();
+    mCurrentPage = page;
     LibG::Message msg(std::get<0>(mTypeCommand), std::get<1>(mTypeCommand));
-    mQuery.setStart(page * LibG::CONFIG::ITEMS_PER_LOAD);
+    mQuery.setStart(page * mPerPage);
     mQuery.bind(&msg);
     sendMessage(&msg);
 }
@@ -248,7 +255,7 @@ void TableModel::loadPage(int page)
 void TableModel::readData(LibG::Message *msg)
 {
     int num = msg->data(QStringLiteral("total")).toInt();
-    int start = msg->data(QStringLiteral("start")).toInt();
+    //int start = msg->data(QStringLiteral("start")).toInt();
     if(!mIsLoaded) {
         beginResetModel();
         mData.clearAndRelease();
@@ -261,14 +268,19 @@ void TableModel::readData(LibG::Message *msg)
         item->fill(l.at(i).toMap());
         items.append(item);
     }
-    mData.insert(start, items);
+    mRowCount = l.size();
+    mData.insert(0, items);
     if(!mIsLoaded) {
-        mNumRow = num;
+        if(mNumRow != num) {
+            mNumRow = num;
+            if(num > 0 && num % mPerPage == 0) emit maxPageChanged(num / mPerPage);
+            else if(num > 0) emit maxPageChanged(num / mPerPage + 1);
+        }
         endResetModel();
         emit firstDataLoaded();
     }
-    if(mIsLoaded)
-        emit dataChanged(createIndex(start, 0), createIndex(start + l.size(), mHeaders.size()));
+    /*if(mIsLoaded)
+        emit dataChanged(createIndex(start, 0), createIndex(start + l.size(), mHeaders.size()));*/
     mIsLoaded = true;
 }
 

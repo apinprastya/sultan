@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class NormalWidget;
@@ -47,7 +48,7 @@ private:
 private slots:
     void addClicked();
     void editClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndexList &index);
 };
 
 }

@@ -37,7 +37,7 @@ class TransactionListDialog : public QDialog, public LibG::MessageHandler
 
 public:
     enum DialogType { Cashier, SoldReturn };
-    TransactionListDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    TransactionListDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~TransactionListDialog();
     void setType(int type);
     inline void setPrintFunction(std::function<void(QVariantMap)> func) { mPrintFunction = func; }

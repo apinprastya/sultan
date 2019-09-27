@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QDialog>
+#include <QModelIndexList>
 
 namespace Ui {
 class AddItemDialog;
@@ -35,7 +36,7 @@ class AddItemDialog : public QDialog, public LibG::MessageHandler
 
 public:
     enum Tab { Price, Package, Ingridient, ItemLink };
-    AddItemDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddItemDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddItemDialog();
     void reset(bool isAddAgain = false);
     void openBarcode(const QString &barcode);
@@ -81,14 +82,14 @@ private slots:
     void calculateDiscount();
     void addPriceClicked();
     void updatePriceClicked(const QModelIndex &index);
-    void deletePriceClicked(const QModelIndex &index);
+    void deletePriceClicked(const QModelIndexList &index);
     void openSearchItem();
     void getItemPrice();
     double updatePackagePrice();
     void tableItemLinkDoubleClicked();
     void addIngridient();
     void updateIngridient(const QModelIndex &index);
-    void deleteIngridient(const QModelIndex &index);
+    void deleteIngridient(const QModelIndexList &index);
     void calculateIngridientPrice();
 
 signals:

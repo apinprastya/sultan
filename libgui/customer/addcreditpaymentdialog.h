@@ -34,7 +34,7 @@ class AddCreditPaymentDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddCreditPaymentDialog();
     void fill(int id, double total);
 

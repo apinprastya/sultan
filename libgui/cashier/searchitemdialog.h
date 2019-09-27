@@ -40,7 +40,7 @@ class SearchItemDialog : public QDialog
     Q_OBJECT
 
 public:
-    SearchItemDialog(LibG::MessageBus *bus, bool advance, QWidget *parent = 0);
+    SearchItemDialog(LibG::MessageBus *bus, bool advance, QWidget *parent = nullptr);
     ~SearchItemDialog();
     inline QString getSelectedBarcode() { return mSelectedBarcode; }
     void setNameField(const QString &str);

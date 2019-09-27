@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class RewardSetting;
@@ -35,7 +36,7 @@ class RewardWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    RewardWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    RewardWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 private:
     Ui::RewardSetting *ui;
@@ -46,10 +47,10 @@ protected:
 private slots:
     void addExchangeClicked();
     void updateExchangeClicked(const QModelIndex &index);
-    void deleteExchangeClicked(const QModelIndex &index);
+    void deleteExchangeClicked(const QModelIndexList &index);
     void addPoinClicked();
     void updatePoinClicked(const QModelIndex &index);
-    void deletePoinClicked(const QModelIndex &index);
+    void deletePoinClicked(const QModelIndexList &index);
 };
 
 }

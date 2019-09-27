@@ -34,7 +34,7 @@ class ReturnResolutionDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReturnResolutionDialog();
     void fill(const QVariantMap &data);
 

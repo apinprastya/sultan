@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class ItemWidget;
@@ -39,7 +40,7 @@ class ItemWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    ItemWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    ItemWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ItemWidget();
 
 protected:
@@ -59,7 +60,7 @@ private slots:
     void mainTableSelectionChanges();
     void addItemClicked();
     void updateItemClicked(const QModelIndex &index);
-    void deleteItemClicked(const QModelIndex &index);
+    void deleteItemClicked(const QModelIndexList &index);
     void importClicked();
     void exportClicked();
     void mainTableKeyPressed(QObject *, QKeyEvent *event);

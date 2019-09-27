@@ -35,7 +35,7 @@ class CheckStockAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CheckStockAddDialog();
     void reset();
 

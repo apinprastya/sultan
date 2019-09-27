@@ -35,7 +35,7 @@ class AddIngridientDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddIngridientDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddIngridientDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddIngridientDialog();
     void setData(const QVariantMap &data);
     inline QVariantMap &getData() { return mData; }

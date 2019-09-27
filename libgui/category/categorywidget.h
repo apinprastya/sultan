@@ -39,7 +39,7 @@ class CategoryWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CategoryWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CategoryWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CategoryWidget();
 
 protected:

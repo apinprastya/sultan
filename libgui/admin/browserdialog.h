@@ -43,7 +43,7 @@ class BrowserDialog : public QDialog
     Q_OBJECT
 
 public:
-    BrowserDialog(QWidget *parent = 0);
+    BrowserDialog(QWidget *parent = nullptr);
     ~BrowserDialog();
     void setUrl(const QUrl &url);
 

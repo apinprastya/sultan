@@ -37,7 +37,7 @@ class CheckStockWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CheckStockWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CheckStockWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg);

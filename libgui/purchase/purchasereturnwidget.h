@@ -22,6 +22,7 @@
 
 #include "messagehandler.h"
 #include <QWidget>
+#include <QModelIndexList>
 
 namespace Ui {
 class NormalWidget;
@@ -36,7 +37,7 @@ class PurchaseReturnWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    PurchaseReturnWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    PurchaseReturnWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg) override;
@@ -50,7 +51,7 @@ private:
 private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndex &index);
+    void deleteClicked(const QModelIndexList &index);
     void getSummary();
     void resolutionClicked();
 };

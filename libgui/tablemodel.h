@@ -68,6 +68,7 @@ public:
     void removeItem(TableItem *item);
     inline RowData* getRowData() { return &mData; }
     inline void setDateTimeISO(bool value) { mDateTimeISO = value; }
+    void setPerPageCount(int value);
 
 public slots:
     void refresh();
@@ -87,7 +88,6 @@ protected:
     QList<int> mAlignments;
     std::tuple<int, int> mTypeCommand;
     std::tuple<int, int> mTypeCommandOne;
-    QMap<int, int> mPageStatus;
     bool mIsLoaded;
     LibDB::QueryDB mQuery;
     QString mIdKey = QStringLiteral("id");
@@ -95,13 +95,16 @@ protected:
     bool mUseStandartHeader = false;
     bool mIsLocal = false;
     std::function<TableItem*(void)> mTemplateTableItemFunc = nullptr;
+    int mPerPage = 10;
+    int mCurrentPage = 0;
+    int mRowCount = 0;
 
 signals:
-    void loadMore(int page) const;
     void firstDataLoaded();
+    void maxPageChanged(int value);
 
-private slots:
-    void loadPage(int page = 0);
+public slots:
+    void loadPage(int page);
 
 private:
     void readData(LibG::Message *msg);

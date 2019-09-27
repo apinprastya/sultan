@@ -33,7 +33,7 @@ class CashierHelpDialog : public QDialog
     Q_OBJECT
 
 public:
-    CashierHelpDialog(QWidget *parent = 0);
+    CashierHelpDialog(QWidget *parent = nullptr);
     ~CashierHelpDialog();
 
 private:

@@ -34,7 +34,7 @@ class StockCardDialog : public QDialog
     Q_OBJECT
 
 public:
-    StockCardDialog(const QString &barcode, LibG::MessageBus *bus, QWidget *parent = 0);
+    StockCardDialog(const QString &barcode, LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~StockCardDialog();
     void showEvent(QShowEvent *e) override;
 

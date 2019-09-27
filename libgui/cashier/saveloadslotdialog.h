@@ -33,7 +33,7 @@ class SaveLoadSlotDialog : public QDialog
     Q_OBJECT
 
 public:
-    SaveLoadSlotDialog(bool isSave = true, QWidget *parent = 0);
+    SaveLoadSlotDialog(bool isSave = true, QWidget *parent = nullptr);
     ~SaveLoadSlotDialog();
     inline int getSelectedSlot() { return mSelectedSlot; }
 

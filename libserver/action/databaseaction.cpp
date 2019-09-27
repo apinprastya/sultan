@@ -156,7 +156,7 @@ QByteArray DatabaseAction::exportData()
     return qCompress(arr);
 }
 
-void DatabaseAction::importData(const QString &fileName, const QString &version, LibG::Message *msg)
+void DatabaseAction::importData(const QString &fileName, const QString &/*version*/, LibG::Message */*msg*/)
 {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QString ver = "013";

@@ -36,7 +36,7 @@ class AutoUpdateDialog : public QDialog
     Q_OBJECT
 
 public:
-    AutoUpdateDialog(QWidget *parent = 0);
+    AutoUpdateDialog(QWidget *parent = nullptr);
     ~AutoUpdateDialog();
 
 protected:

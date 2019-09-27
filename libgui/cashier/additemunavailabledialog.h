@@ -35,7 +35,7 @@ class AddItemUnavailableDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    AddItemUnavailableDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    AddItemUnavailableDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddItemUnavailableDialog();
     void openBarcode(const QString &barcode);
     void openAutoBarcode();

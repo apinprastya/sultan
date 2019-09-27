@@ -34,7 +34,7 @@ class CustomerCreditPaymentDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    CustomerCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CustomerCreditPaymentDialog();
 
 protected:

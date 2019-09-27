@@ -34,7 +34,7 @@ class ChangePasswordDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ChangePasswordDialog();
 
 protected:

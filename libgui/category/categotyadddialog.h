@@ -35,7 +35,7 @@ class CategoryAddDialog : public QDialog
     Q_OBJECT
 
 public:
-    CategoryAddDialog(QWidget *parent = 0);
+    CategoryAddDialog(QWidget *parent = nullptr);
     ~CategoryAddDialog();
     void reset();
     void fill(int id, int parent, const QString &name, const QString &code);

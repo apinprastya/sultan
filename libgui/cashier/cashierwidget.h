@@ -44,7 +44,7 @@ class CashierWidget : public QWidget, public LibG::MessageHandler, public TabClo
     Q_OBJECT
 
 public:
-    CashierWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    CashierWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CashierWidget();
     void showEvent(QShowEvent *event) override;
     bool requestClose() override;

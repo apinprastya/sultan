@@ -35,7 +35,7 @@ class AddPriceDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddPriceDialog(bool local, QWidget *parent = 0);
+    AddPriceDialog(bool local, QWidget *parent = nullptr);
     ~AddPriceDialog();
     void reset();
     void fill(const QVariantMap &data);

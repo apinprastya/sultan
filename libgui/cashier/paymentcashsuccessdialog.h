@@ -33,7 +33,7 @@ class PaymentCashSuccessDialog : public QDialog
     Q_OBJECT
 
 public:
-    PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent = 0);
+    PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent = nullptr);
     ~PaymentCashSuccessDialog();
 
 private:

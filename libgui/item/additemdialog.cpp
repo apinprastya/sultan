@@ -85,10 +85,11 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     model->setTypeCommand(MSG_TYPE::SELLPRICE, MSG_COMMAND::QUERY);
     model->setAsLocal(true);
     ui->tablePrice->setupTable();
+    ui->tablePrice->getTableView()->setSelectionMode(QAbstractItemView::SingleSelection);
     GuiUtil::setColumnWidth(ui->tablePrice->getTableView(), QList<int>() << 50 << 100 << 100 << 100 << 100);
     connect(ui->tablePrice, SIGNAL(addClicked()), SLOT(addPriceClicked()));
     connect(ui->tablePrice, SIGNAL(updateClicked(QModelIndex)), SLOT(updatePriceClicked(QModelIndex)));
-    connect(ui->tablePrice, SIGNAL(deleteClicked(QModelIndex)), SLOT(deletePriceClicked(QModelIndex)));
+    connect(ui->tablePrice, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deletePriceClicked(QModelIndexList)));
     ui->toolBoxPrice->setCurrentIndex(0);
     //this is temporary
     ui->checkProduct->setEnabled(false);
@@ -112,9 +113,10 @@ AddItemDialog::AddItemDialog(LibG::MessageBus *bus, QWidget *parent) :
     model->setTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::QUERY);
     ui->tableIngridient->getTableView()->setUseStandardHeader(true);
     ui->tableIngridient->initCrudButton();
+    ui->tableIngridient->getTableView()->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(ui->tableIngridient, SIGNAL(addClicked()), SLOT(addIngridient()));
     connect(ui->tableIngridient, SIGNAL(updateClicked(QModelIndex)), SLOT(updateIngridient(QModelIndex)));
-    connect(ui->tableIngridient, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteIngridient(QModelIndex)));
+    connect(ui->tableIngridient, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteIngridient(QModelIndexList)));
     GuiUtil::setColumnWidth(ui->tablePrice->getTableView(), QList<int>() << 150 << 100);
     ui->tableItemLink->getTableView()->horizontalHeader()->setStretchLastSection(true);
     connect(ui->tableItemLink->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableItemLinkDoubleClicked()));
@@ -342,6 +344,9 @@ void AddItemDialog::messageReceived(LibG::Message *msg)
         ui->tableIngridient->getModel()->refresh();
     } else if(msg->isTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::INSERT)) {
         FlashMessageManager::showMessage(tr("Ingridient item inserted successfully"));
+        ui->tableIngridient->getModel()->refresh();
+    } else if(msg->isTypeCommand(MSG_TYPE::ITEMLINK, MSG_COMMAND::DEL)) {
+        FlashMessageManager::showMessage(tr("Ingridient item removed successfully"));
         ui->tableIngridient->getModel()->refresh();
     }
 }
@@ -605,9 +610,10 @@ void AddItemDialog::updatePriceClicked(const QModelIndex &index)
     }
 }
 
-void AddItemDialog::deletePriceClicked(const QModelIndex &index)
+void AddItemDialog::deletePriceClicked(const QModelIndexList &index)
 {
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.isEmpty()) return;
+    auto item = static_cast<TableItem*>(index[0].internalPointer());
     int res = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete the price?"));
     if(res == QMessageBox::Yes) {
         if(ui->tablePrice->getModel()->isLocal()) {
@@ -733,9 +739,10 @@ void AddItemDialog::updateIngridient(const QModelIndex &index)
     }
 }
 
-void AddItemDialog::deleteIngridient(const QModelIndex &index)
+void AddItemDialog::deleteIngridient(const QModelIndexList &index)
 {
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if(index.empty()) return;
+    auto item = static_cast<TableItem*>(index[0].internalPointer());
     int res = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure to delete the ingridient?"));
     if(res == QMessageBox::Yes) {
         if(ui->tableIngridient->getModel()->isLocal()) {

@@ -34,7 +34,7 @@ class EditPriceCountDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    EditPriceCountDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    EditPriceCountDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~EditPriceCountDialog();
     void setup(const QString &barcode, float count, double price, const QString disc, const QString &note, int flag);
     inline bool isOk() { return mIsOk; }

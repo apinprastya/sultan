@@ -36,7 +36,7 @@ class MoneyWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    MoneyWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    MoneyWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg) override;

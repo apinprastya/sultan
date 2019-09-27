@@ -33,7 +33,7 @@ class SuplierAddDialog : public QDialog
     Q_OBJECT
 
 public:
-    SuplierAddDialog(QWidget *parent = 0);
+    SuplierAddDialog(QWidget *parent = nullptr);
     ~SuplierAddDialog();
     void reset();
     void fill(const QVariantMap &data);

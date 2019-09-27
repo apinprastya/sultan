@@ -34,7 +34,7 @@ class PurchasePaymentDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~PurchasePaymentDialog();
     void fill(const QVariantMap &data);
 

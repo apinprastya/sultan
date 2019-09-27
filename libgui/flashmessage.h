@@ -33,7 +33,7 @@ class GUISHARED_EXPORT FlashMessage : public QWidget
 public:
     enum Type { Info, Warning, Error };
     enum Lifetime { Short, Long };
-    FlashMessage(const QString &message, int type = Info, int lifetime = Short, QWidget *parent = 0);
+    FlashMessage(const QString &message, int type = Info, int lifetime = Short, QWidget *parent = nullptr);
     ~FlashMessage();
     void mouseReleaseEvent(QMouseEvent *event) override;
 

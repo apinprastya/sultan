@@ -35,7 +35,7 @@ class PayCashlessDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    PayCashlessDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    PayCashlessDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~PayCashlessDialog();
     void showDialog(const double &total);
     int getBank();

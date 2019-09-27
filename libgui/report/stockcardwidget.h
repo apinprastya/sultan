@@ -36,7 +36,7 @@ class StockCardWidget : public QWidget, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    StockCardWidget(LibG::MessageBus *bus, QWidget *parent = 0);
+    StockCardWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~StockCardWidget();
     void showEvent(QShowEvent *e) override;
 

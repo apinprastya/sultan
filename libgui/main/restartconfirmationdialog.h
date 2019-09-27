@@ -33,7 +33,7 @@ class RestartConfirmationDialog : public QDialog
     Q_OBJECT
 
 public:
-    RestartConfirmationDialog(QWidget *parent = 0);
+    RestartConfirmationDialog(QWidget *parent = nullptr);
     ~RestartConfirmationDialog();
     void setMessage(const QString &title, const QString &msg);
 

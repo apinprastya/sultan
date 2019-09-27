@@ -37,7 +37,7 @@ class CheckPriceDialog : public QDialog
     Q_OBJECT
 
 public:
-    CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode, QWidget *parent = 0);
+    CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode, QWidget *parent = nullptr);
     ~CheckPriceDialog();
 
 private:

@@ -34,7 +34,7 @@ class SettingPoinAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    SettingPoinAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    SettingPoinAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SettingPoinAddDialog();
     void reset();
     void fill(const QVariantMap &data);

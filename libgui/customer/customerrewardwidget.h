@@ -36,7 +36,7 @@ class CustomerRewardWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = nullptr);
     inline int getId() { return mId; }
 
 protected:

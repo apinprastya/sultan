@@ -104,7 +104,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mMainTable->getTableView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(mainTableSelectionChanges()));
     connect(mMainTable, SIGNAL(addClicked()), SLOT(addItemClicked()));
     connect(mMainTable, SIGNAL(updateClicked(QModelIndex)), SLOT(updateItemClicked(QModelIndex)));
-    connect(mMainTable, SIGNAL(deleteClicked(QModelIndex)), SLOT(deleteItemClicked(QModelIndex)));
+    connect(mMainTable, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteItemClicked(QModelIndexList)));
     connect(mAddDialog, SIGNAL(success()), mMainTable->getModel(), SLOT(refresh()));
     connect(model, SIGNAL(firstDataLoaded()), SLOT(reloadSummary()));
 
@@ -180,15 +180,18 @@ void ItemWidget::updateItemClicked(const QModelIndex &index)
     mAddDialog->show();
 }
 
-void ItemWidget::deleteItemClicked(const QModelIndex &index)
+void ItemWidget::deleteItemClicked(const QModelIndexList &index)
 {
-    if(!index.isValid()) return;
-    int ret = QMessageBox::question(this, tr("Confirmation"), tr("The sistem will only make this item not visible in order to make the other data link to it still accessible. \
-The stocks cards and item link will be removed. Are you sure to delete item?"));
+    if(index.empty()) return;
+    int ret = QMessageBox::question(this, tr("Confirmation"), tr("The stocks cards and item link will be removed. Are you sure to delete item?"));
     if(ret != QMessageBox::Yes) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    QList<QVariant> ids;
+    for(int i = 0; i < index.size(); i++) {
+        auto item = static_cast<TableItem*>(index[i].internalPointer());
+        ids.append(item->data("barcode"));
+    }
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::DEL);
-    msg.addData("barcode", item->data("barcode"));
+    msg.addData("barcode", ids);
     sendMessage(&msg);
 }
 

@@ -34,7 +34,7 @@ class CustomerAddDialog : public QDialog, public LibG::MessageHandler
     Q_OBJECT
 
 public:
-    CustomerAddDialog(LibG::MessageBus *bus, QWidget *parent = 0);
+    CustomerAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CustomerAddDialog();
     void reset();
     void fill(const QVariantMap &data);

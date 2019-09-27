@@ -449,6 +449,7 @@ bool Db::truncateTable(const QString &table)
     } else {
         this->exec(QString("TRUNCATE TABLE %1").arg(table));
     }
+    return true;
 }
 
 QSqlDatabase Db::getDatabase()

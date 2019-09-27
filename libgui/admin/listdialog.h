@@ -33,7 +33,7 @@ class ListDialog : public QDialog
     Q_OBJECT
 
 public:
-    ListDialog(QWidget *parent = 0);
+    ListDialog(QWidget *parent = nullptr);
     ~ListDialog();
     void fill(const QJsonArray &arr);
     inline QString getSelectedId() { return mSelectedId; }

@@ -33,7 +33,7 @@ class Splash : public QDialog
     Q_OBJECT
 
 public:
-    Splash(QWidget *parent = 0);
+    Splash(QWidget *parent = nullptr);
     ~Splash();
     void setMessage(const QString &msg);
 

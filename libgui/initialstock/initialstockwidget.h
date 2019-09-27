@@ -37,7 +37,7 @@ class InitialStockWidget : public QWidget, public LibG::MessageHandler
 {
     Q_OBJECT
 public:
-    InitialStockWidget(LibG::MessageBus *bus,QWidget *parent = 0);
+    InitialStockWidget(LibG::MessageBus *bus,QWidget *parent = nullptr);
 
 protected:
     void messageReceived(LibG::Message *msg);
