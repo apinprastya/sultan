@@ -41,11 +41,11 @@ class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler
 
 public:
     ImportExportDatabaseDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
-    ~ImportExportDatabaseDialog();
+    ~ImportExportDatabaseDialog() override;
 
 protected:
     void messageReceived(LibG::Message *msg) override;
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     Ui::ImportExportDatabaseDialog *ui;

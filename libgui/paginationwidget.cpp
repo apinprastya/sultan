@@ -13,7 +13,7 @@ PaginationWidget::PaginationWidget(QWidget *parent) :
     ui->comboPerPage->addItem(tr("25/page"), 25);
     ui->comboPerPage->addItem(tr("50/page"), 50);
     ui->comboPerPage->addItem(tr("100/page"), 100);
-    connect(ui->spinPage, QOverload<int>::of(&QSpinBox::valueChanged), this, &PaginationWidget::spinChanged);
+    connect(ui->spinPage, SIGNAL(valueChanged(int)), SLOT(spinChanged(int)));
     connect(ui->comboPerPage, SIGNAL(currentIndexChanged(int)), SLOT(comboIndexChanged()));
 }
 
