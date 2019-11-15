@@ -48,7 +48,8 @@ void PayCashDialog::fill(double total)
 {
     mTotal = total;
     ui->labelTotal->setText(Preference::formatMoney(total));
-    ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
+    //ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
+    ui->lineEdit->setValue(total);
     ui->pushPay->setEnabled(true);
     ui->pushSave->setEnabled(true);
     ui->lineEdit->selectAll();

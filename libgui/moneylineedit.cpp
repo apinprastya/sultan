@@ -61,14 +61,29 @@ void MoneyLineEdit::textHasChanged(const QString &value)
     blockSignals(true);
     QString str = value;
     QLocale locale;
-    if(str.endsWith(".") && locale.decimalPoint() == QChar(',')) {
-        str = str.left(str.length() - 1).append(locale.decimalPoint());
-        setText(str);
-    }
-    if(!str.endsWith(",") && !mIsNative) {
-        str = str.replace(locale.groupSeparator(), "");
-        if(str.isEmpty()) setText(str);
-        else setText(LibG::Preference::formatMoney(locale.toDouble(str)));
+    auto split = str.splitRef(locale.decimalPoint());
+    if(locale.decimalPoint() == QChar(',')) {
+        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(".", "")));
+        if(split.length() == 1) {
+            if(str.endsWith(",") || str.endsWith(".")) {
+                setText(QString("%1,").arg(thausand));
+            } else {
+                setText(thausand);
+            }
+        } else {
+            setText(QString("%1,%2").arg(thausand).arg(split[1].toString()));
+        }
+    } else {
+        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(",", "")));
+        if(split.length() == 1) {
+            if(str.endsWith(".")) {
+                setText(QString("%1.").arg(thausand));
+            } else {
+                setText(thausand);
+            }
+        } else {
+            setText(QString("%1.%2").arg(thausand).arg(split[1].toString()));
+        }
     }
     blockSignals(false);
 }
