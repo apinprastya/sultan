@@ -102,6 +102,7 @@ protected:
 signals:
     void firstDataLoaded();
     void maxPageChanged(int value);
+    void currentPageChanged(int value);
 
 public slots:
     void loadPage(int page);

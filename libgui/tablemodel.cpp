@@ -106,6 +106,7 @@ void TableModel::reset()
     beginResetModel();
     mIsLoaded = false;
     mData.clearAndRelease();
+    mCurrentPage = 0;
     mRowCount = 0;
     endResetModel();
 }
@@ -228,6 +229,8 @@ void TableModel::filterChanged(int index, const QVariant &value)
         else
             mQuery.setFilter(key, FILTER::CATEGORY_IN, value);
     }
+    reset();
+    emit currentPageChanged(0);
     refresh();
 }
 

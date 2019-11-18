@@ -68,6 +68,7 @@ TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     connect(mTableView, SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
     connect(mPaginationWidget, SIGNAL(pageChanged(int)), mModel, SLOT(loadPage(int)));
     connect(mModel, SIGNAL(maxPageChanged(int)), mPaginationWidget, SLOT(setMaxPage(int)));
+    connect(mModel, SIGNAL(currentPageChanged(int)), mPaginationWidget, SLOT(setCurrentPage(int)));
     connect(mPaginationWidget, &PaginationWidget::perPageChanged, mModel, &TableModel::setPerPageCount);
 }
 
