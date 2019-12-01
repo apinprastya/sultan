@@ -82,6 +82,7 @@ Message SoldAction::insertSold(Message *msg)
                        {"type", TRANSACTION_TYPE::INCOME}, {"link_id", id},
                        {"link_type", TRANSACTION_LINK_TYPE::SOLD}, {"user_id", user_id},
                        {"machine_id", msg->data("machine_id")}, {"transaction_total", total},
+                       {"customer_id", cust_id},
                        {"bank_id", msg->data("bank_id")}, {"money_total", mon},
                        {"detail", QObject::tr("Sold : %1").arg(msg->data("number").toString())}};
         mDb->insert("transactions", tr);

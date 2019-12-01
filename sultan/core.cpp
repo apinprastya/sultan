@@ -38,6 +38,7 @@
 #ifdef USE_LIBUSB
 #include "usb.h"
 #endif
+#include "http/httpserver.h"
 #include <QApplication>
 #include <QTimer>
 #include <QMessageBox>
@@ -209,6 +210,8 @@ void Core::init()
             }
             connect(mSocketManager, SIGNAL(receivedMessage(LibG::Message*)), mMainServer, SLOT(messageReceived(LibG::Message*)));
             connect(mMainServer, SIGNAL(messageReady(LibG::Message*)), mSocketManager, SLOT(sendToClient(LibG::Message*)));
+            mHttpServer = new HttpServer();
+            mHttpServer->runServer(Preference::getInt(SETTING::APP_PORT) + 1);
             mMainWindow->splashShowMessage("Connecting to server ...");
             qApp->processEvents();
 #ifndef SERVER_BUILD

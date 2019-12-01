@@ -28,10 +28,12 @@
 #include "migration.h"
 #include <QStringRef>
 #include <QStringBuilder>
+#include <QFile>
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QDir>
 #include <QDirIterator>
+#include <QStandardPaths>
 #include <QDebug>
 
 using namespace LibServer;
@@ -49,21 +51,22 @@ DatabaseAction::DatabaseAction():
 LibG::Message DatabaseAction::exportDatabase(LibG::Message *msg)
 {
     Message message(msg);
-    message.addData("data", exportData().toBase64());
+    exportData();
     return message;
 }
 
 LibG::Message DatabaseAction::importDatabase(LibG::Message *msg)
 {
     Message message(msg);
-    QTemporaryFile f;
-    {
-        const QByteArray &d = qUncompress(QByteArray::fromBase64(msg->data("data").toString().toUtf8()));
-        f.open();
-        f.write(d);
+    QString fileName = msg->data("name").toString();
+    QFile f(fileName);
+    QTemporaryFile file;
+    if(f.open(QFile::ReadOnly) && file.open()) {
+        file.write(qUncompress(f.readAll()));
+        file.close();
         f.close();
     }
-    importData(f.fileName(), msg->data("version").toString(), &message);
+    importData(file.fileName(), msg->data("version").toString(), &message);
     return message;
 }
 
@@ -93,6 +96,7 @@ Message DatabaseAction::resetDatabase(Message *msg)
                     dir.cd(".sultan");
 #endif
                 }
+                //TODO: check this when this happen on client side
                 Preference::setValue(SETTING::RESETDB, true);
             } else {
                 mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
@@ -102,7 +106,7 @@ Message DatabaseAction::resetDatabase(Message *msg)
     return message;
 }
 
-QByteArray DatabaseAction::exportData()
+QString DatabaseAction::exportData()
 {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QStringList tableList;
@@ -117,6 +121,8 @@ QByteArray DatabaseAction::exportData()
         for(int i = 0; i < res.size(); i++)
             tableList << res.data(i).first().toString();
     }
+
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
     QTemporaryFile file;
     file.open();
     QTextStream stream(&file);
@@ -152,14 +158,19 @@ QByteArray DatabaseAction::exportData()
     stream.flush();
     file.reset();
     const QByteArray &arr = file.readAll();
+    QFile fileGzip(dir.absoluteFilePath("sultan.export"));
+    if(fileGzip.open(QFile::WriteOnly)) {
+        fileGzip.write(qCompress(arr));
+    }
     file.close();
-    return qCompress(arr);
+    return "success";
 }
 
 void DatabaseAction::importData(const QString &fileName, const QString &/*version*/, LibG::Message */*msg*/)
 {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QString ver = "013";
+    int counter = -1;
     QFile f(fileName);
     if(f.open(QFile::ReadOnly)) {
         QTextStream stream(&f);
@@ -177,6 +188,10 @@ void DatabaseAction::importData(const QString &fileName, const QString &/*versio
             if(line.startsWith("TABLE|")) {
                 columns.clear();
                 const QVector<QStringRef> &lsplit = line.splitRef("|", QString::SkipEmptyParts);
+                if(counter >= 0) {
+                    counter = -1;
+                    mDb->commit();
+                }
                 if(lsplit.size() == 3) {
                     tableName = lsplit[1].toString();
                     if(dbtype == "SQLITE") {
@@ -196,10 +211,17 @@ void DatabaseAction::importData(const QString &fileName, const QString &/*versio
                     if(!lsplit[i].isEmpty())
                         d.insert(columns[i], lsplit[i].toString().replace("#$", ";").replace("#%", "\n"));
                 }
+                if(counter < 0) mDb->beginTransaction();
                 if(!mDb->insert(tableName, d))
                     qWarning() << "[IMPORT] " << mDb->lastError().text();
+                counter++;
+                if(counter >= 500) {
+                    mDb->commit();
+                    counter = -1;
+                }
             }
         }
+        if(counter >= 0) mDb->commit();
         f.close();
     }
 }

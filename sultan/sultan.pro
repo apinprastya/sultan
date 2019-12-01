@@ -17,12 +17,14 @@ CONFIG += c++11
 
 contains(CONFIG, SINGLEBIN) {
     include(../external_library/o2/src/src.pri)
+    include(../external_library/pillow/pillowcore/pillowcore.pri)
     include(../libglobal/libglobal_src.pri)
     include(../libprint/libprint_src.pri)
     include(../libdb/libdb_src.pri)
     include(../libserver/libserver_src.pri)
     include(../libgui/libgui_src.pri)
 } else {
+    include(../external_library/pillow/pillowcore/pillowcore.pri)
     include(../libglobal/libglobal.pri)
     include(../libprint/libprint.pri)
     include(../libdb/libdb.pri)
@@ -85,12 +87,14 @@ TRANSLATIONS = ../translation/sultan_id.ts
 
 SOURCES += main.cpp \
     core.cpp \
+    http/httpserver.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
     socket/sockethandler.cpp
 
 HEADERS  += \
     core.h \
+    http/httpserver.h \
     socket/socketmanager.h \
     socket/socketclient.h \
     socket/sockethandler.h

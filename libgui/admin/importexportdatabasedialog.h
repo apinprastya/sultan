@@ -23,6 +23,7 @@
 #include "messagehandler.h"
 #include "o2google.h"
 #include <QDialog>
+#include <QNetworkAccessManager>
 
 namespace Ui {
 class ImportExportDatabaseDialog;
@@ -54,8 +55,11 @@ private:
     O2Google *mO2Google;
     GoogleDrive *mGDrive;
     QProgressDialog *mProgressDialog = nullptr;
+    QNetworkAccessManager mNetworkManager;
     bool mIsExport = false;
     bool mGDriveInProcess = false;
+
+    void uploadFile(const QByteArray &data);
 
 private slots:
     void exportFile();
@@ -69,6 +73,7 @@ private slots:
     void uploadGDriveDone();
     void onFileListed(const QJsonArray &arr);
     void onFileDownloaded(const QByteArray &data);
+    void requestFinished(QNetworkReply *reply);
 };
 
 }
