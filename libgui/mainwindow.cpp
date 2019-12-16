@@ -279,15 +279,11 @@ void MainWindow::setupConnection()
 void MainWindow::loginSuccess()
 {
     setup();
-#ifdef Q_PROCESSOR_ARM
-    showFullScreen();
-#else
 #ifdef QT_DEBUG
     setFixedSize(1024, 768);
     show();
 #else
     showMaximized();
-#endif
 #endif
     QNetworkRequest req(QUrl("https://firestore.googleapis.com/v1beta1/projects/testpro-61e0d/databases/(default)/documents/version/version"));
     mNam.get(req);
@@ -649,10 +645,11 @@ void MainWindow::openSoldReturn()
 
 void MainWindow::httpRequestDone(QNetworkReply *reply)
 {
-    const QJsonObject &doc = QJsonDocument::fromJson(reply->readAll()).object();
-    const QJsonObject &fields = doc.value("fields").toObject();
-    const QString &version = fields.value("current").toObject().value("stringValue").toString().replace(".", "");
-    const QString &appVersion = qApp->applicationVersion().replace(".", "");
+    if(reply->error() != QNetworkReply::NoError) return;
+    QJsonObject doc = QJsonDocument::fromJson(reply->readAll()).object();
+    QJsonObject fields = doc.value("fields").toObject();
+    QString version = fields.value("current").toObject().value("stringValue").toString().replace(".", "");
+    QString appVersion = qApp->applicationVersion().replace(".", "");
     if(version.toInt() > appVersion.toInt())
         QMessageBox::information(this, tr("New Version"), tr("New version is available. Please check on %1").
                                  arg("<a href=https://sultan.lekapin.com/download>https://sultan.lekapin.com/download</a>"));
