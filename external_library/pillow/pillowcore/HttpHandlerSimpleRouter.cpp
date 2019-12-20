@@ -235,7 +235,7 @@ bool HttpHandlerSimpleRouter::handleRequest(Pillow::HttpConnection *request)
 	{
 		QString methodParam = request->requestParamValue(methodToken);
 		if (!methodParam.isEmpty())
-			requestMethod = methodParam.toAscii();
+            requestMethod = methodParam.toUtf8();
 	}
 
 	QString requestPath = QUrl::fromPercentEncoding(request->requestPath());

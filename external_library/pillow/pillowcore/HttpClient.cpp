@@ -645,7 +645,7 @@ void Pillow::HttpClient::sendRequest()
 
 	if (_hostHeaderValue.isEmpty())
 	{
-        _hostHeaderValue = _request.url.encodedHost();
+        _hostHeaderValue = _request.url.toAce(_request.url.host());
 		if (_request.url.port(80) != 80)
 		{
 			_hostHeaderValue.append(':');
@@ -653,8 +653,8 @@ void Pillow::HttpClient::sendRequest()
 		}
 	}
 
-	QByteArray uri = _request.url.encodedPath();
-	const QByteArray query = _request.url.encodedQuery();
+    QByteArray uri = _request.url.path().toUtf8();
+    const QByteArray query = _request.url.toEncoded();
 	if (!query.isEmpty()) uri.append('?').append(query);
 
 	Pillow::HttpHeaderCollection headers;
