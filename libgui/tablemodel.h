@@ -68,7 +68,8 @@ public:
     void removeItem(TableItem *item);
     inline RowData* getRowData() { return &mData; }
     inline void setDateTimeISO(bool value) { mDateTimeISO = value; }
-    void setPerPageCount(int value);
+    void setPerPageCount(int value, bool refresh = true);
+    void slotPerPageCount(int value);
 
 public slots:
     void refresh();

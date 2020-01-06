@@ -50,7 +50,7 @@ SearchItemDialog::SearchItemDialog(MessageBus *bus, bool advance, QWidget *paren
     model->addColumnMoney("sell_price", tr("Price"));
     model->addColumnMoney("stock", tr("Stock"));
     model->setTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::QUERY);
-    mTableWidget->setDefaultPerPage(3);
+    mTableWidget->setDefaultPerPage(3, false);
     mTableWidget->setupTable();
     ui->verticalLayout->addWidget(mTableWidget);
     connect(ui->lineName, SIGNAL(returnPressed()), SLOT(nameDone()));

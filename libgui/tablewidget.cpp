@@ -69,7 +69,7 @@ TableWidget::TableWidget(QWidget *parent, bool useStandartHeader) :
     connect(mPaginationWidget, SIGNAL(pageChanged(int)), mModel, SLOT(loadPage(int)));
     connect(mModel, SIGNAL(maxPageChanged(int)), mPaginationWidget, SLOT(setMaxPage(int)));
     connect(mModel, SIGNAL(currentPageChanged(int)), mPaginationWidget, SLOT(setCurrentPage(int)));
-    connect(mPaginationWidget, &PaginationWidget::perPageChanged, mModel, &TableModel::setPerPageCount);
+    connect(mPaginationWidget, &PaginationWidget::perPageChanged, mModel, &TableModel::slotPerPageCount);
 }
 
 TableWidget::~TableWidget()
@@ -110,10 +110,10 @@ QPushButton *TableWidget::addActionButton(const QIcon &icon)
     return addActionButton(icon, Unknown);
 }
 
-void TableWidget::setDefaultPerPage(int index)
+void TableWidget::setDefaultPerPage(int index, bool refresh)
 {
     static QMap<int, int> pageMap{{0, 10}, {1, 25}, {2, 50}, {3, 100}};
-    mModel->setPerPageCount(pageMap[index]);
+    mModel->setPerPageCount(pageMap[index], refresh);
     mPaginationWidget->setCurrentPerPage(index, true);
 }
 

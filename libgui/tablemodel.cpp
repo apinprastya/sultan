@@ -165,13 +165,19 @@ void TableModel::removeItem(TableItem *item)
     endRemoveRows();
 }
 
-void TableModel::setPerPageCount(int value)
+void TableModel::setPerPageCount(int value, bool refresh)
 {
     mQuery.setLimit(value);
     mPerPage = value;
     mCurrentPage = 0;
     mNumRow = 0;
-    this->refresh();
+    if(refresh)
+        this->refresh();
+}
+
+void TableModel::slotPerPageCount(int value)
+{
+    setPerPageCount(value, true);
 }
 
 void TableModel::refresh()

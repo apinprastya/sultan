@@ -54,7 +54,7 @@ public:
     QPushButton *addActionButton(const QIcon &icon);
     inline void addEnableNoSelect(QPushButton *btn) { mEnableNoSelect.append(btn); }
     inline void setEnableDoubleClickUpdate(bool value) { mEnableDoubleClickUpdate = value; }
-    void setDefaultPerPage(int index);
+    void setDefaultPerPage(int index, bool refresh = true);
 
 private:
     TableView *mTableView;
