@@ -56,8 +56,8 @@ LibG::Message TransactionAction::summaryTransaction(LibG::Message *msg)
             where("link_type = ", TRANSACTION_LINK_TYPE::TRANSACTION)->exec();
     message.addData("transonly", res.first()["transonly"]);
     //Margin
-    msg->keepFilter(QStringList() << "0$DATE(date)" << "1$DATE(date)");
-    mDb = QueryHelper::filter(mDb->reset(), msg->data(), QMap<QString, QString> {{"DATE(date)", "DATE(created_at)"}});
+    msg->keepFilter(QStringList() << "0$date" << "1$date");
+    mDb = QueryHelper::filter(mDb->reset(), msg->data(), QMap<QString, QString> {{"date", "DATE(created_at)"}});
     res = mDb->where(QString("(flag & %1) == 0").arg(ITEM_FLAG::ITEM_LINK))->
             select("sum(final - buy_price) as margin")->get("solditems");
     message.addData("margin", res.first()["margin"]);
@@ -69,7 +69,8 @@ LibG::Message TransactionAction::summaryMoney(LibG::Message *msg)
     Message message(msg);
     mDb->table(mTableName);
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
-    DbResult res = mDb->clone()->select("sum(money_total) as total")->exec();
+    DbResult res = mDb->clone()->select("sum(money_total) as total")->
+            join("left join users on users.id = transactions.user_id")->exec();
     message.addData("total", res.first()["total"].toDouble());
     return message;
 }
