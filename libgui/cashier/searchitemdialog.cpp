@@ -37,7 +37,8 @@ using namespace LibG;
 SearchItemDialog::SearchItemDialog(MessageBus *bus, bool advance, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SearchItemDialog),
-    mTableWidget(new TableWidget(this, !advance))
+    mTableWidget(new TableWidget(this, !advance)),
+    mIsAdvance(advance)
 {
     ui->setupUi(this);
     auto keyEvent = new KeyEvent(this);
@@ -59,9 +60,9 @@ SearchItemDialog::SearchItemDialog(MessageBus *bus, bool advance, QWidget *paren
     ui->lineName->setFocus();
     connect(mTableWidget->getModel(), SIGNAL(firstDataLoaded()), SLOT(dataLoaded()));
     connect(keyEvent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(returnPressed()));
+    connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
     if(advance) {
         ui->lineName->hide();
-        connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
         model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLikeNative, QVariant()});
         model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
         model->refresh();
@@ -116,9 +117,14 @@ void SearchItemDialog::doubleClicked(const QModelIndex &index)
 {
     auto item = static_cast<TableItem*>(index.internalPointer());
     if(item) {
-        mSelectedData = item->data();
-        mSelectedBarcode = item->data("barcode").toString();
-        mIsOk = true;
+        if(mIsAdvance) {
+            mSelectedData = item->data();
+            mSelectedBarcode = item->data("barcode").toString();
+            mIsOk = true;
+        } else {
+            mSelectedBarcode = item->data("barcode").toString();
+            mSelectedData = item->data();
+        }
         close();
     }
 }

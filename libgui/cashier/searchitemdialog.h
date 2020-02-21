@@ -53,6 +53,7 @@ private:
     QString mSelectedBarcode;
     QVariantMap mSelectedData;
     bool mIsOk = false;
+    bool mIsAdvance = false;
 
 private slots:
     void nameDone();
