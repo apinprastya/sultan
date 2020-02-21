@@ -63,7 +63,7 @@ void MoneyLineEdit::textHasChanged(const QString &value)
     QLocale locale;
     auto split = str.splitRef(locale.decimalPoint());
     if(locale.decimalPoint() == QChar(',')) {
-        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(".", "")));
+        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(".", "")), 'f', 0);
         if(split.length() == 1) {
             if(str.endsWith(",") || str.endsWith(".")) {
                 setText(QString("%1,").arg(thausand));
@@ -74,7 +74,7 @@ void MoneyLineEdit::textHasChanged(const QString &value)
             setText(QString("%1,%2").arg(thausand).arg(split[1].toString()));
         }
     } else {
-        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(",", "")));
+        const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(",", "")), 'f', 0);
         if(split.length() == 1) {
             if(str.endsWith(".")) {
                 setText(QString("%1.").arg(thausand));
