@@ -19,6 +19,7 @@
  */
 #include "moneylineedit.h"
 #include "preference.h"
+#include "global_setting_const.h"
 #include <QDoubleValidator>
 #include <QLocale>
 #include <QDebug>
@@ -50,10 +51,7 @@ double MoneyLineEdit::value()
 void MoneyLineEdit::setValue(double value)
 {
     QLocale locale;
-    if(locale.decimalPoint() == QChar(','))
-        setText(QString::number(value).replace(".", ","));
-    else
-        setText(QString::number(value));
+    setText(locale.toString(value, 'f', LibG::Preference::getInt(LibG::SETTING::LOCALE_DECIMAL)));
 }
 
 void MoneyLineEdit::textHasChanged(const QString &value)
