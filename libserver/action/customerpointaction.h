@@ -24,14 +24,13 @@
 
 namespace LibServer {
 
-class CustomerPointAction: public ServerAction
-{
-public:
+class CustomerPointAction : public ServerAction {
+  public:
     CustomerPointAction();
 
-protected:
+  protected:
     void afterInsert(const QVariantMap &data) override;
 };
 
-}
+} // namespace LibServer
 #endif // CUSTOMERPOINTACTION_H

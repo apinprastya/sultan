@@ -32,15 +32,15 @@
 
 using namespace LibGUI;
 
-BrowserDialog::BrowserDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::BrowserDialog),
-    mLineAddress(new QLineEdit(this))
+BrowserDialog::BrowserDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::BrowserDialog), mLineAddress(new QLineEdit(this))
 #ifdef USE_EMBED_BROWSER
 #ifndef USE_WEBENGINE
-    ,mWebView(new QWebView(this))
+      ,
+      mWebView(new QWebView(this))
 #else
-    ,mWebView(new QWebEngineView(this))
+      ,
+      mWebView(new QWebEngineView(this))
 #endif
 #endif
 {
@@ -52,13 +52,9 @@ BrowserDialog::BrowserDialog(QWidget *parent) :
     mLineAddress->setReadOnly(true);
 }
 
-BrowserDialog::~BrowserDialog()
-{
-    delete ui;
-}
+BrowserDialog::~BrowserDialog() { delete ui; }
 
-void BrowserDialog::setUrl(const QUrl &url)
-{
+void BrowserDialog::setUrl(const QUrl &url) {
 #ifdef USE_EMBED_BROWSER
     mWebView->load(url);
 #endif

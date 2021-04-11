@@ -26,31 +26,30 @@
 namespace Ui {
 class NormalWidget;
 class DateStartEndWidget;
-}
+} // namespace Ui
 
 namespace LibGUI {
 
 class TableWidget;
 
-class ReportItemWidget : public QWidget, public LibG::MessageHandler
-{
+class ReportItemWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     ReportItemWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReportItemWidget();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::NormalWidget *ui;
     Ui::DateStartEndWidget *mDateWidget;
     TableWidget *mTableWidget;
 
-private slots:
+  private slots:
     void refreshTable();
 };
 
-}
+} // namespace LibGUI
 
 #endif // REPORTITEMWIDGET_H

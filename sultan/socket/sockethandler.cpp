@@ -21,22 +21,14 @@
 #include "message.h"
 #include <QWebSocket>
 
-SocketHandler::SocketHandler(int id, QWebSocket *socket, QObject *parent) :
-    QObject(parent),
-    mId(id),
-    mSocket(socket)
-{
+SocketHandler::SocketHandler(int id, QWebSocket *socket, QObject *parent) : QObject(parent), mId(id), mSocket(socket) {
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(disconnect()));
     connect(mSocket, SIGNAL(binaryMessageReceived(QByteArray)), SLOT(binaryMessageRecieved(QByteArray)));
 }
 
-void SocketHandler::sendMessage(LibG::Message *msg)
-{
-    mSocket->sendBinaryMessage(msg->toByteArray());
-}
+void SocketHandler::sendMessage(LibG::Message *msg) { mSocket->sendBinaryMessage(msg->toByteArray()); }
 
-void SocketHandler::binaryMessageRecieved(const QByteArray &data)
-{
+void SocketHandler::binaryMessageRecieved(const QByteArray &data) {
     LibG::Message msg(data);
     msg.setSocketId(mId);
     emit newMessage(&msg);

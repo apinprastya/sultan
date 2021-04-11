@@ -18,25 +18,21 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "addpoindialog.h"
-#include "ui_addpoindialog.h"
-#include "preference.h"
-#include "global_constant.h"
 #include "flashmessagemanager.h"
-#include "message.h"
+#include "global_constant.h"
 #include "guiutil.h"
+#include "message.h"
+#include "preference.h"
+#include "ui_addpoindialog.h"
 #include "usersession.h"
-#include <QMessageBox>
 #include <QDateTime>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-AddPoinDialog::AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AddPoinDialog),
-    mId(id),
-    mPoin(poin)
-{
+AddPoinDialog::AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddPoinDialog), mId(id), mPoin(poin) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelNumber->setText(number);
@@ -52,25 +48,22 @@ AddPoinDialog::AddPoinDialog(LibG::MessageBus *bus, int id, const QString &numbe
     typeChanged();
 }
 
-AddPoinDialog::~AddPoinDialog()
-{
-    delete ui;
-}
+AddPoinDialog::~AddPoinDialog() { delete ui; }
 
-void AddPoinDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::REWARD, MSG_COMMAND::QUERY)) {
-        if(msg->isSuccess()) {
+void AddPoinDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::REWARD, MSG_COMMAND::QUERY)) {
+        if (msg->isSuccess()) {
             ui->comboExchange->clear();
             ui->comboExchange->addItem(tr("-- Select exchange --"), -1);
             const QVariantList &l = msg->data("data").toList();
-            for(int i = 0; i < l.size(); i++) {
+            for (int i = 0; i < l.size(); i++) {
                 const QVariantMap &data = l[i].toMap();
-                ui->comboExchange->addItem(QString("%1 : %2").arg(data["count"].toInt()).arg(data["detail"].toString()), data["count"].toInt());
+                ui->comboExchange->addItem(QString("%1 : %2").arg(data["count"].toInt()).arg(data["detail"].toString()),
+                                           data["count"].toInt());
             }
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER_POINT, MSG_COMMAND::INSERT)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CUSTOMER_POINT, MSG_COMMAND::INSERT)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Poin exchange added successfully"));
             close();
         } else {
@@ -80,18 +73,16 @@ void AddPoinDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void AddPoinDialog::typeChanged()
-{
+void AddPoinDialog::typeChanged() {
     int val = ui->comboType->currentData().toInt();
     ui->comboExchange->setEnabled(val == POIN_TYPE::EXCHANGE);
     ui->spinReward->setEnabled(val == POIN_TYPE::MANUAL);
     ui->plainDetail->setEnabled(val == POIN_TYPE::MANUAL);
 }
 
-void AddPoinDialog::saveClicked()
-{
+void AddPoinDialog::saveClicked() {
     int type = ui->comboType->currentData().toInt();
-    if(type < 0) {
+    if (type < 0) {
         QMessageBox::critical(this, tr("Error"), tr("Please select the type"));
         return;
     }
@@ -100,20 +91,20 @@ void AddPoinDialog::saveClicked()
     msg.addData("number", QString::number(now, 16).toUpper());
     msg.addData("customer_id", mId);
     msg.addData("user_id", UserSession::id());
-    if(type == POIN_TYPE::EXCHANGE) {
+    if (type == POIN_TYPE::EXCHANGE) {
         int curPoin = ui->comboExchange->currentData().toInt();
-        if(curPoin < 0) {
+        if (curPoin < 0) {
             QMessageBox::critical(this, tr("Error"), tr("Please select the exchange item"));
             return;
         }
-        if(curPoin > mPoin) {
+        if (curPoin > mPoin) {
             QMessageBox::critical(this, tr("Error"), tr("Customer poin has less poin than the required exchange poin"));
             return;
         }
         msg.addData("reward", -curPoin);
         msg.addData("detail", ui->comboExchange->currentText());
     } else {
-        if(GuiUtil::anyEmpty(QList<QWidget*>{ui->spinReward, ui->plainDetail})) {
+        if (GuiUtil::anyEmpty(QList<QWidget *>{ui->spinReward, ui->plainDetail})) {
             QMessageBox::critical(this, tr("Error"), tr("Make sure poin and detail are filled"));
             return;
         }

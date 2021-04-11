@@ -38,16 +38,15 @@ class BrowserDialog;
 
 namespace LibGUI {
 
-class BrowserDialog : public QDialog
-{
+class BrowserDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     BrowserDialog(QWidget *parent = nullptr);
     ~BrowserDialog();
     void setUrl(const QUrl &url);
 
-private:
+  private:
     Ui::BrowserDialog *ui;
     QLineEdit *mLineAddress;
 #ifdef USE_EMBED_BROWSER
@@ -59,5 +58,5 @@ private:
 #endif
 };
 
-}
+} // namespace LibGUI
 #endif // BROWSERDIALOG_H

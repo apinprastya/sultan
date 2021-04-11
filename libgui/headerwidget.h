@@ -21,8 +21,8 @@
 #define HEADERWIDGET_H
 
 #include "gui_global.h"
-#include <QWidget>
 #include <QVariant>
+#include <QWidget>
 
 class QLineEdit;
 class QComboBox;
@@ -30,14 +30,11 @@ class QDateTimeEdit;
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT HeaderWidget : public QWidget
-{
+class GUISHARED_EXPORT HeaderWidget : public QWidget {
     Q_OBJECT
 
-public:
-    enum Type {
-        None, LineEdit, Combo, Date, DateStartEnd
-    };
+  public:
+    enum Type { None, LineEdit, Combo, Date, DateStartEnd };
 
     HeaderWidget(int index, int type, const QString &title, QWidget *parent = nullptr);
     inline QLineEdit *getLineEdit() { return mLineEdit; }
@@ -45,22 +42,22 @@ public:
     inline QDateTimeEdit *getDateEdit() { return mDateEdit; }
     inline QDateTimeEdit *getDateEnd() { return mDateEnd; }
 
-signals:
+  signals:
     void filterValueChanged(int index, QVariant value);
 
-private:
+  private:
     int mIndex;
     QLineEdit *mLineEdit = nullptr;
     QComboBox *mComboBox = nullptr;
     QDateTimeEdit *mDateEdit = nullptr;
     QDateTimeEdit *mDateEnd = nullptr;
 
-private slots:
+  private slots:
     void lineEditDone();
     void comboChanged();
     void dateChanged();
     void dateStartEndChanged();
 };
 
-}
+} // namespace LibGUI
 #endif // HEADERWIDGET_H

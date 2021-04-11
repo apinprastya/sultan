@@ -18,50 +18,46 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "databaseaction.h"
+#include "db.h"
+#include "dbutil.h"
 #include "global_constant.h"
 #include "global_setting_const.h"
-#include "db.h"
+#include "migration.h"
+#include "preference.h"
 #include "queryhelper.h"
 #include "util.h"
-#include "preference.h"
-#include "dbutil.h"
-#include "migration.h"
-#include <QStringRef>
-#include <QStringBuilder>
-#include <QFile>
-#include <QTemporaryFile>
-#include <QTextStream>
+#include <QDebug>
 #include <QDir>
 #include <QDirIterator>
+#include <QFile>
 #include <QStandardPaths>
-#include <QDebug>
+#include <QStringBuilder>
+#include <QStringRef>
+#include <QTemporaryFile>
+#include <QTextStream>
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-DatabaseAction::DatabaseAction():
-    ServerAction("", "")
-{
+DatabaseAction::DatabaseAction() : ServerAction("", "") {
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&DatabaseAction::exportDatabase, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&DatabaseAction::importDatabase, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::RESET, std::bind(&DatabaseAction::resetDatabase, this, std::placeholders::_1));
 }
 
-LibG::Message DatabaseAction::exportDatabase(LibG::Message *msg)
-{
+LibG::Message DatabaseAction::exportDatabase(LibG::Message *msg) {
     Message message(msg);
     exportData();
     return message;
 }
 
-LibG::Message DatabaseAction::importDatabase(LibG::Message *msg)
-{
+LibG::Message DatabaseAction::importDatabase(LibG::Message *msg) {
     Message message(msg);
     QString fileName = msg->data("name").toString();
     QFile f(fileName);
     QTemporaryFile file;
-    if(f.open(QFile::ReadOnly) && file.open()) {
+    if (f.open(QFile::ReadOnly) && file.open()) {
         file.write(qUncompress(f.readAll()));
         file.close();
         f.close();
@@ -70,33 +66,34 @@ LibG::Message DatabaseAction::importDatabase(LibG::Message *msg)
     return message;
 }
 
-Message DatabaseAction::resetDatabase(Message *msg)
-{
+Message DatabaseAction::resetDatabase(Message *msg) {
     Message message(msg);
     DbResult res = mDb->where("id = ", msg->data("user_id"))->get("users");
-    if(res.size() != 1) {
+    if (res.size() != 1) {
         message.setError(QObject::tr("User id not found"));
     } else {
         const QVariantMap &data = res.first();
         const QString &pass = data["password"].toString();
-        if(pass.compare(msg->data("password").toString()) != 0) {
+        if (pass.compare(msg->data("password").toString()) != 0) {
             message.setError("Password is wrong!");
         } else {
             auto dbtype = Preference::getString(SETTING::DATABASE);
-            if(dbtype == "SQLITE") {
+            if (dbtype == "SQLITE") {
                 QDir dir = QDir::home();
                 QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
                 QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
-                if(dbname.isEmpty()) dbname = "sultan.db";
-                if(!dbname.endsWith(".db")) dbname += ".db";
-                if(dirpath.isEmpty()) {
+                if (dbname.isEmpty())
+                    dbname = "sultan.db";
+                if (!dbname.endsWith(".db"))
+                    dbname += ".db";
+                if (dirpath.isEmpty()) {
 #ifdef Q_OS_WIN32
                     dir.cd(".sultan");
 #else
                     dir.cd(".sultan");
 #endif
                 }
-                //TODO: check this when this happen on client side
+                // TODO: check this when this happen on client side
                 Preference::setValue(SETTING::RESETDB, true);
             } else {
                 mDb->exec("DROP DATABASE " + Preference::getString(SETTING::MYSQL_DB));
@@ -106,19 +103,18 @@ Message DatabaseAction::resetDatabase(Message *msg)
     return message;
 }
 
-QString DatabaseAction::exportData()
-{
+QString DatabaseAction::exportData() {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QStringList tableList;
     DbResult migRes = mDb->get("migrations");
     const QString &version = migRes.first()["name"].toString().left(3);
-    if(dbtype == "SQLITE") {
+    if (dbtype == "SQLITE") {
         DbResult res = mDb->where("type = ", "table")->get("sqlite_master");
-        for(int i = 0; i < res.size(); i++)
+        for (int i = 0; i < res.size(); i++)
             tableList << res.data(i)["tbl_name"].toString();
     } else {
         DbResult res = mDb->execResult("SHOW TABLES");
-        for(int i = 0; i < res.size(); i++)
+        for (int i = 0; i < res.size(); i++)
             tableList << res.data(i).first().toString();
     }
 
@@ -127,22 +123,23 @@ QString DatabaseAction::exportData()
     file.open();
     QTextStream stream(&file);
     stream << version << "\n";
-    for(int i = 0; i < tableList.size(); i++) {
+    for (int i = 0; i < tableList.size(); i++) {
         int offset = 0;
         int limit = 500;
         stream << "TABLE|" << tableList[i] << "|";
         DbResult res = mDb->start(offset)->limit(limit)->get(tableList[i]);
-        if(res.isEmpty()) stream << "EMPTY\n";
-        while(!res.isEmpty()) {
-            if(offset == 0) {
+        if (res.isEmpty())
+            stream << "EMPTY\n";
+        while (!res.isEmpty()) {
+            if (offset == 0) {
                 const QVariantMap &m = res.first();
                 const QList<QString> &k = m.keys();
-                for(auto _k : k) {
+                for (auto _k : k) {
                     stream << _k << ";";
                 }
                 stream << "\n";
             }
-            for(int j = 0; j < res.size(); j++) {
+            for (int j = 0; j < res.size(); j++) {
                 const QVariantMap &d = res.data(j);
                 QMapIterator<QString, QVariant> it(d);
                 while (it.hasNext()) {
@@ -159,83 +156,87 @@ QString DatabaseAction::exportData()
     file.reset();
     const QByteArray &arr = file.readAll();
     QFile fileGzip(dir.absoluteFilePath("sultan.export"));
-    if(fileGzip.open(QFile::WriteOnly)) {
+    if (fileGzip.open(QFile::WriteOnly)) {
         fileGzip.write(qCompress(arr));
     }
     file.close();
     return "success";
 }
 
-void DatabaseAction::importData(const QString &fileName, const QString &/*version*/, LibG::Message */*msg*/)
-{
+void DatabaseAction::importData(const QString &fileName, const QString & /*version*/, LibG::Message * /*msg*/) {
     auto dbtype = Preference::getString(SETTING::DATABASE);
     QString ver = "013";
     int counter = -1;
     QFile f(fileName);
-    if(f.open(QFile::ReadOnly)) {
+    if (f.open(QFile::ReadOnly)) {
         QTextStream stream(&f);
         QStringList columns;
         QString tableName;
         bool versionOK = false;
-        while(!stream.atEnd()) {
+        while (!stream.atEnd()) {
             const QString &line = stream.readLine();
-            if(!versionOK) {
+            if (!versionOK) {
                 const QString &strVersion = line.trimmed();
-                if(strVersion.size() == 3) ver = strVersion;
+                if (strVersion.size() == 3)
+                    ver = strVersion;
                 migrateUntil(ver);
                 versionOK = true;
             }
-            if(line.startsWith("TABLE|")) {
+            if (line.startsWith("TABLE|")) {
                 columns.clear();
                 const QVector<QStringRef> &lsplit = line.splitRef("|", QString::SkipEmptyParts);
-                if(counter >= 0) {
+                if (counter >= 0) {
                     counter = -1;
                     mDb->commit();
                 }
-                if(lsplit.size() == 3) {
+                if (lsplit.size() == 3) {
                     tableName = lsplit[1].toString();
-                    if(dbtype == "SQLITE") {
+                    if (dbtype == "SQLITE") {
                         mDb->exec(QString("DELETE FROM %1").arg(tableName));
                     } else {
                         mDb->exec(QString("TRUNCATE TABLE %1").arg(tableName));
                     }
-                    if(!lsplit[2].compare(QLatin1String("EMPTY"))) continue;
+                    if (!lsplit[2].compare(QLatin1String("EMPTY")))
+                        continue;
                     const QVector<QStringRef> &colsplit = lsplit[2].split(";", QString::SkipEmptyParts);
-                    for(auto col : colsplit)
+                    for (auto col : colsplit)
                         columns.append(col.toString());
                 }
             } else {
                 const QVector<QStringRef> &lsplit = line.splitRef(";");
                 QVariantMap d;
-                for(int i = 0; i < columns.size(); i++) {
-                    if(!lsplit[i].isEmpty())
+                for (int i = 0; i < columns.size(); i++) {
+                    if (!lsplit[i].isEmpty())
                         d.insert(columns[i], lsplit[i].toString().replace("#$", ";").replace("#%", "\n"));
                 }
-                if(counter < 0) mDb->beginTransaction();
-                if(!mDb->insert(tableName, d))
+                if (counter < 0)
+                    mDb->beginTransaction();
+                if (!mDb->insert(tableName, d))
                     qWarning() << "[IMPORT] " << mDb->lastError().text();
                 counter++;
-                if(counter >= 500) {
+                if (counter >= 500) {
                     mDb->commit();
                     counter = -1;
                 }
             }
         }
-        if(counter >= 0) mDb->commit();
+        if (counter >= 0)
+            mDb->commit();
         f.close();
     }
 }
 
-void DatabaseAction::migrateUntil(const QString &version)
-{
+void DatabaseAction::migrateUntil(const QString &version) {
     auto dbtype = Preference::getString(SETTING::DATABASE);
-    if(dbtype == "SQLITE") {
+    if (dbtype == "SQLITE") {
         QDir dir = QDir::home();
         QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
         QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
-        if(dbname.isEmpty()) dbname = "sultan.db";
-        if(!dbname.endsWith(".db")) dbname += ".db";
-        if(dirpath.isEmpty()) {
+        if (dbname.isEmpty())
+            dbname = "sultan.db";
+        if (!dbname.endsWith(".db"))
+            dbname += ".db";
+        if (dirpath.isEmpty()) {
 #ifdef Q_OS_WIN32
             dir.cd("sultan");
 #else
@@ -249,11 +250,13 @@ void DatabaseAction::migrateUntil(const QString &version)
     }
     auto func = [version](const QString &name) -> bool {
         const QString &ver = name.left(3);
-        if(!ver.compare(version)) return false;
+        if (!ver.compare(version))
+            return false;
         return true;
     };
-    QDirIterator it(QString(":/migration/%1").arg(Preference::getString(SETTING::DATABASE) == "MYSQL" ?
-                                                      "mysql" : "sqlite"), QDirIterator::Subdirectories);
+    QDirIterator it(
+        QString(":/migration/%1").arg(Preference::getString(SETTING::DATABASE) == "MYSQL" ? "mysql" : "sqlite"),
+        QDirIterator::Subdirectories);
     QStringList sl;
     while (it.hasNext()) {
         sl.append(it.next());
@@ -261,4 +264,3 @@ void DatabaseAction::migrateUntil(const QString &version)
     sl.sort();
     LibDB::Migration::migrateAll(sl, Preference::getString(SETTING::DATABASE), func);
 }
-

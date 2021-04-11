@@ -22,16 +22,15 @@
 #define DBUTIL_H
 
 #include "db_global.h"
-#include <QString>
 #include <QDateTime>
+#include <QString>
 
 namespace LibDB {
 
 class DbResult;
 
-class DBSHARED_EXPORT DBUtil
-{
-public:
+class DBSHARED_EXPORT DBUtil {
+  public:
     DBUtil();
     static QString formatDateToIndo(const QString &d, bool useTime = true);
     static QDate sqlDateToDate(const QString &value);
@@ -39,6 +38,6 @@ public:
     static QString DBResultToString(DbResult *result);
 };
 
-}
+} // namespace LibDB
 
 #endif // DBUTIL_H

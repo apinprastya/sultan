@@ -35,17 +35,16 @@ namespace LibGUI {
 class CategoryTreeWidget;
 class CategoryAddDialog;
 
-class CategoryWidget : public QWidget, public LibG::MessageHandler
-{
+class CategoryWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     CategoryWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CategoryWidget();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::NormalWidget *ui;
     CategoryTreeWidget *mTreeWidget;
     CategoryAddDialog *mAddDialog;
@@ -53,7 +52,7 @@ private:
     QPushButton *addButtonAction(QHBoxLayout *layout, const QString &iconName);
     void pupulateComboBox();
 
-private slots:
+  private slots:
     void loadCategory();
     void addClicked();
     void updateClicked();
@@ -61,5 +60,5 @@ private slots:
     void saveRequested(const QVariantMap &data, int id);
 };
 
-}
+} // namespace LibGUI
 #endif // CATEGORYWIDGET_H

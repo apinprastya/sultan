@@ -25,40 +25,37 @@ using namespace LibDB;
 
 static QMap<int, std::function<void(Db *db, const QString &, int, const QVariantMap &)>> USERDEFINED_FILTER;
 
-QueryHelper::QueryHelper()
-{
-}
+QueryHelper::QueryHelper() {}
 
-Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QString> &fieldMap)
-{
-    if(data.contains(QLatin1String("filter")) && data[QLatin1String("filter")].type() == QVariant::Map) {
+Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QString> &fieldMap) {
+    if (data.contains(QLatin1String("filter")) && data[QLatin1String("filter")].type() == QVariant::Map) {
         const QVariantMap &d = data[QLatin1String("filter")].toMap();
         QMapIterator<QString, QVariant> i(d);
         while (i.hasNext()) {
             i.next();
             QString key = i.key();
-            if(key.contains(QLatin1String("$")))
+            if (key.contains(QLatin1String("$")))
                 key = key.mid(2);
-            if(fieldMap.contains(key))
+            if (fieldMap.contains(key))
                 key = fieldMap[key];
             const QVariantMap &option = i.value().toMap();
             int type = option[QLatin1String("type")].toInt();
-            if(type == COMPARE::IGNORE)
+            if (type == COMPARE::IGNORE)
                 continue;
-            if(type == COMPARE::ISNULL || type == COMPARE::ISNOTNULL) {
+            if (type == COMPARE::ISNULL || type == COMPARE::ISNOTNULL) {
                 db->where(key + getSign(type));
-            } else if(type == COMPARE::LIKE) {
+            } else if (type == COMPARE::LIKE) {
                 db->like(key, option[QLatin1String("value")].toString());
-            } else if(type == COMPARE::LIKE_NATIVE) {
+            } else if (type == COMPARE::LIKE_NATIVE) {
                 db->likeNative(key, option[QLatin1String("value")].toString());
-            } else if(type == COMPARE::FLAG_ENABLE) {
+            } else if (type == COMPARE::FLAG_ENABLE) {
                 db->where(QString("(%1 & %2) != 0").arg(key).arg(option[QLatin1String("value")].toInt()));
-            } else if(type == COMPARE::FLAG_DISABLE) {
+            } else if (type == COMPARE::FLAG_DISABLE) {
                 db->where(QString("(%1 & %2) = 0").arg(key).arg(option[QLatin1String("value")].toInt()));
-            } else if(type == COMPARE::FLAG_ALL) {
+            } else if (type == COMPARE::FLAG_ALL) {
                 db->where(QString("(%1 & %2) != %2").arg(key).arg(option[QLatin1String("value")].toInt()));
-            } else if(type >= COMPARE::USER_DEFINE) {
-                if(USERDEFINED_FILTER.contains(type))
+            } else if (type >= COMPARE::USER_DEFINE) {
+                if (USERDEFINED_FILTER.contains(type))
                     USERDEFINED_FILTER[type](db, key, type, option);
             } else {
                 db->where(key + getSign(type), option[QLatin1String("value")]);
@@ -68,55 +65,52 @@ Db *QueryHelper::filter(Db *db, const QVariantMap &data, const QMap<QString, QSt
     return db;
 }
 
-Db *QueryHelper::sort(Db *db, const QVariantMap &data)
-{
-    if(data.contains(QLatin1String("sort"))) {
+Db *QueryHelper::sort(Db *db, const QVariantMap &data) {
+    if (data.contains(QLatin1String("sort"))) {
         const QString &sort = data["sort"].toString();
-        if(!sort.isEmpty())
+        if (!sort.isEmpty())
             db->sort(data[QLatin1String("sort")].toString());
     }
     return db;
 }
 
-Db *QueryHelper::limitOffset(Db *db, const QVariantMap &data)
-{
-    if(data.contains(QLatin1String("limit"))) {
+Db *QueryHelper::limitOffset(Db *db, const QVariantMap &data) {
+    if (data.contains(QLatin1String("limit"))) {
         int limit = data[QLatin1String("limit")].toInt();
-        if(limit > 0)
+        if (limit > 0)
             db->limit(limit);
     }
-    if(data.contains(QLatin1String("start"))) {
+    if (data.contains(QLatin1String("start"))) {
         db->start(data[QLatin1String("start")].toInt());
     }
     return db;
 }
 
-void QueryHelper::installUserDefinedFilter(int type, std::function<void(Db *db, const QString &, int, const QVariantMap &)> func)
-{
+void QueryHelper::installUserDefinedFilter(
+    int type, std::function<void(Db *db, const QString &, int, const QVariantMap &)> func) {
     USERDEFINED_FILTER.insert(type, func);
 }
 
-QString QueryHelper::getSign(int type)
-{
-    switch(type) {
-        case COMPARE::EQUAL:
-            return QLatin1String("=");
-        case COMPARE::NEQUAL:
-            return QLatin1String("!=");
-        case COMPARE::LESS:
-            return QLatin1String("<");
-        case COMPARE::GREATER:
-            return QLatin1String(">");
-        case COMPARE::LESS_EQUAL:
-            return QLatin1String("<=");
-        case COMPARE::GREATER_EQUAL:
-            return QLatin1String(">=");
-        case COMPARE::ISNULL:
-            return QLatin1String(" IS NULL ");
-        case COMPARE::ISNOTNULL:
-            return QLatin1String(" IS NOT NULL ");
-        case COMPARE::LIKE:
-            return QLatin1String(" LIKE ");
+QString QueryHelper::getSign(int type) {
+    switch (type) {
+    case COMPARE::EQUAL:
+        return QLatin1String("=");
+    case COMPARE::NEQUAL:
+        return QLatin1String("!=");
+    case COMPARE::LESS:
+        return QLatin1String("<");
+    case COMPARE::GREATER:
+        return QLatin1String(">");
+    case COMPARE::LESS_EQUAL:
+        return QLatin1String("<=");
+    case COMPARE::GREATER_EQUAL:
+        return QLatin1String(">=");
+    case COMPARE::ISNULL:
+        return QLatin1String(" IS NULL ");
+    case COMPARE::ISNOTNULL:
+        return QLatin1String(" IS NOT NULL ");
+    case COMPARE::LIKE:
+        return QLatin1String(" LIKE ");
     }
     return QLatin1String("");
 }

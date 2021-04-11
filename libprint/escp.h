@@ -26,22 +26,11 @@
 
 namespace LibPrint {
 
-class PRINTSHARED_EXPORT Escp
-{
-public:
-    enum {
-        CPI = 1,
-        BOLD = 8,
-        DOUBLE_HEIGHT = 16,
-        DOUBLE_WIDTH = 32
-    };
-    enum {
-        SIMPLE,
-        FULL
-    };
-    enum {
-        LEFT, CENTER, RIGHT
-    };
+class PRINTSHARED_EXPORT Escp {
+  public:
+    enum { CPI = 1, BOLD = 8, DOUBLE_HEIGHT = 16, DOUBLE_WIDTH = 32 };
+    enum { SIMPLE, FULL };
+    enum { LEFT, CENTER, RIGHT };
     Escp(int type, int width10, int width12, int width15 = 0);
     Escp *setCpi10Only(bool value);
     Escp *setWidth(int width);
@@ -66,7 +55,7 @@ public:
     static QString cutPaperCommand();
     inline int width() { return mWidth; }
 
-private:
+  private:
     int mType;
     int mMaster;
     int mWidth10;
@@ -86,5 +75,5 @@ private:
     void writeText(const QString &str, int width, int alignment);
 };
 
-}
+} // namespace LibPrint
 #endif // ESCP_H

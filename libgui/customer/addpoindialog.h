@@ -29,26 +29,25 @@ class AddPoinDialog;
 
 namespace LibGUI {
 
-class AddPoinDialog : public QDialog, public LibG::MessageHandler
-{
+class AddPoinDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddPoinDialog(LibG::MessageBus *bus, int id, const QString &number, int poin, QWidget *parent = nullptr);
     ~AddPoinDialog();
 
-private:
+  private:
     Ui::AddPoinDialog *ui;
     int mId = 0;
     int mPoin = 0;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private slots:
+  private slots:
     void typeChanged();
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // ADDPOINDIALOG_H

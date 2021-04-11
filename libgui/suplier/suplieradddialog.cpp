@@ -18,28 +18,21 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "suplieradddialog.h"
-#include "ui_suplieradddialog.h"
 #include "guiutil.h"
+#include "ui_suplieradddialog.h"
 #include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 
-SuplierAddDialog::SuplierAddDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SuplierAddDialog)
-{
+SuplierAddDialog::SuplierAddDialog(QWidget *parent) : QDialog(parent), ui(new Ui::SuplierAddDialog) {
     ui->setupUi(this);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-SuplierAddDialog::~SuplierAddDialog()
-{
-    delete ui;
-}
+SuplierAddDialog::~SuplierAddDialog() { delete ui; }
 
-void SuplierAddDialog::reset()
-{
+void SuplierAddDialog::reset() {
     ui->lineName->clear();
     ui->lineCode->clear();
     ui->linePhone->clear();
@@ -50,8 +43,7 @@ void SuplierAddDialog::reset()
     setWindowTitle(tr("Add new suplier"));
 }
 
-void SuplierAddDialog::fill(const QVariantMap &data)
-{
+void SuplierAddDialog::fill(const QVariantMap &data) {
     ui->lineName->setText(data["name"].toString());
     ui->lineCode->setText(data["code"].toString());
     ui->linePhone->setText(data["phone"].toString());
@@ -63,14 +55,10 @@ void SuplierAddDialog::fill(const QVariantMap &data)
     setWindowTitle(tr("Edit suplier"));
 }
 
-void SuplierAddDialog::enableSave()
-{
-    ui->pushSave->setEnabled(true);
-}
+void SuplierAddDialog::enableSave() { ui->pushSave->setEnabled(true); }
 
-void SuplierAddDialog::saveClicked()
-{
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineName << ui->lineCode)) {
+void SuplierAddDialog::saveClicked() {
+    if (GuiUtil::anyEmpty(QList<QWidget *>() << ui->lineName << ui->lineCode)) {
         QMessageBox::warning(this, tr("Error"), tr("Please fill all form"));
         return;
     }

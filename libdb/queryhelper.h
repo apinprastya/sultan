@@ -26,17 +26,18 @@
 
 namespace LibDB {
 
-class DBSHARED_EXPORT QueryHelper
-{
-public:
+class DBSHARED_EXPORT QueryHelper {
+  public:
     QueryHelper();
-    static Db* filter(Db* db, const QVariantMap &data, const QMap<QString, QString> &fieldMap = QMap<QString, QString>());
-    static Db* sort(Db* db, const QVariantMap &data);
-    static Db* limitOffset(Db* db, const QVariantMap &data);
-    static void installUserDefinedFilter(int type, std::function<void(Db *db, const QString &, int,const QVariantMap &)> func);
+    static Db *filter(Db *db, const QVariantMap &data,
+                      const QMap<QString, QString> &fieldMap = QMap<QString, QString>());
+    static Db *sort(Db *db, const QVariantMap &data);
+    static Db *limitOffset(Db *db, const QVariantMap &data);
+    static void installUserDefinedFilter(int type,
+                                         std::function<void(Db *db, const QString &, int, const QVariantMap &)> func);
 
-private:
+  private:
     static QString getSign(int type);
 };
-}
+} // namespace LibDB
 #endif // QUERYHELPER_H

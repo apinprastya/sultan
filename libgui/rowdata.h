@@ -21,22 +21,21 @@
 #define ROWDATA_H
 
 #include "gui_global.h"
-#include <QVariant>
 #include <QList>
 #include <QMap>
+#include <QVariant>
 
-namespace LibGUI  {
+namespace LibGUI {
 
 class TableItem;
 
-class GUISHARED_EXPORT RowData
-{
-public:
+class GUISHARED_EXPORT RowData {
+  public:
     RowData();
     ~RowData();
     void clearAndRelease();
     void insert(int index, TableItem *item);
-    void insert(int index, const QList<TableItem*> &list);
+    void insert(int index, const QList<TableItem *> &list);
     void append(TableItem *item);
     void removeAndRelease(int index);
     TableItem *operator[](int index);
@@ -50,13 +49,13 @@ public:
     TableItem *getItem(const QString &key, const QVariant &val);
     int indexOf(TableItem *item);
 
-private:
-    QList<TableItem*> mData;
-    //key: index, value: lenght
+  private:
+    QList<TableItem *> mData;
+    // key: index, value: lenght
     QMap<int, int> mOffset;
 
     int getInternalIndex(int index) const;
 };
 
-}
+} // namespace LibGUI
 #endif // ROWDATA_H

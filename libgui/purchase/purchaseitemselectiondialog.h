@@ -30,21 +30,20 @@ class PurchaseItemSelectionDialog;
 
 namespace LibGUI {
 
-class PurchaseItemSelectionDialog : public QDialog
-{
+class PurchaseItemSelectionDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item, QWidget *parent = nullptr);
     ~PurchaseItemSelectionDialog();
 
-private:
+  private:
     Ui::PurchaseItemSelectionDialog *ui;
     PurchaseItem *mItem;
 
-private slots:
+  private slots:
     void tableDoubleClicked(const QModelIndex &index);
 };
 
-}
+} // namespace LibGUI
 #endif // PURCHASEITEMSELECTIONDIALOG_H

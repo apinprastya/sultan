@@ -18,15 +18,12 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "aboutdialog.h"
-#include "ui_aboutdialog.h"
 #include "global_constant.h"
+#include "ui_aboutdialog.h"
 
 using namespace LibGUI;
 
-AboutDialog::AboutDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AboutDialog)
-{
+AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
     ui->setupUi(this);
     setModal(true);
     ui->textBrowser->setOpenExternalLinks(true);
@@ -39,7 +36,4 @@ AboutDialog::AboutDialog(QWidget *parent) :
                     https://github.com/yusukekamiyamane/fugue-icons</a></center>"));
 }
 
-AboutDialog::~AboutDialog()
-{
-    delete ui;
-}
+AboutDialog::~AboutDialog() { delete ui; }

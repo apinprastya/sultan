@@ -18,21 +18,19 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "returnresolutiondialog.h"
-#include "ui_returnresolutiondialog.h"
-#include "message.h"
-#include "global_constant.h"
-#include "preference.h"
 #include "dbutil.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
+#include "message.h"
+#include "preference.h"
+#include "ui_returnresolutiondialog.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-ReturnResolutionDialog::ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ReturnResolutionDialog)
-{
+ReturnResolutionDialog::ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::ReturnResolutionDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
@@ -40,13 +38,9 @@ ReturnResolutionDialog::ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *p
     sendMessage(&msg);
 }
 
-ReturnResolutionDialog::~ReturnResolutionDialog()
-{
-    delete ui;
-}
+ReturnResolutionDialog::~ReturnResolutionDialog() { delete ui; }
 
-void ReturnResolutionDialog::fill(const QVariantMap &data)
-{
+void ReturnResolutionDialog::fill(const QVariantMap &data) {
     mId = data["id"].toInt();
     ui->labelBarcode->setText(data["barcode"].toString());
     ui->labelName->setText(data["name"].toString());
@@ -63,31 +57,32 @@ void ReturnResolutionDialog::fill(const QVariantMap &data)
     ui->dateReturned->setDate(date.isValid() ? date : QDate::currentDate());
 }
 
-void ReturnResolutionDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::UPDATE)) {
-        if(msg->isSuccess()) {
+void ReturnResolutionDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::UPDATE)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Return item updated successfully"));
             close();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
         ui->comboBank->addItem("Cash", 0);
         const QVariantList &l = msg->data("data").toList();
-        for(auto v : l) {
+        for (auto v : l) {
             const QVariantMap &m = v.toMap();
             ui->comboBank->addItem(m["name"].toString(), m["id"]);
         }
     }
 }
 
-void ReturnResolutionDialog::saveClicked()
-{
-    QVariantMap data{{"status", ui->checkReturned->isChecked() ? PURCHASE_RETURN_STATUS::RETURNED : PURCHASE_RETURN_STATUS::UNRETURN},
-                     {"item_returned", ui->doubleItem->value()}, {"money_returned", ui->doubleMoney->value()},
-                     {"return_date", ui->dateReturned->date()}, {"bank_id", ui->comboBank->currentData()}};
+void ReturnResolutionDialog::saveClicked() {
+    QVariantMap data{{"status", ui->checkReturned->isChecked() ? PURCHASE_RETURN_STATUS::RETURNED
+                                                               : PURCHASE_RETURN_STATUS::UNRETURN},
+                     {"item_returned", ui->doubleItem->value()},
+                     {"money_returned", ui->doubleMoney->value()},
+                     {"return_date", ui->dateReturned->date()},
+                     {"bank_id", ui->comboBank->currentData()}};
     Message msg(MSG_TYPE::PURCHASE_RETURN, MSG_COMMAND::UPDATE);
     msg.addData("id", mId);
     msg.addData("data", data);

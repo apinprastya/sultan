@@ -18,32 +18,29 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "solditemlistdialog.h"
-#include "ui_solditemlistdialog.h"
-#include "tableitem.h"
-#include "tableview.h"
-#include "guiutil.h"
-#include "tablemodel.h"
-#include "dbutil.h"
-#include "global_constant.h"
-#include "message.h"
-#include "db_constant.h"
-#include "keyevent.h"
 #include "cashieritem.h"
-#include "tableitem.h"
+#include "db_constant.h"
+#include "dbutil.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "keyevent.h"
+#include "message.h"
 #include "returnitemadddialog.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "ui_solditemlistdialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
 
-SoldItemListDialog::SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SoldItemListDialog),
-    mId(data["id"].toInt())
-{
+SoldItemListDialog::SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::SoldItemListDialog), mId(data["id"].toInt()) {
     ui->setupUi(this);
     ui->labelNumber->setText(data["number"].toString());
-    ui->labelDate->setText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yyyy hh:mm"));
+    ui->labelDate->setText(
+        LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yyyy hh:mm"));
     auto model = ui->tableWidget->getModel();
     model->setMessageBus(bus);
     model->addColumn("barcode", tr("Barcode"));
@@ -65,31 +62,25 @@ SoldItemListDialog::SoldItemListDialog(const QVariantMap &data, LibG::MessageBus
     auto keyevent = new KeyEvent(this);
     keyevent->addConsumeKey(Qt::Key_Return);
     ui->tableWidget->getTableView()->installEventFilter(keyevent);
-    connect(keyevent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(tableReturnPressed()));
+    connect(keyevent, SIGNAL(keyPressed(QObject *, QKeyEvent *)), SLOT(tableReturnPressed()));
     connect(ui->tableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableReturnPressed()));
 }
 
-SoldItemListDialog::~SoldItemListDialog()
-{
-    delete ui;
-}
+SoldItemListDialog::~SoldItemListDialog() { delete ui; }
 
-void SoldItemListDialog::messageReceived(LibG::Message */*msg*/)
-{
-}
+void SoldItemListDialog::messageReceived(LibG::Message * /*msg*/) {}
 
-void SoldItemListDialog::focusAndSelectTable()
-{
+void SoldItemListDialog::focusAndSelectTable() {
     ui->tableWidget->getTableView()->setFocus(Qt::TabFocusReason);
-    if(ui->tableWidget->getModel()->rowCount(QModelIndex()) > 0)
+    if (ui->tableWidget->getModel()->rowCount(QModelIndex()) > 0)
         ui->tableWidget->getTableView()->selectRow(0);
 }
 
-void SoldItemListDialog::tableReturnPressed()
-{
+void SoldItemListDialog::tableReturnPressed() {
     const QModelIndex &index = ui->tableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     mData = item->data();
     mIsOk = true;
     close();

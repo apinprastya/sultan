@@ -19,32 +19,29 @@
  */
 
 #include "initialstockwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
+#include "db_constant.h"
+#include "dbutil.h"
+#include "flashmessagemanager.h"
 #include "global_constant.h"
 #include "guiutil.h"
-#include "tableview.h"
-#include "tableitem.h"
-#include "dbutil.h"
 #include "headerwidget.h"
-#include "db_constant.h"
-#include "message.h"
-#include "flashmessagemanager.h"
-#include "preference.h"
-#include "util.h"
 #include "initialstockadddialog.h"
+#include "message.h"
+#include "preference.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
+#include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mAddDialog(new InitialStockAddDialog(bus, this))
-{
+InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
+      mAddDialog(new InitialStockAddDialog(bus, this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Initial Stock"));
@@ -59,20 +56,22 @@ InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
     model->addColumn("real_stock", tr("Stock"), Qt::AlignRight);
-    //model->addColumn("note", tr("Note"));
+    // model->addColumn("note", tr("Note"));
     model->setFilter("flag", COMPARE::FLAG_ENABLE, CHECKSTOCK_FLAG::INITIAL);
 
     QVariantMap defVal;
     defVal.insert("start", Util::getBeginningOfMonth());
     defVal.insert("end", Util::getEndOfMonth());
-    model->addHeaderFilter("created_at", HeaderFilter{HeaderWidget::DateStartEnd, TableModel::FilterBetweenDate, defVal});
+    model->addHeaderFilter("created_at",
+                           HeaderFilter{HeaderWidget::DateStartEnd, TableModel::FilterBetweenDate, defVal});
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
 
     model->setTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::QUERY);
     model->setTypeCommandOne(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::GET);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 150 << 100 << 100 << 75 << 75 << 75 << 200);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(),
+                            QList<int>() << 150 << 150 << 150 << 100 << 100 << 75 << 75 << 75 << 200);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->setSort("created_at DESC");
     model->refresh();
@@ -81,14 +80,9 @@ InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mAddDialog, SIGNAL(addSuccess()), model, SLOT(refresh()));
 }
 
-void InitialStockWidget::messageReceived(LibG::Message */*msg*/)
-{
+void InitialStockWidget::messageReceived(LibG::Message * /*msg*/) {}
 
-}
-
-void InitialStockWidget::addClicked()
-{
+void InitialStockWidget::addClicked() {
     mAddDialog->reset();
     mAddDialog->show();
 }
-

@@ -30,11 +30,10 @@ class AddItemUnavailableDialog;
 
 namespace LibGUI {
 
-class AddItemUnavailableDialog : public QDialog, public LibG::MessageHandler
-{
+class AddItemUnavailableDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddItemUnavailableDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddItemUnavailableDialog();
     void openBarcode(const QString &barcode);
@@ -42,24 +41,24 @@ public:
     inline bool isOk() { return mIsOk; }
     inline bool isAuto() { return mIsAutoBarcode; }
 
-private:
+  private:
     Ui::AddItemUnavailableDialog *ui;
     bool mIsOk = false;
     bool mIsAutoBarcode = false;
 
     void fill(const QString &barcode);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private slots:
+  private slots:
     void saveClicked();
     void sellPriceChanged();
 
-signals:
+  signals:
     void addNewItem(const QVariantMap &data);
 };
 
-}
+} // namespace LibGUI
 
 #endif // ADDITEMUNAVAILABLEDIALOG_H

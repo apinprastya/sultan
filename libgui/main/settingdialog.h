@@ -31,18 +31,18 @@ class QTimer;
 
 namespace LibGUI {
 
-class SettingDialog : public QDialog
-{
+class SettingDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     SettingDialog(QWidget *parent = nullptr);
     ~SettingDialog();
     void showDialog();
-    static void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon);
+    static void setSettingSocketOpenClose(std::function<void(const QString &, int)> openCon,
+                                          std::function<void()> closeCon);
     static void guiMessage(int id, const QString &str);
 
-private:
+  private:
     Ui::SettingDialog *ui;
     bool mMysqlOk;
     bool mConOk;
@@ -50,7 +50,7 @@ private:
 
     void saveMysqlSetting();
 
-private slots:
+  private slots:
     void databaseChanged();
     void checkSetting();
     void checkType();
@@ -60,11 +60,11 @@ private slots:
     void save();
     void openDirectorySelector();
 
-public:
+  public:
     void clientConnected();
     void clientError(const QString &err);
     void clientTimeout();
 };
 
-}
+} // namespace LibGUI
 #endif // SETTINGDIALOG_H

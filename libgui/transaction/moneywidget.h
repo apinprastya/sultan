@@ -32,26 +32,25 @@ namespace LibGUI {
 class TableWidget;
 class TileWidget;
 
-class MoneyWidget : public QWidget, public LibG::MessageHandler
-{
+class MoneyWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     MoneyWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
     void showEvent(QShowEvent *e) override;
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     TileWidget *mTileTotal;
     bool isShowed = false;
 
-private slots:
+  private slots:
     void refreshSummary();
 };
 
-}
+} // namespace LibGUI
 
 #endif // MONEYWIDGET_H

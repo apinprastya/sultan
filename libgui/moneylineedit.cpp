@@ -18,52 +18,45 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "moneylineedit.h"
-#include "preference.h"
 #include "global_setting_const.h"
+#include "preference.h"
+#include <QDebug>
 #include <QDoubleValidator>
 #include <QLocale>
-#include <QDebug>
 
 using namespace LibGUI;
 
-MoneyLineEdit::MoneyLineEdit(QWidget *parent):
-    QLineEdit(parent)
-{
+MoneyLineEdit::MoneyLineEdit(QWidget *parent) : QLineEdit(parent) {
     setValidator(new QDoubleValidator(this));
     setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     connect(this, SIGNAL(textChanged(QString)), SLOT(textHasChanged(QString)));
 }
 
-MoneyLineEdit::~MoneyLineEdit()
-{
+MoneyLineEdit::~MoneyLineEdit() {}
 
-}
-
-double MoneyLineEdit::value()
-{
+double MoneyLineEdit::value() {
     QString val = text();
     QLocale locale;
-    if(val.endsWith(locale.decimalPoint())) val = val.replace(locale.decimalPoint(), "");
+    if (val.endsWith(locale.decimalPoint()))
+        val = val.replace(locale.decimalPoint(), "");
     val = val.replace(locale.groupSeparator(), "");
     return locale.toDouble(val);
 }
 
-void MoneyLineEdit::setValue(double value)
-{
+void MoneyLineEdit::setValue(double value) {
     QLocale locale;
     setText(locale.toString(value, 'f', LibG::Preference::getInt(LibG::SETTING::LOCALE_DECIMAL)));
 }
 
-void MoneyLineEdit::textHasChanged(const QString &value)
-{
+void MoneyLineEdit::textHasChanged(const QString &value) {
     blockSignals(true);
     QString str = value;
     QLocale locale;
     auto split = str.splitRef(locale.decimalPoint());
-    if(locale.decimalPoint() == QChar(',')) {
+    if (locale.decimalPoint() == QChar(',')) {
         const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(".", "")), 'f', 0);
-        if(split.length() == 1) {
-            if(str.endsWith(",") || str.endsWith(".")) {
+        if (split.length() == 1) {
+            if (str.endsWith(",") || str.endsWith(".")) {
                 setText(QString("%1,").arg(thausand));
             } else {
                 setText(thausand);
@@ -73,8 +66,8 @@ void MoneyLineEdit::textHasChanged(const QString &value)
         }
     } else {
         const QString &thausand = locale.toString(locale.toDouble(split[0].toString().replace(",", "")), 'f', 0);
-        if(split.length() == 1) {
-            if(str.endsWith(".")) {
+        if (split.length() == 1) {
+            if (str.endsWith(".")) {
                 setText(QString("%1.").arg(thausand));
             } else {
                 setText(thausand);

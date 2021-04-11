@@ -21,8 +21,4 @@
 
 using namespace LibServer;
 
-BankAction::BankAction():
-    ServerAction("banks", "id")
-{
-    mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
-}
+BankAction::BankAction() : ServerAction("banks", "id") { mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE; }

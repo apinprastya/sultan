@@ -18,31 +18,27 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "settingwidget.h"
-#include "ui_settingwidget.h"
-#include "preference.h"
-#include "global_setting_const.h"
+#include "escp.h"
 #include "global_constant.h"
-#include "printer.h"
+#include "global_setting_const.h"
 #include "guiutil.h"
 #include "message.h"
-#include "guiutil.h"
-#include "escp.h"
-#include <QMetaEnum>
-#include <QMessageBox>
+#include "preference.h"
+#include "printer.h"
+#include "ui_settingwidget.h"
 #include <QDebug>
+#include <QMessageBox>
+#include <QMetaEnum>
 
-#define TAB_APPLICATION     0
-#define TAB_LOCALE          1
-#define TAB_PRINT           2
+#define TAB_APPLICATION 0
+#define TAB_LOCALE 1
+#define TAB_PRINT 2
 
 using namespace LibG;
 using namespace LibGUI;
 using namespace LibPrint;
 
-SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SettingWidget)
-{
+SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent), ui(new Ui::SettingWidget) {
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->checkSign, SIGNAL(toggled(bool)), SLOT(signChanged()));
@@ -69,13 +65,9 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) :
     checkWidget();
 }
 
-SettingWidget::~SettingWidget()
-{
-    delete ui;
-}
+SettingWidget::~SettingWidget() { delete ui; }
 
-void SettingWidget::setupAppliaction()
-{
+void SettingWidget::setupAppliaction() {
     ui->lineAppName->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->plainSubName->setPlainText(Preference::getString(SETTING::MARKET_SUBNAME, "Jl. Bantul\nYogyakarta"));
 
@@ -87,21 +79,20 @@ void SettingWidget::setupAppliaction()
     ui->groupUseMinimumOrder->setChecked(Preference::getBool(SETTING::MULTIPLE_MINIMUM));
 }
 
-void SettingWidget::setupLocale()
-{
+void SettingWidget::setupLocale() {
     ui->comboApplicationLanguage->addItem("English", "en");
     ui->comboApplicationLanguage->addItem("Bahasa Indonesia", "id");
     GuiUtil::selectCombo(ui->comboApplicationLanguage, Preference::getString(SETTING::APPLICATION_LANGUAGE, "id"));
     QMetaEnum meta = QMetaEnum::fromType<QLocale::Language>();
     mAllLocales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
-    for(auto locale : mAllLocales)
+    for (auto locale : mAllLocales)
         mLocaleLanguage.insert(QLatin1String(meta.valueToKey(locale.language())), locale.language());
     QMapIterator<QString, QLocale::Language> i(mLocaleLanguage);
     while (i.hasNext()) {
         i.next();
         ui->comboLocale->addItem(i.key(), i.value());
     }
-    //Fill
+    // Fill
     setCurrentCombo(ui->comboApplicationLanguage, Preference::getString(SETTING::APPLICATION_LANGUAGE, "EN"));
     setCurrentCombo(ui->comboLocale, Preference::getInt(SETTING::LOCALE_LANGUAGE, QLocale::Indonesian));
     localeLanguageChanged();
@@ -112,8 +103,7 @@ void SettingWidget::setupLocale()
     ui->spinMoneyDecimal->setValue(Preference::getInt(SETTING::LOCALE_DECIMAL));
 }
 
-void SettingWidget::setupPrinter()
-{
+void SettingWidget::setupPrinter() {
 #ifndef NO_PRINTER_DEVICE
     ui->comboPrintCashierType->addItem(tr("Device Printer"), PRINT_TYPE::DEVICE);
 #else
@@ -133,9 +123,9 @@ void SettingWidget::setupPrinter()
     uint16_t vendorId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_VENDOR_ID);
     uint16_t produkId = (uint16_t)Preference::getInt(SETTING::PRINTER_CASHIER_PRODUK_ID);
     int curSel = 0;
-    for(int i = 0; i < mUsbDevices.size(); i++) {
+    for (int i = 0; i < mUsbDevices.size(); i++) {
         ui->comboUsb->addItem(mUsbDevices[i].name);
-        if(vendorId == mUsbDevices[i].vendorId && produkId == mUsbDevices[i].productId)
+        if (vendorId == mUsbDevices[i].vendorId && produkId == mUsbDevices[i].productId)
             curSel = i;
     }
     ui->comboUsb->setCurrentIndex(curSel);
@@ -150,8 +140,10 @@ void SettingWidget::setupPrinter()
     ui->comboPrintCashier->setCurrentText(Preference::getString(SETTING::PRINTER_CASHIER_NAME));
     ui->linePrintCashierDevice->setText(Preference::getString(SETTING::PRINTER_CASHIER_DEVICE));
     ui->linePrintCashierTitle->setText(Preference::getString(SETTING::PRINTER_CASHIER_TITLE, "Sultan Minimarket"));
-    ui->plainPrintCashierSubtitle->setPlainText(Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul"));
-    ui->plainPrintCashierFooter->setPlainText(Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar"));
+    ui->plainPrintCashierSubtitle->setPlainText(
+        Preference::getString(SETTING::PRINTER_CASHIER_SUBTITLE, "Jogonalan Lor RT 2 Bantul"));
+    ui->plainPrintCashierFooter->setPlainText(
+        Preference::getString(SETTING::PRINTER_CASHIER_FOOTER, "Barang dibeli tidak dapat ditukar"));
     ui->spinCashierCpi10->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32));
     ui->spinCashierCpi12->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40));
     ui->checkPrintCashierCut->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT));
@@ -163,8 +155,7 @@ void SettingWidget::setupPrinter()
     ui->checkOnly10->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
 }
 
-void SettingWidget::setupCashier()
-{
+void SettingWidget::setupCashier() {
     ui->groupCAI->setChecked(Preference::getBool(SETTING::CAI_ENABLE));
     ui->checkCAISuplier->setChecked(Preference::getBool(SETTING::CAI_SUPLIER));
     ui->checkCAICategory->setChecked(Preference::getBool(SETTING::CAI_CATEGORY));
@@ -178,22 +169,20 @@ void SettingWidget::setupCashier()
     connect(ui->checkCAIBuyPrice, SIGNAL(toggled(bool)), SLOT(checkWidget()));
 }
 
-void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value)
-{
-    for(int i = 0; i < combo->count(); i++) {
-        if(combo->itemData(i) == value) {
+void SettingWidget::setCurrentCombo(QComboBox *combo, QVariant value) {
+    for (int i = 0; i < combo->count(); i++) {
+        if (combo->itemData(i) == value) {
             combo->setCurrentIndex(i);
             return;
         }
     }
 }
 
-void SettingWidget::updateFromDBConfig(const QVariantList &data)
-{
-    for(int i = 0; i < data.size(); i++) {
+void SettingWidget::updateFromDBConfig(const QVariantList &data) {
+    for (int i = 0; i < data.size(); i++) {
         const QVariantMap &d = data[i].toMap();
         int id = d["id"].toInt();
-        switch(id) {
+        switch (id) {
         case CONFIG_DB::AUTOBARCODE_DIGIT:
             ui->spinCABarcodeLength->setValue(d["value"].toInt());
             break;
@@ -204,8 +193,7 @@ void SettingWidget::updateFromDBConfig(const QVariantList &data)
     }
 }
 
-void SettingWidget::saveToDbConfig()
-{
+void SettingWidget::saveToDbConfig() {
     QVariantList list;
     list.append(QVariantMap{{"id", CONFIG_DB::AUTOBARCODE_DIGIT}, {"value", ui->spinCABarcodeLength->value()}});
     list.append(QVariantMap{{"id", CONFIG_DB::AUTOBARCODE_PREFIX}, {"value", ui->lineCABarcodePrefix->text()}});
@@ -214,41 +202,36 @@ void SettingWidget::saveToDbConfig()
     sendMessage(&msg);
 }
 
-void SettingWidget::signChanged()
-{
-    ui->lineSign->setEnabled(ui->checkSign->isChecked());
-}
+void SettingWidget::signChanged() { ui->lineSign->setEnabled(ui->checkSign->isChecked()); }
 
-void SettingWidget::cashierPrintTypeChanged()
-{
+void SettingWidget::cashierPrintTypeChanged() {
     ui->comboPrintCashier->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::SPOOL);
     ui->linePrintCashierDevice->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::DEVICE);
     ui->comboUsb->setEnabled(ui->comboPrintCashierType->currentData().toInt() == PRINT_TYPE::USB);
 }
 
-void SettingWidget::saveClicked()
-{
+void SettingWidget::saveClicked() {
     saveToDbConfig();
-    //market name
+    // market name
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
     Preference::setValue(SETTING::MACHINE_ID, ui->comboMachine->currentData().toMap()["id"]);
     Preference::setValue(SETTING::MACHINE_CODE, ui->comboMachine->currentData().toMap()["code"]);
     Preference::setValue(SETTING::MACHINE_NAME, ui->comboMachine->currentText());
-    //taxes
+    // taxes
     Preference::setValue(SETTING::USE_TAX, ui->groupBoxTax->isChecked());
     Preference::setValue(SETTING::TAX_VALUE, ui->lineSalesTax->text());
     Preference::setValue(SETTING::CASHIER_NAMEBASED, ui->groupNameBased->isChecked());
     Preference::setValue(SETTING::CAPITALIZE, ui->groupCapitalize->isChecked());
     Preference::setValue(SETTING::MULTIPLE_MINIMUM, ui->groupUseMinimumOrder->isChecked());
-    //locale
+    // locale
     Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());
     Preference::setValue(SETTING::LOCALE_LANGUAGE, ui->comboLocale->currentData().toInt());
     Preference::setValue(SETTING::LOCALE_USE_SIGN, ui->checkSign->isChecked());
     Preference::setValue(SETTING::LOCALE_SIGN, ui->lineSign->text());
     Preference::setValue(SETTING::LOCALE_DECIMAL, ui->spinMoneyDecimal->value());
-    //printer
+    // printer
     Preference::setValue(SETTING::PRINTER_CASHIER_TYPE, ui->comboPrintCashierType->currentData());
     Preference::setValue(SETTING::PRINTER_CASHIER_NAME, ui->comboPrintCashier->currentText());
     Preference::setValue(SETTING::PRINTER_CASHIER_DEVICE, ui->linePrintCashierDevice->text());
@@ -267,12 +250,12 @@ void SettingWidget::saveClicked()
     Preference::setValue(SETTING::INLINE_EDIT_QTY, ui->checkInlineEdit->isChecked());
 #ifdef USE_LIBUSB
     int cur = ui->comboUsb->currentIndex();
-    if(ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {
+    if (ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {
         Preference::setValue(SETTING::PRINTER_CASHIER_PRODUK_ID, mUsbDevices[cur].productId);
         Preference::setValue(SETTING::PRINTER_CASHIER_VENDOR_ID, mUsbDevices[cur].vendorId);
     }
 #endif
-    //cashier
+    // cashier
     Preference::setValue(SETTING::CAI_ENABLE, ui->groupCAI->isChecked());
     Preference::setValue(SETTING::CAI_SUPLIER, ui->checkCAISuplier->isChecked());
     Preference::setValue(SETTING::CAI_CATEGORY, ui->checkCAICategory->isChecked());
@@ -286,25 +269,25 @@ void SettingWidget::saveClicked()
     Preference::applyApplicationSetting();
 }
 
-void SettingWidget::tabChanged()
-{
-    if(ui->tabWidget->currentIndex() == TAB_PRINT) ui->pushPrintTest->show();
-    else ui->pushPrintTest->hide();
+void SettingWidget::tabChanged() {
+    if (ui->tabWidget->currentIndex() == TAB_PRINT)
+        ui->pushPrintTest->show();
+    else
+        ui->pushPrintTest->hide();
 }
 
-void SettingWidget::printTestClicked()
-{
+void SettingWidget::printTestClicked() {
     int type = ui->comboPrintCashierType->currentData().toInt();
     Escp e(type, 20, 20);
     QString str;
     QString str2;
     int counter = 1;
-    while(counter <= 100) {
+    while (counter <= 100) {
         str.append(QString::number(counter % 10));
         counter++;
     }
     counter = 1;
-    while(counter <= 100) {
+    while (counter <= 100) {
         str2.append(QString::number(counter % 10));
         counter++;
     }
@@ -314,30 +297,33 @@ void SettingWidget::printTestClicked()
     e.cpi12()->leftText("CPI 12 :")->newLine();
     e.leftText(str2, true)->newLine();
     e.line()->newLine(ui->spinCashierLinefeed->value());
-    QString printName = type == PRINT_TYPE::DEVICE ? ui->linePrintCashierDevice->text() : PRINT_TYPE::SPOOL ? ui->comboPrintCashier->currentText() : ui->comboUsb->currentText();
-    if(printName.isEmpty()) {
+    QString printName = type == PRINT_TYPE::DEVICE
+                            ? ui->linePrintCashierDevice->text()
+                            : PRINT_TYPE::SPOOL ? ui->comboPrintCashier->currentText() : ui->comboUsb->currentText();
+    if (printName.isEmpty()) {
         QMessageBox::critical(this, tr("Error"), tr("Please specify the printer"));
         return;
     }
     uint16_t vendorId = 0;
     uint16_t productId = 0;
-    if(mUsbDevices.size() > 0) {
+    if (mUsbDevices.size() > 0) {
         vendorId = mUsbDevices[ui->comboUsb->currentIndex()].vendorId;
         productId = mUsbDevices[ui->comboUsb->currentIndex()].productId;
     }
-    if(ui->checkPrintCashierDrawer->isChecked()) Printer::instance()->print(printName, Escp::openDrawerCommand(), type, vendorId, productId);
+    if (ui->checkPrintCashierDrawer->isChecked())
+        Printer::instance()->print(printName, Escp::openDrawerCommand(), type, vendorId, productId);
     Printer::instance()->print(printName, e.data(), type);
-    if(ui->checkPrintCashierCut->isChecked()) Printer::instance()->print(printName, Escp::cutPaperCommand(), type, vendorId, productId);
+    if (ui->checkPrintCashierCut->isChecked())
+        Printer::instance()->print(printName, Escp::cutPaperCommand(), type, vendorId, productId);
 }
 
-void SettingWidget::localeLanguageChanged()
-{
+void SettingWidget::localeLanguageChanged() {
     mLocaleCountry.clear();
     ui->comboLocaleCounty->clear();
     QLocale::Language curLang = (QLocale::Language)ui->comboLocale->currentData().toInt();
     QMetaEnum meta = QMetaEnum::fromType<QLocale::Country>();
-    for(auto locale : mAllLocales) {
-        if(locale.language() == curLang) {
+    for (auto locale : mAllLocales) {
+        if (locale.language() == curLang) {
             mLocaleCountry.insert(QLatin1String(meta.valueToKey(locale.country())), locale.country());
         }
     }
@@ -348,41 +334,39 @@ void SettingWidget::localeLanguageChanged()
     }
 }
 
-void SettingWidget::checkWidget()
-{
+void SettingWidget::checkWidget() {
     ui->comboCAISuplier->setEnabled(ui->checkCAISuplier->isChecked());
     ui->comboCAICategory->setEnabled(ui->checkCAICategory->isChecked());
     ui->comboCAIUnit->setEnabled(ui->checkCAIUnit->isChecked());
     ui->doubleCAIBuyPrice->setEnabled(ui->checkCAIBuyPrice->isChecked());
 }
 
-void SettingWidget::messageReceived(Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY)) {
+void SettingWidget::messageReceived(Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY)) {
         ui->comboMachine->clear();
         ui->comboMachine->addItem(tr("-- Select Machine --"), 0);
         const QVariantList &list = msg->data("data").toList();
-        for(auto d : list) {
+        for (auto d : list) {
             const QVariantMap &data = d.toMap();
             ui->comboMachine->addItem(data["name"].toString(), data);
         }
         GuiUtil::selectCombo(ui->comboMachine, Preference::getInt(SETTING::MACHINE_ID, 0), "id");
-    } else if(msg->isTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCAISuplier, list, tr("-- Select Suplier --"));
         GuiUtil::selectCombo(ui->comboCAISuplier, Preference::getInt(SETTING::CAI_DEFAULT_SUPLIER));
-    } else if(msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCAICategory, list, tr("-- Select Category --"));
         GuiUtil::selectCombo(ui->comboCAICategory, Preference::getInt(SETTING::CAI_DEFAULT_CATEGORY));
-    } else if(msg->isTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCAIUnit, list, tr("-- Select Unit --"));
         GuiUtil::selectCombo(ui->comboCAIUnit, Preference::getInt(SETTING::CAI_DEFAULT_UNIT));
-    } else if(msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         updateFromDBConfig(list);
-    } else if(msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::CONFIG_INSERT_UPDATE)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::CONFIG_INSERT_UPDATE)) {
         Message msg2(MSG_TYPE::BROADCAST, MSG_BROADCAST::SETTING_CHANGES);
         sendMessage(&msg2);
     }

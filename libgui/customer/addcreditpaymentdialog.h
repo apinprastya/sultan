@@ -29,28 +29,27 @@ class AddCreditPaymentDialog;
 
 namespace LibGUI {
 
-class AddCreditPaymentDialog : public QDialog, public LibG::MessageHandler
-{
+class AddCreditPaymentDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddCreditPaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddCreditPaymentDialog();
     void fill(int id, double total);
 
-private:
+  private:
     Ui::AddCreditPaymentDialog *ui;
     int mId = 0;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private slots:
+  private slots:
     void saveClicked();
 
-signals:
+  signals:
     void paymentSuccess();
 };
 
-}
+} // namespace LibGUI
 #endif // ADDCREDITPAYMENTDIALOG_H

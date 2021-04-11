@@ -18,24 +18,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchaseitemselectiondialog.h"
-#include "ui_purchaseitemselectiondialog.h"
-#include "tableview.h"
-#include "tableitem.h"
-#include "tablemodel.h"
-#include "guiutil.h"
-#include "global_constant.h"
-#include "headerwidget.h"
 #include "db_constant.h"
 #include "dbutil.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "ui_purchaseitemselectiondialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
 
-PurchaseItemSelectionDialog::PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PurchaseItemSelectionDialog),
-    mItem(item)
-{
+PurchaseItemSelectionDialog::PurchaseItemSelectionDialog(LibG::MessageBus *bus, int suplier, PurchaseItem *item,
+                                                         QWidget *parent)
+    : QDialog(parent), ui(new Ui::PurchaseItemSelectionDialog), mItem(item) {
     ui->setupUi(this);
     auto model = ui->tableWidget->getModel();
     model->setMessageBus(bus);
@@ -56,19 +54,16 @@ PurchaseItemSelectionDialog::PurchaseItemSelectionDialog(LibG::MessageBus *bus, 
     model->setSort("created_at DESC");
     ui->tableWidget->setupTable();
     ui->tableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    GuiUtil::setColumnWidth(ui->tableWidget->getTableView(), QList<int>() << 100 << 150 << 200 << 100 << 100 << 100 << 100);
+    GuiUtil::setColumnWidth(ui->tableWidget->getTableView(), QList<int>()
+                                                                 << 100 << 150 << 200 << 100 << 100 << 100 << 100);
     model->refresh();
     connect(ui->tableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(tableDoubleClicked(QModelIndex)));
 }
 
-PurchaseItemSelectionDialog::~PurchaseItemSelectionDialog()
-{
-    delete ui;
-}
+PurchaseItemSelectionDialog::~PurchaseItemSelectionDialog() { delete ui; }
 
-void PurchaseItemSelectionDialog::tableDoubleClicked(const QModelIndex &index)
-{
-    auto item = static_cast<TableItem*>(index.internalPointer());
+void PurchaseItemSelectionDialog::tableDoubleClicked(const QModelIndex &index) {
+    auto item = static_cast<TableItem *>(index.internalPointer());
     mItem->fill(item->data());
     close();
 }

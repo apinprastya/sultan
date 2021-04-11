@@ -25,9 +25,8 @@
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT Message
-{
-private:
+class GLOBALSHARED_EXPORT Message {
+  private:
     /*
      * Flag are use to store type, status, and request/answer
      * type : 8bit
@@ -45,7 +44,7 @@ private:
 
     int mUniqueId;
 
-public:
+  public:
     Message();
     Message(int type, int command, int status = 0);
     Message(const QByteArray &ba);
@@ -95,5 +94,5 @@ public:
     QString getErrorString();
 };
 
-}
+} // namespace LibG
 #endif // MESSAGE_H

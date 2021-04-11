@@ -21,9 +21,9 @@
 #define TABLEMODEL_H
 
 #include "gui_global.h"
-#include "rowdata.h"
 #include "messagehandler.h"
 #include "querydb.h"
+#include "rowdata.h"
 #include <QAbstractTableModel>
 #include <functional>
 
@@ -35,10 +35,9 @@ struct HeaderFilter {
     QVariant defValue;
 };
 
-class GUISHARED_EXPORT TableModel: public QAbstractTableModel, public LibG::MessageHandler
-{
+class GUISHARED_EXPORT TableModel : public QAbstractTableModel, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     enum PageStatus { None, Loading, Loaded };
     enum Role { TitleRole = Qt::UserRole, FilterRole = Qt::UserRole + 1, FilterValueRole = Qt::UserRole + 2 };
     enum Filter { FilterEQ, FilterLike, FilterBetweenDate, FilterLikeNative, FilterCategory };
@@ -47,14 +46,16 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     void reset();
-    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft, std::function<QVariant(TableItem*,const QString&)> formater = nullptr);
+    void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft,
+                   std::function<QVariant(TableItem *, const QString &)> formater = nullptr);
     void addColumnMoney(const QString &key, const QString &title);
     void addHeaderFilter(const QString &key, HeaderFilter filter);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
-    inline void setTypeCommandOne(const int &type, const int &command) { mTypeCommandOne = std::make_tuple(type, command); }
+    inline void setTypeCommandOne(const int &type, const int &command) {
+        mTypeCommandOne = std::make_tuple(type, command);
+    }
     void setFilter(const QString &key, int type, const QVariant &value);
     void clearFilter();
     inline void setIdKey(const QString &key) { mIdKey = key; }
@@ -63,29 +64,29 @@ public:
     void setSort(const QString &sort);
     inline void setAsLocal(bool value) { mIsLocal = value; }
     inline bool isLocal() { return mIsLocal; }
-    inline void setTableItemTemplateFunc(std::function<TableItem*(void)> func) { mTemplateTableItemFunc = func; }
-    void appendItem(TableItem* item);
+    inline void setTableItemTemplateFunc(std::function<TableItem *(void)> func) { mTemplateTableItemFunc = func; }
+    void appendItem(TableItem *item);
     void removeItem(TableItem *item);
-    inline RowData* getRowData() { return &mData; }
+    inline RowData *getRowData() { return &mData; }
     inline void setDateTimeISO(bool value) { mDateTimeISO = value; }
     void setPerPageCount(int value, bool refresh = true);
     void slotPerPageCount(int value);
 
-public slots:
+  public slots:
     void refresh();
     void resfreshOne(const QVariant &id);
     void filterChanged(int index, const QVariant &value);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-protected:
+  protected:
     int mNumRow;
     bool mDateTimeISO = false;
     RowData mData;
     QList<QString> mHeaders;
     QList<QString> mColumns;
-    QMap<QString, std::function<QVariant(TableItem*,const QString&)>> mFormater;
+    QMap<QString, std::function<QVariant(TableItem *, const QString &)>> mFormater;
     QList<int> mAlignments;
     std::tuple<int, int> mTypeCommand;
     std::tuple<int, int> mTypeCommandOne;
@@ -95,23 +96,23 @@ protected:
     QMap<QString, HeaderFilter> mHeaderFilter;
     bool mUseStandartHeader = false;
     bool mIsLocal = false;
-    std::function<TableItem*(void)> mTemplateTableItemFunc = nullptr;
+    std::function<TableItem *(void)> mTemplateTableItemFunc = nullptr;
     int mPerPage = 10;
     int mCurrentPage = 0;
     int mRowCount = 0;
 
-signals:
+  signals:
     void firstDataLoaded();
     void maxPageChanged(int value);
     void currentPageChanged(int value);
 
-public slots:
+  public slots:
     void loadPage(int page);
 
-private:
+  private:
     void readData(LibG::Message *msg);
     void readOneData(LibG::Message *msg);
 };
 
-}
+} // namespace LibGUI
 #endif // TABLEMODEL_H

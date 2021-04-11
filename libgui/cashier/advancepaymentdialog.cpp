@@ -18,19 +18,17 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "advancepaymentdialog.h"
-#include "ui_advancepaymentdialog.h"
 #include "customer/customer.h"
-#include "preference.h"
 #include "global_constant.h"
+#include "preference.h"
+#include "ui_advancepaymentdialog.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-AdvancePaymentDialog::AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AdvancePaymentDialog)
-{
+AdvancePaymentDialog::AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AdvancePaymentDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->comboBox->addItem(tr("Cash Payment"), PAYMENT::CASH);
@@ -38,13 +36,9 @@ AdvancePaymentDialog::AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *paren
     connect(ui->linePayment, SIGNAL(textChanged(QString)), SLOT(paymentValueChanged(QString)));
 }
 
-AdvancePaymentDialog::~AdvancePaymentDialog()
-{
-    delete ui;
-}
+AdvancePaymentDialog::~AdvancePaymentDialog() { delete ui; }
 
-void AdvancePaymentDialog::setup(double total, Customer *cust)
-{
+void AdvancePaymentDialog::setup(double total, Customer *cust) {
     mTotal = total;
     mCustomer = cust;
     ui->labelTotal->setText(Preference::formatMoney(total));
@@ -58,25 +52,20 @@ void AdvancePaymentDialog::setup(double total, Customer *cust)
     ui->pushPay->setEnabled(true);
 }
 
-void AdvancePaymentDialog::messageReceived(LibG::Message */*msg*/)
-{
+void AdvancePaymentDialog::messageReceived(LibG::Message * /*msg*/) {}
 
-}
-
-void AdvancePaymentDialog::paymentValueChanged(const QString &/*value*/)
-{
+void AdvancePaymentDialog::paymentValueChanged(const QString & /*value*/) {
     double val = ui->linePayment->value();
     ui->labelCredit->setText(Preference::formatMoney(mTotal - val));
 }
 
-void AdvancePaymentDialog::payClicked()
-{
+void AdvancePaymentDialog::payClicked() {
     double val = ui->linePayment->value();
-    if(val > mTotal) {
+    if (val > mTotal) {
         QMessageBox::critical(this, tr("Error"), tr("Payment can not bigger than total"));
         return;
     }
-    if(val < 0) {
+    if (val < 0) {
         QMessageBox::critical(this, tr("Error"), tr("Payment must equal or greater than 0"));
         return;
     }

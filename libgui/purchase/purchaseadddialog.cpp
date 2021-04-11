@@ -18,27 +18,24 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchaseadddialog.h"
-#include "ui_purchaseadddialog.h"
-#include "message.h"
-#include "global_constant.h"
-#include "guiutil.h"
 #include "dbutil.h"
-#include "util.h"
 #include "flashmessagemanager.h"
-#include "preference.h"
+#include "global_constant.h"
 #include "global_setting_const.h"
-#include "usersession.h"
 #include "guiutil.h"
+#include "message.h"
+#include "preference.h"
+#include "ui_purchaseadddialog.h"
+#include "usersession.h"
+#include "util.h"
 #include <QDebug>
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PurchaseAddDialog)
-{
+PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::PurchaseAddDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->dateCreated->setCalendarPopup(true);
@@ -53,13 +50,9 @@ PurchaseAddDialog::PurchaseAddDialog(LibG::MessageBus *bus, QWidget *parent) :
     sendMessage(&msg);
 }
 
-PurchaseAddDialog::~PurchaseAddDialog()
-{
-    delete ui;
-}
+PurchaseAddDialog::~PurchaseAddDialog() { delete ui; }
 
-void PurchaseAddDialog::reset()
-{
+void PurchaseAddDialog::reset() {
     ui->dateCreated->setDate(QDate::currentDate());
     ui->dateDeadline->setDate(QDate::currentDate().addDays(7));
     ui->lineNumber->clear();
@@ -72,8 +65,7 @@ void PurchaseAddDialog::reset()
     this->adjustSize();
 }
 
-void PurchaseAddDialog::fill(const QVariantMap &data)
-{
+void PurchaseAddDialog::fill(const QVariantMap &data) {
     ui->dateCreated->setDate(LibDB::DBUtil::sqlDateToDate(data["created_at"].toString()));
     ui->dateDeadline->setDate(LibDB::DBUtil::sqlDateToDate(data["deadline"].toString()));
     ui->lineNumber->setText(data["number"].toString());
@@ -85,21 +77,21 @@ void PurchaseAddDialog::fill(const QVariantMap &data)
     mBankId = data["bank_id"].toInt();
     const QString &discFormula = data["discount_formula"].toString();
     ui->lineDiscountFormula->setText(discFormula);
-    if(discFormula.isEmpty()) calculateTotal();
+    if (discFormula.isEmpty())
+        calculateTotal();
     mId = data["id"].toInt();
     ui->groupBox->show();
     this->adjustSize();
 }
 
-void PurchaseAddDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isType(MSG_TYPE::SUPLIER)) {
+void PurchaseAddDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isType(MSG_TYPE::SUPLIER)) {
         const QVariantList &list = msg->data("data").toList();
         populateSuplier(list);
-    } else if(msg->isType(MSG_TYPE::PURCHASE)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isType(MSG_TYPE::PURCHASE)) {
+        if (msg->isSuccess()) {
             hide();
-            if(mId > 0) {
+            if (mId > 0) {
                 FlashMessageManager::showMessage(tr("Purchase added successfully"));
                 emit successUpdate(mId);
             } else {
@@ -110,11 +102,11 @@ void PurchaseAddDialog::messageReceived(LibG::Message *msg)
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if (msg->isSuccess()) {
             const QVariantList &l = msg->data("data").toList();
             ui->comboBank->addItem(tr("Cash"), 0);
-            for(int i = 0; i < l.size(); i++) {
+            for (int i = 0; i < l.size(); i++) {
                 const QVariantMap &data = l[i].toMap();
                 int id = data["id"].toInt();
                 ui->comboBank->addItem(data["name"].toString(), id);
@@ -124,37 +116,34 @@ void PurchaseAddDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void PurchaseAddDialog::showEvent(QShowEvent *event)
-{
+void PurchaseAddDialog::showEvent(QShowEvent *event) {
     Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     msg.setLimit(-1);
     sendMessage(&msg);
     QDialog::showEvent(event);
 }
 
-void PurchaseAddDialog::populateSuplier(const QVariantList &list)
-{
+void PurchaseAddDialog::populateSuplier(const QVariantList &list) {
     ui->comboSuplier->clear();
     ui->comboSuplier->addItem(tr("-- Select Suplier --"), 0);
-    for(auto &d : list) {
+    for (auto &d : list) {
         const QVariantMap &m = d.toMap();
         ui->comboSuplier->addItem(m["name"].toString(), m["id"].toInt());
     }
     GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
 }
 
-void PurchaseAddDialog::saveClicked()
-{
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineNumber << ui->comboSuplier)) {
+void PurchaseAddDialog::saveClicked() {
+    if (GuiUtil::anyEmpty(QList<QWidget *>() << ui->lineNumber << ui->comboSuplier)) {
         QMessageBox::critical(this, tr("Error"), tr("Please fill required field"));
         return;
     }
     const QString &discFormula = ui->lineDiscountFormula->text();
-    if(discFormula.contains(" ")) {
+    if (discFormula.contains(" ")) {
         QMessageBox::critical(this, tr("Error"), tr("Discount formula can not consist space[s]"));
         return;
     }
-    if(!Util::isValidDiscountFormula(discFormula)) {
+    if (!Util::isValidDiscountFormula(discFormula)) {
         QMessageBox::critical(this, tr("Error"), tr("Discount formula not valid"));
         return;
     }
@@ -167,10 +156,10 @@ void PurchaseAddDialog::saveClicked()
     d.insert("discount_formula", ui->lineDiscountFormula->text());
     d.insert("user_id", UserSession::id());
     d.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
-    if(ui->comboPaymentType->currentData().toInt() == PURCHASEPAYMENT::DIRECT)
+    if (ui->comboPaymentType->currentData().toInt() == PURCHASEPAYMENT::DIRECT)
         d.insert("bank_id", ui->comboBank->currentData());
     Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::INSERT);
-    if(mId > 0) {
+    if (mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         double discount = Util::calculateDiscount(ui->lineDiscountFormula->text(), mTotal);
         d.insert("discount", discount);
@@ -184,14 +173,12 @@ void PurchaseAddDialog::saveClicked()
     ui->pushSave->setEnabled(false);
 }
 
-void PurchaseAddDialog::typeChanged()
-{
+void PurchaseAddDialog::typeChanged() {
     ui->dateDeadline->setEnabled(ui->comboPaymentType->currentData().toInt() != PURCHASEPAYMENT::DIRECT);
     ui->comboBank->setEnabled(ui->comboPaymentType->currentData().toInt() == PURCHASEPAYMENT::DIRECT);
 }
 
-void PurchaseAddDialog::calculateTotal()
-{
+void PurchaseAddDialog::calculateTotal() {
     double disc = Util::calculateDiscount(ui->lineDiscountFormula->text(), mTotal);
     ui->labelTotal->setText(Preference::formatMoney(mTotal));
     ui->labelDiscount->setText(Preference::formatMoney(disc));

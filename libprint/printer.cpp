@@ -18,16 +18,16 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "printer.h"
-#include "preference.h"
 #include "global_constant.h"
 #include "global_setting_const.h"
+#include "preference.h"
 #ifdef USE_LIBUSB
 #include "usb.h"
 #endif
-#include <QPrinterInfo>
 #include <QByteArray>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
+#include <QPrinterInfo>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #else
@@ -41,32 +41,24 @@ using namespace LibG;
 
 static Printer *sInstance = Q_NULLPTR;
 
-Printer::Printer()
-{
-}
+Printer::Printer() {}
 
-Printer *Printer::instance()
-{
-    if(!sInstance)
+Printer *Printer::instance() {
+    if (!sInstance)
         sInstance = new Printer();
     return sInstance;
 }
 
-void Printer::destroy()
-{
-    if(sInstance)
+void Printer::destroy() {
+    if (sInstance)
         delete sInstance;
     sInstance = Q_NULLPTR;
 }
 
-QStringList Printer::getPrintList()
-{
-    return QPrinterInfo::availablePrinterNames();
-}
+QStringList Printer::getPrintList() { return QPrinterInfo::availablePrinterNames(); }
 
 // this method is designed to be called from separated thread
-void Printer::print(const QString &printName, const QString &data, int type, uint16_t vendorId, uint16_t produckId)
-{
+void Printer::print(const QString &printName, const QString &data, int type, uint16_t vendorId, uint16_t produckId) {
     QMutexLocker locker(&mMutex);
 #ifdef Q_OS_WIN
     wchar_t printerName[256];
@@ -74,7 +66,7 @@ void Printer::print(const QString &printName, const QString &data, int type, uin
     printerName[printName.length()] = '\0';
     LPBYTE lpData;
     QByteArray ba = data.toLocal8Bit();
-    lpData = (unsigned char*)(ba.data());
+    lpData = (unsigned char *)(ba.data());
     DWORD dwCount = ba.length();
 
     DOC_INFO_1 docInfo;
@@ -91,48 +83,41 @@ void Printer::print(const QString &printName, const QString &data, int type, uin
     DWORD dwBytesWritten = 0L;
 
     bStatus = OpenPrinterW(printerName, &hPrinter, NULL);
-    if(bStatus) {
+    if (bStatus) {
 
-        dwPrtJob = StartDocPrinterW (
-                        hPrinter,
-                        1,
-                        (LPBYTE)&docInfo);
+        dwPrtJob = StartDocPrinterW(hPrinter, 1, (LPBYTE)&docInfo);
 
         if (dwPrtJob > 0) {
-                // Send the data to the printer.
-                bStatus = WritePrinter (
-                hPrinter,
-                lpData,
-                dwCount,
-                &dwBytesWritten);
+            // Send the data to the printer.
+            bStatus = WritePrinter(hPrinter, lpData, dwCount, &dwBytesWritten);
         }
 
-        EndDocPrinter (hPrinter);
+        EndDocPrinter(hPrinter);
 
         // Close the printer handle.
         bStatus = ClosePrinter(hPrinter);
     }
 #else
-    if(type == PRINT_TYPE::DEVICE) {
+    if (type == PRINT_TYPE::DEVICE) {
         QFile file(printName);
-        if(file.open(QFile::WriteOnly)) {
+        if (file.open(QFile::WriteOnly)) {
             file.write(data.toLocal8Bit());
         }
-    } else if(type == PRINT_TYPE::SPOOL) {
+    } else if (type == PRINT_TYPE::SPOOL) {
 #ifndef NO_PRINTER_SPOOL
         int jobId = 0;
         jobId = cupsCreateJob(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), "Sultan print", 0, NULL);
-        if(jobId > 0) {
-            cupsStartDocument(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), jobId, "Sultan Document", CUPS_FORMAT_RAW, true);
+        if (jobId > 0) {
+            cupsStartDocument(CUPS_HTTP_DEFAULT, printName.toStdString().c_str(), jobId, "Sultan Document",
+                              CUPS_FORMAT_RAW, true);
             cupsWriteRequestData(CUPS_HTTP_DEFAULT, data.toStdString().c_str(), data.length());
             cupsFinishDocument(CUPS_HTTP_DEFAULT, printName.toStdString().c_str());
         }
 #endif
-    } else if(type == PRINT_TYPE::USB) {
+    } else if (type == PRINT_TYPE::USB) {
 #ifdef USE_LIBUSB
         Usb::sendData(vendorId, produckId, data.toUtf8());
 #endif
     }
 #endif
 }
-

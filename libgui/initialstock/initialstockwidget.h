@@ -33,24 +33,23 @@ namespace LibGUI {
 class TableWidget;
 class InitialStockAddDialog;
 
-class InitialStockWidget : public QWidget, public LibG::MessageHandler
-{
+class InitialStockWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
-    InitialStockWidget(LibG::MessageBus *bus,QWidget *parent = nullptr);
+  public:
+    InitialStockWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     InitialStockAddDialog *mAddDialog;
 
-private slots:
+  private slots:
     void addClicked();
 };
 
-}
+} // namespace LibGUI
 
 #endif // INITIALSTOCKWIDGET_H

@@ -24,29 +24,25 @@
 using namespace LibServer;
 using namespace LibDB;
 
-CategoryAction::CategoryAction():
-    ServerAction("categories", "id")
-{
+CategoryAction::CategoryAction() : ServerAction("categories", "id") {
     mFlag = AFTER_INSERT | HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE | AFTER_DELETE;
 }
 
-void CategoryAction::afterInsert(const QVariantMap &data)
-{
+void CategoryAction::afterInsert(const QVariantMap &data) {
     mDb->insert("categorychilds", QVariantMap{{"category_id", data["id"]}, {"child_id", data["id"]}});
-    if(data["parent_id"].toInt() != 0) {
+    if (data["parent_id"].toInt() != 0) {
         parentAddChild(data["parent_id"].toInt(), data["id"].toInt());
     }
 }
 
-void CategoryAction::afterDelete(const QVariantMap &oldData)
-{
-    mDb->where("parent_id = ", oldData["id"])->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}});
+void CategoryAction::afterDelete(const QVariantMap &oldData) {
+    mDb->where("parent_id = ", oldData["id"])
+        ->update(mTableName, QVariantMap{{"deleted_at", QDateTime::currentDateTime()}});
 }
 
-void CategoryAction::parentAddChild(int parent, int child)
-{
+void CategoryAction::parentAddChild(int parent, int child) {
     mDb->insert("categorychilds", QVariantMap{{"category_id", parent}, {"child_id", child}});
     DbResult res = mDb->where("id = ", parent)->get(mTableName);
-    if(res.first()["parent_id"].toInt() != 0)
+    if (res.first()["parent_id"].toInt() != 0)
         parentAddChild(res.first()["parent_id"].toInt(), child);
 }

@@ -21,13 +21,9 @@
 
 using namespace LibGUI;
 
-Customer::Customer()
-{
+Customer::Customer() {}
 
-}
-
-void Customer::fill(const QVariantMap &data)
-{
+void Customer::fill(const QVariantMap &data) {
     id = data["id"].toInt();
     number = data["number"].toString();
     name = data["name"].toString();
@@ -35,8 +31,7 @@ void Customer::fill(const QVariantMap &data)
     credit = data["credit"].toDouble();
 }
 
-void Customer::reset()
-{
+void Customer::reset() {
     id = 0;
     number = QString();
     name = QString();
@@ -44,8 +39,7 @@ void Customer::reset()
     credit = 0;
 }
 
-QVariantMap Customer::toMap()
-{
+QVariantMap Customer::toMap() {
     QVariantMap m;
     m.insert("id", id);
     m.insert("name", name);

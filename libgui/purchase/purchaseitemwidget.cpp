@@ -18,40 +18,35 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchaseitemwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableview.h"
-#include "tableitem.h"
+#include "db_constant.h"
 #include "global_constant.h"
 #include "guiutil.h"
-#include "db_constant.h"
-#include "message.h"
-#include "purchaseadditemdialog.h"
 #include "headerwidget.h"
-#include "tilewidget.h"
 #include "message.h"
 #include "preference.h"
-#include <QMessageBox>
-#include <QHBoxLayout>
+#include "purchaseadditemdialog.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "tilewidget.h"
+#include "ui_normalwidget.h"
 #include <QDebug>
+#include <QHBoxLayout>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mAddDialog(new PurchaseAddItemDialog(bus, data["id"].toInt(), this)),
-    mTileTotal(new TileWidget(this)),
-    mTileDiscount(new TileWidget(this)),
-    mTileFinal(new TileWidget(this))
-{
+PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
+      mAddDialog(new PurchaseAddItemDialog(bus, data["id"].toInt(), this)), mTileTotal(new TileWidget(this)),
+      mTileDiscount(new TileWidget(this)), mTileFinal(new TileWidget(this)) {
     mId = data["id"].toInt();
     ui->setupUi(this);
     setMessageBus(bus);
-    ui->labelTitle->setText(tr("Purchase Item : %1 / %2").arg(data["number"].toString()).arg(data["suplier"].toString()));
+    ui->labelTitle->setText(
+        tr("Purchase Item : %1 / %2").arg(data["number"].toString()).arg(data["suplier"].toString()));
 
     auto hor = new QHBoxLayout;
     mTileTotal->setTitleValue(tr("Total"), "0");
@@ -79,7 +74,8 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     model->setFilter("purchase_id", COMPARE::EQUAL, data["id"].toInt());
     mTableWidget->setupTable();
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 200 << 100 << 100 << 100 << 100 << 100);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>()
+                                                              << 150 << 200 << 100 << 100 << 100 << 100 << 100);
     model->refresh();
     ui->verticalLayout->addWidget(mTableWidget);
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
@@ -91,49 +87,43 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
 }
 
-PurchaseItemWidget::~PurchaseItemWidget()
-{
-    delete ui;
-}
+PurchaseItemWidget::~PurchaseItemWidget() { delete ui; }
 
-void PurchaseItemWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL)) {
-        if(msg->isSuccess()) {
+void PurchaseItemWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL)) {
+        if (msg->isSuccess()) {
             mTableWidget->getModel()->refresh();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::SUMMARY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::SUMMARY)) {
         mTileTotal->setValue(Preference::formatMoney(msg->data("total").toDouble()));
         mTileDiscount->setValue(Preference::formatMoney(msg->data("discount").toDouble()));
         mTileFinal->setValue(Preference::formatMoney(msg->data("final").toDouble()));
     }
 }
 
-void PurchaseItemWidget::addClicked()
-{
+void PurchaseItemWidget::addClicked() {
     mAddDialog->reset();
     mAddDialog->show();
 }
 
-void PurchaseItemWidget::updateClicked(const QModelIndex &index)
-{
-    if(index.isValid()) {
-        auto item = static_cast<TableItem*>(index.internalPointer());
+void PurchaseItemWidget::updateClicked(const QModelIndex &index) {
+    if (index.isValid()) {
+        auto item = static_cast<TableItem *>(index.internalPointer());
         mAddDialog->fill(item->data());
         mAddDialog->show();
     }
 }
 
-void PurchaseItemWidget::delClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
+void PurchaseItemWidget::delClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
     int res = QMessageBox::question(this, tr("Confirmation remove"), tr("Are you sure to delete the item?"));
-    if(res == QMessageBox::Yes) {
+    if (res == QMessageBox::Yes) {
         QList<QVariant> ids;
-        for(int i = 0; i < index.size(); i++) {
-            auto item = static_cast<TableItem*>(index[i].internalPointer());
+        for (int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem *>(index[i].internalPointer());
             ids.append(item->id);
         }
         Message msg(MSG_TYPE::PURCHASE_ITEM, MSG_COMMAND::DEL);
@@ -142,8 +132,7 @@ void PurchaseItemWidget::delClicked(const QModelIndexList &index)
     }
 }
 
-void PurchaseItemWidget::refreshSummary()
-{
+void PurchaseItemWidget::refreshSummary() {
     mTileDiscount->setValue(tr("loading..."));
     mTileFinal->setValue(tr("loading..."));
     mTileTotal->setValue(tr("loading..."));

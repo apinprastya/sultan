@@ -30,11 +30,10 @@ class PayCashlessDialog;
 
 namespace LibGUI {
 
-class PayCashlessDialog : public QDialog, public LibG::MessageHandler
-{
+class PayCashlessDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     PayCashlessDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~PayCashlessDialog();
     void showDialog(const double &total);
@@ -42,22 +41,22 @@ public:
     int getCardType();
     QString getCardNumber();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::PayCashlessDialog *ui;
     double mTotal = 0;
     double mAdditonal = 0;
     QMap<int, std::tuple<QString, QString>> mAdditionalCharge;
 
-private slots:
+  private slots:
     void calculateTotal();
     void payClicked();
 
-signals:
+  signals:
     void requestPay(int type, double payment, int flag);
 };
 
-}
+} // namespace LibGUI
 #endif // PAYCASHLESSDIALOG_H

@@ -22,35 +22,29 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
-#include "global_constant.h"
 #include "util.h"
 #include "util/itemutil.h"
-#include <QStringBuilder>
 #include <QDateTime>
 #include <QDebug>
+#include <QStringBuilder>
 
 using namespace LibServer;
 using namespace LibDB;
 using namespace LibG;
 
-CheckStockAction::CheckStockAction():
-    ServerAction("checkstocks", "id")
-{
-    mFlag = AFTER_INSERT | USE_TRANSACTION;
-}
+CheckStockAction::CheckStockAction() : ServerAction("checkstocks", "id") { mFlag = AFTER_INSERT | USE_TRANSACTION; }
 
-LibG::Message CheckStockAction::insert(LibG::Message *msg)
-{
+LibG::Message CheckStockAction::insert(LibG::Message *msg) {
     LibG::Message message(msg);
-    if(hasFlag(HAS_UPDATE_FIELD))
+    if (hasFlag(HAS_UPDATE_FIELD))
         msg->addData("updated_at", QDateTime::currentDateTime());
     /*bool hasName = msg->hasData("category_id");
     QVariantMap item{{"name", msg->data("name")}, {"category_id", msg->takeData("category_id")},
                     {"suplier_id", msg->takeData("suplier_id")}, {"buy_price", msg->takeData("buy_price")}};
     double sellPrice = msg->takeData("sell_price").toDouble();*/
-    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
+    if (hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction())
         mDb->beginTransaction();
-    if(!mDb->insert(mTableName, msg->data())) {
+    if (!mDb->insert(mTableName, msg->data())) {
         message.setError(mDb->lastError().text());
     } else {
         DbResult res = mDb->where("id = ", mDb->lastInsertedId())->get(mTableName);
@@ -68,11 +62,12 @@ LibG::Message CheckStockAction::insert(LibG::Message *msg)
                 }
             }
         }*/
-        if(hasFlag(AFTER_INSERT)) afterInsert(d);
+        if (hasFlag(AFTER_INSERT))
+            afterInsert(d);
         message.setData(d);
     }
-    if(hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
-        if(!mDb->commit()) {
+    if (hasFlag(USE_TRANSACTION) && mDb->isSupportTransaction()) {
+        if (!mDb->commit()) {
             mDb->roolback();
             message.setError(mDb->lastError().text());
         }
@@ -80,13 +75,12 @@ LibG::Message CheckStockAction::insert(LibG::Message *msg)
     return message;
 }
 
-void CheckStockAction::afterInsert(const QVariantMap &data)
-{
+void CheckStockAction::afterInsert(const QVariantMap &data) {
     /*mDb->where("barcode = ", data["barcode"]);
     QVariantMap d{{"stock", data["real_stock"]}};
     mDb->update("items", d);*/
     float diff = data["real_stock"].toFloat() - data["system_stock"].toFloat();
     ItemUtil util(mDb);
     util.insertStock(data["barcode"].toString(), QString("Checkstock %1").arg(data["barcode"].toString()),
-            STOCK_CARD_TYPE::CHECKSTOCK, diff, 0, QVariantMap());
+                     STOCK_CARD_TYPE::CHECKSTOCK, diff, 0, QVariantMap());
 }

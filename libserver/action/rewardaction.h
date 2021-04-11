@@ -24,11 +24,10 @@
 
 namespace LibServer {
 
-class RewardAction : public ServerAction
-{
-public:
+class RewardAction : public ServerAction {
+  public:
     RewardAction();
 };
 
-}
+} // namespace LibServer
 #endif // REWARDACTION_H

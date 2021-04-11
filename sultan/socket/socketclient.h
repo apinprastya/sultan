@@ -21,35 +21,34 @@
 #define SOCKETCLIENT_H
 
 #include "message.h"
-#include <QObject>
 #include <QAbstractSocket>
+#include <QObject>
 
 class QWebSocket;
 
-class SocketClient : public QObject
-{
+class SocketClient : public QObject {
     Q_OBJECT
-public:
+  public:
     SocketClient(QObject *parent = nullptr);
     void connectToServer(const QString &address, int port);
     void disconnectFromServer();
     QString lastError();
     bool isConnected();
 
-public slots:
+  public slots:
     void sendMessage(LibG::Message *msg);
 
-private:
+  private:
     QWebSocket *mSocket;
 
-signals:
+  signals:
     void socketConnected();
     void socketError();
     void socketDisconnected();
     void messageReceived(LibG::Message *msg);
     void connectionTimeout();
 
-private slots:
+  private slots:
     void checkConnection();
     void errorOccure();
     void stateChanged(QAbstractSocket::SocketState state);

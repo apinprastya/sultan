@@ -28,16 +28,15 @@ class ReturnItemAddDialog;
 
 namespace LibGUI {
 
-class ReturnItemAddDialog : public QDialog
-{
+class ReturnItemAddDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     ReturnItemAddDialog(QWidget *parent = nullptr);
     ~ReturnItemAddDialog();
     void fill(const QVariantMap &d);
 
-private:
+  private:
     Ui::ReturnItemAddDialog *ui;
     int mId = 0;
     double mPrice = 0;
@@ -46,10 +45,10 @@ private:
     double mBuyPrice = 0;
     QString mUnit;
 
-private slots:
+  private slots:
     void calculateTotal();
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // RETURNITEMADDDIALOG_H

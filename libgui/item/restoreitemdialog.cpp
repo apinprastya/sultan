@@ -22,10 +22,8 @@
 
 using namespace LibGUI;
 
-RestoreItemDialog::RestoreItemDialog(const QVariantMap &data, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::RestoreItemDialog)
-{
+RestoreItemDialog::RestoreItemDialog(const QVariantMap &data, QWidget *parent)
+    : QDialog(parent), ui(new Ui::RestoreItemDialog) {
     ui->setupUi(this);
     ui->labelBarcode->setText(data["barcode"].toString());
     ui->labelName->setText(data["name"].toString());
@@ -35,13 +33,9 @@ RestoreItemDialog::RestoreItemDialog(const QVariantMap &data, QWidget *parent) :
     connect(ui->pushRestore, SIGNAL(clicked(bool)), SLOT(restoreClicked()));
 }
 
-RestoreItemDialog::~RestoreItemDialog()
-{
-    delete ui;
-}
+RestoreItemDialog::~RestoreItemDialog() { delete ui; }
 
-void RestoreItemDialog::restoreClicked()
-{
+void RestoreItemDialog::restoreClicked() {
     mIsOk = true;
     close();
 }

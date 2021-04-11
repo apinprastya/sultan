@@ -21,29 +21,23 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
-#include <QStringBuilder>
 #include <QDebug>
+#include <QStringBuilder>
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-SoldItemAction::SoldItemAction():
-    ServerAction("solditems", "id")
-{
+SoldItemAction::SoldItemAction() : ServerAction("solditems", "id") {
     mFlag = USE_TRANSACTION;
     mFunctionMap.insert(MSG_COMMAND::SOLD_SUMMARY, std::bind(&SoldItemAction::getSummary, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SOLD_ITEM_REPORT, std::bind(&SoldItemAction::report, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&SoldItemAction::exportData, this, std::placeholders::_1));
 }
 
-void SoldItemAction::selectAndJoin()
-{
-    mDb->select("*, (final - buy_price) as margin");
-}
+void SoldItemAction::selectAndJoin() { mDb->select("*, (final - buy_price) as margin"); }
 
-Message SoldItemAction::getSummary(Message *msg)
-{
+Message SoldItemAction::getSummary(Message *msg) {
     LibG::Message message(msg);
     mDb->table(mTableName);
     mDb->select("sum(final) as total, sum(final - buy_price) as margin");
@@ -52,15 +46,18 @@ Message SoldItemAction::getSummary(Message *msg)
     return message;
 }
 
-Message SoldItemAction::report(Message *msg)
-{
+Message SoldItemAction::report(Message *msg) {
     LibG::Message message(msg);
-    mDb->table(mTableName)->select("sum(solditems.count) as count, solditems.barcode, items.name, items.stock, items.unit, categories.name as category, supliers.name as suplier")->
-            join("LEFT JOIN items ON items.barcode = solditems.barcode")->
-            join("LEFT JOIN supliers ON supliers.id = items.suplier_id")->
-            join("LEFT JOIN categories ON categories.id = items.category_id")->group("solditems.barcode")->sort("count DESC");
+    mDb->table(mTableName)
+        ->select("sum(solditems.count) as count, solditems.barcode, items.name, items.stock, items.unit, "
+                 "categories.name as category, supliers.name as suplier")
+        ->join("LEFT JOIN items ON items.barcode = solditems.barcode")
+        ->join("LEFT JOIN supliers ON supliers.id = items.suplier_id")
+        ->join("LEFT JOIN categories ON categories.id = items.category_id")
+        ->group("solditems.barcode")
+        ->sort("count DESC");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
-    if(!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
+    if (!(msg->data().contains(QStringLiteral("start")) && msg->data().value(QStringLiteral("start")).toInt() > 0))
         message.addData(QStringLiteral("total"),
                         mDb->clone()->reset()->table("(" + mDb->getSelectQuery() + ") d")->count());
     setStart(&message, msg);
@@ -70,8 +67,7 @@ Message SoldItemAction::report(Message *msg)
     return message;
 }
 
-Message SoldItemAction::exportData(Message *msg)
-{
+Message SoldItemAction::exportData(Message *msg) {
     LibG::Message message(msg);
     QString arr;
     arr.append("date;barcode;name;count;price;discount;total;buy_price;margin;\n");
@@ -81,10 +77,11 @@ Message SoldItemAction::exportData(Message *msg)
     mDb = QueryHelper::sort(mDb, msg->data());
     const int limit = 500;
     int start = 0;
-    while(true) {
+    while (true) {
         DbResult res = mDb->clone()->start(start)->limit(limit)->exec();
-        if(res.isEmpty()) break;
-        for(int i = 0; i < res.size(); i++) {
+        if (res.isEmpty())
+            break;
+        for (int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
             double margin = d["total"].toDouble() - d["buy_price"].toDouble();
             arr.append(d["created_at"].toString() % ";");

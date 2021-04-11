@@ -3,20 +3,13 @@
 
 using namespace LibGUI;
 
-ImportItemDialog::ImportItemDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ImportItemDialog)
-{
+ImportItemDialog::ImportItemDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ImportItemDialog) {
     ui->setupUi(this);
 }
 
-ImportItemDialog::~ImportItemDialog()
-{
-    delete ui;
-}
+ImportItemDialog::~ImportItemDialog() { delete ui; }
 
-void LibGUI::ImportItemDialog::on_pushImport_clicked()
-{
+void LibGUI::ImportItemDialog::on_pushImport_clicked() {
     mIsChecked = ui->groupBox->isChecked();
     accept();
 }

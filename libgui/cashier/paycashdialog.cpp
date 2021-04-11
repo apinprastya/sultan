@@ -18,47 +18,39 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "paycashdialog.h"
-#include "ui_paycashdialog.h"
-#include "preference.h"
-#include "global_setting_const.h"
 #include "global_constant.h"
+#include "global_setting_const.h"
+#include "preference.h"
+#include "ui_paycashdialog.h"
 #include "util.h"
+#include <QDebug>
 #include <QLocale>
 #include <QMessageBox>
-#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-PayCashDialog::PayCashDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PayCashDialog)
-{
+PayCashDialog::PayCashDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PayCashDialog) {
     ui->setupUi(this);
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payClicked()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-PayCashDialog::~PayCashDialog()
-{
-    delete ui;
-}
+PayCashDialog::~PayCashDialog() { delete ui; }
 
-void PayCashDialog::fill(double total)
-{
+void PayCashDialog::fill(double total) {
     mTotal = total;
     ui->labelTotal->setText(Preference::formatMoney(total));
-    //ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
+    // ui->lineEdit->setText(QString::number(total, 'f', Preference::getInt(SETTING::LOCALE_DECIMAL)));
     ui->lineEdit->setValue(total);
     ui->pushPay->setEnabled(true);
     ui->pushSave->setEnabled(true);
     ui->lineEdit->selectAll();
 }
 
-void PayCashDialog::saveTransaction()
-{
+void PayCashDialog::saveTransaction() {
     double payment = ui->lineEdit->value();
-    if(Util::roundDouble(payment) < Util::roundDouble(mTotal)) {
+    if (Util::roundDouble(payment) < Util::roundDouble(mTotal)) {
         QMessageBox::critical(this, tr("Error Payment"), tr("Payment must bigger or equal to total"));
         return;
     }
@@ -66,14 +58,12 @@ void PayCashDialog::saveTransaction()
     ui->pushSave->setEnabled(false);
 }
 
-void PayCashDialog::payClicked()
-{
+void PayCashDialog::payClicked() {
     saveTransaction();
     emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 0);
 }
 
-void PayCashDialog::saveClicked()
-{
+void PayCashDialog::saveClicked() {
     saveTransaction();
     emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 1);
 }

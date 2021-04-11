@@ -18,32 +18,28 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "settingdialog.h"
-#include "ui_settingdialog.h"
 #include "global_constant.h"
-#include "preference.h"
 #include "global_setting_const.h"
 #include "keyevent.h"
-#include <QSqlDatabase>
-#include <QSqlError>
+#include "preference.h"
+#include "ui_settingdialog.h"
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QProcess>
-#include <QFileDialog>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 using namespace LibGUI;
 using namespace LibG;
 
-static std::function<void(const QString&, int)> sOpenCon = nullptr;
+static std::function<void(const QString &, int)> sOpenCon = nullptr;
 static std::function<void()> sCloseCon = nullptr;
 static std::function<void()> sConConnected = nullptr;
-static std::function<void(const QString&)> sConError = nullptr;
+static std::function<void(const QString &)> sConError = nullptr;
 static std::function<void()> sConTimeout = nullptr;
 
-SettingDialog::SettingDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SettingDialog),
-    mMysqlOk(false),
-    mConOk(false)
-{
+SettingDialog::SettingDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::SettingDialog), mMysqlOk(false), mConOk(false) {
     ui->setupUi(this);
     ui->pushSave->setDisabled(true);
     ui->comboType->addItem(tr("Server"), APPLICATION_TYPE::SERVER);
@@ -67,20 +63,18 @@ SettingDialog::SettingDialog(QWidget *parent) :
     auto ke = new KeyEvent(this);
     ke->setClickEvent(true);
     ui->lineSqlitePath->installEventFilter(ke);
-    connect(ke, SIGNAL(clicked(QObject*)), SLOT(openDirectorySelector()));
+    connect(ke, SIGNAL(clicked(QObject *)), SLOT(openDirectorySelector()));
     ui->lineSqlitePath->setReadOnly(true);
 }
 
-SettingDialog::~SettingDialog()
-{
+SettingDialog::~SettingDialog() {
     delete ui;
     sConConnected = nullptr;
     sConError = nullptr;
     sConTimeout = nullptr;
 }
 
-void SettingDialog::showDialog()
-{
+void SettingDialog::showDialog() {
     ui->comboType->setCurrentIndex(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER ? 0 : 1);
     ui->comboDatabase->setCurrentIndex(Preference::getString(SETTING::DATABASE) == "MYSQL" ? 1 : 0);
     ui->lineSqlitePath->setText(Preference::getString(SETTING::SQLITE_DBPATH));
@@ -93,24 +87,22 @@ void SettingDialog::showDialog()
     show();
 }
 
-void SettingDialog::setSettingSocketOpenClose(std::function<void (const QString &, int)> openCon, std::function<void ()> closeCon)
-{
+void SettingDialog::setSettingSocketOpenClose(std::function<void(const QString &, int)> openCon,
+                                              std::function<void()> closeCon) {
     sOpenCon = openCon;
     sCloseCon = closeCon;
 }
 
-void SettingDialog::guiMessage(int id, const QString &str)
-{
-    if(id == GUI_MESSAGE::MSG_CONNECTION_SUCCESS)
+void SettingDialog::guiMessage(int id, const QString &str) {
+    if (id == GUI_MESSAGE::MSG_CONNECTION_SUCCESS)
         sConConnected();
-    else if(id == GUI_MESSAGE::MSG_CONNECTION_FAILED)
+    else if (id == GUI_MESSAGE::MSG_CONNECTION_FAILED)
         sConError(str);
-    else if(id == GUI_MESSAGE::MSG_CONNECTION_TIMEOUT)
+    else if (id == GUI_MESSAGE::MSG_CONNECTION_TIMEOUT)
         sConTimeout();
 }
 
-void SettingDialog::saveMysqlSetting()
-{
+void SettingDialog::saveMysqlSetting() {
     Preference::setValue(SETTING::MYSQL_HOST, ui->lineEditHost->text());
     Preference::setValue(SETTING::MYSQL_PORT, ui->spinBoxPort->value());
     Preference::setValue(SETTING::MYSQL_USERNAME, ui->lineEditUsername->text());
@@ -119,8 +111,7 @@ void SettingDialog::saveMysqlSetting()
     Preference::sync();
 }
 
-void SettingDialog::databaseChanged()
-{
+void SettingDialog::databaseChanged() {
     bool isMysql = ui->comboDatabase->currentText() == "MYSQL";
     ui->groupMysql_2->setEnabled(isMysql);
     ui->groupSqlite->setEnabled(!isMysql);
@@ -128,18 +119,16 @@ void SettingDialog::databaseChanged()
     checkSetting();
 }
 
-void SettingDialog::checkSetting()
-{
+void SettingDialog::checkSetting() {
     int type = ui->comboType->currentData().toInt();
-    if(type == APPLICATION_TYPE::SERVER) {
+    if (type == APPLICATION_TYPE::SERVER) {
         ui->pushSave->setEnabled(mMysqlOk);
     } else {
         ui->pushSave->setEnabled(mConOk);
     }
 }
 
-void SettingDialog::checkType()
-{
+void SettingDialog::checkType() {
     int type = ui->comboType->currentData().toInt();
     ui->groupClient->setEnabled(type != APPLICATION_TYPE::SERVER);
     ui->groupMysql->setEnabled(type == APPLICATION_TYPE::SERVER);
@@ -147,20 +136,19 @@ void SettingDialog::checkType()
     checkSetting();
 }
 
-void SettingDialog::checkMysql()
-{
-    if(ui->lineEditHost->text().isEmpty() || ui->lineEditUsername->text().isEmpty() ||
-            ui->lineEditDatabase->text().isEmpty()) {
+void SettingDialog::checkMysql() {
+    if (ui->lineEditHost->text().isEmpty() || ui->lineEditUsername->text().isEmpty() ||
+        ui->lineEditDatabase->text().isEmpty()) {
         QMessageBox::critical(this, tr("Error"), tr("Please complete the setting"));
         return;
     }
     QSqlDatabase database = QSqlDatabase::database(QStringLiteral("settingtest"));
     database.setHostName(ui->lineEditHost->text());
     database.setPort(ui->spinBoxPort->value());
-    //database.setDatabaseName(ui->lineEditDatabase->text());
+    // database.setDatabaseName(ui->lineEditDatabase->text());
     database.setUserName(ui->lineEditUsername->text());
     database.setPassword(ui->lineEditPassword->text());
-    if(database.open()) {
+    if (database.open()) {
         QMessageBox::information(this, tr("Success"), tr("Connection to Mysql OK!"));
         Preference::setValue(SETTING::MYSQL_OK, true);
         mMysqlOk = true;
@@ -173,15 +161,13 @@ void SettingDialog::checkMysql()
     checkSetting();
 }
 
-void SettingDialog::checkConnection()
-{
-    if(sOpenCon != nullptr)
+void SettingDialog::checkConnection() {
+    if (sOpenCon != nullptr)
         sOpenCon(ui->lineEditClientAddress->text(), ui->spinBoxClientPort->value());
 }
 
-void SettingDialog::cancel()
-{
-    if(!Preference::getBool(SETTING::SETTING_OK)) {
+void SettingDialog::cancel() {
+    if (!Preference::getBool(SETTING::SETTING_OK)) {
         close();
         qApp->quit();
     } else {
@@ -189,8 +175,7 @@ void SettingDialog::cancel()
     }
 }
 
-void SettingDialog::save()
-{
+void SettingDialog::save() {
     Preference::setValue(SETTING::APP_TYPE, ui->comboType->currentData().toInt());
     Preference::setValue(SETTING::APP_PORT, ui->spinBoxServerPort->text());
     Preference::setValue(SETTING::SERVER_PORT, ui->spinBoxClientPort->value());
@@ -200,40 +185,35 @@ void SettingDialog::save()
     Preference::setValue(SETTING::SQLITE_DBNAME, ui->lineSqliteName->text());
     Preference::setValue(SETTING::SETTING_OK, true);
     Preference::sync();
-    //restart the app for easier :D
+    // restart the app for easier :D
     qApp->quit();
     QStringList list;
     const QStringList &args = qApp->arguments();
-    for(int i = 0; i < args.count(); i++) {
-        if(i == 0) continue;
+    for (int i = 0; i < args.count(); i++) {
+        if (i == 0)
+            continue;
         list.append(args[i]);
     }
     QProcess::startDetached(qApp->arguments()[0], list);
-    if(sCloseCon != nullptr)
+    if (sCloseCon != nullptr)
         sCloseCon();
 }
 
-void SettingDialog::openDirectorySelector()
-{
+void SettingDialog::openDirectorySelector() {
     auto str = QFileDialog::getExistingDirectory(this, tr("Select directory"), QDir::homePath());
-    if(!str.isEmpty()) {
+    if (!str.isEmpty()) {
         ui->lineSqlitePath->setText(str);
     }
 }
 
-void SettingDialog::clientConnected()
-{
+void SettingDialog::clientConnected() {
     QMessageBox::information(this, tr("Connection Success"), tr("Connection to server success"));
     mConOk = true;
     checkSetting();
 }
 
-void SettingDialog::clientError(const QString &err)
-{
+void SettingDialog::clientError(const QString &err) {
     QMessageBox::critical(this, tr("Connection Error"), tr("Connection error : %1").arg(err));
 }
 
-void SettingDialog::clientTimeout()
-{
-    QMessageBox::critical(this, tr("Connection Timeout"), tr("Connection timeout"));
-}
+void SettingDialog::clientTimeout() { QMessageBox::critical(this, tr("Connection Timeout"), tr("Connection timeout")); }

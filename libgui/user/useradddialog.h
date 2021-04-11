@@ -28,27 +28,26 @@ class UserAddDialog;
 
 namespace LibGUI {
 
-class UserAddDialog : public QDialog
-{
+class UserAddDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     UserAddDialog(QWidget *parent = nullptr);
     ~UserAddDialog();
     void reset();
     void fill(const QVariantMap &data);
     void enableSave();
 
-private:
+  private:
     Ui::UserAddDialog *ui;
     int mId = -1;
 
-private slots:
+  private slots:
     void saveClicked();
 
-signals:
+  signals:
     void saveData(const QVariantMap &data, int id);
 };
 
-}
+} // namespace LibGUI
 #endif // USERADDDIALOG_H

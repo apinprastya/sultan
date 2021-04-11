@@ -29,14 +29,13 @@ struct CategoryData {
     int parent_id;
     QString name;
     QString code;
-    CategoryData(int id, int parent_id, const QString &name, const QString &code):
-        id(id), parent_id(parent_id), name(name), code(code) {}
+    CategoryData(int id, int parent_id, const QString &name, const QString &code)
+        : id(id), parent_id(parent_id), name(name), code(code) {}
 };
 
-class CategoryTreeWidget : public QTreeWidget
-{
+class CategoryTreeWidget : public QTreeWidget {
     Q_OBJECT
-public:
+  public:
     CategoryTreeWidget(QWidget *parent = nullptr);
     ~CategoryTreeWidget();
     void load(const QVariantList &data);
@@ -45,12 +44,12 @@ public:
     void deleteItem(int id);
     QList<CategoryData> getData();
 
-private:
-    QList<QTreeWidgetItem*> mItems;
+  private:
+    QList<QTreeWidgetItem *> mItems;
     QTreeWidgetItem *getItemWithId(int id);
-    void populateData(QTreeWidgetItem* item, QList<CategoryData> &data, int pos);
-    void cleanChild(QTreeWidgetItem* item);
+    void populateData(QTreeWidgetItem *item, QList<CategoryData> &data, int pos);
+    void cleanChild(QTreeWidgetItem *item);
 };
 
-}
+} // namespace LibGUI
 #endif // CATEGORYTREEWIDGET_H

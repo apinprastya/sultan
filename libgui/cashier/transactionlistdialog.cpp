@@ -18,26 +18,24 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "transactionlistdialog.h"
-#include "ui_transactionlistdialog.h"
-#include "tableitem.h"
-#include "tableview.h"
-#include "guiutil.h"
-#include "tablemodel.h"
+#include "db_constant.h"
 #include "dbutil.h"
 #include "global_constant.h"
-#include "message.h"
-#include "db_constant.h"
+#include "guiutil.h"
 #include "keyevent.h"
+#include "message.h"
 #include "solditemlistdialog.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "ui_transactionlistdialog.h"
 #include <QShortcut>
 
 using namespace LibGUI;
 using namespace LibG;
 
-TransactionListDialog::TransactionListDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::TransactionListDialog)
-{
+TransactionListDialog::TransactionListDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::TransactionListDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     auto model = ui->tableWidget->getModel();
@@ -61,61 +59,54 @@ TransactionListDialog::TransactionListDialog(LibG::MessageBus *bus, QWidget *par
     auto key = new KeyEvent(ui->tableWidget->getTableView());
     key->addConsumeKey(Qt::Key_Return);
     ui->tableWidget->getTableView()->installEventFilter(key);
-    connect(key, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(showItems()));
+    connect(key, SIGNAL(keyPressed(QObject *, QKeyEvent *)), SLOT(showItems()));
     connect(ui->tableWidget->getTableView(), SIGNAL(doubleClicked(QModelIndex)), SLOT(showItems()));
 }
 
-TransactionListDialog::~TransactionListDialog()
-{
-    delete ui;
-}
+TransactionListDialog::~TransactionListDialog() { delete ui; }
 
-void TransactionListDialog::setType(int type)
-{
-    if(type == SoldReturn) {
+void TransactionListDialog::setType(int type) {
+    if (type == SoldReturn) {
         ui->groupBox->hide();
     }
     mType = type;
 }
 
-void TransactionListDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::GET) && msg->isSuccess()) {
+void TransactionListDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::GET) && msg->isSuccess()) {
         mPrintFunction(msg->data());
     }
 }
 
-void TransactionListDialog::focusAndSelectTable()
-{
+void TransactionListDialog::focusAndSelectTable() {
     ui->tableWidget->getTableView()->setFocus(Qt::TabFocusReason);
-    if(ui->tableWidget->getModel()->rowCount(QModelIndex()) > 0)
+    if (ui->tableWidget->getModel()->rowCount(QModelIndex()) > 0)
         ui->tableWidget->getTableView()->selectRow(0);
 }
 
-void TransactionListDialog::printTransaction()
-{
+void TransactionListDialog::printTransaction() {
     const auto &index = ui->tableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     Message msg(MSG_TYPE::SOLD, MSG_COMMAND::GET);
     msg.addData("id", item->id);
     sendMessage(&msg);
 }
 
-void TransactionListDialog::search()
-{
+void TransactionListDialog::search() {
     ui->tableWidget->getModel()->setFilter("number", COMPARE::LIKE, ui->lineNumber->text());
     ui->tableWidget->getModel()->refresh();
 }
 
-void TransactionListDialog::showItems()
-{
+void TransactionListDialog::showItems() {
     const QModelIndex &index = ui->tableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     SoldItemListDialog dialog(item->data(), mMessageBus, this);
     dialog.exec();
-    if(mType == SoldReturn && dialog.isOk()) {
+    if (mType == SoldReturn && dialog.isOk()) {
         mIsOk = true;
         mData = dialog.getData();
         mData["sold_id"] = item->data("id");

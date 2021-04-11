@@ -20,8 +20,8 @@
 #ifndef SOCKETMANAGER_H
 #define SOCKETMANAGER_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 
 namespace LibG {
 class Message;
@@ -30,27 +30,26 @@ class Message;
 class QWebSocketServer;
 class SocketHandler;
 
-class SocketManager : public QObject
-{
+class SocketManager : public QObject {
     Q_OBJECT
-public:
+  public:
     SocketManager(QObject *parent = nullptr);
     bool listen(int port);
 
-private:
+  private:
     int mLastId;
     QWebSocketServer *mServer;
-    QMap<int, SocketHandler*> mHandlers;
+    QMap<int, SocketHandler *> mHandlers;
 
-private slots:
+  private slots:
     void newConnection();
     void clientDisconnect();
 
-public slots:
+  public slots:
     void sendToClient(LibG::Message *msg);
     void processMessageFromClient(LibG::Message *msg);
 
-signals:
+  signals:
     void receivedMessage(LibG::Message *msg);
 };
 

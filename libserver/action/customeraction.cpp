@@ -18,26 +18,23 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "customeraction.h"
+#include "db.h"
+#include "dbresult.h"
 #include "global_constant.h"
 #include "message.h"
-#include "db.h"
-#include "queryhelper.h"
-#include "dbresult.h"
 #include "preference.h"
+#include "queryhelper.h"
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-CustomerAction::CustomerAction():
-    ServerAction("customers", "id")
-{
+CustomerAction::CustomerAction() : ServerAction("customers", "id") {
     mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE | BEFORE_DELETE;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&CustomerAction::summary, this, std::placeholders::_1));
 }
 
-LibG::Message CustomerAction::summary(LibG::Message *msg)
-{
+LibG::Message CustomerAction::summary(LibG::Message *msg) {
     Message message(msg);
     mDb->table(mTableName);
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
@@ -46,9 +43,8 @@ LibG::Message CustomerAction::summary(LibG::Message *msg)
     return message;
 }
 
-bool CustomerAction::beforeDelete(const QVariantMap &oldData, Message *retMsg)
-{
-    if(oldData["credit"].toDouble() != 0) {
+bool CustomerAction::beforeDelete(const QVariantMap &oldData, Message *retMsg) {
+    if (oldData["credit"].toDouble() != 0) {
         retMsg->setError(QObject::tr("Customer credit must 0 when delete the customer"));
         return false;
     }

@@ -28,20 +28,19 @@ namespace LibGUI {
 class HorizontalHeader;
 class HeaderWidget;
 
-class TableView : public QTableView
-{
+class TableView : public QTableView {
     Q_OBJECT
-public:
+  public:
     TableView(QWidget *parent = nullptr, bool useStandartHeader = false);
     HeaderWidget *getHeaderWidget(int index);
     void setUseStandardHeader(bool value);
 
-protected:
+  protected:
     void scrollContentsBy(int dx, int dy) override;
 
-private:
+  private:
     HorizontalHeader *mHeader;
 };
 
-}
+} // namespace LibGUI
 #endif // TABLEVIEW_H

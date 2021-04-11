@@ -21,18 +21,22 @@
 #include "ui_userpermissiondialog.h"
 #include <QDebug>
 
-static QMap<int, QString> AVAIL_PERMISSION = {
-    {9876, "Administrator"}, /*{1, "User"},*/ {2, "Suplier"},
-    {3, "Item"}, {4, "Cashier"}, {5, "Category"}, {6, "Purchase"},
-    {7, "Report"}, {8, "Customer"}, {9, "Bank"}, {10, "Money Report"},
-    {11, "Report Transaction"}, {12, "Check Stock"}, /*{13, "Initial Stock"},*/
-    {14, "Unit"}
-};
+static QMap<int, QString> AVAIL_PERMISSION = {{9876, "Administrator"},
+                                              /*{1, "User"},*/ {2, "Suplier"},
+                                              {3, "Item"},
+                                              {4, "Cashier"},
+                                              {5, "Category"},
+                                              {6, "Purchase"},
+                                              {7, "Report"},
+                                              {8, "Customer"},
+                                              {9, "Bank"},
+                                              {10, "Money Report"},
+                                              {11, "Report Transaction"},
+                                              {12, "Check Stock"}, /*{13, "Initial Stock"},*/
+                                              {14, "Unit"}};
 
-UserPermissionDialog::UserPermissionDialog(const QVariantMap &data, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::UserPermissionDialog)
-{
+UserPermissionDialog::UserPermissionDialog(const QVariantMap &data, QWidget *parent)
+    : QDialog(parent), ui(new Ui::UserPermissionDialog) {
     ui->setupUi(this);
     mId = data["id"].toInt();
     mPermission.fromString(data["permission"].toString());
@@ -41,7 +45,7 @@ UserPermissionDialog::UserPermissionDialog(const QVariantMap &data, QWidget *par
         i.next();
         auto item = new QListWidgetItem(i.value());
         item->setData(Qt::UserRole, i.key());
-        if(mPermission.has(i.key()))
+        if (mPermission.has(i.key()))
             ui->listSelected->addItem(item);
         else
             ui->listAvailable->addItem(item);
@@ -53,29 +57,23 @@ UserPermissionDialog::UserPermissionDialog(const QVariantMap &data, QWidget *par
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-UserPermissionDialog::~UserPermissionDialog()
-{
-    delete ui;
-}
+UserPermissionDialog::~UserPermissionDialog() { delete ui; }
 
-void UserPermissionDialog::listAvailableDoubleClicked(const QModelIndex &index)
-{
+void UserPermissionDialog::listAvailableDoubleClicked(const QModelIndex &index) {
     auto item = ui->listAvailable->takeItem(index.row());
     ui->listSelected->addItem(item);
     int val = item->data(Qt::UserRole).toInt();
     mPermission.add(val);
 }
 
-void UserPermissionDialog::listSelectedDoubleClicked(const QModelIndex &index)
-{
+void UserPermissionDialog::listSelectedDoubleClicked(const QModelIndex &index) {
     auto item = ui->listSelected->takeItem(index.row());
     ui->listAvailable->addItem(item);
     int val = item->data(Qt::UserRole).toInt();
     mPermission.rem(val);
 }
 
-void UserPermissionDialog::saveClicked()
-{
+void UserPermissionDialog::saveClicked() {
     QVariantMap d{{"permission", mPermission.toString()}};
     emit saveData(d, mId);
     close();

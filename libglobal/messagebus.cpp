@@ -23,32 +23,23 @@
 
 using namespace LibG;
 
-MessageBus::MessageBus(QObject *parent) : QObject(parent)
-{
+MessageBus::MessageBus(QObject *parent) : QObject(parent) {}
 
-}
+void MessageBus::sendMessage(Message *msg) { emit newMessageToSend(msg); }
 
-void MessageBus::sendMessage(Message *msg)
-{
-    emit newMessageToSend(msg);
-}
-
-void MessageBus::registerHandler(MessageHandler *handler)
-{
-    if(!mMessageHandler.contains(handler))
+void MessageBus::registerHandler(MessageHandler *handler) {
+    if (!mMessageHandler.contains(handler))
         mMessageHandler.append(handler);
 }
 
-void MessageBus::removeHandler(MessageHandler *handler)
-{
-    if(mMessageHandler.contains(handler))
+void MessageBus::removeHandler(MessageHandler *handler) {
+    if (mMessageHandler.contains(handler))
         mMessageHandler.removeOne(handler);
 }
 
-void MessageBus::messageRecieved(LibG::Message *msg)
-{
-    for(auto handler : mMessageHandler) {
-        if(handler->consumeMessage(msg))
+void MessageBus::messageRecieved(LibG::Message *msg) {
+    for (auto handler : mMessageHandler) {
+        if (handler->consumeMessage(msg))
             break;
     }
 }

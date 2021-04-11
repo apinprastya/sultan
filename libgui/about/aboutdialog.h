@@ -28,17 +28,16 @@ class AboutDialog;
 
 namespace LibGUI {
 
-class AboutDialog : public QDialog
-{
+class AboutDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     AboutDialog(QWidget *parent = nullptr);
     ~AboutDialog();
 
-private:
+  private:
     Ui::AboutDialog *ui;
 };
 
-}
+} // namespace LibGUI
 #endif // ABOUTDIALOG_H

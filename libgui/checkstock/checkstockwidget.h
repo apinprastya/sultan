@@ -33,23 +33,22 @@ namespace LibGUI {
 class TableWidget;
 class CheckStockAddDialog;
 
-class CheckStockWidget : public QWidget, public LibG::MessageHandler
-{
+class CheckStockWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     CheckStockWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     CheckStockAddDialog *mAddDialog;
 
-private slots:
+  private slots:
     void addClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // CHECKSTOCKWIDGET_H

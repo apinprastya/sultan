@@ -23,17 +23,17 @@
 #include <QtCore/qglobal.h>
 
 #ifdef GLOBAL_LIBRARY_STATIC
-    #define GLOBALSHARED_EXPORT
+#define GLOBALSHARED_EXPORT
 #else
-    #if defined(GLOBAL_LIBRARY)
-        #define GLOBALSHARED_EXPORT Q_DECL_EXPORT
-    #else
-        #if defined(SINGLEBIN)
-            #define GLOBALSHARED_EXPORT
-        #else
-            #define GLOBALSHARED_EXPORT Q_DECL_IMPORT
-        #endif
-    #endif
+#if defined(GLOBAL_LIBRARY)
+#define GLOBALSHARED_EXPORT Q_DECL_EXPORT
+#else
+#if defined(SINGLEBIN)
+#define GLOBALSHARED_EXPORT
+#else
+#define GLOBALSHARED_EXPORT Q_DECL_IMPORT
+#endif
+#endif
 #endif
 
 #endif // GLOBAL_GLOBAL_H

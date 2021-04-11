@@ -23,9 +23,7 @@
 
 using namespace LibGUI;
 
-TableView::TableView(QWidget *parent, bool useStandartHeader) :
-    QTableView(parent)
-{
+TableView::TableView(QWidget *parent, bool useStandartHeader) : QTableView(parent) {
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     mHeader = new HorizontalHeader(this, useStandartHeader);
@@ -34,19 +32,12 @@ TableView::TableView(QWidget *parent, bool useStandartHeader) :
     verticalScrollBar()->setTracking(false);
 }
 
-HeaderWidget *TableView::getHeaderWidget(int index)
-{
-    return mHeader->getHeaderWidget(index);
-}
+HeaderWidget *TableView::getHeaderWidget(int index) { return mHeader->getHeaderWidget(index); }
 
-void TableView::setUseStandardHeader(bool value)
-{
-    mHeader->setUseStandardHeader(value);
-}
+void TableView::setUseStandardHeader(bool value) { mHeader->setUseStandardHeader(value); }
 
-void TableView::scrollContentsBy(int dx, int dy)
-{
+void TableView::scrollContentsBy(int dx, int dy) {
     QTableView::scrollContentsBy(dx, dy);
-    if(dx != 0)
+    if (dx != 0)
         mHeader->fixWidgetPositions();
 }

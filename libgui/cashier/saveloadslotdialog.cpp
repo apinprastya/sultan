@@ -18,19 +18,16 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "saveloadslotdialog.h"
-#include "ui_saveloadslotdialog.h"
 #include "keyevent.h"
+#include "ui_saveloadslotdialog.h"
+#include <QDir>
 #include <QFile>
 #include <QMessageBox>
-#include <QDir>
 
 using namespace LibGUI;
 
-SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SaveLoadSlotDialog),
-    mIsSave(isSave)
-{
+SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent)
+    : QDialog(parent), ui(new Ui::SaveLoadSlotDialog), mIsSave(isSave) {
     ui->setupUi(this);
     auto keyEvent = new KeyEvent(ui->tableWidget);
     keyEvent->addConsumeKey(Qt::Key_Return);
@@ -47,7 +44,7 @@ SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent) :
     QDir dir = QDir::home();
     dir.mkdir(".sultan");
     dir.cd(".sultan");
-    for(int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         auto item = new QTableWidgetItem(QString::number(i + 1));
         item->setTextAlignment(Qt::AlignCenter);
         ui->tableWidget->setItem(i, 0, item);
@@ -55,33 +52,31 @@ SaveLoadSlotDialog::SaveLoadSlotDialog(bool isSave, QWidget *parent) :
         item->setData(Qt::UserRole, 1);
         item->setTextAlignment(Qt::AlignCenter);
         QFile file(dir.absoluteFilePath(QString("trans_%1.trans").arg(i)));
-        if(file.exists()){
+        if (file.exists()) {
             item->setText(isSave ? tr("NO") : tr("YES"));
             item->setData(Qt::UserRole, 0);
         }
         ui->tableWidget->setItem(i, 1, item);
     }
     ui->tableWidget->selectRow(0);
-    if(!isSave) ui->pushButton->setText(tr("Load"));
-    connect(keyEvent, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(returnPressed()));
+    if (!isSave)
+        ui->pushButton->setText(tr("Load"));
+    connect(keyEvent, SIGNAL(keyPressed(QObject *, QKeyEvent *)), SLOT(returnPressed()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), SLOT(returnPressed()));
 }
 
-SaveLoadSlotDialog::~SaveLoadSlotDialog()
-{
-    delete ui;
-}
+SaveLoadSlotDialog::~SaveLoadSlotDialog() { delete ui; }
 
-void SaveLoadSlotDialog::returnPressed()
-{
+void SaveLoadSlotDialog::returnPressed() {
     auto item = ui->tableWidget->item(ui->tableWidget->currentRow(), 1);
     int available = item->data(Qt::UserRole).toInt();
-    if(!available && mIsSave) {
-        int ret = QMessageBox::question(this, tr("Override Confirmation"), tr("Slot is in used, are you sure to override?"));
-        if(ret != QMessageBox::Yes) {
+    if (!available && mIsSave) {
+        int ret =
+            QMessageBox::question(this, tr("Override Confirmation"), tr("Slot is in used, are you sure to override?"));
+        if (ret != QMessageBox::Yes) {
             return;
         }
-    } else if(available && !mIsSave){
+    } else if (available && !mIsSave) {
         return;
     }
     mSelectedSlot = ui->tableWidget->currentRow();

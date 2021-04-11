@@ -25,9 +25,8 @@
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT TableItem
-{
-public:
+class GUISHARED_EXPORT TableItem {
+  public:
     QVariant id;
     TableItem();
     virtual ~TableItem() {}
@@ -35,9 +34,9 @@ public:
     virtual QVariant data(const QString &key);
     QVariantMap data();
 
-private:
+  private:
     QVariantMap mData;
 };
 
-}
+} // namespace LibGUI
 #endif // TABLEITEM_H

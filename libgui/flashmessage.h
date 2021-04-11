@@ -27,25 +27,24 @@ class QTimer;
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT FlashMessage : public QWidget
-{
+class GUISHARED_EXPORT FlashMessage : public QWidget {
     Q_OBJECT
-public:
+  public:
     enum Type { Info, Warning, Error };
     enum Lifetime { Short, Long };
     FlashMessage(const QString &message, int type = Info, int lifetime = Short, QWidget *parent = nullptr);
     ~FlashMessage();
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-signals:
+  signals:
     void done(FlashMessage *flashmessage);
 
-private:
+  private:
     QTimer *mTimer;
 
-private slots:
+  private slots:
     void lifetimeDone();
 };
 
-}
+} // namespace LibGUI
 #endif // FLASHMESSAGE_H

@@ -29,11 +29,10 @@ class EditPriceCountDialog;
 
 namespace LibGUI {
 
-class EditPriceCountDialog : public QDialog, public LibG::MessageHandler
-{
+class EditPriceCountDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     EditPriceCountDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~EditPriceCountDialog();
     void setup(const QString &barcode, float count, double price, const QString disc, const QString &note, int flag);
@@ -43,17 +42,17 @@ public:
     QString getDiscountFormula();
     QString getNote();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::EditPriceCountDialog *ui;
     bool mIsOk = false;
 
-private slots:
+  private slots:
     void updatePrice();
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // EDITPRICECOUNTDIALOG_H

@@ -29,27 +29,26 @@ class CashierReportDialog;
 
 namespace LibGUI {
 
-class CashierReportDialog : public QDialog, public LibG::MessageHandler
-{
+class CashierReportDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     CashierReportDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CashierReportDialog();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::CashierReportDialog *ui;
     QVariantList mData;
 
     QString getType(int type);
 
-private slots:
+  private slots:
     void search();
     void print();
 };
 
-}
+} // namespace LibGUI
 #endif // CASHIERREPORTDIALOG_H

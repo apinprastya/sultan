@@ -29,19 +29,18 @@ class AddSoldReturnDialog;
 
 namespace LibGUI {
 
-class AddSoldReturnDialog : public QDialog, public LibG::MessageHandler
-{
+class AddSoldReturnDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddSoldReturnDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddSoldReturnDialog();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::AddSoldReturnDialog *ui;
     int mId = -1;
     int mSoldId = -1;
@@ -51,13 +50,13 @@ private:
 
     void fillField(const QVariantMap &data);
 
-private slots:
+  private slots:
     void saveClicked();
     void calculatePrice();
     void openTransactionDialog();
     void checkBank();
 };
 
-}
+} // namespace LibGUI
 
 #endif // ADDSOLDRETURNDIALOG_H

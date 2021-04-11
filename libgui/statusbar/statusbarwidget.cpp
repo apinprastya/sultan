@@ -20,32 +20,24 @@
 #include "statusbarwidget.h"
 #include "ui_statusbarwidget.h"
 #include "usersession.h"
-#include <QTimer>
 #include <QDateTime>
 #include <QStringBuilder>
+#include <QTimer>
 
 using namespace LibGUI;
 
-StatusBarWidget::StatusBarWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::StatusBarWidget)
-{
+StatusBarWidget::StatusBarWidget(QWidget *parent) : QWidget(parent), ui(new Ui::StatusBarWidget) {
     ui->setupUi(this);
     updateClock();
 }
 
-StatusBarWidget::~StatusBarWidget()
-{
-    delete ui;
-}
+StatusBarWidget::~StatusBarWidget() { delete ui; }
 
-void StatusBarWidget::updateUser()
-{
+void StatusBarWidget::updateUser() {
     ui->labelUser->setText(LibG::UserSession::username() % " - " % LibG::UserSession::name());
 }
 
-void StatusBarWidget::updateClock()
-{
+void StatusBarWidget::updateClock() {
     ui->labelClock->setText(QDateTime::currentDateTime().toString("dd-MMMM-yyyy hh:mm:ss"));
     QTimer::singleShot(500, this, SLOT(updateClock()));
 }

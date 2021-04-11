@@ -31,25 +31,24 @@ class AutoUpdateDialog;
 
 namespace LibGUI {
 
-class AutoUpdateDialog : public QDialog
-{
+class AutoUpdateDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     AutoUpdateDialog(QWidget *parent = nullptr);
     ~AutoUpdateDialog();
 
-protected:
+  protected:
     void closeEvent(QCloseEvent *e);
 
-private:
+  private:
     Ui::AutoUpdateDialog *ui;
-    QList<QWidget*> mGroupWidget;
+    QList<QWidget *> mGroupWidget;
     QNetworkAccessManager *mNetworkManager;
     QString mArc;
     QString mNewVersion;
 
-private slots:
+  private slots:
     void checkDone();
     void httpError(QNetworkReply::NetworkError error);
     void updateClicked();
@@ -57,5 +56,5 @@ private slots:
     void downloadProgress(qint64 receive, qint64 total);
 };
 
-}
+} // namespace LibGUI
 #endif // AUTOUPDATEDIALOG_H

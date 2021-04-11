@@ -29,26 +29,25 @@ class RewardAddDialog;
 
 namespace LibGUI {
 
-class RewardAddDialog : public QDialog, LibG::MessageHandler
-{
+class RewardAddDialog : public QDialog, LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     RewardAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~RewardAddDialog();
     void reset();
     void fill(const QVariantMap &data);
 
-private:
+  private:
     Ui::RewardAddDialog *ui;
     int mId;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // REWARDADDDIALOG_H

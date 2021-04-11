@@ -26,23 +26,22 @@
 namespace Ui {
 class NormalWidget;
 class CreditSummaryWidget;
-}
+} // namespace Ui
 
 namespace LibGUI {
 
 class TableWidget;
 
-class CustomerRewardWidget : public QWidget, public LibG::MessageHandler
-{
+class CustomerRewardWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent = nullptr);
     inline int getId() { return mId; }
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::NormalWidget *ui;
     Ui::CreditSummaryWidget *uiSummary;
     TableWidget *mTableWidget;
@@ -51,12 +50,12 @@ private:
     int mPoin = 0;
     QString mNumber;
 
-private slots:
+  private slots:
     void addClicked();
     void refreshCustomer();
     void printClicked();
     void print(const QVariantMap &data);
 };
 
-}
+} // namespace LibGUI
 #endif // CUSTOMERREWARDWIDGET_H

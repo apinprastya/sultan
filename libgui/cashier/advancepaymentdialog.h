@@ -31,30 +31,29 @@ namespace LibGUI {
 
 class Customer;
 
-class AdvancePaymentDialog : public QDialog, public LibG::MessageHandler
-{
+class AdvancePaymentDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AdvancePaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AdvancePaymentDialog();
     void setup(double total, Customer *cust);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::AdvancePaymentDialog *ui;
     double mTotal = 0;
     Customer *mCustomer = nullptr;
 
-signals:
+  signals:
     void payRequested(int type, double value, int flag);
 
-private slots:
+  private slots:
     void paymentValueChanged(const QString &value);
     void payClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // ADVANCEPAYMENTDIALOG_H

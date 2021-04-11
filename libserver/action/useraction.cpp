@@ -18,34 +18,32 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "useraction.h"
-#include "global_constant.h"
 #include "db.h"
+#include "global_constant.h"
 #include <QDebug>
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-UserAction::UserAction():
-    ServerAction("users", "id")
-{
+UserAction::UserAction() : ServerAction("users", "id") {
     mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
     mFunctionMap.insert(MSG_COMMAND::LOGIN, std::bind(&UserAction::login, this, std::placeholders::_1));
-    mFunctionMap.insert(MSG_COMMAND::CHANGE_MY_PASSWORD, std::bind(&UserAction::changeMyPassword, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::CHANGE_MY_PASSWORD,
+                        std::bind(&UserAction::changeMyPassword, this, std::placeholders::_1));
 }
 
-Message UserAction::login(Message *msg)
-{
+Message UserAction::login(Message *msg) {
     LibG::Message message(msg);
     const QString &username = msg->data("username").toString();
     const QString &password = msg->data("password").toString();
     mDb->table(mTableName)->where("username = ", username);
     DbResult res = mDb->exec();
-    if(res.isEmpty()) {
+    if (res.isEmpty()) {
         message.setError("Username and password not match");
     } else {
         const QVariantMap &data = res.first();
-        if(password.compare(data["password"].toString())) {
+        if (password.compare(data["password"].toString())) {
             message.setError("Username and password not match");
         } else {
             message.addData("id", data["id"]);
@@ -57,24 +55,23 @@ Message UserAction::login(Message *msg)
     return message;
 }
 
-Message UserAction::changeMyPassword(Message *msg)
-{
+Message UserAction::changeMyPassword(Message *msg) {
     LibG::Message message(msg);
     const QString &old = msg->data("current").toString();
     const QString &newpass = msg->data("new").toString();
     mDb->table(mTableName)->where("id = ", msg->data("id").toInt());
     DbResult res = mDb->exec();
-    if(res.isEmpty()) {
+    if (res.isEmpty()) {
         message.setError("User not found");
     } else {
         const QVariantMap &data = res.first();
-        if(old.compare(data["password"].toString())) {
+        if (old.compare(data["password"].toString())) {
             message.setError("Old password wrong");
         } else {
             QVariantMap d{{"password", newpass}};
             mDb->beginTransaction();
             mDb->where("id = ", msg->data("id").toInt())->update(mTableName, d);
-            if(!mDb->commit()) {
+            if (!mDb->commit()) {
                 message.setError(mDb->lastError().text());
             }
         }

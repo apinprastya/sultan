@@ -21,32 +21,31 @@
 #define MESSAGEBUS_H
 
 #include "global_global.h"
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 namespace LibG {
 
 class Message;
 class MessageHandler;
 
-class GLOBALSHARED_EXPORT MessageBus : public QObject
-{
+class GLOBALSHARED_EXPORT MessageBus : public QObject {
     Q_OBJECT
-public:
+  public:
     MessageBus(QObject *parent = nullptr);
     void sendMessage(Message *msg);
     void registerHandler(MessageHandler *handler);
     void removeHandler(MessageHandler *handler);
 
-public slots:
+  public slots:
     void messageRecieved(LibG::Message *msg);
 
-signals:
+  signals:
     void newMessageToSend(LibG::Message *msg);
 
-private:
-    QList<MessageHandler*> mMessageHandler;
+  private:
+    QList<MessageHandler *> mMessageHandler;
 };
 
-}
+} // namespace LibG
 #endif // MESSAGEBUS_H

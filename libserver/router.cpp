@@ -18,65 +18,64 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "router.h"
-#include "message.h"
-#include "serveraction.h"
-#include "global_constant.h"
-#include "action/useraction.h"
-#include "action/suplieraction.h"
-#include "action/itemaction.h"
-#include "action/sellpriceactions.h"
+#include "action/bankaction.h"
 #include "action/categoryaction.h"
-#include "action/purchaseaction.h"
-#include "action/purchaseitemaction.h"
-#include "action/soldaction.h"
-#include "action/solditemaction.h"
+#include "action/checkstockaction.h"
+#include "action/configaction.h"
+#include "action/cusomercreditaction.h"
 #include "action/customeraction.h"
 #include "action/customerpointaction.h"
-#include "action/cusomercreditaction.h"
+#include "action/databaseaction.h"
+#include "action/itemaction.h"
+#include "action/itemlinkaction.h"
 #include "action/machineaction.h"
+#include "action/purchaseaction.h"
+#include "action/purchaseitemaction.h"
+#include "action/purchasereturnaction.h"
 #include "action/rewardaction.h"
 #include "action/rewardpoinaction.h"
-#include "action/bankaction.h"
-#include "action/transactionaction.h"
-#include "action/purchasereturnaction.h"
-#include "action/databaseaction.h"
-#include "action/checkstockaction.h"
-#include "action/unitaction.h"
-#include "action/stockcardaction.h"
-#include "action/itemlinkaction.h"
+#include "action/sellpriceactions.h"
+#include "action/soldaction.h"
+#include "action/solditemaction.h"
 #include "action/soldreturnaction.h"
-#include "action/configaction.h"
+#include "action/stockcardaction.h"
+#include "action/suplieraction.h"
+#include "action/transactionaction.h"
+#include "action/unitaction.h"
+#include "action/useraction.h"
 #include "db.h"
+#include "global_constant.h"
+#include "message.h"
 #include "queryhelper.h"
-#include <QStringBuilder>
+#include "serveraction.h"
 #include <QDebug>
+#include <QStringBuilder>
 
 using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-Router::Router()
-{
-    //define the user defined filter here
-    LibDB::QueryHelper::installUserDefinedFilter(FILTER::CATEGORY_IN, [](Db *db, const QString &key, int type, const QVariantMap &data) {
-       if(type == FILTER::CATEGORY_IN) {
-            db->where(key % " IN (SELECT child_id FROM categorychilds WHERE category_id = " % data["value"].toString() % ")");
-       }
-    });
+Router::Router() {
+    // define the user defined filter here
+    LibDB::QueryHelper::installUserDefinedFilter(
+        FILTER::CATEGORY_IN, [](Db *db, const QString &key, int type, const QVariantMap &data) {
+            if (type == FILTER::CATEGORY_IN) {
+                db->where(key % " IN (SELECT child_id FROM categorychilds WHERE category_id = " %
+                          data["value"].toString() % ")");
+            }
+        });
 }
 
-LibG::Message Router::handler(LibG::Message msg)
-{
+LibG::Message Router::handler(LibG::Message msg) {
     QScopedPointer<ServerAction> action(getServerAction(msg.type()));
-    if(action != nullptr)
+    if (action != nullptr)
         return action->exec(&msg);
     msg.setStatus(STATUS::ERROR);
     return msg;
 }
 
-ServerAction *Router::getServerAction(int type)
-{
-    switch(type) {
+ServerAction *Router::getServerAction(int type) {
+    switch (type) {
     case MSG_TYPE::USER:
         return new UserAction();
     case MSG_TYPE::SUPLIER:
@@ -130,4 +129,3 @@ ServerAction *Router::getServerAction(int type)
     }
     return nullptr;
 }
-

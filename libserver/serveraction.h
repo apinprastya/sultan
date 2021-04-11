@@ -20,8 +20,8 @@
 #ifndef SERVERACTION_H
 #define SERVERACTION_H
 
-#include "server_global.h"
 #include "message.h"
+#include "server_global.h"
 #include <QMap>
 #include <functional>
 
@@ -31,33 +31,32 @@ class Db;
 
 namespace LibServer {
 
-class SERVERSHARED_EXPORT ServerAction
-{
-public:
+class SERVERSHARED_EXPORT ServerAction {
+  public:
     enum Flag {
-        BEFORE_INSERT       = 0x1,
-        AFTER_INSERT        = 0x2,
-        BEFORE_UPDATE       = 0x4,
-        AFTER_UPDATE        = 0x8,
-        BEFORE_DELETE       = 0x10,
-        AFTER_DELETE        = 0x20,
-        SOFT_DELETE         = 0x40,
-        BEFORE_RESTORE      = 0x80,
-        AFTER_RESTORE       = 0x100,
-        HAS_UPDATE_FIELD    = (1 << 16),
-        USE_TRANSACTION     = (1 << 17),
+        BEFORE_INSERT = 0x1,
+        AFTER_INSERT = 0x2,
+        BEFORE_UPDATE = 0x4,
+        AFTER_UPDATE = 0x8,
+        BEFORE_DELETE = 0x10,
+        AFTER_DELETE = 0x20,
+        SOFT_DELETE = 0x40,
+        BEFORE_RESTORE = 0x80,
+        AFTER_RESTORE = 0x100,
+        HAS_UPDATE_FIELD = (1 << 16),
+        USE_TRANSACTION = (1 << 17),
     };
 
     ServerAction(const QString &tableName, const QString idfield);
     virtual ~ServerAction();
     LibG::Message exec(LibG::Message *msg);
 
-protected:
+  protected:
     int mFlag = 0;
     LibDB::Db *mDb;
     QString mTableName;
     QString mIdField;
-    QMap<int, std::function<LibG::Message(LibG::Message*)> > mFunctionMap;
+    QMap<int, std::function<LibG::Message(LibG::Message *)>> mFunctionMap;
 
     virtual LibG::Message insert(LibG::Message *msg);
     virtual LibG::Message update(LibG::Message *msg);
@@ -69,17 +68,21 @@ protected:
     void setStart(LibG::Message *msg, LibG::Message *src);
     virtual QMap<QString, QString> fieldMap() const;
     virtual void selectAndJoin() {}
-    virtual bool beforeInsert(const QVariantMap &/*data*/, LibG::Message */*retMsg*/) { return true; }
-    virtual void afterInsert(const QVariantMap &/*data*/) {}
-    virtual bool beforeUpdate(const QVariantMap &/*oldData*/, LibG::Message */*msg*/, LibG::Message */*retMsg*/) { return true; }
-    virtual void afterUpdate(const QVariantMap &/*oldData*/, const QVariantMap &/*newData*/) {}
-    virtual bool beforeDelete(const QVariantMap &/*oldData*/, LibG::Message */*retMsg*/) { return true; }
-    virtual void afterDelete(const QVariantMap &/*oldData*/) {}
-    virtual bool beforeRestore(const QVariantMap &/*oldData*/, LibG::Message */*msg*/, LibG::Message */*retMsg*/) { return true; }
-    virtual void afterRestore(const QVariantMap &/*data*/) {}
+    virtual bool beforeInsert(const QVariantMap & /*data*/, LibG::Message * /*retMsg*/) { return true; }
+    virtual void afterInsert(const QVariantMap & /*data*/) {}
+    virtual bool beforeUpdate(const QVariantMap & /*oldData*/, LibG::Message * /*msg*/, LibG::Message * /*retMsg*/) {
+        return true;
+    }
+    virtual void afterUpdate(const QVariantMap & /*oldData*/, const QVariantMap & /*newData*/) {}
+    virtual bool beforeDelete(const QVariantMap & /*oldData*/, LibG::Message * /*retMsg*/) { return true; }
+    virtual void afterDelete(const QVariantMap & /*oldData*/) {}
+    virtual bool beforeRestore(const QVariantMap & /*oldData*/, LibG::Message * /*msg*/, LibG::Message * /*retMsg*/) {
+        return true;
+    }
+    virtual void afterRestore(const QVariantMap & /*data*/) {}
 
     bool hasFlag(int flag);
 };
 
-}
+} // namespace LibServer
 #endif // SERVERACTION_H

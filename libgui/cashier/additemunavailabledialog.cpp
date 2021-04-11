@@ -19,49 +19,41 @@
  */
 
 #include "additemunavailabledialog.h"
-#include "ui_additemunavailabledialog.h"
 #include "global_constant.h"
-#include "message.h"
-#include "guiutil.h"
-#include "preference.h"
 #include "global_setting_const.h"
+#include "guiutil.h"
+#include "message.h"
+#include "preference.h"
+#include "ui_additemunavailabledialog.h"
 #include "util.h"
 
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-AddItemUnavailableDialog::AddItemUnavailableDialog(MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AddItemUnavailableDialog)
-{
+AddItemUnavailableDialog::AddItemUnavailableDialog(MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddItemUnavailableDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
     connect(ui->doublePrice, SIGNAL(valueChanged(double)), SLOT(sellPriceChanged()));
 }
 
-AddItemUnavailableDialog::~AddItemUnavailableDialog()
-{
-    delete ui;
-}
+AddItemUnavailableDialog::~AddItemUnavailableDialog() { delete ui; }
 
-void AddItemUnavailableDialog::openBarcode(const QString &barcode)
-{
+void AddItemUnavailableDialog::openBarcode(const QString &barcode) {
     mIsAutoBarcode = false;
     fill(barcode);
 }
 
-void AddItemUnavailableDialog::openAutoBarcode()
-{
+void AddItemUnavailableDialog::openAutoBarcode() {
     mIsAutoBarcode = true;
     fill("AUTO");
 }
 
-void AddItemUnavailableDialog::fill(const QString &barcode)
-{
+void AddItemUnavailableDialog::fill(const QString &barcode) {
     ui->lineBarcode->setText(barcode);
     ui->lineBarcode->setReadOnly(true);
     ui->lineName->setFocus(Qt::TabFocusReason);
@@ -81,56 +73,62 @@ void AddItemUnavailableDialog::fill(const QString &barcode)
     show();
 }
 
-void AddItemUnavailableDialog::messageReceived(Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY)) {
+void AddItemUnavailableDialog::messageReceived(Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboSuplier, list, tr("-- Select Suplier --"));
-        if(Preference::getBool(SETTING::CAI_SUPLIER))
+        if (Preference::getBool(SETTING::CAI_SUPLIER))
             GuiUtil::selectCombo(ui->comboSuplier, Preference::getInt(SETTING::CAI_DEFAULT_SUPLIER));
-    } else if(msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CATEGORY, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCategory, list, tr("-- Select Category --"));
-        if(Preference::getBool(SETTING::CAI_CATEGORY))
+        if (Preference::getBool(SETTING::CAI_CATEGORY))
             GuiUtil::selectCombo(ui->comboCategory, Preference::getInt(SETTING::CAI_DEFAULT_CATEGORY));
-    } else if(msg->isTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboUnit, list, tr("-- Select Unit --"));
-        if(Preference::getBool(SETTING::CAI_UNIT))
+        if (Preference::getBool(SETTING::CAI_UNIT))
             GuiUtil::selectCombo(ui->comboUnit, Preference::getInt(SETTING::CAI_DEFAULT_UNIT));
     }
 }
 
-void AddItemUnavailableDialog::saveClicked()
-{
-    if(ui->lineName->text().isEmpty()) {
+void AddItemUnavailableDialog::saveClicked() {
+    if (ui->lineName->text().isEmpty()) {
         ui->lineName->setFocus(Qt::TabFocusReason);
         QMessageBox::critical(this, tr("Error"), tr("Name must be filled"));
         return;
     }
-    if(ui->comboSuplier->currentData().toInt() <= 0 || ui->comboCategory->currentData().toInt() <= 0 ||
-            ui->comboUnit->currentData().toInt() <= 0) {
+    if (ui->comboSuplier->currentData().toInt() <= 0 || ui->comboCategory->currentData().toInt() <= 0 ||
+        ui->comboUnit->currentData().toInt() <= 0) {
         QMessageBox::critical(this, tr("Error"), tr("Please select correct suplier, category, and unit"));
         return;
     }
-    if(ui->doublePrice->value() <= 0 || ui->doubleBuyPrice->value() <= 0) {
+    if (ui->doublePrice->value() <= 0 || ui->doubleBuyPrice->value() <= 0) {
         ui->doublePrice->setFocus(Qt::TabFocusReason);
         QMessageBox::critical(this, tr("Error"), tr("Price and buy price must greater than 0"));
         return;
     }
     int flag = ITEM_FLAG::CALCULATE_STOCK | ITEM_FLAG::PURCHASE | ITEM_FLAG::SELLABLE;
-    QVariantMap d{{"barcode", ui->lineBarcode->text()}, {"count", 1}, {"price", ui->doublePrice->value()},
-                {"discount_formula", ""}, {"discount", 0}, {"final", ui->doublePrice->value()}};
-    emit addNewItem(QVariantMap{{"barcode", ui->lineBarcode->text()}, {"name", Util::capitalize(ui->lineName->text())},
-                    {"category_id", ui->comboCategory->currentData()}, {"suplier_id", ui->comboSuplier->currentData()},
-                    {"flag", flag}, {"unit", ui->comboUnit->currentText()}, {"buy_price", ui->doubleBuyPrice->value()},
-                                {"sell_price", d}, {"autobarcode", mIsAutoBarcode}});
+    QVariantMap d{{"barcode", ui->lineBarcode->text()},
+                  {"count", 1},
+                  {"price", ui->doublePrice->value()},
+                  {"discount_formula", ""},
+                  {"discount", 0},
+                  {"final", ui->doublePrice->value()}};
+    emit addNewItem(QVariantMap{{"barcode", ui->lineBarcode->text()},
+                                {"name", Util::capitalize(ui->lineName->text())},
+                                {"category_id", ui->comboCategory->currentData()},
+                                {"suplier_id", ui->comboSuplier->currentData()},
+                                {"flag", flag},
+                                {"unit", ui->comboUnit->currentText()},
+                                {"buy_price", ui->doubleBuyPrice->value()},
+                                {"sell_price", d},
+                                {"autobarcode", mIsAutoBarcode}});
     ui->pushSave->setEnabled(false);
 }
 
-void AddItemUnavailableDialog::sellPriceChanged()
-{
-    if(Preference::getBool(SETTING::CAI_MARGIN)) {
+void AddItemUnavailableDialog::sellPriceChanged() {
+    if (Preference::getBool(SETTING::CAI_MARGIN)) {
         double margin = Preference::getDouble(SETTING::CAI_DEFAULT_MARGIN) / 100;
         double buy = ui->doublePrice->value() / (1 + margin);
         ui->doubleBuyPrice->setValue(buy);

@@ -24,11 +24,10 @@
 
 namespace LibServer {
 
-class BankAction: public ServerAction
-{
-public:
+class BankAction : public ServerAction {
+  public:
     BankAction();
 };
 
-}
+} // namespace LibServer
 #endif // BANKACTION_H

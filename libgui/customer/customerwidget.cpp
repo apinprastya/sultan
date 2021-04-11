@@ -18,36 +18,32 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "customerwidget.h"
-#include "ui_normalwidget.h"
-#include "horizontalheader.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableitem.h"
-#include "global_constant.h"
-#include "message.h"
-#include "tableview.h"
-#include "usersession.h"
-#include "guiutil.h"
-#include "headerwidget.h"
+#include "customeradddialog.h"
 #include "db_constant.h"
 #include "flashmessagemanager.h"
-#include "customeradddialog.h"
-#include "tilewidget.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "horizontalheader.h"
+#include "message.h"
 #include "preference.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "tilewidget.h"
+#include "ui_normalwidget.h"
+#include "usersession.h"
+#include <QHBoxLayout>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QHBoxLayout>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mAddDialog(new CustomerAddDialog(bus, this)),
-    mTileCredit(new TileWidget(this))
-{
+CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
+      mAddDialog(new CustomerAddDialog(bus, this)), mTileCredit(new TileWidget(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
     auto hbox = new QHBoxLayout;
@@ -94,42 +90,42 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
 }
 
-void CustomerWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL)) {
-        if(msg->isSuccess()) {
+void CustomerWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Customer deleted successfully"));
             mTableWidget->getModel()->refresh();
         } else {
             FlashMessageManager::showError(msg->data("error").toString());
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY)) {
         mTileCredit->setValue(Preference::formatMoney(msg->data("credit").toDouble()));
     }
 }
 
-void CustomerWidget::addClicked()
-{
+void CustomerWidget::addClicked() {
     mAddDialog->reset();
     mAddDialog->show();
 }
 
-void CustomerWidget::updateClicked(const QModelIndex &index)
-{
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+void CustomerWidget::updateClicked(const QModelIndex &index) {
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     mAddDialog->fill(item->data());
     mAddDialog->show();
 }
 
-void CustomerWidget::deleteClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
-    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Make sure the credit is 0 before delete. Are you sure to delete the customer?"));
-    if(ret == QMessageBox::Yes) {
+void CustomerWidget::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
+    int ret =
+        QMessageBox::question(this, tr("Delete Confirmation"),
+                              tr("Make sure the credit is 0 before delete. Are you sure to delete the customer?"));
+    if (ret == QMessageBox::Yes) {
         QList<QVariant> ids;
-        for(int i = 0; i < index.size(); i++) {
-            auto item = static_cast<TableItem*>(index[i].internalPointer());
+        for (int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem *>(index[i].internalPointer());
             ids.append(item->id);
         }
         Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::DEL);
@@ -138,34 +134,27 @@ void CustomerWidget::deleteClicked(const QModelIndexList &index)
     }
 }
 
-void CustomerWidget::customerAdded()
-{
-    mTableWidget->getModel()->refresh();
-}
+void CustomerWidget::customerAdded() { mTableWidget->getModel()->refresh(); }
 
-void CustomerWidget::customerUpdated(int id)
-{
-    mTableWidget->getModel()->resfreshOne(id);
-}
+void CustomerWidget::customerUpdated(int id) { mTableWidget->getModel()->resfreshOne(id); }
 
-void CustomerWidget::creditClicked()
-{
+void CustomerWidget::creditClicked() {
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     emit requestOpenCustomerCredit(item->id.toInt(), item->data("number").toString());
 }
 
-void CustomerWidget::rewardClicked()
-{
+void CustomerWidget::rewardClicked() {
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     emit requestOpenCustomerReward(item->id.toInt(), item->data("number").toString());
 }
 
-void CustomerWidget::refreshSummary()
-{
+void CustomerWidget::refreshSummary() {
     Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::SUMMARY);
     sendMessage(&msg);
 }

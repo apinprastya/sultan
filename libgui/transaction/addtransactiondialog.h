@@ -29,27 +29,26 @@ class AddTransactionDialog;
 
 namespace LibGUI {
 
-class AddTransactionDialog : public QDialog, public LibG::MessageHandler
-{
+class AddTransactionDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddTransactionDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddTransactionDialog();
     void reset();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::AddTransactionDialog *ui;
     int mId = 0;
     int mBankId = 0;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // ADDTRANSACTIONDIALOG_H

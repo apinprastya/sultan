@@ -18,30 +18,27 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "bankwidget.h"
-#include "ui_normalwidget.h"
-#include "horizontalheader.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableitem.h"
-#include "global_constant.h"
-#include "message.h"
-#include "tableview.h"
-#include "usersession.h"
-#include "guiutil.h"
-#include "headerwidget.h"
+#include "bank/bankadddialog.h"
 #include "db_constant.h"
 #include "flashmessagemanager.h"
-#include "bank/bankadddialog.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "horizontalheader.h"
+#include "message.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
+#include "usersession.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-BankWidget::BankWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this))
-{
+BankWidget::BankWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
     ui->labelTitle->setText(tr("Banks"));
@@ -62,28 +59,26 @@ BankWidget::BankWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
 }
 
-void BankWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::DEL)) {
-        if(msg->isSuccess()) {
+void BankWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::DEL)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Bank deleted successfully"));
             mTableWidget->getModel()->refresh();
         }
     }
 }
 
-void BankWidget::addClicked()
-{
+void BankWidget::addClicked() {
     BankAddDialog dialog(mMessageBus, this);
     dialog.reset();
     dialog.exec();
     mTableWidget->getModel()->refresh();
 }
 
-void BankWidget::updateClicked(const QModelIndex &index)
-{
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
+void BankWidget::updateClicked(const QModelIndex &index) {
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
     BankAddDialog dialog(mMessageBus, this);
     dialog.reset();
     dialog.fill(item->data());
@@ -91,13 +86,12 @@ void BankWidget::updateClicked(const QModelIndex &index)
     mTableWidget->getModel()->refresh();
 }
 
-void BankWidget::deleteClicked(const QModelIndexList &index)
-{
+void BankWidget::deleteClicked(const QModelIndexList &index) {
     int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete selected the bank?"));
-    if(ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Yes) {
         QList<QVariant> ids;
-        for(int i = 0; i < index.length(); i++) {
-            auto item = static_cast<TableItem*>(index[i].internalPointer());
+        for (int i = 0; i < index.length(); i++) {
+            auto item = static_cast<TableItem *>(index[i].internalPointer());
             ids.push_back(item->id);
         }
         Message msg(MSG_TYPE::BANK, MSG_COMMAND::DEL);

@@ -29,14 +29,14 @@ namespace LibDB {
 
 class Db;
 
-class DBSHARED_EXPORT Migration
-{
-public:
-    static bool migrateAll(const QStringList &filelist, const QString &dbtype, std::function<bool(const QString &)> afterCallback = nullptr);
+class DBSHARED_EXPORT Migration {
+  public:
+    static bool migrateAll(const QStringList &filelist, const QString &dbtype,
+                           std::function<bool(const QString &)> afterCallback = nullptr);
     static void setAfterMigrate(std::function<bool(const QString &)> afterCallback);
     Migration(Db *db, const QStringList &filelist, const QString &dbtype);
 
-private:
+  private:
     Db *mDb;
     QStringList mFileNameList;
     QString mLastFile;
@@ -48,6 +48,6 @@ private:
     bool executeFile(const QString &filePath);
 };
 
-}
+} // namespace LibDB
 
 #endif // MIGRATION_H

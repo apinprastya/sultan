@@ -28,24 +28,23 @@ class Message;
 
 class QWebSocket;
 
-class SocketHandler : public QObject
-{
+class SocketHandler : public QObject {
     Q_OBJECT
-public:
+  public:
     SocketHandler(int id, QWebSocket *socket, QObject *parent = nullptr);
     void sendMessage(LibG::Message *msg);
     inline int getId() { return mId; }
-    inline QWebSocket* getSocket() { return mSocket; }
+    inline QWebSocket *getSocket() { return mSocket; }
 
-signals:
+  signals:
     void newMessage(LibG::Message *msg);
     void disconnect();
 
-private:
+  private:
     int mId;
     QWebSocket *mSocket;
 
-private slots:
+  private slots:
     void binaryMessageRecieved(const QByteArray &data);
 };
 

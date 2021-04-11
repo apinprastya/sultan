@@ -25,10 +25,10 @@
 namespace LibGUI {
 
 class GUISHARED_EXPORT TabCloseableWidget {
-public:
+  public:
     virtual ~TabCloseableWidget() {}
     virtual bool requestClose() = 0;
 };
 
-}
+} // namespace LibGUI
 #endif // TABCLOSEABLEWIDGET_H

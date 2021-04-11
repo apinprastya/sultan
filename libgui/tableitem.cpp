@@ -21,22 +21,13 @@
 
 using namespace LibGUI;
 
-TableItem::TableItem()
-{
-}
+TableItem::TableItem() {}
 
-void TableItem::fill(const QVariantMap &data)
-{
+void TableItem::fill(const QVariantMap &data) {
     id = data["id"];
     mData = data;
 }
 
-QVariant TableItem::data(const QString &key)
-{
-    return mData[key];
-}
+QVariant TableItem::data(const QString &key) { return mData[key]; }
 
-QVariantMap TableItem::data()
-{
-    return mData;
-}
+QVariantMap TableItem::data() { return mData; }

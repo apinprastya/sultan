@@ -28,23 +28,22 @@ class ListDialog;
 
 namespace LibGUI {
 
-class ListDialog : public QDialog
-{
+class ListDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     ListDialog(QWidget *parent = nullptr);
     ~ListDialog();
     void fill(const QJsonArray &arr);
     inline QString getSelectedId() { return mSelectedId; }
 
-private:
+  private:
     Ui::ListDialog *ui;
     QString mSelectedId;
 
-private slots:
+  private slots:
     void onSelect();
 };
 
-}
+} // namespace LibGUI
 #endif // LISTDIALOG_H

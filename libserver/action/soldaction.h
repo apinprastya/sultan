@@ -24,18 +24,17 @@
 
 namespace LibServer {
 
-class SoldAction: public ServerAction
-{
-public:
+class SoldAction : public ServerAction {
+  public:
     SoldAction();
 
-protected:
+  protected:
     LibG::Message insertSold(LibG::Message *msg);
     LibG::Message get(LibG::Message *msg) override;
 
-private:
+  private:
     void calculateStock(const QVariantMap &data);
 };
 
-}
+} // namespace LibServer
 #endif // SOLDACTION_H

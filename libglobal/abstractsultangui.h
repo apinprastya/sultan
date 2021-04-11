@@ -26,9 +26,8 @@
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT AbstractSultanGUI
-{
-public:
+class GLOBALSHARED_EXPORT AbstractSultanGUI {
+  public:
     virtual ~AbstractSultanGUI();
     virtual void showSplashScreen() = 0;
     virtual void hideSplashScreen() = 0;
@@ -37,9 +36,10 @@ public:
     virtual void showMainWindow() = 0;
     virtual void showRestartError(const QString &title, const QString &msg) = 0;
     virtual void guiMessage(int id, const QString &str) = 0;
-    virtual void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon) = 0;
+    virtual void setSettingSocketOpenClose(std::function<void(const QString &, int)> openCon,
+                                           std::function<void()> closeCon) = 0;
 };
 
-}
+} // namespace LibG
 
 #endif // ABSTRACTSULTANGUI_H

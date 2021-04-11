@@ -33,28 +33,27 @@ class MessageBus;
 
 namespace LibGUI {
 
-class SearchCustomerDialog : public QDialog
-{
+class SearchCustomerDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     SearchCustomerDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SearchCustomerDialog();
     inline QVariantMap getSelectedData() { return mSelectedData; }
     inline bool isOk() { return mIsOk; }
 
-private:
+  private:
     Ui::SearchCustomerDialog *ui;
     QVariantMap mSelectedData;
     bool mIsOk = false;
 
-private slots:
+  private slots:
     void nameDone();
     void dataLoaded();
     void returnPressed();
     void doubleClicked(const QModelIndex &index);
 };
 
-}
+} // namespace LibGUI
 
 #endif // SEARCHCUSTOMERDIALOG_H

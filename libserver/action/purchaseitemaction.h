@@ -24,22 +24,21 @@
 
 namespace LibServer {
 
-class PurchaseItemAction: public ServerAction
-{
-public:
+class PurchaseItemAction : public ServerAction {
+  public:
     PurchaseItemAction();
     LibG::Message insert(LibG::Message *msg) override;
     LibG::Message update(LibG::Message *msg) override;
     LibG::Message del(LibG::Message *msg) override;
     LibG::Message summary(LibG::Message *msg);
 
-protected:
+  protected:
     QMap<QString, QString> fieldMap() const override;
     void selectAndJoin() override;
 
-private:
+  private:
     void updatePurchaseTotal(int purchaseid);
 };
 
-}
+} // namespace LibServer
 #endif // PURCHASEITEMACTION_H

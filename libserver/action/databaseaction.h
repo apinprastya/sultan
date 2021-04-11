@@ -24,20 +24,19 @@
 
 namespace LibServer {
 
-class DatabaseAction: public ServerAction
-{
-public:
+class DatabaseAction : public ServerAction {
+  public:
     DatabaseAction();
     LibG::Message exportDatabase(LibG::Message *msg);
     LibG::Message importDatabase(LibG::Message *msg);
     LibG::Message resetDatabase(LibG::Message *msg);
 
-private:
+  private:
     QString exportData();
     void importData(const QString &fileName, const QString &version, LibG::Message *msg);
     void migrateUntil(const QString &version);
 };
 
-}
+} // namespace LibServer
 
 #endif // DATABASEACTION_H

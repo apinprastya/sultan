@@ -18,29 +18,26 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "suplierwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
+#include "flashmessagemanager.h"
 #include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "message.h"
 #include "suplieradddialog.h"
 #include "tableitem.h"
-#include "message.h"
-#include "guiutil.h"
+#include "tablemodel.h"
 #include "tableview.h"
-#include "headerwidget.h"
-#include "flashmessagemanager.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
 #include <QDebug>
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mAddDialog(new SuplierAddDialog(this))
-{
+SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
+      mAddDialog(new SuplierAddDialog(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Suplier"));
@@ -65,13 +62,12 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
-    connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+    connect(mAddDialog, SIGNAL(saveData(QVariantMap, int)), SLOT(saveRequested(QVariantMap, int)));
 }
 
-void SuplierWidget::messageReceived(Message *msg)
-{
-    if(msg->isCommand(MSG_COMMAND::INSERT)) {
-        if(msg->isSuccess()) {
+void SuplierWidget::messageReceived(Message *msg) {
+    if (msg->isCommand(MSG_COMMAND::INSERT)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Suplier added successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
@@ -80,8 +76,8 @@ void SuplierWidget::messageReceived(Message *msg)
             mAddDialog->enableSave();
             return;
         }
-    } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isCommand(MSG_COMMAND::UPDATE)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Suplier updated successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
@@ -90,33 +86,31 @@ void SuplierWidget::messageReceived(Message *msg)
             mAddDialog->enableSave();
             return;
         }
-    } else if(msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
+    } else if (msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("Suplier deleted successfully"));
         mTableWidget->getModel()->refresh();
     }
 }
 
-void SuplierWidget::addClicked()
-{
+void SuplierWidget::addClicked() {
     mAddDialog->reset();
     mAddDialog->show();
 }
 
-void SuplierWidget::editClicked(const QModelIndex &index)
-{
-    auto item = static_cast<TableItem*>(index.internalPointer());
+void SuplierWidget::editClicked(const QModelIndex &index) {
+    auto item = static_cast<TableItem *>(index.internalPointer());
     mAddDialog->fill(item->data());
     mAddDialog->show();
 }
 
-void SuplierWidget::deleteClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
+void SuplierWidget::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove suplier?"));
-    if(ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Yes) {
         QList<QVariant> ids;
-        for(int i = 0; i < index.size(); i++) {
-            auto item = static_cast<TableItem*>(index[i].internalPointer());
+        for (int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem *>(index[i].internalPointer());
             ids.append(item->id);
         }
         Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::DEL);
@@ -125,10 +119,9 @@ void SuplierWidget::deleteClicked(const QModelIndexList &index)
     }
 }
 
-void SuplierWidget::saveRequested(const QVariantMap &data, int id)
-{
+void SuplierWidget::saveRequested(const QVariantMap &data, int id) {
     Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::INSERT);
-    if(id <= 0) {
+    if (id <= 0) {
         msg.setData(data);
     } else {
         msg.setCommand(MSG_COMMAND::UPDATE);

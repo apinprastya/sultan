@@ -23,41 +23,31 @@
 
 using namespace LibGUI;
 
-KeyEvent::KeyEvent(QObject *parent) : QObject(parent)
-{
+KeyEvent::KeyEvent(QObject *parent) : QObject(parent) {}
 
-}
+void KeyEvent::discardKey(Qt::Key key) { mDiscardKey.append(key); }
 
-void KeyEvent::discardKey(Qt::Key key)
-{
-    mDiscardKey.append(key);
-}
+void KeyEvent::addConsumeKey(Qt::Key key) { mConsumeKey.append(key); }
 
-void KeyEvent::addConsumeKey(Qt::Key key)
-{
-    mConsumeKey.append(key);
-}
-
-bool KeyEvent::eventFilter(QObject *obj, QEvent *event)
-{
+bool KeyEvent::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        for(int i = 0; i < mDiscardKey.size(); i++) {
-            if(mDiscardKey[i] == keyEvent->key())
+        for (int i = 0; i < mDiscardKey.size(); i++) {
+            if (mDiscardKey[i] == keyEvent->key())
                 return true;
         }
-        for(int i = 0; i < mConsumeKey.size(); i++) {
-            if(mConsumeKey[i] == keyEvent->key()) {
-                if(mModifiers != Qt::NoModifier && (keyEvent->modifiers() & mModifiers) != mModifiers)
+        for (int i = 0; i < mConsumeKey.size(); i++) {
+            if (mConsumeKey[i] == keyEvent->key()) {
+                if (mModifiers != Qt::NoModifier && (keyEvent->modifiers() & mModifiers) != mModifiers)
                     return QObject::eventFilter(obj, event);
                 emit keyPressed(obj, keyEvent);
                 return true;
             }
         }
-    } else if(mFocusEvent && event->type() == QEvent::FocusIn) {
+    } else if (mFocusEvent && event->type() == QEvent::FocusIn) {
         emit focused(obj);
         return true;
-    } else if(mClickEvent && event->type() == QEvent::MouseButtonPress) {
+    } else if (mClickEvent && event->type() == QEvent::MouseButtonPress) {
         emit clicked(obj);
     }
     return QObject::eventFilter(obj, event);

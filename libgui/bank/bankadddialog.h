@@ -29,26 +29,25 @@ class BankAddDialog;
 
 namespace LibGUI {
 
-class BankAddDialog : public QDialog, public LibG::MessageHandler
-{
+class BankAddDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     BankAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~BankAddDialog();
     void reset();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::BankAddDialog *ui;
     int mId = 0;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // BANKADDDIALOG_H

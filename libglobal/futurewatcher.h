@@ -22,27 +22,26 @@
 
 #include "global_global.h"
 #include "message.h"
-#include <QObject>
 #include <QFutureWatcher>
+#include <QObject>
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT FutureWatcher : public QObject
-{
+class GLOBALSHARED_EXPORT FutureWatcher : public QObject {
     Q_OBJECT
-public:
+  public:
     FutureWatcher(QObject *parent = 0);
     void setFuture(const QFuture<Message> &future);
 
-private:
+  private:
     QFutureWatcher<Message> *mWatcher;
 
-private slots:
+  private slots:
     void finished();
 
-signals:
+  signals:
     void messageReceived(LibG::Message *msg);
 };
 
-}
+} // namespace LibG
 #endif // FUTUREWATCHER_H

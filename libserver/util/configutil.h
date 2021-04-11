@@ -1,9 +1,9 @@
 #ifndef CONFIGUTIL_H
 #define CONFIGUTIL_H
 
-#include <QVariant>
-#include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonObject>
+#include <QVariant>
 
 namespace LibDB {
 class Db;
@@ -11,9 +11,8 @@ class Db;
 
 namespace LibServer {
 
-class ConfigUtil
-{
-public:
+class ConfigUtil {
+  public:
     ConfigUtil();
     static QVariant getVariantConfig(LibDB::Db *db, int configId, const QVariant &defValue = QVariant());
     static QString getStringConfig(LibDB::Db *db, int configId, const QString &defValue = QString());
@@ -23,6 +22,6 @@ public:
     static void setConfig(LibDB::Db *db, int configId, const QVariant &value);
 };
 
-}
+} // namespace LibServer
 
 #endif // CONFIGUTIL_H

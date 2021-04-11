@@ -24,24 +24,17 @@
 
 using namespace LibGUI;
 
-ListDialog::ListDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ListDialog)
-{
+ListDialog::ListDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ListDialog) {
     ui->setupUi(this);
     connect(ui->listWidget, SIGNAL(doubleClicked(QModelIndex)), SLOT(onSelect()));
     connect(ui->pushSelect, SIGNAL(clicked(bool)), SLOT(onSelect()));
 }
 
-ListDialog::~ListDialog()
-{
-    delete ui;
-}
+ListDialog::~ListDialog() { delete ui; }
 
-void ListDialog::fill(const QJsonArray &arr)
-{
+void ListDialog::fill(const QJsonArray &arr) {
     ui->listWidget->clear();
-    for(int i = 0; i < arr.size(); i++) {
+    for (int i = 0; i < arr.size(); i++) {
         const QJsonObject &json = arr[i].toObject();
         auto item = new QListWidgetItem(json.value("name").toString());
         item->setData(Qt::UserRole, json.value("id").toString());
@@ -49,10 +42,9 @@ void ListDialog::fill(const QJsonArray &arr)
     }
 }
 
-void ListDialog::onSelect()
-{
+void ListDialog::onSelect() {
     auto item = ui->listWidget->currentItem();
-    if(item != nullptr) {
+    if (item != nullptr) {
         mSelectedId = item->data(Qt::UserRole).toString();
     }
     close();

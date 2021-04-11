@@ -29,23 +29,22 @@ class ChangePasswordDialog;
 
 namespace LibGUI {
 
-class ChangePasswordDialog : public QDialog, public LibG::MessageHandler
-{
+class ChangePasswordDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ChangePasswordDialog();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::ChangePasswordDialog *ui;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // CHANGEPASSWORDDIALOG_H

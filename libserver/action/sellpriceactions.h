@@ -24,17 +24,16 @@
 
 namespace LibServer {
 
-class SellPriceActions : public ServerAction
-{
-public:
+class SellPriceActions : public ServerAction {
+  public:
     SellPriceActions();
     LibG::Message insert(LibG::Message *msg) override;
     LibG::Message update(LibG::Message *msg) override;
 
-protected:
+  protected:
     void selectAndJoin() override;
     QMap<QString, QString> fieldMap() const override;
 };
 
-}
+} // namespace LibServer
 #endif // SELLPRICEACTIONS_H

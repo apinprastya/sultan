@@ -18,36 +18,33 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "userwidget.h"
-#include "ui_normalwidget.h"
-#include "horizontalheader.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableitem.h"
-#include "global_constant.h"
-#include "message.h"
-#include "useradddialog.h"
-#include "tableview.h"
-#include "userpermissiondialog.h"
-#include "usersession.h"
-#include "guiutil.h"
-#include "headerwidget.h"
 #include "db_constant.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "horizontalheader.h"
+#include "message.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
+#include "useradddialog.h"
+#include "userpermissiondialog.h"
+#include "usersession.h"
 #include "util.h"
-#include <QMessageBox>
-#include <QInputDialog>
-#include <QPushButton>
 #include <QCryptographicHash>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QPushButton>
 
 using namespace LibGUI;
 using namespace LibG;
 
-UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mAddDialog(new UserAddDialog(this))
-{
+UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
+      mAddDialog(new UserAddDialog(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
     ui->labelTitle->setText(tr("User"));
@@ -76,18 +73,14 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
-    connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+    connect(mAddDialog, SIGNAL(saveData(QVariantMap, int)), SLOT(saveRequested(QVariantMap, int)));
 }
 
-UserWidget::~UserWidget()
-{
-    delete ui;
-}
+UserWidget::~UserWidget() { delete ui; }
 
-void UserWidget::messageReceived(Message *msg)
-{
-    if(msg->isCommand(MSG_COMMAND::INSERT)) {
-        if(msg->isSuccess()) {
+void UserWidget::messageReceived(Message *msg) {
+    if (msg->isCommand(MSG_COMMAND::INSERT)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("User added successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
@@ -96,8 +89,8 @@ void UserWidget::messageReceived(Message *msg)
             mAddDialog->enableSave();
             return;
         }
-    } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isCommand(MSG_COMMAND::UPDATE)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("User updated successfully"));
             mAddDialog->hide();
             mTableWidget->getModel()->refresh();
@@ -106,43 +99,42 @@ void UserWidget::messageReceived(Message *msg)
             mAddDialog->enableSave();
             return;
         }
-    } else if(msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
+    } else if (msg->isCommand(MSG_COMMAND::DEL) && msg->isSuccess()) {
         FlashMessageManager::showMessage(tr("User deleted successfully"));
         mTableWidget->getModel()->refresh();
     }
 }
 
-void UserWidget::addClicked()
-{
+void UserWidget::addClicked() {
     mAddDialog->reset();
     mAddDialog->show();
 }
 
-void UserWidget::updateClicked(const QModelIndex &index)
-{
-    auto item = static_cast<TableItem*>(index.internalPointer());
+void UserWidget::updateClicked(const QModelIndex &index) {
+    auto item = static_cast<TableItem *>(index.internalPointer());
     mAddDialog->fill(item->data());
     mAddDialog->show();
 }
 
-void UserWidget::deleteClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
+void UserWidget::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove user?"));
-    if(ret == QMessageBox::Yes) {
-        auto item = static_cast<TableItem*>(index[0].internalPointer());
+    if (ret == QMessageBox::Yes) {
+        auto item = static_cast<TableItem *>(index[0].internalPointer());
         Message msg(MSG_TYPE::USER, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
-        msg.addData("data", QVariantMap{{"username", QString("%1_%2").arg(item->data("username").toString()).arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"))},
+        msg.addData("data", QVariantMap{{"username", QString("%1_%2")
+                                                         .arg(item->data("username").toString())
+                                                         .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"))},
                                         {"deleted_at", QDateTime::currentDateTime()}});
         sendMessage(&msg);
     }
 }
 
-void UserWidget::saveRequested(const QVariantMap &data, int id)
-{
+void UserWidget::saveRequested(const QVariantMap &data, int id) {
     Message msg(MSG_TYPE::USER, MSG_COMMAND::INSERT);
-    if(id <= 0) {
+    if (id <= 0) {
         msg.setData(data);
     } else {
         msg.setCommand(MSG_COMMAND::UPDATE);
@@ -152,34 +144,37 @@ void UserWidget::saveRequested(const QVariantMap &data, int id)
     sendMessage(&msg);
 }
 
-void UserWidget::permissionClicked()
-{
+void UserWidget::permissionClicked() {
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->id == UserSession::id()) {
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
+    if (item->id == UserSession::id()) {
         QMessageBox::critical(this, tr("Error"), tr("You can't change your own"));
         return;
     }
     UserPermissionDialog dialog(item->data());
-    connect(&dialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+    connect(&dialog, SIGNAL(saveData(QVariantMap, int)), SLOT(saveRequested(QVariantMap, int)));
     dialog.exec();
 }
 
-void UserWidget::resetPasswordClicked()
-{
+void UserWidget::resetPasswordClicked() {
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->id == UserSession::id()) {
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
+    if (item->id == UserSession::id()) {
         QMessageBox::critical(this, tr("Error"), tr("You can't change your own"));
         return;
     }
-    const QString &value = QInputDialog::getText(this, tr("Reset password"), tr("Input new password"), QLineEdit::Password);
-    if(!value.isEmpty()) {
+    const QString &value =
+        QInputDialog::getText(this, tr("Reset password"), tr("Input new password"), QLineEdit::Password);
+    if (!value.isEmpty()) {
         Message msg(MSG_TYPE::USER, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
-        msg.addData("data", QVariantMap{{"password", QString(QCryptographicHash::hash(value.toUtf8(),QCryptographicHash::Md5).toHex())}});
+        msg.addData("data",
+                    QVariantMap{{"password",
+                                 QString(QCryptographicHash::hash(value.toUtf8(), QCryptographicHash::Md5).toHex())}});
         sendMessage(&msg);
     }
 }

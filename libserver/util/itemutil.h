@@ -44,23 +44,25 @@ namespace LibServer {
     QString name;
 };*/
 
-class ItemUtil
-{
-public:
+class ItemUtil {
+  public:
     ItemUtil(LibDB::Db *db);
     void updateBuyPrice(const QString &barcode);
-    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, int link_id, bool recursive = true);
-    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, QVariantMap data, bool recursive = true);
-    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, int link_id, QVariantMap data, bool recursive = true);
+    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, int link_id,
+                     bool recursive = true);
+    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, QVariantMap data,
+                     bool recursive = true);
+    void insertStock(const QString &barcode, const QString &number, int type, float count, int flag, int link_id,
+                     QVariantMap data, bool recursive = true);
     void updateStockCardCount(const QString &barcode, float count, int type, int link_id, bool recursive = true);
 
-private:
+  private:
     LibDB::Db *mDb;
     int mLevel = 0;
     QStringList mBarcodeInserted;
     QStringList mBarcodeUpdated;
 };
 
-}
+} // namespace LibServer
 
 #endif // ITEMUTIL_H

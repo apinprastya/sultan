@@ -18,27 +18,25 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "paymentcashsuccessdialog.h"
-#include "ui_paymentcashsuccessdialog.h"
 #include "global_constant.h"
 #include "preference.h"
+#include "ui_paymentcashsuccessdialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
 
-PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PaymentCashSuccessDialog)
-{
+PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent)
+    : QDialog(parent), ui(new Ui::PaymentCashSuccessDialog) {
     ui->setupUi(this);
     int type = data["payment_type"].toInt();
     setWindowTitle(type == PAYMENT::CASH ? tr("Cash Payment Success") : tr("Cashless Payment Success"));
     double total = data["total"].toDouble();
     double payment = data["payment"].toDouble();
-    if(type == PAYMENT::CASH) {
+    if (type == PAYMENT::CASH) {
         ui->labelTotal->setText(LibG::Preference::formatMoney(total));
         ui->labelPayment->setText(LibG::Preference::formatMoney(payment));
         ui->labelChange->setText(LibG::Preference::formatMoney(qAbs(total - payment)));
-        if(total > payment) {
+        if (total > payment) {
             ui->labelChange_2->setText(tr("Credit"));
         }
     } else {
@@ -51,7 +49,4 @@ PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWid
     }
 }
 
-PaymentCashSuccessDialog::~PaymentCashSuccessDialog()
-{
-    delete ui;
-}
+PaymentCashSuccessDialog::~PaymentCashSuccessDialog() { delete ui; }

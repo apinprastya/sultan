@@ -28,17 +28,16 @@ class PaymentCashSuccessDialog;
 
 namespace LibGUI {
 
-class PaymentCashSuccessDialog : public QDialog
-{
+class PaymentCashSuccessDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     PaymentCashSuccessDialog(const QVariantMap &data, QWidget *parent = nullptr);
     ~PaymentCashSuccessDialog();
 
-private:
+  private:
     Ui::PaymentCashSuccessDialog *ui;
 };
 
-}
+} // namespace LibGUI
 #endif // PAYMENTCASHSUCCESSDIALOG_H

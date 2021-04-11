@@ -1,32 +1,27 @@
 #include "initialstockadddialog.h"
-#include "ui_initialstockadddialog.h"
-#include "keyevent.h"
-#include "guiutil.h"
-#include "message.h"
-#include "messagebus.h"
-#include "global_constant.h"
-#include "usersession.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
 #include "guiutil.h"
 #include "item/additemdialog.h"
+#include "keyevent.h"
+#include "message.h"
+#include "messagebus.h"
 #include "preference.h"
+#include "ui_initialstockadddialog.h"
+#include "usersession.h"
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QMessageBox>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-
-InitialStockAddDialog::InitialStockAddDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::InitialStockAddDialog),
-    mNetworkManager(new QNetworkAccessManager(this))
-{
+InitialStockAddDialog::InitialStockAddDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::InitialStockAddDialog), mNetworkManager(new QNetworkAccessManager(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     auto ke = new KeyEvent(this);
@@ -34,7 +29,7 @@ InitialStockAddDialog::InitialStockAddDialog(LibG::MessageBus *bus, QWidget *par
     ke->addConsumeKey(Qt::Key_Enter);
     ke->addConsumeKey(Qt::Key_Tab);
     ui->lineBarcode->installEventFilter(ke);
-    connect(ke, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(barcodeDone()));
+    connect(ke, SIGNAL(keyPressed(QObject *, QKeyEvent *)), SLOT(barcodeDone()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(addClicked()));
     connect(ui->pushSaveAgain, SIGNAL(clicked(bool)), SLOT(addAgainClicked()));
     connect(ui->doubleSellPrice, SIGNAL(valueChanged(double)), SLOT(calculateMargin()));
@@ -42,32 +37,31 @@ InitialStockAddDialog::InitialStockAddDialog(LibG::MessageBus *bus, QWidget *par
     ui->checkOnline->hide();
 }
 
-InitialStockAddDialog::~InitialStockAddDialog()
-{
-    delete ui;
-}
+InitialStockAddDialog::~InitialStockAddDialog() { delete ui; }
 
-void InitialStockAddDialog::reset()
-{
+void InitialStockAddDialog::reset() {
     ui->lineBarcode->clear();
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
     ui->doubleStock->setValue(0);
     ui->doubleBuyPrice->setValue(0);
     ui->doubleSellPrice->setValue(0);
     ui->labelName->clear();
-    GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock <<
-                          ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
+    GuiUtil::enableWidget(false, QList<QWidget *>()
+                                     << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock
+                                     << ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
 }
 
-void InitialStockAddDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
-        if(msg->isSuccess()) {
-            if(msg->data("stock").toFloat() != 0) {
-                QMessageBox::critical(this, tr("Error"), tr("Item already has stock. Use checkstock if you want change the stock"));
+void InitialStockAddDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
+        if (msg->isSuccess()) {
+            if (msg->data("stock").toFloat() != 0) {
+                QMessageBox::critical(this, tr("Error"),
+                                      tr("Item already has stock. Use checkstock if you want change the stock"));
             } else {
-                GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock <<
-                                      ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
+                GuiUtil::enableWidget(true, QList<QWidget *>()
+                                                << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock
+                                                << ui->comboCategory << ui->comboSuplier << ui->pushSave
+                                                << ui->pushSaveAgain);
                 ui->labelName->setText(msg->data("name").toString());
                 ui->comboSuplier->setFocus(Qt::TabFocusReason);
                 GuiUtil::selectCombo(ui->comboCategory, msg->data("category_id"));
@@ -75,29 +69,32 @@ void InitialStockAddDialog::messageReceived(LibG::Message *msg)
                 ui->doubleBuyPrice->setValue(msg->data("buy_price").toDouble());
                 ui->doubleSellPrice->setValue(msg->data("sell_price").toDouble());
             }
-        } else if(ui->checkOnline->isChecked()) {
+        } else if (ui->checkOnline->isChecked()) {
             QNetworkRequest request(QUrl(LibG::CONSTANT::BARCODE_CLOUD.arg(mLastBarcode)));
             auto reply = mNetworkManager->get(request);
             connect(reply, SIGNAL(finished()), SLOT(checkDone()));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(httpError(QNetworkReply::NetworkError)));
         } else {
             /*if(!ui->checkOnline->isChecked())
-                QMessageBox::critical(this, tr("Error"), tr("Item not found. You can check item online by tick the \"Check Online\" checkbox"));*/
+                QMessageBox::critical(this, tr("Error"), tr("Item not found. You can check item online by tick the
+               \"Check Online\" checkbox"));*/
             openAddItem();
         }
-    } else if(msg->isType(MSG_TYPE::SUPLIER)) {
+    } else if (msg->isType(MSG_TYPE::SUPLIER)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboSuplier, list, tr("-- Select Suplier --"));
         GuiUtil::selectCombo(ui->comboSuplier, mCurrentSuplier);
-    } else if(msg->isType(MSG_TYPE::CATEGORY)) {
+    } else if (msg->isType(MSG_TYPE::CATEGORY)) {
         const QVariantList &list = msg->data("data").toList();
         GuiUtil::populateCombo(ui->comboCategory, list, tr("-- Select Category --"));
         GuiUtil::selectCombo(ui->comboCategory, mCurrentCategory);
-    } else if(msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Initial stock addedd successfully"));
-            if(mIsAddAgain) reset();
-            else close();
+            if (mIsAddAgain)
+                reset();
+            else
+                close();
             emit addSuccess();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
@@ -105,8 +102,7 @@ void InitialStockAddDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void InitialStockAddDialog::showEvent(QShowEvent *event)
-{
+void InitialStockAddDialog::showEvent(QShowEvent *event) {
     Message msg(MSG_TYPE::SUPLIER, MSG_COMMAND::QUERY);
     msg.setLimit(-1);
     sendMessage(&msg);
@@ -116,20 +112,20 @@ void InitialStockAddDialog::showEvent(QShowEvent *event)
     QDialog::showEvent(event);
 }
 
-void InitialStockAddDialog::openAddItem()
-{
+void InitialStockAddDialog::openAddItem() {
     AddItemDialog dialog(mMessageBus, this);
     dialog.reset(false);
     dialog.disableAddAgain();
     dialog.setBarcode(ui->lineBarcode->text());
     dialog.exec();
-    if(dialog.isSuccess()) barcodeDone();
+    if (dialog.isSuccess())
+        barcodeDone();
 }
 
-void InitialStockAddDialog::save()
-{
-    if(mLastBarcode.isEmpty()) return;
-    if(mLastBarcode != ui->lineBarcode->text()) {
+void InitialStockAddDialog::save() {
+    if (mLastBarcode.isEmpty())
+        return;
+    if (mLastBarcode != ui->lineBarcode->text()) {
         QMessageBox::critical(this, tr("Error"), tr("Please redo the process"));
         return;
     }
@@ -150,36 +146,35 @@ void InitialStockAddDialog::save()
     sendMessage(&msg);
 }
 
-void InitialStockAddDialog::barcodeDone()
-{
+void InitialStockAddDialog::barcodeDone() {
     mLastBarcode = ui->lineBarcode->text();
-    if(mLastBarcode.isEmpty()) return;
+    if (mLastBarcode.isEmpty())
+        return;
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::GET);
     msg.addData("barcode", mLastBarcode);
     sendMessage(&msg);
-    GuiUtil::enableWidget(false, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock <<
-                          ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
+    GuiUtil::enableWidget(false, QList<QWidget *>()
+                                     << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock
+                                     << ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
 }
 
-void InitialStockAddDialog::addClicked()
-{
+void InitialStockAddDialog::addClicked() {
     mIsAddAgain = false;
     save();
 }
 
-void InitialStockAddDialog::addAgainClicked()
-{
+void InitialStockAddDialog::addAgainClicked() {
     mIsAddAgain = true;
     save();
 }
 
-void InitialStockAddDialog::checkDone()
-{
-    auto reply = static_cast<QNetworkReply*>(QObject::sender());
+void InitialStockAddDialog::checkDone() {
+    auto reply = static_cast<QNetworkReply *>(QObject::sender());
     auto json = QJsonDocument::fromJson(reply->readAll()).object();
-    if(json.contains("name")) {
-        GuiUtil::enableWidget(true, QList<QWidget*>() << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock <<
-                              ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
+    if (json.contains("name")) {
+        GuiUtil::enableWidget(true, QList<QWidget *>()
+                                        << ui->doubleBuyPrice << ui->doubleSellPrice << ui->doubleStock
+                                        << ui->comboCategory << ui->comboSuplier << ui->pushSave << ui->pushSaveAgain);
         ui->labelName->setText(json.value("name").toString());
         ui->comboSuplier->setFocus(Qt::TabFocusReason);
     } else {
@@ -188,17 +183,16 @@ void InitialStockAddDialog::checkDone()
     reply->deleteLater();
 }
 
-void InitialStockAddDialog::httpError(QNetworkReply::NetworkError /*error*/)
-{
-    auto reply = static_cast<QNetworkReply*>(QObject::sender());
+void InitialStockAddDialog::httpError(QNetworkReply::NetworkError /*error*/) {
+    auto reply = static_cast<QNetworkReply *>(QObject::sender());
     QMessageBox::critical(this, tr("Error"), reply->errorString());
     reply->deleteLater();
 }
 
-void InitialStockAddDialog::calculateMargin()
-{
+void InitialStockAddDialog::calculateMargin() {
     auto buy = ui->doubleBuyPrice->value();
     auto sell = ui->doubleSellPrice->value();
-    double c = buy == 0 ? 0 : (sell-buy) * 100 / buy;
-    ui->labelMargin->setText(QString("Margin : %1 (%2 %)").arg(Preference::formatMoney(sell - buy)).arg(QString::number(c, 'f', 2)));
+    double c = buy == 0 ? 0 : (sell - buy) * 100 / buy;
+    ui->labelMargin->setText(
+        QString("Margin : %1 (%2 %)").arg(Preference::formatMoney(sell - buy)).arg(QString::number(c, 'f', 2)));
 }

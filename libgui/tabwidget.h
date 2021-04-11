@@ -28,10 +28,9 @@ class QLabel;
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT TabWidget : public QTabWidget
-{
+class GUISHARED_EXPORT TabWidget : public QTabWidget {
     Q_OBJECT
-public:
+  public:
     enum Type { Root, Purchase, Cashier };
     TabWidget(QWidget *parent = nullptr);
     TabWidget(int type, QWidget *parent = nullptr);
@@ -40,15 +39,15 @@ public:
     bool isTabAvailable(std::function<bool(QWidget *)> func);
     void closeAllTabAndFree();
     inline int getType() { return mType; }
-    inline void setNewWidgetFunc(std::function<QWidget*()> func) { mNewWidgetFunc = func; }
+    inline void setNewWidgetFunc(std::function<QWidget *()> func) { mNewWidgetFunc = func; }
 
-private:
+  private:
     int mType = Root;
     int mCounter = 1;
     QLabel *mLabel = nullptr;
-    std::function<QWidget*()> mNewWidgetFunc = nullptr;
+    std::function<QWidget *()> mNewWidgetFunc = nullptr;
 
-public slots:
+  public slots:
     void tbnRemoveTab(int index);
     void tbnRemoveTab();
     void newTab();
@@ -56,6 +55,6 @@ public slots:
     void prevTab();
 };
 
-}
+} // namespace LibGUI
 
 #endif // TABVIEW_H

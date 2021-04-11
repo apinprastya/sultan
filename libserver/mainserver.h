@@ -31,22 +31,21 @@ namespace LibServer {
 
 class Router;
 
-class SERVERSHARED_EXPORT MainServer : public QObject
-{
+class SERVERSHARED_EXPORT MainServer : public QObject {
     Q_OBJECT
-public:
+  public:
     MainServer(QObject *parent = nullptr);
     ~MainServer();
 
-public slots:
+  public slots:
     void messageReceived(LibG::Message *msg);
 
-signals:
+  signals:
     void messageReady(LibG::Message *msg);
 
-private:
+  private:
     Router *mRouter;
 };
 
-}
+} // namespace LibServer
 #endif // LIBSERVER_H

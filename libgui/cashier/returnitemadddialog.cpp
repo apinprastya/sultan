@@ -18,32 +18,25 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "returnitemadddialog.h"
-#include "ui_returnitemadddialog.h"
-#include "preference.h"
-#include "cashiertablemodel.h"
 #include "cashieritem.h"
-#include <QMessageBox>
+#include "cashiertablemodel.h"
+#include "preference.h"
+#include "ui_returnitemadddialog.h"
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-ReturnItemAddDialog::ReturnItemAddDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ReturnItemAddDialog)
-{
+ReturnItemAddDialog::ReturnItemAddDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ReturnItemAddDialog) {
     ui->setupUi(this);
     connect(ui->doubleCount, SIGNAL(valueChanged(double)), SLOT(calculateTotal()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-ReturnItemAddDialog::~ReturnItemAddDialog()
-{
-    delete ui;
-}
+ReturnItemAddDialog::~ReturnItemAddDialog() { delete ui; }
 
-void ReturnItemAddDialog::fill(const QVariantMap &d)
-{
+void ReturnItemAddDialog::fill(const QVariantMap &d) {
     mId = d["id"].toInt();
     mPrice = d["price"].toDouble();
     mDiscount = d["discount"].toDouble();
@@ -60,20 +53,19 @@ void ReturnItemAddDialog::fill(const QVariantMap &d)
     calculateTotal();
 }
 
-void ReturnItemAddDialog::calculateTotal()
-{
+void ReturnItemAddDialog::calculateTotal() {
     ui->labelTotal->setText(Preference::formatMoney((mPrice - mDiscount) * ui->doubleCount->value()));
 }
 
-void ReturnItemAddDialog::saveClicked()
-{
+void ReturnItemAddDialog::saveClicked() {
     auto model = CashierTableModel::instance();
     auto item = model->getItemWithFlag(ui->labelBarcode->text(), CashierItem::Return);
-    if(item != nullptr) {
+    if (item != nullptr) {
         QMessageBox::critical(this, tr("Error"), tr("Return item with barcode already exists"));
         return;
     }
-    auto it = model->addReturnItem(ui->doubleCount->value(), ui->labelName->text(), ui->labelBarcode->text(), mPrice, mDiscount, mUnit, mFlag | CashierItem::Return);
+    auto it = model->addReturnItem(ui->doubleCount->value(), ui->labelName->text(), ui->labelBarcode->text(), mPrice,
+                                   mDiscount, mUnit, mFlag | CashierItem::Return);
     it->linkId = mId;
     it->buyPrice = mBuyPrice;
     close();

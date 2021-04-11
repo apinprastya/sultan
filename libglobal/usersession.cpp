@@ -25,60 +25,43 @@ using namespace LibG;
 
 static UserSession *sInstance = nullptr;
 
-UserSession::UserSession()
-{
-}
+UserSession::UserSession() {}
 
-LibG::UserSession *LibG::UserSession::init(const QVariantMap &data)
-{
-    if(sInstance == nullptr)
+LibG::UserSession *LibG::UserSession::init(const QVariantMap &data) {
+    if (sInstance == nullptr)
         sInstance = new UserSession();
     sInstance->mName = data["name"].toString();
     sInstance->mUsername = data["username"].toString();
     sInstance->mId = data["id"].toInt();
     sInstance->mPermission.clear();
     QStringList per = data["permission"].toString().split(",");
-    for(const QString &str : per) {
+    for (const QString &str : per) {
         const QString &s = str.trimmed();
-        if(s.isEmpty()) continue;
+        if (s.isEmpty())
+            continue;
         int val = s.toInt();
         sInstance->mPermission.append(val);
     }
     return sInstance;
 }
 
-QString LibG::UserSession::username()
-{
-    return sInstance->mUsername;
-}
+QString LibG::UserSession::username() { return sInstance->mUsername; }
 
-QString LibG::UserSession::name()
-{
-    return sInstance->mName;
-}
+QString LibG::UserSession::name() { return sInstance->mName; }
 
-int UserSession::id()
-{
-    return sInstance->mId;
-}
+int UserSession::id() { return sInstance->mId; }
 
-bool LibG::UserSession::hasPermission(int permission)
-{
-    if(sInstance->mPermission.contains(PERMISSION::ADMINISTRATOR)) return true;
+bool LibG::UserSession::hasPermission(int permission) {
+    if (sInstance->mPermission.contains(PERMISSION::ADMINISTRATOR))
+        return true;
     return sInstance->mPermission.contains(permission);
 }
 
-void UserSession::destroy()
-{
-    if(sInstance) delete sInstance;
+void UserSession::destroy() {
+    if (sInstance)
+        delete sInstance;
 }
 
-void UserSession::logout()
-{
-    sInstance->mId = 0;
-}
+void UserSession::logout() { sInstance->mId = 0; }
 
-bool UserSession::isLoggedIn()
-{
-    return sInstance->mId > 0;
-}
+bool UserSession::isLoggedIn() { return sInstance->mId > 0; }

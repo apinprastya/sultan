@@ -18,42 +18,35 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "transactionwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableview.h"
-#include "tableitem.h"
+#include "addtransactiondialog.h"
+#include "db_constant.h"
+#include "dbutil.h"
+#include "flashmessagemanager.h"
 #include "global_constant.h"
 #include "guiutil.h"
-#include "db_constant.h"
-#include "message.h"
 #include "headerwidget.h"
-#include "tilewidget.h"
 #include "message.h"
 #include "preference.h"
-#include "dbutil.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "tilewidget.h"
+#include "ui_normalwidget.h"
 #include "util.h"
-#include "addtransactiondialog.h"
-#include "flashmessagemanager.h"
+#include <QDebug>
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QFileDialog>
-#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mTileIncome(new TileWidget(this)),
-    mTileExpense(new TileWidget(this)),
-    mTileDifference(new TileWidget(this)),
-    mTileNet(new TileWidget(this)),
-    mTileProfit(new TileWidget(this))
-{
+TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)), mTileIncome(new TileWidget(this)),
+      mTileExpense(new TileWidget(this)), mTileDifference(new TileWidget(this)), mTileNet(new TileWidget(this)),
+      mTileProfit(new TileWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Transactions"));
@@ -78,7 +71,7 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     ui->verticalLayout->addLayout(hor);
     ui->verticalLayout->addWidget(mTableWidget);
 
-    //mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);
+    // mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);
     mTableWidget->initCrudButton();
     auto model = mTableWidget->getModel();
     model->setDateTimeISO(true);
@@ -110,17 +103,16 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent) :
     button->setFlat(true);
     connect(button, SIGNAL(clicked(bool)), SLOT(exportClicked()));
     mTableWidget->addActionButton(button);
-    //model->refresh();
+    // model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
 }
 
-void TransactionWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_TRANSACTION)) {
-        if(msg->isSuccess()) {
+void TransactionWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_TRANSACTION)) {
+        if (msg->isSuccess()) {
             double expense = msg->data("expense").toDouble();
             double net = msg->data("margin").toDouble() + msg->data("transonly").toDouble();
             mTileIncome->setValue(Preference::formatMoney(msg->data("income").toDouble()));
@@ -129,15 +121,15 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
             mTileNet->setValue(Preference::formatMoney(net));
             mTileProfit->setValue(Preference::formatMoney(net + expense));
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
+    } else if (msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL)) {
         FlashMessageManager::showMessage(tr("Suplier deleted successfully"));
         mTableWidget->getModel()->refresh();
-    } else if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::EXPORT)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::EXPORT)) {
+        if (msg->isSuccess()) {
             const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
-            if(!fileName.isEmpty()) {
+            if (!fileName.isEmpty()) {
                 QFile file(fileName);
-                if(file.open(QFile::WriteOnly)) {
+                if (file.open(QFile::WriteOnly)) {
                     file.write(msg->data("data").toString().toUtf8());
                     file.close();
                 } else {
@@ -148,12 +140,13 @@ void TransactionWidget::messageReceived(LibG::Message *msg)
     }
 }
 
-void TransactionWidget::showEvent(QShowEvent *e)
-{
+void TransactionWidget::showEvent(QShowEvent *e) {
     QWidget::showEvent(e);
-    if(isShowed) return;
+    if (isShowed)
+        return;
     isShowed = true;
-    auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("type"))->getComboBox();
+    auto combo =
+        mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("type"))->getComboBox();
     combo->blockSignals(true);
     combo->clear();
     combo->addItem(tr("All"), -1);
@@ -162,26 +155,24 @@ void TransactionWidget::showEvent(QShowEvent *e)
     combo->blockSignals(false);
 }
 
-void TransactionWidget::refreshSummary()
-{
+void TransactionWidget::refreshSummary() {
     Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_TRANSACTION);
     auto query = mTableWidget->getModel()->getQuery();
     query->bind(&msg);
     sendMessage(&msg);
 }
 
-void TransactionWidget::addClicked()
-{
+void TransactionWidget::addClicked() {
     AddTransactionDialog dialog(mMessageBus, this);
     dialog.exec();
     mTableWidget->getModel()->refresh();
 }
 
-void TransactionWidget::editClicked(const QModelIndex &index)
-{
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
+void TransactionWidget::editClicked(const QModelIndex &index) {
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
+    if (item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
         QMessageBox::critical(this, tr("Error"), tr("Can not edit transaction from cashier, use sale return instead"));
         return;
     }
@@ -191,28 +182,28 @@ void TransactionWidget::editClicked(const QModelIndex &index)
     mTableWidget->getModel()->refresh();
 }
 
-void TransactionWidget::deleteClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
+void TransactionWidget::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
     QVariantList ids;
-    for(int i = 0; i < index.size(); i++) {
-        auto item = static_cast<TableItem*>(index[i].internalPointer());
+    for (int i = 0; i < index.size(); i++) {
+        auto item = static_cast<TableItem *>(index[i].internalPointer());
         ids.append(item->id);
-        if(item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
-            QMessageBox::critical(this, tr("Error"), tr("Can not remote transaction from cashier, use sale return instead"));
+        if (item->data("link_type").toInt() != TRANSACTION_LINK_TYPE::TRANSACTION) {
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Can not remote transaction from cashier, use sale return instead"));
             return;
         }
     }
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove transaction?"));
-    if(ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Yes) {
         Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::DEL);
         msg.addData("id", ids);
         sendMessage(&msg);
     }
 }
 
-void TransactionWidget::exportClicked()
-{
+void TransactionWidget::exportClicked() {
     Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::EXPORT);
     sendMessage(&msg);
 }

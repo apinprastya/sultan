@@ -18,28 +18,25 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "logindialog.h"
-#include "ui_logindialog.h"
 #include "global_constant.h"
-#include "message.h"
-#include "usersession.h"
-#include "settingdialog.h"
-#include "preference.h"
 #include "global_setting_const.h"
 #include "keyevent.h"
-#include <QStringBuilder>
-#include <QCryptographicHash>
-#include <QMessageBox>
-#include <QCloseEvent>
+#include "message.h"
+#include "preference.h"
+#include "settingdialog.h"
+#include "ui_logindialog.h"
+#include "usersession.h"
 #include <QApplication>
+#include <QCloseEvent>
+#include <QCryptographicHash>
 #include <QDebug>
+#include <QMessageBox>
+#include <QStringBuilder>
 
 using namespace LibGUI;
 using namespace LibG;
 
-LoginDialog::LoginDialog(MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::LoginDialog)
-{
+LoginDialog::LoginDialog(MessageBus *bus, QWidget *parent) : QDialog(parent), ui(new Ui::LoginDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     setWindowTitle(CONSTANT::WINDOW_TITLE.arg(tr("Login")));
@@ -48,21 +45,16 @@ LoginDialog::LoginDialog(MessageBus *bus, QWidget *parent) :
     ui->labelVersion->setText(QString("Sultan version %1").arg(qApp->applicationVersion()));
 }
 
-LoginDialog::~LoginDialog()
-{
-    delete ui;
-}
+LoginDialog::~LoginDialog() { delete ui; }
 
-void LoginDialog::reset()
-{
+void LoginDialog::reset() {
     ui->lineUsername->clear();
     ui->linePassword->clear();
     ui->lineUsername->setFocus(Qt::TabFocusReason);
     ui->labelError->hide();
 }
 
-void LoginDialog::showDialog()
-{
+void LoginDialog::showDialog() {
     reset();
 #ifdef QT_DEBUG
     ui->lineUsername->setText("sultan");
@@ -71,9 +63,8 @@ void LoginDialog::showDialog()
     show();
 }
 
-void LoginDialog::messageReceived(Message *msg)
-{
-    if(msg->status() == STATUS::ERROR) {
+void LoginDialog::messageReceived(Message *msg) {
+    if (msg->status() == STATUS::ERROR) {
         ui->labelError->show();
         ui->labelError->setText(msg->data("error").toString());
     } else {
@@ -84,13 +75,12 @@ void LoginDialog::messageReceived(Message *msg)
     }
 }
 
-void LoginDialog::closeEvent(QCloseEvent *event)
-{
+void LoginDialog::closeEvent(QCloseEvent *event) {
     int type = Preference::getInt(SETTING::APP_TYPE);
-    if(type == APPLICATION_TYPE::SERVER) {
+    if (type == APPLICATION_TYPE::SERVER) {
         int ret = QMessageBox::question(this, tr("Close Confirmation"),
                                         tr("This is a server, any client will be disconnect. Are you sure to exit?"));
-        if(ret == QMessageBox::No) {
+        if (ret == QMessageBox::No) {
             event->ignore();
             return;
         }
@@ -99,35 +89,32 @@ void LoginDialog::closeEvent(QCloseEvent *event)
     QDialog::closeEvent(event);
 }
 
-void LoginDialog::reject()
-{
+void LoginDialog::reject() {
     int type = Preference::getInt(SETTING::APP_TYPE);
-    if(type == APPLICATION_TYPE::SERVER) {
+    if (type == APPLICATION_TYPE::SERVER) {
         int ret = QMessageBox::question(this, tr("Close Confirmation"),
                                         tr("This is a server, any client will be disconnect. Are you sure to exit?"));
-        if(ret != QMessageBox::No) {
+        if (ret != QMessageBox::No) {
             QDialog::reject();
         }
     }
 }
 
-void LoginDialog::loginClicked()
-{
+void LoginDialog::loginClicked() {
     const QString &username = ui->lineUsername->text();
     const QString &password = ui->linePassword->text();
-    if(username.isEmpty() || password.isEmpty()) {
+    if (username.isEmpty() || password.isEmpty()) {
         ui->labelError->show();
         ui->labelError->setText(tr("fill all field"));
         return;
     }
     LibG::Message msg(MSG_TYPE::USER, MSG_COMMAND::LOGIN);
     msg.addData("username", username);
-    msg.addData("password", QString(QCryptographicHash::hash(password.toUtf8(),QCryptographicHash::Md5).toHex()));
+    msg.addData("password", QString(QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex()));
     sendMessage(&msg);
 }
 
-void LoginDialog::openSetting()
-{
+void LoginDialog::openSetting() {
     SettingDialog dialog(this);
     dialog.showDialog();
     dialog.exec();

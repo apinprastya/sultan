@@ -18,26 +18,23 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "reportitemwidget.h"
-#include "ui_normalwidget.h"
-#include "ui_datefromtowidget.h"
-#include "tablewidget.h"
+#include "db_constant.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
 #include "tablemodel.h"
 #include "tableview.h"
-#include "headerwidget.h"
-#include "global_constant.h"
-#include "db_constant.h"
-#include "guiutil.h"
+#include "tablewidget.h"
+#include "ui_datefromtowidget.h"
+#include "ui_normalwidget.h"
 #include <QDateTime>
 
 using namespace LibGUI;
 using namespace LibG;
 
-ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mDateWidget(new Ui::DateStartEndWidget),
-    mTableWidget(new TableWidget(this))
-{
+ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mDateWidget(new Ui::DateStartEndWidget),
+      mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     auto widget = new QWidget(this);
@@ -60,7 +57,8 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::SOLD_ITEM_REPORT);
     model->setTypeCommandOne(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::GET);
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 150 << 100 << 100 << 100 << 150 << 150);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>()
+                                                              << 150 << 150 << 100 << 100 << 100 << 150 << 150);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     auto now = QDateTime::currentDateTime();
     now.setTime(QTime(23, 59, 59));
@@ -71,20 +69,15 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent) :
     refreshTable();
 }
 
-ReportItemWidget::~ReportItemWidget()
-{
+ReportItemWidget::~ReportItemWidget() {}
 
-}
+void ReportItemWidget::messageReceived(LibG::Message * /*msg*/) {}
 
-void ReportItemWidget::messageReceived(LibG::Message */*msg*/)
-{
-
-}
-
-void ReportItemWidget::refreshTable()
-{
+void ReportItemWidget::refreshTable() {
     auto model = mTableWidget->getModel();
-    model->setFilter("0$solditems.created_at", COMPARE::GREATER_EQUAL, mDateWidget->dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    model->setFilter("1$solditems.created_at", COMPARE::LESS_EQUAL, mDateWidget->dateEnd->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    model->setFilter("0$solditems.created_at", COMPARE::GREATER_EQUAL,
+                     mDateWidget->dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    model->setFilter("1$solditems.created_at", COMPARE::LESS_EQUAL,
+                     mDateWidget->dateEnd->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     model->refresh();
 }

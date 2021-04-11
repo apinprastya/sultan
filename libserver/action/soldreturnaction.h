@@ -24,18 +24,17 @@
 
 namespace LibServer {
 
-class SoldReturnAction : public ServerAction
-{
-public:
+class SoldReturnAction : public ServerAction {
+  public:
     SoldReturnAction();
     LibG::Message summary(LibG::Message *msg);
 
-protected:
+  protected:
     void selectAndJoin() override;
     void afterInsert(const QVariantMap &data) override;
     void afterUpdate(const QVariantMap &oldData, const QVariantMap &newData) override;
     void afterDelete(const QVariantMap &oldData) override;
 };
 
-}
+} // namespace LibServer
 #endif // SOLDRETURNACTION_H

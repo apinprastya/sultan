@@ -30,33 +30,32 @@ class AddIngridientDialog;
 
 namespace LibGUI {
 
-class AddIngridientDialog : public QDialog, public LibG::MessageHandler
-{
+class AddIngridientDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddIngridientDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddIngridientDialog();
     void setData(const QVariantMap &data);
     inline QVariantMap &getData() { return mData; }
     inline bool isOk() { return mIsOk; }
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
     void fill();
 
-private:
+  private:
     Ui::AddIngridientDialog *ui;
     double mBuyPrice;
     double mSellPrice;
     bool mIsOk = false;
     QVariantMap mData;
 
-private slots:
+  private slots:
     void barcodeClicked();
     void saveClicked();
     void calculatePrice();
 };
 
-}
+} // namespace LibGUI
 #endif // ADDINGRIDIENTDIALOG_H

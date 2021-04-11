@@ -19,25 +19,23 @@
  */
 
 #include "checkstockadddialog.h"
-#include "ui_checkstockadddialog.h"
-#include "keyevent.h"
+#include "cashier/searchitemdialog.h"
+#include "flashmessagemanager.h"
+#include "global_constant.h"
 #include "guiutil.h"
+#include "keyevent.h"
 #include "message.h"
 #include "messagebus.h"
-#include "global_constant.h"
+#include "ui_checkstockadddialog.h"
 #include "usersession.h"
-#include "flashmessagemanager.h"
-#include "cashier/searchitemdialog.h"
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CheckStockAddDialog::CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CheckStockAddDialog)
-{
+CheckStockAddDialog::CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::CheckStockAddDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     auto ke = new KeyEvent(this);
@@ -45,21 +43,17 @@ CheckStockAddDialog::CheckStockAddDialog(LibG::MessageBus *bus, QWidget *parent)
     ke->addConsumeKey(Qt::Key_Enter);
     ke->addConsumeKey(Qt::Key_Tab);
     ui->lineBarcode->installEventFilter(ke);
-    connect(ke, SIGNAL(keyPressed(QObject*,QKeyEvent*)), SLOT(barcodeDone()));
+    connect(ke, SIGNAL(keyPressed(QObject *, QKeyEvent *)), SLOT(barcodeDone()));
     connect(ui->doubleStock, SIGNAL(valueChanged(double)), SLOT(checkDiff()));
     connect(ui->pushAdd, SIGNAL(clicked(bool)), SLOT(addClicked()));
     connect(ui->pushAddAgain, SIGNAL(clicked(bool)), SLOT(addAgainClicked()));
     connect(ui->pushSearch, SIGNAL(clicked(bool)), SLOT(openSearchItem()));
 }
 
-CheckStockAddDialog::~CheckStockAddDialog()
-{
-    delete ui;
-}
+CheckStockAddDialog::~CheckStockAddDialog() { delete ui; }
 
-void CheckStockAddDialog::reset()
-{
-    GuiUtil::enableWidget(false, QList<QWidget*>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
+void CheckStockAddDialog::reset() {
+    GuiUtil::enableWidget(false, QList<QWidget *>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
     ui->labelDiff->clear();
     ui->labelName->clear();
     ui->labelStock->clear();
@@ -71,12 +65,11 @@ void CheckStockAddDialog::reset()
     ui->lineBarcode->setFocus(Qt::TabFocusReason);
 }
 
-void CheckStockAddDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
-        if(msg->isSuccess()) {
+void CheckStockAddDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::GET)) {
+        if (msg->isSuccess()) {
             int flag = msg->data("flag").toInt();
-            if((flag & ITEM_FLAG::CALCULATE_STOCK) == 0) {
+            if ((flag & ITEM_FLAG::CALCULATE_STOCK) == 0) {
                 QMessageBox::critical(this, tr("Error"), tr("Item does not support stock handling"));
                 ui->lineBarcode->selectAll();
                 return;
@@ -85,7 +78,7 @@ void CheckStockAddDialog::messageReceived(LibG::Message *msg)
             mLastStock = msg->data("stock").toFloat();
             mBuyPrice = msg->data("buy_price").toDouble();
             ui->labelStock->setText(msg->data("stock").toString());
-            GuiUtil::enableWidget(true, QList<QWidget*>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
+            GuiUtil::enableWidget(true, QList<QWidget *>() << ui->pushAdd << ui->pushAddAgain << ui->doubleStock);
             ui->doubleStock->setValue(mLastStock);
             ui->doubleStock->setFocus(Qt::TabFocusReason);
             ui->doubleStock->selectAll();
@@ -93,23 +86,25 @@ void CheckStockAddDialog::messageReceived(LibG::Message *msg)
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::CHECKSTOCK, MSG_COMMAND::INSERT)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Check stock inserted successfully"));
-            if(mIsAddAgain) reset();
-            else close();
+            if (mIsAddAgain)
+                reset();
+            else
+                close();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
     }
 }
 
-void CheckStockAddDialog::inputCheckStock()
-{
+void CheckStockAddDialog::inputCheckStock() {
     ui->pushAdd->setEnabled(false);
     ui->pushAddAgain->setEnabled(false);
-    if(mLastBarcode.isEmpty()) return;
-    if(mLastBarcode != ui->lineBarcode->text()) {
+    if (mLastBarcode.isEmpty())
+        return;
+    if (mLastBarcode != ui->lineBarcode->text()) {
         QMessageBox::warning(this, tr("Error"), tr("Please redo input barcode correctly"));
         return;
     }
@@ -126,37 +121,33 @@ void CheckStockAddDialog::inputCheckStock()
     sendMessage(&msg);
 }
 
-void CheckStockAddDialog::barcodeDone()
-{
+void CheckStockAddDialog::barcodeDone() {
     mLastBarcode = ui->lineBarcode->text();
-    if(mLastBarcode.isEmpty()) return;
+    if (mLastBarcode.isEmpty())
+        return;
     Message msg(MSG_TYPE::ITEM, MSG_COMMAND::GET);
     msg.addData("barcode", mLastBarcode);
     sendMessage(&msg);
 }
 
-void CheckStockAddDialog::addClicked()
-{
+void CheckStockAddDialog::addClicked() {
     mIsAddAgain = false;
     inputCheckStock();
 }
 
-void CheckStockAddDialog::addAgainClicked()
-{
+void CheckStockAddDialog::addAgainClicked() {
     mIsAddAgain = true;
     inputCheckStock();
 }
 
-void CheckStockAddDialog::checkDiff()
-{
+void CheckStockAddDialog::checkDiff() {
     ui->labelDiff->setText(QString::number(ui->doubleStock->value() - mLastStock));
 }
 
-void CheckStockAddDialog::openSearchItem()
-{
+void CheckStockAddDialog::openSearchItem() {
     SearchItemDialog dialog(mMessageBus, true, this);
     dialog.exec();
-    if(dialog.isOk()) {
+    if (dialog.isOk()) {
         ui->lineBarcode->setText(dialog.getSelectedData()["barcode"].toString());
         barcodeDone();
     }

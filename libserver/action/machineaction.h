@@ -24,11 +24,10 @@
 
 namespace LibServer {
 
-class MachineAction : public ServerAction
-{
-public:
+class MachineAction : public ServerAction {
+  public:
     MachineAction();
 };
 
-}
+} // namespace LibServer
 #endif // MACHINEACTION_H

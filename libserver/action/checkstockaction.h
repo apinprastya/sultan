@@ -25,16 +25,15 @@
 
 namespace LibServer {
 
-class CheckStockAction : public ServerAction
-{
-public:
+class CheckStockAction : public ServerAction {
+  public:
     CheckStockAction();
     LibG::Message insert(LibG::Message *msg) override;
 
-protected:
+  protected:
     void afterInsert(const QVariantMap &data) override;
 };
 
-}
+} // namespace LibServer
 
 #endif // CHECKSTOCKACTION_H

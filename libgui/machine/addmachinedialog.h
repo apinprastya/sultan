@@ -29,25 +29,24 @@ class AddMachineDialog;
 
 namespace LibGUI {
 
-class AddMachineDialog : public QDialog, public LibG::MessageHandler
-{
+class AddMachineDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     AddMachineDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~AddMachineDialog();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::AddMachineDialog *ui;
     int mId = -1;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // ADDMACHINEDIALOG_H

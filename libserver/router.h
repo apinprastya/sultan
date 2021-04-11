@@ -20,22 +20,21 @@
 #ifndef ROUTER_H
 #define ROUTER_H
 
-#include "server_global.h"
 #include "message.h"
+#include "server_global.h"
 
 namespace LibServer {
 
 class ServerAction;
 
-class SERVERSHARED_EXPORT Router
-{
-public:
+class SERVERSHARED_EXPORT Router {
+  public:
     Router();
     LibG::Message handler(LibG::Message msg);
 
-private:
+  private:
     ServerAction *getServerAction(int type);
 };
 
-}
+} // namespace LibServer
 #endif // ROUTER_H

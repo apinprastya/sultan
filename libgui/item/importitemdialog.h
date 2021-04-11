@@ -9,23 +9,22 @@ class ImportItemDialog;
 
 namespace LibGUI {
 
-class ImportItemDialog : public QDialog
-{
+class ImportItemDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     ImportItemDialog(QWidget *parent = nullptr);
     ~ImportItemDialog();
     inline bool isChecked() { return mIsChecked; }
 
-private slots:
+  private slots:
     void on_pushImport_clicked();
 
-private:
+  private:
     Ui::ImportItemDialog *ui;
     bool mIsChecked = false;
 };
 
-}
+} // namespace LibGUI
 
 #endif // IMPORTITEMDIALOG_H

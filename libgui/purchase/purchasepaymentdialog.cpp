@@ -18,21 +18,19 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchasepaymentdialog.h"
-#include "ui_purchasepaymentdialog.h"
-#include "preference.h"
-#include "message.h"
-#include "global_constant.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
 #include "guiutil.h"
+#include "message.h"
+#include "preference.h"
+#include "ui_purchasepaymentdialog.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PurchasePaymentDialog)
-{
+PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::PurchasePaymentDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
@@ -42,13 +40,9 @@ PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *par
     sendMessage(&msg);
 }
 
-PurchasePaymentDialog::~PurchasePaymentDialog()
-{
-    delete ui;
-}
+PurchasePaymentDialog::~PurchasePaymentDialog() { delete ui; }
 
-void PurchasePaymentDialog::fill(const QVariantMap &data)
-{
+void PurchasePaymentDialog::fill(const QVariantMap &data) {
     ui->labelSuplier->setText(data["suplier"].toString());
     ui->labelTotal->setText(Preference::formatMoney(data["final"].toDouble()));
     mId = data["id"].toInt();
@@ -56,27 +50,26 @@ void PurchasePaymentDialog::fill(const QVariantMap &data)
     QDate date = data["payment_date"].toDate();
     ui->linePayment->setText(data["payment_number"].toString());
     ui->checkPaid->setChecked(data["status"].toInt() != PAYMENT_STATUS::UNPAID);
-    if(date.isValid())
+    if (date.isValid())
         ui->datePayment->setDate(data["payment_date"].toDate());
     else
         ui->datePayment->setDate(QDate::currentDate());
 }
 
-void PurchasePaymentDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::UPDATE)) {
-        if(msg->isSuccess()) {
+void PurchasePaymentDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::UPDATE)) {
+        if (msg->isSuccess()) {
             FlashMessageManager::showMessage(tr("Purchase payment edited successfully"));
             close();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             ui->pushSave->setEnabled(true);
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
-        if(msg->isSuccess()) {
+    } else if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if (msg->isSuccess()) {
             const QVariantList &l = msg->data("data").toList();
             ui->comboBank->addItem(tr("Cash"), 0);
-            for(int i = 0; i < l.size(); i++) {
+            for (int i = 0; i < l.size(); i++) {
                 const QVariantMap &data = l[i].toMap();
                 int id = data["id"].toInt();
                 ui->comboBank->addItem(data["name"].toString(), id);
@@ -86,8 +79,7 @@ void PurchasePaymentDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void PurchasePaymentDialog::saveClicked()
-{
+void PurchasePaymentDialog::saveClicked() {
     Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::UPDATE);
     QVariantMap data;
     data.insert("payment_number", ui->linePayment->text());
@@ -100,8 +92,7 @@ void PurchasePaymentDialog::saveClicked()
     ui->pushSave->setEnabled(false);
 }
 
-void PurchasePaymentDialog::paidChanged()
-{
+void PurchasePaymentDialog::paidChanged() {
     ui->linePayment->setEnabled(ui->checkPaid->isChecked());
     ui->datePayment->setEnabled(ui->checkPaid->isChecked());
 }

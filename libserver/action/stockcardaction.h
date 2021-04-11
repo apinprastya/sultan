@@ -24,12 +24,11 @@
 
 namespace LibServer {
 
-class StockCardAction : public ServerAction
-{
-public:
+class StockCardAction : public ServerAction {
+  public:
     StockCardAction();
 };
 
-}
+} // namespace LibServer
 
 #endif // STOCKCARDACTION_H

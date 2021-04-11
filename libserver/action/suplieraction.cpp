@@ -21,8 +21,6 @@
 
 using namespace LibServer;
 
-SuplierAction::SuplierAction():
-    ServerAction("supliers", "id")
-{
+SuplierAction::SuplierAction() : ServerAction("supliers", "id") {
     mFlag = HAS_UPDATE_FIELD | USE_TRANSACTION | SOFT_DELETE;
 }

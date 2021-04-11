@@ -30,29 +30,28 @@ class SoldItemListDialog;
 
 namespace LibGUI {
 
-class SoldItemListDialog : public QDialog, public LibG::MessageHandler
-{
+class SoldItemListDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     SoldItemListDialog(const QVariantMap &data, LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~SoldItemListDialog();
     inline bool isOk() { return mIsOk; }
     inline QVariantMap getData() { return mData; }
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::SoldItemListDialog *ui;
     int mId;
     QVariantMap mData;
     bool mIsOk = false;
 
-private slots:
+  private slots:
     void focusAndSelectTable();
     void tableReturnPressed();
 };
 
-}
+} // namespace LibGUI
 #endif // SOLDITEMLISTDIALOG_H

@@ -24,15 +24,14 @@
 
 namespace LibServer {
 
-class CustomerAction : public ServerAction
-{
-public:
+class CustomerAction : public ServerAction {
+  public:
     CustomerAction();
     LibG::Message summary(LibG::Message *msg);
 
-protected:
+  protected:
     bool beforeDelete(const QVariantMap &oldData, LibG::Message *retMsg) override;
 };
 
-}
+} // namespace LibServer
 #endif // CUSTOMERACTION_H

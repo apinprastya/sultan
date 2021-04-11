@@ -1,29 +1,27 @@
-#include <QApplication>
-#include <QStyleFactory>
 #include "core.h"
-#include "preference.h"
 #include "global_setting_const.h"
-#include <QTranslator>
-#include <QPalette>
-#include <QDir>
-#include <QTextStream>
+#include "preference.h"
+#include <QApplication>
 #include <QDateTime>
-#include <QDirIterator>
 #include <QDebug>
+#include <QDir>
+#include <QDirIterator>
+#include <QPalette>
+#include <QStyleFactory>
+#include <QTextStream>
+#include <QTranslator>
 
 static QTextStream sLogStream;
 static int sCounter;
 
-void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
+void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
     QString formatted = qFormatLogMessage(type, context, msg);
     sLogStream << formatted << "\n";
-    if(sCounter++ % 10 == 0)
+    if (sCounter++ % 10 == 0)
         sLogStream.flush();
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 #ifdef SERVER_BUILD
     QCoreApplication a(argc, argv);
 #else
@@ -47,7 +45,7 @@ int main(int argc, char *argv[])
 #endif
     QFile file(dir.absoluteFilePath(logFileName));
     QFileInfo fi(dir.absoluteFilePath(logFileName));
-    if(fi.size() >= (2 * 1024 * 1024)) {
+    if (fi.size() >= (2 * 1024 * 1024)) {
         QFile::rename(logFileName, logFileName + "." + QDateTime::currentDateTime().toString("yyyyMMddhhMMss"));
     }
     file.open(QFile::Append);
@@ -57,10 +55,10 @@ int main(int argc, char *argv[])
     LibG::Preference::createInstance();
     const QString &lang = LibG::Preference::getString(LibG::SETTING::APPLICATION_LANGUAGE, "id");
     QTranslator tr[3];
-    if(lang.compare("en")) {
+    if (lang.compare("en")) {
         QStringList trans{":/translation/sultan_", ":/translation/libgui_", ":/translation/libserver_"};
-        for(int i = 0; i < trans.count(); i++) {
-            if(tr[i].load(trans[i] + lang))
+        for (int i = 0; i < trans.count(); i++) {
+            if (tr[i].load(trans[i] + lang))
                 a.installTranslator(&tr[i]);
         }
     }

@@ -24,13 +24,12 @@
 
 namespace LibServer {
 
-class UserAction : public ServerAction
-{
-public:
+class UserAction : public ServerAction {
+  public:
     UserAction();
     LibG::Message login(LibG::Message *msg);
     LibG::Message changeMyPassword(LibG::Message *msg);
 };
 
-}
+} // namespace LibServer
 #endif // USERACTION_H

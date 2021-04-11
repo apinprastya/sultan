@@ -18,36 +18,30 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "changepassworddialog.h"
-#include "ui_changepassworddialog.h"
+#include "flashmessagemanager.h"
+#include "global_constant.h"
 #include "guiutil.h"
 #include "message.h"
 #include "messagebus.h"
-#include "global_constant.h"
+#include "ui_changepassworddialog.h"
 #include "usersession.h"
-#include "flashmessagemanager.h"
-#include <QMessageBox>
 #include <QCryptographicHash>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-ChangePasswordDialog::ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ChangePasswordDialog)
-{
+ChangePasswordDialog::ChangePasswordDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::ChangePasswordDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-ChangePasswordDialog::~ChangePasswordDialog()
-{
-    delete ui;
-}
+ChangePasswordDialog::~ChangePasswordDialog() { delete ui; }
 
-void ChangePasswordDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isSuccess()) {
+void ChangePasswordDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isSuccess()) {
         FlashMessageManager::showMessage("Password changed successfully");
         close();
     } else {
@@ -56,19 +50,22 @@ void ChangePasswordDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void ChangePasswordDialog::saveClicked()
-{
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->linePasswordOld << ui->linePasswordNew << ui->linePasswordNewRe)) {
+void ChangePasswordDialog::saveClicked() {
+    if (GuiUtil::anyEmpty(QList<QWidget *>() << ui->linePasswordOld << ui->linePasswordNew << ui->linePasswordNewRe)) {
         QMessageBox::critical(this, tr("Error"), tr("Please fill all field"));
         return;
     }
-    if(ui->linePasswordNew->text().compare(ui->linePasswordNewRe->text())) {
+    if (ui->linePasswordNew->text().compare(ui->linePasswordNewRe->text())) {
         QMessageBox::critical(this, tr("Error"), tr("New password not match"));
         return;
     }
     LibG::Message msg(MSG_TYPE::USER, MSG_COMMAND::CHANGE_MY_PASSWORD);
-    msg.addData("current", QString(QCryptographicHash::hash(ui->linePasswordOld->text().toUtf8(),QCryptographicHash::Md5).toHex()));
-    msg.addData("new", QString(QCryptographicHash::hash(ui->linePasswordNew->text().toUtf8(),QCryptographicHash::Md5).toHex()));
+    msg.addData(
+        "current",
+        QString(QCryptographicHash::hash(ui->linePasswordOld->text().toUtf8(), QCryptographicHash::Md5).toHex()));
+    msg.addData(
+        "new",
+        QString(QCryptographicHash::hash(ui->linePasswordNew->text().toUtf8(), QCryptographicHash::Md5).toHex()));
     msg.addData("id", UserSession::id());
     sendMessage(&msg);
     ui->pushSave->setEnabled(false);

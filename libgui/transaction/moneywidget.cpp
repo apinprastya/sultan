@@ -18,33 +18,28 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "moneywidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableview.h"
-#include "tableitem.h"
+#include "db_constant.h"
+#include "dbutil.h"
 #include "global_constant.h"
 #include "guiutil.h"
-#include "db_constant.h"
-#include "message.h"
 #include "headerwidget.h"
-#include "tilewidget.h"
 #include "message.h"
 #include "preference.h"
-#include "dbutil.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "tilewidget.h"
+#include "ui_normalwidget.h"
 #include "util.h"
-#include <QHBoxLayout>
 #include <QDebug>
+#include <QHBoxLayout>
 
 using namespace LibGUI;
 using namespace LibG;
 
-MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this)),
-    mTileTotal(new TileWidget(this))
-{
+MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)), mTileTotal(new TileWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Money"));
@@ -64,21 +59,29 @@ MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
         return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy hh:mm");
     });
     model->addColumn("link_type", tr("Type"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
-        switch(item->data(key).toInt()) {
-        case TRANSACTION_LINK_TYPE::TRANSACTION: return tr("Transaction");
-        case TRANSACTION_LINK_TYPE::SOLD: return tr("Sold");
-        case TRANSACTION_LINK_TYPE::PURCHASE: return tr("Purchase");
-        case TRANSACTION_LINK_TYPE::CUSTOMER_CREDIT: return tr("Credit");
-        case TRANSACTION_LINK_TYPE::BUY_RETURN: return tr("Purchase return");
-        case TRANSACTION_LINK_TYPE::SOLD_RETURN: return tr("Sold return");
+        switch (item->data(key).toInt()) {
+        case TRANSACTION_LINK_TYPE::TRANSACTION:
+            return tr("Transaction");
+        case TRANSACTION_LINK_TYPE::SOLD:
+            return tr("Sold");
+        case TRANSACTION_LINK_TYPE::PURCHASE:
+            return tr("Purchase");
+        case TRANSACTION_LINK_TYPE::CUSTOMER_CREDIT:
+            return tr("Credit");
+        case TRANSACTION_LINK_TYPE::BUY_RETURN:
+            return tr("Purchase return");
+        case TRANSACTION_LINK_TYPE::SOLD_RETURN:
+            return tr("Sold return");
         }
         return QString();
     });
     model->addColumn("number", tr("Number"));
     model->addColumn("bank", tr("Bank"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
         const QString &str = item->data(key).toString();
-        if(str.isEmpty()) return tr("Cash");
-        else return str;
+        if (str.isEmpty())
+            return tr("Cash");
+        else
+            return str;
     });
     model->addColumn("machine", tr("Machine"));
     model->addColumn("user", tr("User"));
@@ -98,28 +101,30 @@ MoneyWidget::MoneyWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setFilter("money_total", COMPARE::NEQUAL, 0);
     model->setSort("date DESC");
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150 << 100 << 200 << 100 << 100 << 100 << 250 << 100);
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>()
+                                                              << 150 << 100 << 200 << 100 << 100 << 100 << 250 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
-    //model->refresh();
+    // model->refresh();
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshSummary()));
     Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
     sendMessage(&msg);
 }
 
-void LibGUI::MoneyWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_MONEY)) {
-        if(msg->isSuccess()) {
+void LibGUI::MoneyWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_MONEY)) {
+        if (msg->isSuccess()) {
             mTileTotal->setValue(Preference::formatMoney(msg->data("total").toDouble()));
         }
-    } else if(msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
-        if(msg->isSuccess()) {
-            auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("bank"))->getComboBox();
+    } else if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
+        if (msg->isSuccess()) {
+            auto combo = mTableWidget->getTableView()
+                             ->getHeaderWidget(mTableWidget->getModel()->getIndex("bank"))
+                             ->getComboBox();
             combo->blockSignals(true);
             combo->addItem(tr("All"), -1);
             combo->addItem(tr("Cash"), 0);
             const QVariantList &l = msg->data("data").toList();
-            for(int i = 0; i < l.size(); i++) {
+            for (int i = 0; i < l.size(); i++) {
                 const QVariantMap &m = l[i].toMap();
                 combo->addItem(m["name"].toString(), m["id"]);
             }
@@ -128,12 +133,13 @@ void LibGUI::MoneyWidget::messageReceived(LibG::Message *msg)
     }
 }
 
-void LibGUI::MoneyWidget::showEvent(QShowEvent *e)
-{
+void LibGUI::MoneyWidget::showEvent(QShowEvent *e) {
     QWidget::showEvent(e);
-    if(isShowed) return;
+    if (isShowed)
+        return;
     isShowed = true;
-    auto combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("link_type"))->getComboBox();
+    auto combo =
+        mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("link_type"))->getComboBox();
     combo->clear();
     combo->addItem(tr("All"), -1);
     combo->addItem(tr("Transaction"), TRANSACTION_LINK_TYPE::TRANSACTION);
@@ -144,8 +150,7 @@ void LibGUI::MoneyWidget::showEvent(QShowEvent *e)
     combo->addItem(tr("Sold return"), TRANSACTION_LINK_TYPE::SOLD_RETURN);
 }
 
-void LibGUI::MoneyWidget::refreshSummary()
-{
+void LibGUI::MoneyWidget::refreshSummary() {
     Message msg(MSG_TYPE::TRANSACTION, MSG_COMMAND::SUMMARY_MONEY);
     auto query = mTableWidget->getModel()->getQuery();
     query->bind(&msg);

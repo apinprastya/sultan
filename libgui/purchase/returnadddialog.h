@@ -30,20 +30,19 @@ class ReturnAddDialog;
 
 namespace LibGUI {
 
-class ReturnAddDialog : public QDialog, public LibG::MessageHandler
-{
+class ReturnAddDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     ReturnAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReturnAddDialog();
     void reset();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::ReturnAddDialog *ui;
     int mId = -1;
     int mCurrentSuplier = -1;
@@ -53,11 +52,11 @@ private:
     void populateSuplier(const QVariantList &list);
     void fillField();
 
-private slots:
+  private slots:
     void purchaseItemFocused();
     void saveClicked();
     void calculateTotal();
 };
 
-}
+} // namespace LibGUI
 #endif // RETURNADDDIALOG_H

@@ -18,42 +18,37 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "customerrewardwidget.h"
-#include "ui_normalwidget.h"
-#include "ui_creditsummarywidget.h"
-#include "horizontalheader.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "tableitem.h"
-#include "global_constant.h"
-#include "message.h"
-#include "tableview.h"
-#include "usersession.h"
-#include "guiutil.h"
-#include "headerwidget.h"
-#include "db_constant.h"
-#include "flashmessagemanager.h"
-#include "preference.h"
 #include "addcreditpaymentdialog.h"
+#include "addpoindialog.h"
+#include "db_constant.h"
 #include "dbutil.h"
 #include "escp.h"
-#include "printer.h"
+#include "flashmessagemanager.h"
+#include "global_constant.h"
 #include "global_setting_const.h"
-#include "addpoindialog.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "horizontalheader.h"
+#include "message.h"
+#include "preference.h"
+#include "printer.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "ui_creditsummarywidget.h"
+#include "ui_normalwidget.h"
+#include "usersession.h"
+#include <QDebug>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QDebug>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    uiSummary(new Ui::CreditSummaryWidget),
-    mTableWidget(new TableWidget(this)),
-    mId(id),
-    mNumber(number)
-{
+CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), uiSummary(new Ui::CreditSummaryWidget),
+      mTableWidget(new TableWidget(this)), mId(id), mNumber(number) {
     setMessageBus(bus);
     ui->setupUi(this);
     auto sumWidget = new QWidget(this);
@@ -88,10 +83,9 @@ CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::
     connect(model, SIGNAL(firstDataLoaded()), SLOT(refreshCustomer()));
 }
 
-void CustomerRewardWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET)) {
-        if(msg->isSuccess()) {
+void CustomerRewardWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET)) {
+        if (msg->isSuccess()) {
             mTotal = msg->data("credit").toDouble();
             mPoin = msg->data("reward").toInt();
             uiSummary->labelNumber->setText(msg->data("number").toString());
@@ -104,33 +98,31 @@ void CustomerRewardWidget::messageReceived(LibG::Message *msg)
     }
 }
 
-void CustomerRewardWidget::addClicked()
-{
+void CustomerRewardWidget::addClicked() {
     AddPoinDialog dialog(mMessageBus, mId, mNumber, mPoin, this);
     dialog.exec();
     mTableWidget->getModel()->refresh();
 }
 
-void CustomerRewardWidget::refreshCustomer()
-{
+void CustomerRewardWidget::refreshCustomer() {
     Message msg(MSG_TYPE::CUSTOMER, MSG_COMMAND::GET);
     msg.addData("id", mId);
     sendMessage(&msg);
 }
 
-void CustomerRewardWidget::printClicked()
-{
+void CustomerRewardWidget::printClicked() {
     const QModelIndex &index = mTableWidget->getTableView()->currentIndex();
-    if(!index.isValid()) return;
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    if(item->data("link_id").toInt() != 0) return;
+    if (!index.isValid())
+        return;
+    auto item = static_cast<TableItem *>(index.internalPointer());
+    if (item->data("link_id").toInt() != 0)
+        return;
     print(item->data());
 }
 
-void CustomerRewardWidget::print(const QVariantMap &data)
-{
+void CustomerRewardWidget::print(const QVariantMap &data) {
     int type = Preference::getInt(SETTING::PRINTER_CASHIER_TYPE, -1);
-    if(type < 0) {
+    if (type < 0) {
         QMessageBox::critical(this, tr("Error"), tr("Please setting printer first"));
         return;
     }
@@ -140,22 +132,33 @@ void CustomerRewardWidget::print(const QVariantMap &data)
 
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
     escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
-    escp->cpi10()->doubleHeight(true)->centerText(title)->newLine()->
-            centerText(tr("Reward Exchange"))->
-            doubleHeight(false)->cpi12()->newLine(2);
+    escp->cpi10()
+        ->doubleHeight(true)
+        ->centerText(title)
+        ->newLine()
+        ->centerText(tr("Reward Exchange"))
+        ->doubleHeight(false)
+        ->cpi12()
+        ->newLine(2);
     escp->column(QList<int>())->line(QChar('='));
     escp->column(QList<int>{50, 50})->leftText(tr("Cust-ID"))->rightText(uiSummary->labelNumber->text())->newLine();
     escp->column(QList<int>{50, 50})->leftText(tr("Name"))->rightText(uiSummary->labelName->text())->newLine();
-    escp->column(QList<int>{50, 50})->leftText(tr("Total Reward"))->rightText(Preference::formatMoney(mTotal))->newLine();
+    escp->column(QList<int>{50, 50})
+        ->leftText(tr("Total Reward"))
+        ->rightText(Preference::formatMoney(mTotal))
+        ->newLine();
     escp->column(QList<int>())->line(QChar('-'));
-    escp->column(QList<int>{50, 50})->leftText(tr("Date"))->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))->newLine();
+    escp->column(QList<int>{50, 50})
+        ->leftText(tr("Date"))
+        ->rightText(LibDB::DBUtil::sqlDateToDateTime(data["created_at"].toString()).toString("dd-MM-yy hh:mm"))
+        ->newLine();
     escp->leftText(tr("Number"))->rightText(data["number"].toString())->newLine();
     escp->leftText(tr("Reward Exchange"))->rightText(Preference::formatMoney(-data["reward"].toDouble()))->newLine();
     escp->column(QList<int>())->leftText(tr("Detail :"))->newLine()->leftText(data["detail"].toString())->newLine();
     escp->line(QChar('-'))->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     GuiUtil::print(escp->data());
     delete escp;
-    if(Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
+    if (Preference::getBool(SETTING::PRINTER_CASHIER_AUTOCUT)) {
         const QString &command = LibPrint::Escp::cutPaperCommand();
         GuiUtil::print(command);
     }

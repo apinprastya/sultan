@@ -18,24 +18,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "stockcarddialog.h"
-#include "ui_stockcarddialog.h"
-#include "tablewidget.h"
+#include "db_constant.h"
+#include "dbutil.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "tableitem.h"
 #include "tablemodel.h"
 #include "tableview.h"
-#include "tableitem.h"
-#include "headerwidget.h"
-#include "global_constant.h"
-#include "db_constant.h"
-#include "guiutil.h"
-#include "dbutil.h"
+#include "tablewidget.h"
+#include "ui_stockcarddialog.h"
 
 using namespace LibGUI;
 using namespace LibG;
 
-StockCardDialog::StockCardDialog(const QString &barcode, LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::StockCardDialog)
-{
+StockCardDialog::StockCardDialog(const QString &barcode, LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::StockCardDialog) {
     ui->setupUi(this);
     setWindowTitle(tr("Stock Card : %1").arg(barcode));
     auto model = ui->table->getModel();
@@ -44,13 +42,19 @@ StockCardDialog::StockCardDialog(const QString &barcode, LibG::MessageBus *bus, 
         return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy hh:mm");
     });
     model->addColumn("type", tr("Type"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
-        switch(item->data(key).toInt()) {
-            case STOCK_CARD_TYPE::INITIAL_STOCK : return tr("Initial");
-            case STOCK_CARD_TYPE::PURCHASE : return tr("Purchase");
-            case STOCK_CARD_TYPE::SOLD : return tr("Sold");
-            case STOCK_CARD_TYPE::CHECKSTOCK : return tr("Checkstock");
-            case STOCK_CARD_TYPE::PURCHASE_RETURN : return tr("Purchase return");
-            case STOCK_CARD_TYPE::SOLD_RETURN : return tr("Sold return");
+        switch (item->data(key).toInt()) {
+        case STOCK_CARD_TYPE::INITIAL_STOCK:
+            return tr("Initial");
+        case STOCK_CARD_TYPE::PURCHASE:
+            return tr("Purchase");
+        case STOCK_CARD_TYPE::SOLD:
+            return tr("Sold");
+        case STOCK_CARD_TYPE::CHECKSTOCK:
+            return tr("Checkstock");
+        case STOCK_CARD_TYPE::PURCHASE_RETURN:
+            return tr("Purchase return");
+        case STOCK_CARD_TYPE::SOLD_RETURN:
+            return tr("Sold return");
         }
         return QString();
     });
@@ -67,16 +71,12 @@ StockCardDialog::StockCardDialog(const QString &barcode, LibG::MessageBus *bus, 
     model->refresh();
 }
 
-StockCardDialog::~StockCardDialog()
-{
-    delete ui;
-}
+StockCardDialog::~StockCardDialog() { delete ui; }
 
-void StockCardDialog::showEvent(QShowEvent *e)
-{
+void StockCardDialog::showEvent(QShowEvent *e) {
     QDialog::showEvent(e);
-    auto  combo = ui->table->getTableView()->getHeaderWidget(ui->table->getModel()->getIndex("type"))->getComboBox();
-    if(combo->count() == 0) {
+    auto combo = ui->table->getTableView()->getHeaderWidget(ui->table->getModel()->getIndex("type"))->getComboBox();
+    if (combo->count() == 0) {
         combo->blockSignals(true);
         combo->clear();
         combo->addItem(tr("All"), -1);

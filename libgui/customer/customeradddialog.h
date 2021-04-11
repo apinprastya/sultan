@@ -29,30 +29,29 @@ class CustomerAddDialog;
 
 namespace LibGUI {
 
-class CustomerAddDialog : public QDialog, public LibG::MessageHandler
-{
+class CustomerAddDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     CustomerAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CustomerAddDialog();
     void reset();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::CustomerAddDialog *ui;
     int mId = 0;
 
-signals:
+  signals:
     void customerAdded();
     void customerUpdated(int id);
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // CUSTOMERADDDIALOG_H

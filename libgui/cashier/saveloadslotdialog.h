@@ -28,23 +28,22 @@ class SaveLoadSlotDialog;
 
 namespace LibGUI {
 
-class SaveLoadSlotDialog : public QDialog
-{
+class SaveLoadSlotDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     SaveLoadSlotDialog(bool isSave = true, QWidget *parent = nullptr);
     ~SaveLoadSlotDialog();
     inline int getSelectedSlot() { return mSelectedSlot; }
 
-private:
+  private:
     Ui::SaveLoadSlotDialog *ui;
     bool mIsSave;
     int mSelectedSlot = -1;
 
-private slots:
+  private slots:
     void returnPressed();
 };
 
-}
+} // namespace LibGUI
 #endif // SAVELOADSLOTDIALOG_H

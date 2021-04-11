@@ -28,18 +28,17 @@ class Splash;
 
 namespace LibGUI {
 
-class Splash : public QDialog
-{
+class Splash : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     Splash(QWidget *parent = nullptr);
     ~Splash();
     void setMessage(const QString &msg);
 
-private:
+  private:
     Ui::Splash *ui;
 };
 
-}
+} // namespace LibGUI
 #endif // SPLASH_H

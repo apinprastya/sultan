@@ -23,17 +23,17 @@
 #include <QtCore/qglobal.h>
 
 #ifdef SERVER_LIBRARY_STATIC
-    #define SERVERSHARED_EXPORT
+#define SERVERSHARED_EXPORT
 #else
-    #if defined(SERVER_LIBRARY)
-        #define SERVERSHARED_EXPORT Q_DECL_EXPORT
-    #else
-        #if defined(SINGLEBIN)
-            #define SERVERSHARED_EXPORT
-        #else
-            #define SERVERSHARED_EXPORT Q_DECL_IMPORT
-        #endif
-    #endif
+#if defined(SERVER_LIBRARY)
+#define SERVERSHARED_EXPORT Q_DECL_EXPORT
+#else
+#if defined(SINGLEBIN)
+#define SERVERSHARED_EXPORT
+#else
+#define SERVERSHARED_EXPORT Q_DECL_IMPORT
+#endif
+#endif
 #endif
 
 #endif // SERVER_GLOBAL_H

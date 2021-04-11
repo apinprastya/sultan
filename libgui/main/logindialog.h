@@ -20,8 +20,8 @@
 #ifndef LOGINDIALOG_H
 #define LOGINDIALOG_H
 
-#include <QDialog>
 #include "messagehandler.h"
+#include <QDialog>
 
 namespace Ui {
 class LoginDialog;
@@ -29,31 +29,30 @@ class LoginDialog;
 
 namespace LibGUI {
 
-class LoginDialog : public QDialog, public LibG::MessageHandler
-{
+class LoginDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     LoginDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~LoginDialog();
     void reset();
     void showDialog();
 
-private:
+  private:
     Ui::LoginDialog *ui;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
     void closeEvent(QCloseEvent *event) override;
     void reject() override;
 
-signals:
+  signals:
     void loginSuccess();
 
-private slots:
+  private slots:
     void loginClicked();
     void openSetting();
 };
 
-}
+} // namespace LibGUI
 #endif // LOGINDIALOG_H

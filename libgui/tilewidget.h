@@ -28,20 +28,19 @@ class TileWidget;
 
 namespace LibGUI {
 
-class TileWidget : public QWidget
-{
+class TileWidget : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     TileWidget(QWidget *parent = nullptr);
     ~TileWidget();
     void setTitle(const QString &title);
     void setValue(const QString &value);
     void setTitleValue(const QString &title, const QString &value);
 
-private:
+  private:
     Ui::TileWidget *ui;
 };
 
-}
+} // namespace LibGUI
 #endif // TILEWIDGET_H

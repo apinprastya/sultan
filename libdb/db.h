@@ -24,18 +24,18 @@
 #include "db_global.h"
 #include "dbresult.h"
 #include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QSqlError>
+#include <QSqlQuery>
+#include <QStringList>
 #include <QVariant>
 #include <QVariantMap>
-#include <QStringList>
 
 namespace LibDB {
 
 struct DBSetting {
-    DBSetting(){}
-    DBSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname):
-        port(port), host(host), username(username), password(password), dbName(dbname){}
+    DBSetting() {}
+    DBSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname)
+        : port(port), host(host), username(username), password(password), dbName(dbname) {}
     void set(const QString &host, int port, const QString &username, const QString &password, const QString &dbname) {
         this->port = port;
         this->host = host;
@@ -50,14 +50,15 @@ struct DBSetting {
     QString dbName;
 };
 
-class DBSHARED_EXPORT Db
-{
-private:
+class DBSHARED_EXPORT Db {
+  private:
     Db();
-public:
+
+  public:
     ~Db();
     static Db *createInstance(bool checkDBName = false, bool newConnection = false, QString *err = nullptr);
-    static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password, const QString &dbname);
+    static bool setDbSetting(const QString &host, int port, const QString &username, const QString &password,
+                             const QString &dbname);
     static bool checkConnection(QString &error);
     static void setDatabaseType(const QString &db);
     Db *reset();
@@ -90,11 +91,14 @@ public:
     bool commit();
     bool roolback();
     inline bool isSupportTransaction() { return mSupportTransaction; }
-    inline Db *clearSelect() { mSelect.clear(); return this; }
+    inline Db *clearSelect() {
+        mSelect.clear();
+        return this;
+    }
     bool isSQLite();
     bool truncateTable(const QString &table);
 
-private:
+  private:
     static QStringList mCreated;
     static QStringList mUpdate;
     static QStringList mSoftDelete;
@@ -108,20 +112,21 @@ private:
     QString mStart;
     QString mSort;
     QString mGroup;
-    QList<Db*> childs;
-    Db* parent;
+    QList<Db *> childs;
+    Db *parent;
     QString mLastQuery;
     QVariant mInsertedId;
     QSqlError mLastError;
 
     static QSqlDatabase getDatabase();
-    bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname, bool checkDBName = false, bool newConnection = false);
+    bool init(const QString &host, int port, const QString &username, const QString &password, const QString &dbname,
+              bool checkDBName = false, bool newConnection = false);
     void postQuery(QSqlQuery *query);
     QString dataToString(const QVariantMap &map);
 
-protected:
+  protected:
     bool mDebug;
 };
 
-}
+} // namespace LibDB
 #endif // DB_H

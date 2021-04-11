@@ -21,14 +21,13 @@
 #define PREFERENCE_H
 
 #include "global_global.h"
-#include <QString>
 #include <QSettings>
+#include <QString>
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT Preference
-{
-public:
+class GLOBALSHARED_EXPORT Preference {
+  public:
     Preference();
     ~Preference();
     static void destroy();
@@ -46,11 +45,11 @@ public:
     static QString formatMoney(float val);
     static QString formatFloat(float val);
 
-private:
+  private:
     static Preference *instance();
     QSettings *mSetting;
 };
 
-}
+} // namespace LibG
 
 #endif // PREFERENCE_H

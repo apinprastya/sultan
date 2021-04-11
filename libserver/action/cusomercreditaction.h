@@ -24,14 +24,13 @@
 
 namespace LibServer {
 
-class CusomerCreditAction : public ServerAction
-{
-public:
+class CusomerCreditAction : public ServerAction {
+  public:
     CusomerCreditAction();
 
-protected:
+  protected:
     void afterInsert(const QVariantMap &data) override;
 };
 
-}
+} // namespace LibServer
 #endif // CUSOMERDEBTACTION_H

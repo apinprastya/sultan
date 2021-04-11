@@ -19,28 +19,22 @@
  */
 #include "mainserver.h"
 #include "futurewatcher.h"
-#include "router.h"
 #include "message.h"
+#include "router.h"
 #include <QtConcurrent>
 
 using namespace LibG;
 using namespace LibServer;
 
-MainServer::MainServer(QObject *parent) :
-    QObject(parent),
-    mRouter(new Router)
-{
+MainServer::MainServer(QObject *parent) : QObject(parent), mRouter(new Router) {}
 
+MainServer::~MainServer() {
+    if (mRouter)
+        delete mRouter;
 }
 
-MainServer::~MainServer()
-{
-    if(mRouter) delete mRouter;
-}
-
-void MainServer::messageReceived(LibG::Message *msg)
-{
+void MainServer::messageReceived(LibG::Message *msg) {
     auto watcher = new FutureWatcher();
-    connect(watcher, SIGNAL(messageReceived(LibG::Message*)), SIGNAL(messageReady(LibG::Message*)));
+    connect(watcher, SIGNAL(messageReceived(LibG::Message *)), SIGNAL(messageReady(LibG::Message *)));
     watcher->setFuture(QtConcurrent::run(mRouter, &Router::handler, *msg));
 }

@@ -24,19 +24,18 @@
 
 namespace LibServer {
 
-class TransactionAction: public ServerAction
-{
-public:
+class TransactionAction : public ServerAction {
+  public:
     TransactionAction();
     LibG::Message summaryTransaction(LibG::Message *msg);
     LibG::Message summaryMoney(LibG::Message *msg);
     LibG::Message exportData(LibG::Message *msg);
     LibG::Message summaryCashier(LibG::Message *msg);
 
-protected:
+  protected:
     QMap<QString, QString> fieldMap() const override;
     void selectAndJoin() override;
 };
 
-}
+} // namespace LibServer
 #endif // TRANSACTIONACTION_H

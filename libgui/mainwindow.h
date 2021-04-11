@@ -20,9 +20,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "messagehandler.h"
 #include "abstractsultangui.h"
 #include "gui_global.h"
+#include "messagehandler.h"
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -43,11 +43,10 @@ class StatusBarWidget;
 class Splash;
 class LoginDialog;
 
-class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHandler, public LibG::AbstractSultanGUI
-{
+class GUISHARED_EXPORT MainWindow : public QMainWindow, public LibG::MessageHandler, public LibG::AbstractSultanGUI {
     Q_OBJECT
 
-public:
+  public:
     MainWindow(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~MainWindow();
     void setup();
@@ -58,14 +57,15 @@ public:
     void showMainWindow() override;
     void showRestartError(const QString &title, const QString &msg) override;
     void guiMessage(int id, const QString &str) override;
-    void setSettingSocketOpenClose(std::function<void(const QString&, int)> openCon, std::function<void()> closeCon) override;
+    void setSettingSocketOpenClose(std::function<void(const QString &, int)> openCon,
+                                   std::function<void()> closeCon) override;
 
-protected:
+  protected:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::MainWindow *ui;
     int mLastIdLogin = 0;
     StatusBarWidget *mStatusBar;
@@ -75,7 +75,7 @@ private:
 
     void setupConnection();
 
-private slots:
+  private slots:
     void loginSuccess();
     void logout();
     void showWindowFullScreen();
@@ -115,5 +115,5 @@ private slots:
     void httpRequestDone(QNetworkReply *reply);
 };
 
-}
+} // namespace LibGUI
 #endif // MAINWINDOW_H

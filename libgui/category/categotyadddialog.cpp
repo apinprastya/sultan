@@ -18,29 +18,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "categotyadddialog.h"
-#include "ui_categoryadddialog.h"
 #include "guiutil.h"
+#include "ui_categoryadddialog.h"
 #include "util.h"
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
 
 using namespace LibGUI;
 
-CategoryAddDialog::CategoryAddDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CategoryAddDialog)
-{
+CategoryAddDialog::CategoryAddDialog(QWidget *parent) : QDialog(parent), ui(new Ui::CategoryAddDialog) {
     ui->setupUi(this);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-CategoryAddDialog::~CategoryAddDialog()
-{
-    delete ui;
-}
+CategoryAddDialog::~CategoryAddDialog() { delete ui; }
 
-void CategoryAddDialog::reset()
-{
+void CategoryAddDialog::reset() {
     ui->lineCode->clear();
     ui->lineName->clear();
     ui->comboParent->setFocus(Qt::TabFocusReason);
@@ -49,10 +42,9 @@ void CategoryAddDialog::reset()
     mId = -1;
 }
 
-void CategoryAddDialog::fill(int id, int parent, const QString &name, const QString &code)
-{
-    for(int i = 0; i < ui->comboParent->count(); i++) {
-        if(parent == ui->comboParent->itemData(i).toInt()) {
+void CategoryAddDialog::fill(int id, int parent, const QString &name, const QString &code) {
+    for (int i = 0; i < ui->comboParent->count(); i++) {
+        if (parent == ui->comboParent->itemData(i).toInt()) {
             ui->comboParent->setCurrentIndex(i);
             break;
         }
@@ -65,26 +57,19 @@ void CategoryAddDialog::fill(int id, int parent, const QString &name, const QStr
     mId = id;
 }
 
-void CategoryAddDialog::enableSaveButton(bool enable)
-{
-    ui->pushSave->setEnabled(enable);
-}
+void CategoryAddDialog::enableSaveButton(bool enable) { ui->pushSave->setEnabled(enable); }
 
-QComboBox *CategoryAddDialog::getComboParent()
-{
-    return ui->comboParent;
-}
+QComboBox *CategoryAddDialog::getComboParent() { return ui->comboParent; }
 
-void CategoryAddDialog::saveClicked()
-{
-    if(GuiUtil::anyEmpty(QList<QWidget*>() << ui->lineName << ui->lineCode)) {
+void CategoryAddDialog::saveClicked() {
+    if (GuiUtil::anyEmpty(QList<QWidget *>() << ui->lineName << ui->lineCode)) {
         QMessageBox::warning(this, tr("Error"), tr("Please fill all form"));
         return;
     }
     QVariantMap data;
     data.insert("name", LibG::Util::capitalize(ui->lineName->text()));
     data.insert("code", LibG::Util::capitalize(ui->lineCode->text()));
-    if(ui->comboParent->isEnabled())
+    if (ui->comboParent->isEnabled())
         data.insert("parent_id", ui->comboParent->currentData().toInt());
     ui->pushSave->setEnabled(false);
     emit saveRequest(data, mId);

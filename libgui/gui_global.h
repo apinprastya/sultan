@@ -23,17 +23,17 @@
 #include <QtCore/qglobal.h>
 
 #ifdef GUI_LIBRARY_STATIC
-    #define GUISHARED_EXPORT
+#define GUISHARED_EXPORT
 #else
-    #if defined(GUI_LIBRARY)
-        #define GUISHARED_EXPORT Q_DECL_EXPORT
-    #else
-        #if defined(SINGLEBIN)
-            #define GUISHARED_EXPORT
-        #else
-            #define GUISHARED_EXPORT Q_DECL_IMPORT
-        #endif
-    #endif
+#if defined(GUI_LIBRARY)
+#define GUISHARED_EXPORT Q_DECL_EXPORT
+#else
+#if defined(SINGLEBIN)
+#define GUISHARED_EXPORT
+#else
+#define GUISHARED_EXPORT Q_DECL_IMPORT
+#endif
+#endif
 #endif
 
 #endif // GUI_GLOBAL_H

@@ -25,29 +25,22 @@ using namespace LibG;
 
 static int UNIQUE_ID = 0;
 
-MessageHandler::MessageHandler():
-    mMessageBus(nullptr)
-{
+MessageHandler::MessageHandler() : mMessageBus(nullptr) {}
 
-}
-
-MessageHandler::~MessageHandler()
-{
-    if(mMessageBus != nullptr)
+MessageHandler::~MessageHandler() {
+    if (mMessageBus != nullptr)
         mMessageBus->removeHandler(this);
 }
 
-void MessageHandler::setMessageBus(MessageBus *bus)
-{
+void MessageHandler::setMessageBus(MessageBus *bus) {
     mMessageBus = bus;
     bus->registerHandler(this);
 }
 
-bool MessageHandler::consumeMessage(Message *msg)
-{
-    if(mAlwaysListen.contains(msg->type())) {
+bool MessageHandler::consumeMessage(Message *msg) {
+    if (mAlwaysListen.contains(msg->type())) {
         messageReceived(msg);
-    } else if(mInterests.contains(msg->getUniqueId())) {
+    } else if (mInterests.contains(msg->getUniqueId())) {
         mInterests.removeOne(msg->getUniqueId());
         messageReceived(msg);
         return true;
@@ -55,8 +48,7 @@ bool MessageHandler::consumeMessage(Message *msg)
     return false;
 }
 
-int MessageHandler::sendMessage(Message *msg)
-{
+int MessageHandler::sendMessage(Message *msg) {
     int unique = UNIQUE_ID++;
     msg->setUniqueId(unique);
     mInterests.append(unique);
@@ -64,14 +56,10 @@ int MessageHandler::sendMessage(Message *msg)
     return msg->getUniqueId();
 }
 
-void MessageHandler::setAlwaysListen(int msg_type)
-{
-    if(!mAlwaysListen.contains(msg_type)) {
+void MessageHandler::setAlwaysListen(int msg_type) {
+    if (!mAlwaysListen.contains(msg_type)) {
         mAlwaysListen.append(msg_type);
     }
 }
 
-void MessageHandler::removeAlwaysListern(int msg_type)
-{
-    mAlwaysListen.removeOne(msg_type);
-}
+void MessageHandler::removeAlwaysListern(int msg_type) { mAlwaysListen.removeOne(msg_type); }

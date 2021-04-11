@@ -28,23 +28,22 @@ class DateSettingDialog;
 
 namespace LibGUI {
 
-class DateSettingDialog : public QDialog
-{
+class DateSettingDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     DateSettingDialog(QWidget *parent = nullptr);
     ~DateSettingDialog();
     void closeEvent(QCloseEvent *event) override;
 
-private:
+  private:
     Ui::DateSettingDialog *ui;
     bool mIsOk = false;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 
 #endif // DATESETTINGDIALOG_H

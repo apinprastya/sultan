@@ -13,20 +13,19 @@ class InitialStockAddDialog;
 
 namespace LibGUI {
 
-class InitialStockAddDialog : public QDialog, public LibG::MessageHandler
-{
+class InitialStockAddDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     InitialStockAddDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~InitialStockAddDialog();
     void reset();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
     void showEvent(QShowEvent *event) override;
 
-private:
+  private:
     Ui::InitialStockAddDialog *ui;
     bool mIsAddAgain = false;
     bool mIsReqCloud = false;
@@ -38,7 +37,7 @@ private:
     void openAddItem();
     void save();
 
-private slots:
+  private slots:
     void barcodeDone();
     void addClicked();
     void addAgainClicked();
@@ -46,9 +45,9 @@ private slots:
     void httpError(QNetworkReply::NetworkError error);
     void calculateMargin();
 
-signals:
+  signals:
     void addSuccess();
 };
 
-}
+} // namespace LibGUI
 #endif // INITIALSTOCKADDDIALOG_H

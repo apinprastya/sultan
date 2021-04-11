@@ -18,22 +18,19 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "addpricedialog.h"
-#include "ui_addpricedialog.h"
 #include "global_constant.h"
-#include "preference.h"
 #include "global_setting_const.h"
 #include "message.h"
+#include "preference.h"
+#include "ui_addpricedialog.h"
 #include "util.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-AddPriceDialog::AddPriceDialog(bool local, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AddPriceDialog),
-    mIsLocal(local)
-{
+AddPriceDialog::AddPriceDialog(bool local, QWidget *parent)
+    : QDialog(parent), ui(new Ui::AddPriceDialog), mIsLocal(local) {
     ui->setupUi(this);
     ui->doublePrice->setDecimals(Preference::getInt(SETTING::LOCALE_DECIMAL));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
@@ -41,13 +38,9 @@ AddPriceDialog::AddPriceDialog(bool local, QWidget *parent) :
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), SLOT(updateDiscount()));
 }
 
-AddPriceDialog::~AddPriceDialog()
-{
-    delete ui;
-}
+AddPriceDialog::~AddPriceDialog() { delete ui; }
 
-void AddPriceDialog::reset()
-{
+void AddPriceDialog::reset() {
     ui->doubleCount->setValue(0);
     ui->doublePrice->setValue(0);
     ui->pushSave->setEnabled(true);
@@ -56,29 +49,27 @@ void AddPriceDialog::reset()
     mId = 0;
 }
 
-void AddPriceDialog::fill(const QVariantMap &data)
-{
+void AddPriceDialog::fill(const QVariantMap &data) {
     mId = data["id"].toInt();
     ui->doubleCount->setValue(data["count"].toDouble());
     ui->doublePrice->setValue(data["price"].toDouble());
     ui->doubleCount->setFocus(Qt::TabFocusReason);
     const QString &discFormula = data["discount_formula"].toString();
     ui->lineEdit->setText(discFormula);
-    if(discFormula.isEmpty()) updateDiscount();
+    if (discFormula.isEmpty())
+        updateDiscount();
 }
 
-void AddPriceDialog::setBuyPrice(double buyprice)
-{
+void AddPriceDialog::setBuyPrice(double buyprice) {
     mBuyPrice = buyprice;
     ui->labelBuyPrice->setText(Preference::formatMoney(buyprice));
     updateDiscount();
 }
 
-void AddPriceDialog::saveClicked()
-{
+void AddPriceDialog::saveClicked() {
     const double &count = ui->doubleCount->value();
     const double &price = ui->doublePrice->value();
-    if(count == 0 && price == 0) {
+    if (count == 0 && price == 0) {
         QMessageBox::critical(this, tr("Error"), tr("Make sure value is greater than 0"));
         return;
     }
@@ -93,13 +84,14 @@ void AddPriceDialog::saveClicked()
     close();
 }
 
-void AddPriceDialog::updateDiscount()
-{
+void AddPriceDialog::updateDiscount() {
     double discount = Util::calculateDiscount(ui->lineEdit->text(), ui->doublePrice->value());
     double margin = ui->doublePrice->value() - discount - mBuyPrice;
     double perc = 100;
-    if(mBuyPrice > 0) perc = margin * 100 / mBuyPrice;
+    if (mBuyPrice > 0)
+        perc = margin * 100 / mBuyPrice;
     ui->labelDiscount->setText(Preference::formatMoney(discount));
     ui->labelFinal->setText(Preference::formatMoney(ui->doublePrice->value() - discount));
-    ui->labelMargin->setText(QString("%1 (%2%)").arg(Preference::formatMoney(margin)).arg(Preference::formatMoney(perc)));
+    ui->labelMargin->setText(
+        QString("%1 (%2%)").arg(Preference::formatMoney(margin)).arg(Preference::formatMoney(perc)));
 }

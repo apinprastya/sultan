@@ -18,25 +18,22 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "stockcardwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
+#include "db_constant.h"
+#include "dbutil.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "tableitem.h"
 #include "tablemodel.h"
 #include "tableview.h"
-#include "tableitem.h"
-#include "headerwidget.h"
-#include "global_constant.h"
-#include "db_constant.h"
-#include "guiutil.h"
-#include "dbutil.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
 
 using namespace LibGUI;
 using namespace LibG;
 
-StockCardWidget::StockCardWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this))
-{
+StockCardWidget::StockCardWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->verticalLayout->addWidget(mTableWidget);
@@ -50,19 +47,25 @@ StockCardWidget::StockCardWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->addColumn("barcode", tr("Barcode"));
     model->addColumn("name", tr("Name"));
     model->addColumn("type", tr("Type"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
-        switch(item->data(key).toInt()) {
-            case STOCK_CARD_TYPE::INITIAL_STOCK : return tr("Initial");
-            case STOCK_CARD_TYPE::PURCHASE : return tr("Purchase");
-            case STOCK_CARD_TYPE::SOLD : return tr("Sold");
-            case STOCK_CARD_TYPE::CHECKSTOCK : return tr("Checkstock");
-            case STOCK_CARD_TYPE::PURCHASE_RETURN : return tr("Purchase return");
-            case STOCK_CARD_TYPE::SOLD_RETURN : return tr("Sold return");
+        switch (item->data(key).toInt()) {
+        case STOCK_CARD_TYPE::INITIAL_STOCK:
+            return tr("Initial");
+        case STOCK_CARD_TYPE::PURCHASE:
+            return tr("Purchase");
+        case STOCK_CARD_TYPE::SOLD:
+            return tr("Sold");
+        case STOCK_CARD_TYPE::CHECKSTOCK:
+            return tr("Checkstock");
+        case STOCK_CARD_TYPE::PURCHASE_RETURN:
+            return tr("Purchase return");
+        case STOCK_CARD_TYPE::SOLD_RETURN:
+            return tr("Sold return");
         }
         return QString();
     });
     model->addColumn("number", tr("Number"));
     model->addColumn("count", tr("Count"), Qt::AlignRight);
-    //model->addColumnMoney("price", tr("Price"));
+    // model->addColumnMoney("price", tr("Price"));
     model->addColumn("stock", tr("Stock"), Qt::AlignRight);
     model->addHeaderFilter("barcode", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterEQ, QVariant()});
     model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
@@ -71,21 +74,19 @@ StockCardWidget::StockCardWidget(LibG::MessageBus *bus, QWidget *parent) :
     model->setTypeCommandOne(MSG_TYPE::STOCKCARD, MSG_COMMAND::GET);
     model->setSort("id DESC");
     mTableWidget->setupTable();
-    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 120 << 150 << 150 << 100 << 150 << 100 << 100 << 100 );
+    GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>()
+                                                              << 120 << 150 << 150 << 100 << 150 << 100 << 100 << 100);
     mTableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
     model->refresh();
 }
 
-StockCardWidget::~StockCardWidget()
-{
-    delete ui;
-}
+StockCardWidget::~StockCardWidget() { delete ui; }
 
-void StockCardWidget::showEvent(QShowEvent *e)
-{
+void StockCardWidget::showEvent(QShowEvent *e) {
     QWidget::showEvent(e);
-    auto  combo = mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("type"))->getComboBox();
-    if(combo->count() == 0) {
+    auto combo =
+        mTableWidget->getTableView()->getHeaderWidget(mTableWidget->getModel()->getIndex("type"))->getComboBox();
+    if (combo->count() == 0) {
         combo->blockSignals(true);
         combo->clear();
         combo->addItem(tr("All"), -1);
@@ -99,7 +100,4 @@ void StockCardWidget::showEvent(QShowEvent *e)
     }
 }
 
-void StockCardWidget::messageReceived(LibG::Message */*msg*/)
-{
-
-}
+void StockCardWidget::messageReceived(LibG::Message * /*msg*/) {}

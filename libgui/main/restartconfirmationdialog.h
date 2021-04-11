@@ -28,23 +28,22 @@ class RestartConfirmationDialog;
 
 namespace LibGUI {
 
-class RestartConfirmationDialog : public QDialog
-{
+class RestartConfirmationDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     RestartConfirmationDialog(QWidget *parent = nullptr);
     ~RestartConfirmationDialog();
     void setMessage(const QString &title, const QString &msg);
 
-private:
+  private:
     Ui::RestartConfirmationDialog *ui;
 
-private slots:
+  private slots:
     void restartClicked();
     void exitClicked();
     void openSetting();
 };
 
-}
+} // namespace LibGUI
 #endif // RESTARTCONFIRMATIONDIALOG_H

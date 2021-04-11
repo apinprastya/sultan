@@ -28,19 +28,18 @@ class CashierHelpDialog;
 
 namespace LibGUI {
 
-class CashierHelpDialog : public QDialog
-{
+class CashierHelpDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     CashierHelpDialog(QWidget *parent = nullptr);
     ~CashierHelpDialog();
 
-private:
+  private:
     Ui::CashierHelpDialog *ui;
 
     void addRow(const QString &key, const QString &detail);
 };
 
-}
+} // namespace LibGUI
 #endif // CASHIERHELPDIALOG_H

@@ -18,29 +18,26 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "unitwidget.h"
-#include "ui_normalwidget.h"
-#include "tablewidget.h"
-#include "tablemodel.h"
-#include "global_constant.h"
-#include "tableitem.h"
-#include "message.h"
-#include "guiutil.h"
-#include "tableview.h"
-#include "headerwidget.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
+#include "guiutil.h"
+#include "headerwidget.h"
+#include "message.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "tablewidget.h"
+#include "ui_normalwidget.h"
 #include "util.h"
 #include <QDebug>
-#include <QMessageBox>
 #include <QInputDialog>
+#include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NormalWidget),
-    mTableWidget(new TableWidget(this))
-{
+UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent)
+    : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Unit"));
@@ -49,7 +46,8 @@ UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent) :
     auto model = mTableWidget->getModel();
     model->setMessageBus(bus);
     model->addColumn("name", tr("Name"));
-    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});;
+    model->addHeaderFilter("name", HeaderFilter{HeaderWidget::LineEdit, TableModel::FilterLike, QVariant()});
+    ;
     model->setTypeCommand(MSG_TYPE::UNIT, MSG_COMMAND::QUERY);
     mTableWidget->setupTable();
     GuiUtil::setColumnWidth(mTableWidget->getTableView(), QList<int>() << 150);
@@ -58,16 +56,15 @@ UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent) :
     connect(mTableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
     connect(mTableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(editClicked(QModelIndex)));
     connect(mTableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
-    //connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
+    // connect(mAddDialog, SIGNAL(saveData(QVariantMap,int)), SLOT(saveRequested(QVariantMap,int)));
 }
 
-void UnitWidget::messageReceived(LibG::Message *msg)
-{
-    if(msg->isSuccess()) {
-        if(msg->isType(MSG_TYPE::UNIT)) {
-            if(msg->isCommand(MSG_COMMAND::INSERT)) {
+void UnitWidget::messageReceived(LibG::Message *msg) {
+    if (msg->isSuccess()) {
+        if (msg->isType(MSG_TYPE::UNIT)) {
+            if (msg->isCommand(MSG_COMMAND::INSERT)) {
                 FlashMessageManager::showMessage(tr("Unit added successfully"));
-            } else if(msg->isCommand(MSG_COMMAND::UPDATE)) {
+            } else if (msg->isCommand(MSG_COMMAND::UPDATE)) {
                 FlashMessageManager::showMessage(tr("Unit updated successfully"));
             } else {
                 FlashMessageManager::showMessage(tr("Unit deleted successfully"));
@@ -79,21 +76,20 @@ void UnitWidget::messageReceived(LibG::Message *msg)
     }
 }
 
-void UnitWidget::addClicked()
-{
+void UnitWidget::addClicked() {
     const QString &name = QInputDialog::getText(this, tr("Add new unit"), tr("Input name"));
-    if(!name.isEmpty()) {
+    if (!name.isEmpty()) {
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::INSERT);
         msg.addData("name", Util::capitalize(name));
         sendMessage(&msg);
     }
 }
 
-void UnitWidget::editClicked(const QModelIndex &index)
-{
-    auto item = static_cast<TableItem*>(index.internalPointer());
-    const QString &name = QInputDialog::getText(this, tr("Add new unit"), tr("Input name"), QLineEdit::Normal, item->data("name").toString());
-    if(!name.isEmpty()) {
+void UnitWidget::editClicked(const QModelIndex &index) {
+    auto item = static_cast<TableItem *>(index.internalPointer());
+    const QString &name = QInputDialog::getText(this, tr("Add new unit"), tr("Input name"), QLineEdit::Normal,
+                                                item->data("name").toString());
+    if (!name.isEmpty()) {
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::UPDATE);
         msg.addData("id", item->id);
         msg.addData("data", QVariantMap{{"name", Util::capitalize(name)}});
@@ -101,14 +97,14 @@ void UnitWidget::editClicked(const QModelIndex &index)
     }
 }
 
-void UnitWidget::deleteClicked(const QModelIndexList &index)
-{
-    if(index.empty()) return;
+void UnitWidget::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
     int ret = QMessageBox::question(this, tr("Confirmation"), tr("Are you sure want to remove unit?"));
-    if(ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Yes) {
         QList<QVariant> ids;
-        for(int i = 0; i < index.size(); i++) {
-            auto item = static_cast<TableItem*>(index[i].internalPointer());
+        for (int i = 0; i < index.size(); i++) {
+            auto item = static_cast<TableItem *>(index[i].internalPointer());
             ids.append(item->id);
         }
         Message msg(MSG_TYPE::UNIT, MSG_COMMAND::DEL);

@@ -25,22 +25,21 @@
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT MoneyLineEdit : public QLineEdit
-{
+class GUISHARED_EXPORT MoneyLineEdit : public QLineEdit {
     Q_OBJECT
-public:
+  public:
     MoneyLineEdit(QWidget *parent = nullptr);
     ~MoneyLineEdit();
     double value();
     void setValue(double value);
     inline void setNative(bool value) { mIsNative = value; }
 
-private:
+  private:
     bool mIsNative = false;
 
-private slots:
+  private slots:
     void textHasChanged(const QString &value);
 };
 
-}
+} // namespace LibGUI
 #endif // MONEYLINEEDIT_H

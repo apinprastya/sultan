@@ -24,17 +24,17 @@
 #include <QtCore/qglobal.h>
 
 #ifdef DB_LIBRARY_STATIC
-    #define DBSHARED_EXPORT
+#define DBSHARED_EXPORT
 #else
-    #if defined(DB_LIBRARY)
-        #define DBSHARED_EXPORT Q_DECL_EXPORT
-    #else
-        #if defined(SINGLEBIN)
-            #define DBSHARED_EXPORT
-        #else
-            #define DBSHARED_EXPORT Q_DECL_IMPORT
-        #endif
-    #endif
+#if defined(DB_LIBRARY)
+#define DBSHARED_EXPORT Q_DECL_EXPORT
+#else
+#if defined(SINGLEBIN)
+#define DBSHARED_EXPORT
+#else
+#define DBSHARED_EXPORT Q_DECL_IMPORT
+#endif
+#endif
 #endif
 
 #endif // DB_GLOBAL_H

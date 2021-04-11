@@ -25,124 +25,78 @@
 
 using namespace LibG;
 
-Message::Message()
-{
-}
+Message::Message() {}
 
-Message::Message(int type, int command, int status)
-{
+Message::Message(int type, int command, int status) {
     setType(type);
     setCommand(command);
     setStatus(status);
 }
 
-Message::Message(const QByteArray &ba)
-{
-    fromByteArray(ba);
-}
+Message::Message(const QByteArray &ba) { fromByteArray(ba); }
 
-Message::Message(Message *other)
-{
+Message::Message(Message *other) {
     this->mFlag = other->mFlag;
     this->mSocketId = other->mSocketId;
     this->mUniqueId = other->mUniqueId;
 }
 
-void Message::setType(int type)
-{
+void Message::setType(int type) {
     mFlag &= ~0xFF;
     mFlag |= (type & 0xFF);
 }
 
-void Message::setCommand(int command)
-{
+void Message::setCommand(int command) {
     mFlag &= ~0xFF00;
     mFlag |= ((command << 8) & 0xFF00);
 }
 
-void Message::setStatus(int status)
-{
+void Message::setStatus(int status) {
     mFlag &= ~0xF0000;
     mFlag |= ((status << 16) & 0xF0000);
 }
 
-void Message::setFlag(int flag)
-{
+void Message::setFlag(int flag) {
     mFlag &= ~0xFF00000;
     mFlag |= ((flag << 20) & 0xFF00000);
 }
 
-bool Message::isCommand(int command)
-{
-    return this->command() == command;
-}
+bool Message::isCommand(int command) { return this->command() == command; }
 
-bool Message::isType(int type)
-{
-    return this->type() == type;
-}
+bool Message::isType(int type) { return this->type() == type; }
 
-bool Message::isTypeCommand(int type, int command)
-{
-    return (this->type() == type && this->command() == command);
-}
+bool Message::isTypeCommand(int type, int command) { return (this->type() == type && this->command() == command); }
 
-bool Message::isSuccess()
-{
-    return this->status() == STATUS::OK;
-}
+bool Message::isSuccess() { return this->status() == STATUS::OK; }
 
-void Message::addData(const QString &key, const QVariant &data)
-{
-    mData.insert(key, data);
-}
+void Message::addData(const QString &key, const QVariant &data) { mData.insert(key, data); }
 
-void Message::removeData(const QString &key)
-{
-    mData.remove(key);
-}
+void Message::removeData(const QString &key) { mData.remove(key); }
 
-QVariant Message::takeData(const QString &key)
-{
+QVariant Message::takeData(const QString &key) {
     const QVariant data = mData[key];
     mData.remove(key);
     return data;
 }
 
-void Message::clearData()
-{
-    mData.clear();
-}
+void Message::clearData() { mData.clear(); }
 
-void Message::setData(const QVariantMap &data)
-{
-    mData = data;
-}
+void Message::setData(const QVariantMap &data) { mData = data; }
 
-QVariantMap Message::data()
-{
-    return mData;
-}
+QVariantMap Message::data() { return mData; }
 
-QVariant Message::data(const QString &key)
-{
-    return mData[key];
-}
+QVariant Message::data(const QString &key) { return mData[key]; }
 
-bool Message::hasData(const QString &key)
-{
-    return mData.contains(key);
-}
+bool Message::hasData(const QString &key) { return mData.contains(key); }
 
-void Message::setError(const QString &error, bool clearData)
-{
+void Message::setError(const QString &error, bool clearData) {
     setStatus(STATUS::ERROR);
-    if(clearData) mData.clear();
+    if (clearData)
+        mData.clear();
     mData.insert("error", error);
 }
 
-QJsonObject Message::toJsonObject()
-{
+QJsonObject Message::toJsonObject() {
     QJsonObject root;
     root.insert(QStringLiteral("_u"), QJsonValue(mUniqueId));
     root.insert(QStringLiteral("_f"), QJsonValue(mFlag));
@@ -150,92 +104,72 @@ QJsonObject Message::toJsonObject()
     return root;
 }
 
-QString Message::toJsonString()
-{
+QString Message::toJsonString() {
     const QJsonObject &root = toJsonObject();
     QJsonDocument doc(root);
     return QLatin1String(doc.toJson(QJsonDocument::Compact));
 }
 
-QByteArray Message::toByteArray()
-{
+QByteArray Message::toByteArray() {
     const QJsonObject &root = toJsonObject();
     QJsonDocument doc(root);
     return qCompress(doc.toBinaryData());
 }
 
-void Message::fromByteArray(const QByteArray &ba)
-{
+void Message::fromByteArray(const QByteArray &ba) {
     QJsonDocument doc = QJsonDocument::fromBinaryData(qUncompress(ba));
     fromJsonDoc(doc);
 }
 
-void Message::fromJsonDoc(const QJsonDocument &jsonDoc)
-{
+void Message::fromJsonDoc(const QJsonDocument &jsonDoc) {
     QJsonObject obj = jsonDoc.object();
     mFlag = obj.value(QStringLiteral("_f")).toInt();
     mData = obj.value(QStringLiteral("_d")).toObject().toVariantMap();
     mUniqueId = obj.value(QStringLiteral("_u")).toInt();
 }
 
-void Message::resetQuery()
-{
+void Message::resetQuery() {
     mData.remove(QStringLiteral("filter"));
     mData.remove(QStringLiteral("sort"));
     mData.remove(QStringLiteral("limit"));
     mData.remove(QStringLiteral("start"));
 }
 
-void Message::setSort(const QString &sort)
-{
-    mData.insert(QStringLiteral("sort"), sort);
-}
+void Message::setSort(const QString &sort) { mData.insert(QStringLiteral("sort"), sort); }
 
-void Message::setStart(const int &start)
-{
-    mData.insert(QStringLiteral("start"), start);
-}
+void Message::setStart(const int &start) { mData.insert(QStringLiteral("start"), start); }
 
-void Message::setLimit(const int &limit)
-{
-    mData.insert(QStringLiteral("limit"), limit);
-}
+void Message::setLimit(const int &limit) { mData.insert(QStringLiteral("limit"), limit); }
 
-void Message::addFilter(const QString &key, int type, const QVariant &data)
-{
+void Message::addFilter(const QString &key, int type, const QVariant &data) {
     QVariantMap m;
     m.insert(QStringLiteral("type"), type);
     m.insert(QStringLiteral("value"), data);
     QVariantMap filter;
-    if(mData.contains(QStringLiteral("filter"))) {
+    if (mData.contains(QStringLiteral("filter"))) {
         filter = mData[QStringLiteral("filter")].toMap();
     }
     filter.insert(key, m);
     mData[QStringLiteral("filter")] = filter;
 }
 
-QVariant Message::getFilter(const QString &key)
-{
+QVariant Message::getFilter(const QString &key) {
     const QVariantMap f = mData["filter"].toMap();
     return f[key].toMap()["value"];
 }
 
-void Message::keepFilter(const QStringList &list)
-{
+void Message::keepFilter(const QStringList &list) {
     const QVariantMap f = mData["filter"].toMap();
     QVariantMap newFilter;
     QMapIterator<QString, QVariant> i(f);
     while (i.hasNext()) {
         i.next();
-        for(int a = 0; a < list.size(); a++) {
-            if(!list[a].compare(i.key()))
+        for (int a = 0; a < list.size(); a++) {
+            if (!list[a].compare(i.key()))
                 newFilter.insert(i.key(), i.value());
         }
     }
     mData["filter"] = newFilter;
 }
 
-QString Message::getErrorString()
-{
-    return mData["error"].toString();
-}
+QString Message::getErrorString() { return mData["error"].toString(); }

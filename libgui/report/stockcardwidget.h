@@ -31,23 +31,22 @@ namespace LibGUI {
 
 class TableWidget;
 
-class StockCardWidget : public QWidget, public LibG::MessageHandler
-{
+class StockCardWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     StockCardWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~StockCardWidget();
     void showEvent(QShowEvent *e) override;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
-     Ui::NormalWidget *ui;
+  private:
+    Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
 };
 
-}
+} // namespace LibGUI
 
 #endif // STOCKCARDWIDGET_H

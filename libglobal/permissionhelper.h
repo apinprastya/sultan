@@ -26,9 +26,8 @@
 
 namespace LibG {
 
-class GLOBALSHARED_EXPORT PermissionHelper
-{
-public:
+class GLOBALSHARED_EXPORT PermissionHelper {
+  public:
     PermissionHelper() = default;
     PermissionHelper(const QString &data);
     void fromString(const QString &data);
@@ -37,9 +36,9 @@ public:
     void add(int val);
     void rem(int val);
 
-private:
+  private:
     QList<int> mPermissionInt;
 };
 
-}
+} // namespace LibG
 #endif // PERMISSIONHELPER_H

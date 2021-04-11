@@ -21,28 +21,27 @@
 #define GUIUTIL_H
 
 #include "gui_global.h"
+#include <QComboBox>
 #include <QVariantMap>
 #include <QWidget>
-#include <QComboBox>
 
 class QTableView;
 
 namespace LibGUI {
 
-class GuiUtil
-{
-public:
-    static bool anyEmpty(const QList<QWidget*> &lists);
+class GuiUtil {
+  public:
+    static bool anyEmpty(const QList<QWidget *> &lists);
     static void setColumnWidth(QTableView *table, const QList<int> &widths);
     static QString toHtml(QString value);
     static void selectCombo(QComboBox *combo, const QVariant &value, const QString &key = "");
     static void selectComboByText(QComboBox *combo, const QString &value);
-    static void clearAll(const QList<QWidget*> &lists);
-    static void enableWidget(bool enable, const QList<QWidget*> &lists);
+    static void clearAll(const QList<QWidget *> &lists);
+    static void enableWidget(bool enable, const QList<QWidget *> &lists);
     static bool isWidgetFocused(QWidget *widget);
     static void populateCombo(QComboBox *combo, const QVariantList &list, const QString &holder);
     static void print(const QString &data);
 };
 
-}
+} // namespace LibGUI
 #endif // GUIUTIL_H

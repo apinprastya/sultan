@@ -22,15 +22,14 @@
 
 using namespace LibServer;
 
-CustomerPointAction::CustomerPointAction():
-    ServerAction("customerrewards", "id")
-{
+CustomerPointAction::CustomerPointAction() : ServerAction("customerrewards", "id") {
     mFlag = AFTER_INSERT | USE_TRANSACTION;
 }
 
-void CustomerPointAction::afterInsert(const QVariantMap &data)
-{
+void CustomerPointAction::afterInsert(const QVariantMap &data) {
     auto cust_id = data["customer_id"].toInt();
-    mDb->exec(QString("UPDATE customers SET reward = (SELECT SUM(reward) FROM customerrewards WHERE customer_id = %1) WHERE id = %2").
-              arg(cust_id).arg(cust_id));
+    mDb->exec(QString("UPDATE customers SET reward = (SELECT SUM(reward) FROM customerrewards WHERE customer_id = %1) "
+                      "WHERE id = %2")
+                  .arg(cust_id)
+                  .arg(cust_id));
 }

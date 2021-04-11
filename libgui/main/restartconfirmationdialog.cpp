@@ -18,16 +18,14 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "restartconfirmationdialog.h"
-#include "ui_restartconfirmationdialog.h"
 #include "settingdialog.h"
+#include "ui_restartconfirmationdialog.h"
 #include <QProcess>
 
 using namespace LibGUI;
 
-RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::RestartConfirmationDialog)
-{
+RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::RestartConfirmationDialog) {
     ui->setupUi(this);
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     connect(ui->pushRestart, SIGNAL(clicked(bool)), SLOT(restartClicked()));
@@ -35,36 +33,28 @@ RestartConfirmationDialog::RestartConfirmationDialog(QWidget *parent) :
     connect(ui->pushSetting, SIGNAL(clicked(bool)), SLOT(openSetting()));
 }
 
-RestartConfirmationDialog::~RestartConfirmationDialog()
-{
-    delete ui;
-}
+RestartConfirmationDialog::~RestartConfirmationDialog() { delete ui; }
 
-void RestartConfirmationDialog::setMessage(const QString &title, const QString &msg)
-{
+void RestartConfirmationDialog::setMessage(const QString &title, const QString &msg) {
     setWindowTitle(title);
     ui->labelTitle->setText(msg);
 }
 
-void RestartConfirmationDialog::restartClicked()
-{
+void RestartConfirmationDialog::restartClicked() {
     qApp->quit();
     QStringList list;
     const QStringList &args = qApp->arguments();
-    for(int i = 0; i < args.count(); i++) {
-        if(i == 0) continue;
+    for (int i = 0; i < args.count(); i++) {
+        if (i == 0)
+            continue;
         list.append(args[i]);
     }
     QProcess::startDetached(qApp->arguments()[0], list);
 }
 
-void RestartConfirmationDialog::exitClicked()
-{
-    qApp->quit();
-}
+void RestartConfirmationDialog::exitClicked() { qApp->quit(); }
 
-void RestartConfirmationDialog::openSetting()
-{
+void RestartConfirmationDialog::openSetting() {
     close();
     SettingDialog dialog;
     dialog.showDialog();

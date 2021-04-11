@@ -20,10 +20,10 @@
 #ifndef CASHIERWIDGET_H
 #define CASHIERWIDGET_H
 
-#include "messagehandler.h"
 #include "customer/customer.h"
-#include "tabcloseablewidget.h"
 #include "doublespinboxdelegate.h"
+#include "messagehandler.h"
+#include "tabcloseablewidget.h"
 #include <QWidget>
 
 namespace Ui {
@@ -39,20 +39,19 @@ class PayCashlessDialog;
 class CashierItem;
 class AddItemUnavailableDialog;
 
-class CashierWidget : public QWidget, public LibG::MessageHandler, public TabCloseableWidget
-{
+class CashierWidget : public QWidget, public LibG::MessageHandler, public TabCloseableWidget {
     Q_OBJECT
 
-public:
+  public:
     CashierWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~CashierWidget();
     void showEvent(QShowEvent *event) override;
     bool requestClose() override;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::CashierWidget *ui;
     float mCount = 0.0f;
     CashierTableModel *mModel;
@@ -72,10 +71,10 @@ private:
     double getTax();
     void updateItem(CashierItem *item);
 
-signals:
+  signals:
     void transactionDone();
 
-private slots:
+  private slots:
     void barcodeWithCtrlPressed();
     void barcodeEntered(bool isControlPressed = false);
     void totalChanged(double value);
@@ -109,5 +108,5 @@ private slots:
     void editRequest(const QModelIndex &index, const QVariant &value);
 };
 
-}
+} // namespace LibGUI
 #endif // CASHIERWIDGET_H

@@ -31,24 +31,23 @@ namespace LibGUI {
 
 class TableWidget;
 
-class SalesWidget : public QWidget, public LibG::MessageHandler
-{
+class SalesWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     SalesWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::SalesWidget *ui;
     TableWidget *mTableWidget;
 
-private slots:
+  private slots:
     void refreshSummary();
     void exportClicked();
 };
 
-}
+} // namespace LibGUI
 
 #endif // SALESWIDGET_H

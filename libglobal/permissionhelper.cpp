@@ -18,49 +18,35 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "permissionhelper.h"
-#include <QStringList>
 #include <QStringBuilder>
+#include <QStringList>
 
 using namespace LibG;
 
-PermissionHelper::PermissionHelper(const QString &data)
-{
-    fromString(data);
-}
+PermissionHelper::PermissionHelper(const QString &data) { fromString(data); }
 
-void PermissionHelper::fromString(const QString &data)
-{
+void PermissionHelper::fromString(const QString &data) {
     const QStringList &l = data.split(",");
-    for(auto s : l) {
+    for (auto s : l) {
         const QString &val = s.trimmed();
-        if(!val.isEmpty()) {
+        if (!val.isEmpty()) {
             mPermissionInt.append(val.toInt());
         }
     }
 }
 
-QString PermissionHelper::toString()
-{
+QString PermissionHelper::toString() {
     QString retVal;
-    for(int i = 0; i < mPermissionInt.size(); i++) {
+    for (int i = 0; i < mPermissionInt.size(); i++) {
         retVal = retVal % QString::number(mPermissionInt[i]);
-        if(i != mPermissionInt.size() - 1)
+        if (i != mPermissionInt.size() - 1)
             retVal = retVal % ",";
     }
     return retVal;
 }
 
-bool PermissionHelper::has(int val)
-{
-    return mPermissionInt.contains(val);
-}
+bool PermissionHelper::has(int val) { return mPermissionInt.contains(val); }
 
-void PermissionHelper::add(int val)
-{
-    mPermissionInt.append(val);
-}
+void PermissionHelper::add(int val) { mPermissionInt.append(val); }
 
-void PermissionHelper::rem(int val)
-{
-    mPermissionInt.removeOne(val);
-}
+void PermissionHelper::rem(int val) { mPermissionInt.removeOne(val); }

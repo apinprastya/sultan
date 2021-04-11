@@ -30,7 +30,7 @@ class HttpServer;
 namespace LibG {
 class MessageBus;
 class AbstractSultanGUI;
-}
+} // namespace LibG
 
 namespace LibServer {
 class MainServer;
@@ -40,15 +40,14 @@ namespace LibGUI {
 class MainWindow;
 }
 
-class Core : public QObject
-{
+class Core : public QObject {
     Q_OBJECT
-public:
+  public:
     Core(QObject *parent = nullptr);
     ~Core();
     void setup();
 
-private:
+  private:
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
     HttpServer *mHttpServer;
@@ -57,11 +56,11 @@ private:
     LibG::AbstractSultanGUI *mMainWindow;
     SocketClient *mSettingSocketClient = nullptr;
 
-protected:
+  protected:
     bool initConfigJson();
     bool migrationCallback(const QString &str);
 
-private slots:
+  private slots:
     void init();
     void connectToServer();
     void clientConnected();

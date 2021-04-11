@@ -29,18 +29,17 @@ class StockCardDialog;
 
 namespace LibGUI {
 
-class StockCardDialog : public QDialog
-{
+class StockCardDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     StockCardDialog(const QString &barcode, LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~StockCardDialog();
     void showEvent(QShowEvent *e) override;
 
-private:
+  private:
     Ui::StockCardDialog *ui;
 };
 
-}
+} // namespace LibGUI
 #endif // STOCKCARDDIALOG_H

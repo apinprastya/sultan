@@ -20,20 +20,14 @@
 #ifndef CASHIERITEM_H
 #define CASHIERITEM_H
 
-#include <QVariantMap>
 #include <QString>
+#include <QVariantMap>
 
 namespace LibGUI {
 
-class CashierItem
-{
-public:
-    enum Flag {
-        Item        = 0x1,
-        Service     = 0x2,
-        Return      = 1 << 8,
-        Returned    = 1 << 9
-    };
+class CashierItem {
+  public:
+    enum Flag { Item = 0x1, Service = 0x2, Return = 1 << 8, Returned = 1 << 9 };
     int id = 0;
     int parent = 0;
     int flag = Item;
@@ -51,9 +45,12 @@ public:
     QString unit;
     QString note;
     CashierItem();
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
-    CashierItem(const QString &name, const QString &barcode, float count, double price, double discount,  const QString &unit, int flag);
-    void set(const QString &name, const QString &barcode, float count, double price, double total, const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double total,
+                const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
+    CashierItem(const QString &name, const QString &barcode, float count, double price, double discount,
+                const QString &unit, int flag);
+    void set(const QString &name, const QString &barcode, float count, double price, double total,
+             const QString &discformula, double discount, double final, const QString &unit, int flag = Item);
     void fill(const QVariantMap &data);
     QVariantMap toMap();
     CashierItem *clone();
@@ -64,5 +61,5 @@ public:
     inline void setNote(const QString &note) { this->note = note; }
 };
 
-}
+} // namespace LibGUI
 #endif // CASHIERITEM_H

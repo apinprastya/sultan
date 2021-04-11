@@ -22,21 +22,12 @@
 
 using namespace LibGUI;
 
-Splash::Splash(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Splash)
-{
+Splash::Splash(QWidget *parent) : QDialog(parent), ui(new Ui::Splash) {
     ui->setupUi(this);
     setWindowTitle("");
     setWindowFlags(Qt::CustomizeWindowHint | Qt::Dialog);
 }
 
-Splash::~Splash()
-{
-    delete ui;
-}
+Splash::~Splash() { delete ui; }
 
-void Splash::setMessage(const QString &msg)
-{
-    ui->labelLoading->setText(msg);
-}
+void Splash::setMessage(const QString &msg) { ui->labelLoading->setText(msg); }

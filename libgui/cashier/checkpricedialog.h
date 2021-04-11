@@ -32,21 +32,20 @@ class MessageBus;
 
 namespace LibGUI {
 
-class CheckPriceDialog : public QDialog
-{
+class CheckPriceDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode, QWidget *parent = nullptr);
     ~CheckPriceDialog();
 
-private:
+  private:
     Ui::CheckPriceDialog *ui;
 
-private slots:
+  private slots:
     void search();
     void focusAndSelectTable();
 };
 
-}
+} // namespace LibGUI
 #endif // CHECKPRICEDIALOG_H

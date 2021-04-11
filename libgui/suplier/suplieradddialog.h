@@ -28,27 +28,26 @@ class SuplierAddDialog;
 
 namespace LibGUI {
 
-class SuplierAddDialog : public QDialog
-{
+class SuplierAddDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     SuplierAddDialog(QWidget *parent = nullptr);
     ~SuplierAddDialog();
     void reset();
     void fill(const QVariantMap &data);
     void enableSave();
 
-private:
+  private:
     Ui::SuplierAddDialog *ui;
     int mId = -1;
 
-private slots:
+  private slots:
     void saveClicked();
 
-signals:
+  signals:
     void saveData(const QVariantMap &data, int id);
 };
 
-}
+} // namespace LibGUI
 #endif // SUPLIERADDDIALOG_H

@@ -21,8 +21,8 @@
 #define USERWIDGET_H
 
 #include "messagehandler.h"
-#include <QWidget>
 #include <QModelIndexList>
+#include <QWidget>
 
 namespace Ui {
 class NormalWidget;
@@ -33,23 +33,22 @@ namespace LibGUI {
 class TableWidget;
 class UserAddDialog;
 
-class UserWidget : public QWidget, public LibG::MessageHandler
-{
+class UserWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     UserWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~UserWidget();
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg);
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     UserAddDialog *mAddDialog;
 
-private slots:
+  private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
     void deleteClicked(const QModelIndexList &index);
@@ -58,5 +57,5 @@ private slots:
     void resetPasswordClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // USERWIDGET_H

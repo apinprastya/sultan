@@ -24,13 +24,12 @@
 
 namespace LibServer {
 
-class PurchaseReturnAction: public ServerAction
-{
-public:
+class PurchaseReturnAction : public ServerAction {
+  public:
     PurchaseReturnAction();
     LibG::Message summary(LibG::Message *msg);
 
-protected:
+  protected:
     void selectAndJoin() override;
     QMap<QString, QString> fieldMap() const override;
     void afterInsert(const QVariantMap &data) override;
@@ -38,5 +37,5 @@ protected:
     void afterDelete(const QVariantMap &oldData) override;
 };
 
-}
+} // namespace LibServer
 #endif // PURCHASERETURNACTION_H

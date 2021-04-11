@@ -7,17 +7,15 @@ using namespace LibServer;
 using namespace LibG;
 using namespace LibDB;
 
-ConfigAction::ConfigAction():
-    ServerAction("configs", "id")
-{
-    mFunctionMap.insert(MSG_COMMAND::CONFIG_INSERT_UPDATE, std::bind(&ConfigAction::insertOrUpdate, this, std::placeholders::_1));
+ConfigAction::ConfigAction() : ServerAction("configs", "id") {
+    mFunctionMap.insert(MSG_COMMAND::CONFIG_INSERT_UPDATE,
+                        std::bind(&ConfigAction::insertOrUpdate, this, std::placeholders::_1));
 }
 
-LibG::Message ConfigAction::insertOrUpdate(LibG::Message *msg)
-{
+LibG::Message ConfigAction::insertOrUpdate(LibG::Message *msg) {
     Message message(msg);
     const QVariantList &data = msg->data("data").toList();
-    for(int i = 0; i < data.size(); i++) {
+    for (int i = 0; i < data.size(); i++) {
         const QVariantMap &d = data[i].toMap();
         ConfigUtil::setConfig(mDb, d["id"].toInt(), d["value"]);
     }

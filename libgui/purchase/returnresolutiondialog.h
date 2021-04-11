@@ -29,25 +29,24 @@ class ReturnResolutionDialog;
 
 namespace LibGUI {
 
-class ReturnResolutionDialog : public QDialog, public LibG::MessageHandler
-{
+class ReturnResolutionDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     ReturnResolutionDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~ReturnResolutionDialog();
     void fill(const QVariantMap &data);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::ReturnResolutionDialog *ui;
     int mId;
 
-private slots:
+  private slots:
     void saveClicked();
 };
 
-}
+} // namespace LibGUI
 #endif // RETURNRESOLUTIONDIALOG_H

@@ -21,8 +21,8 @@
 #define SOLDITEMRETURNWIDGET_H
 
 #include "messagehandler.h"
-#include <QWidget>
 #include <QModelIndexList>
+#include <QWidget>
 
 namespace Ui {
 class NormalWidget;
@@ -33,27 +33,26 @@ namespace LibGUI {
 class TableWidget;
 class TileWidget;
 
-class SoldItemReturnWidget : public QWidget, public LibG::MessageHandler
-{
+class SoldItemReturnWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     SoldItemReturnWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     TileWidget *mTotalDebt;
 
-private slots:
+  private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
     void deleteClicked(const QModelIndexList &index);
     void getSummary();
 };
 
-}
+} // namespace LibGUI
 
 #endif // SOLDITEMRETURNWIDGET_H

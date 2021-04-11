@@ -10,31 +10,30 @@ class PaginationWidget;
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT PaginationWidget : public QWidget
-{
+class GUISHARED_EXPORT PaginationWidget : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     PaginationWidget(QWidget *parent = nullptr);
     ~PaginationWidget();
     void setCurrentPerPage(int index, bool blockSignal);
 
-private:
+  private:
     Ui::PaginationWidget *ui;
     int mMaxPage;
 
-signals:
+  signals:
     void pageChanged(int page);
     void perPageChanged(int value);
 
-private slots:
+  private slots:
     void spinChanged(int value);
     void comboIndexChanged();
 
-public slots:
+  public slots:
     void setMaxPage(int value);
     void setCurrentPage(int value);
 };
 
-}
+} // namespace LibGUI
 #endif // PAGINATIONWIDGET_H

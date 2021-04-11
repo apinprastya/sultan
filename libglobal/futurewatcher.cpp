@@ -21,20 +21,13 @@
 
 using namespace LibG;
 
-FutureWatcher::FutureWatcher(QObject *parent) :
-    QObject(parent),
-    mWatcher(new QFutureWatcher<Message>(this))
-{
+FutureWatcher::FutureWatcher(QObject *parent) : QObject(parent), mWatcher(new QFutureWatcher<Message>(this)) {
     connect(mWatcher, SIGNAL(finished()), SLOT(finished()));
 }
 
-void FutureWatcher::setFuture(const QFuture<LibG::Message> &future)
-{
-    mWatcher->setFuture(future);
-}
+void FutureWatcher::setFuture(const QFuture<LibG::Message> &future) { mWatcher->setFuture(future); }
 
-void FutureWatcher::finished()
-{
+void FutureWatcher::finished() {
     Message msg = mWatcher->result();
     emit messageReceived(&msg);
     this->deleteLater();

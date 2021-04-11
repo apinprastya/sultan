@@ -18,23 +18,21 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "checkpricedialog.h"
-#include "ui_checkpricedialog.h"
-#include "messagebus.h"
-#include "tablemodel.h"
-#include "tableview.h"
+#include "db_constant.h"
 #include "global_constant.h"
 #include "guiutil.h"
+#include "messagebus.h"
 #include "tableitem.h"
-#include "db_constant.h"
+#include "tablemodel.h"
+#include "tableview.h"
+#include "ui_checkpricedialog.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-CheckPriceDialog::CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CheckPriceDialog)
-{
+CheckPriceDialog::CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode, QWidget *parent)
+    : QDialog(parent), ui(new Ui::CheckPriceDialog) {
     ui->setupUi(this);
     auto model = ui->tableWidget->getModel();
     model->setMessageBus(bus);
@@ -51,34 +49,29 @@ CheckPriceDialog::CheckPriceDialog(LibG::MessageBus *bus, const QString &barcode
     ui->tableWidget->getTableView()->setUseStandardHeader(true);
     connect(model, SIGNAL(firstDataLoaded()), SLOT(focusAndSelectTable()));
     connect(ui->lineBarcode, SIGNAL(returnPressed()), SLOT(search()));
-    if(!barcode.isEmpty()) {
+    if (!barcode.isEmpty()) {
         ui->lineBarcode->setText(barcode);
         ui->lineBarcode->selectAll();
         search();
     }
 }
 
-CheckPriceDialog::~CheckPriceDialog()
-{
-    delete ui;
-}
+CheckPriceDialog::~CheckPriceDialog() { delete ui; }
 
-void CheckPriceDialog::search()
-{
+void CheckPriceDialog::search() {
     auto model = ui->tableWidget->getModel();
     model->setFilter("barcode", COMPARE::EQUAL, ui->lineBarcode->text());
     model->refresh();
 }
 
-void CheckPriceDialog::focusAndSelectTable()
-{
-    if(ui->tableWidget->getModel()->rowCount(QModelIndex()) == 0) {
+void CheckPriceDialog::focusAndSelectTable() {
+    if (ui->tableWidget->getModel()->rowCount(QModelIndex()) == 0) {
         ui->labelName->setText(tr("Item not found"));
         QMessageBox::critical(this, tr("Error"), tr("Item not found"));
         return;
     }
     const QModelIndex &index = ui->tableWidget->getModel()->index(0, 0);
-    auto item = static_cast<TableItem*>(index.internalPointer());
+    auto item = static_cast<TableItem *>(index.internalPointer());
     ui->labelName->setText(item->data("name").toString());
     ui->tableWidget->getTableView()->selectRow(0);
     ui->tableWidget->setFocus(Qt::TabFocusReason);

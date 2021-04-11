@@ -35,11 +35,10 @@ namespace LibGUI {
 
 class TableWidget;
 
-class SearchItemDialog : public QDialog
-{
+class SearchItemDialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     SearchItemDialog(LibG::MessageBus *bus, bool advance, QWidget *parent = nullptr);
     ~SearchItemDialog();
     inline QString getSelectedBarcode() { return mSelectedBarcode; }
@@ -47,7 +46,7 @@ public:
     inline QVariantMap getSelectedData() { return mSelectedData; }
     inline bool isOk() { return mIsOk; }
 
-private:
+  private:
     Ui::SearchItemDialog *ui;
     TableWidget *mTableWidget;
     QString mSelectedBarcode;
@@ -55,12 +54,12 @@ private:
     bool mIsOk = false;
     bool mIsAdvance = false;
 
-private slots:
+  private slots:
     void nameDone();
     void dataLoaded();
     void returnPressed();
     void doubleClicked(const QModelIndex &index);
 };
 
-}
+} // namespace LibGUI
 #endif // SEARCHITEMDIALOG_H

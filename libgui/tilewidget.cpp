@@ -22,30 +22,15 @@
 
 using namespace LibGUI;
 
-TileWidget::TileWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TileWidget)
-{
-    ui->setupUi(this);
-}
+TileWidget::TileWidget(QWidget *parent) : QWidget(parent), ui(new Ui::TileWidget) { ui->setupUi(this); }
 
-TileWidget::~TileWidget()
-{
-    delete ui;
-}
+TileWidget::~TileWidget() { delete ui; }
 
-void TileWidget::setTitle(const QString &title)
-{
-    ui->labelTitle->setText(title);
-}
+void TileWidget::setTitle(const QString &title) { ui->labelTitle->setText(title); }
 
-void TileWidget::setValue(const QString &value)
-{
-    ui->labelValue->setText(value);
-}
+void TileWidget::setValue(const QString &value) { ui->labelValue->setText(value); }
 
-void TileWidget::setTitleValue(const QString &title, const QString &value)
-{
+void TileWidget::setTitleValue(const QString &title, const QString &value) {
     ui->labelTitle->setText(title);
     ui->labelValue->setText(value);
 }

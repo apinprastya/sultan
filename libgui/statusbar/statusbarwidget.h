@@ -28,21 +28,20 @@ class StatusBarWidget;
 
 namespace LibGUI {
 
-class StatusBarWidget : public QWidget
-{
+class StatusBarWidget : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     StatusBarWidget(QWidget *parent = nullptr);
     ~StatusBarWidget();
     void updateUser();
 
-private:
+  private:
     Ui::StatusBarWidget *ui;
 
-private slots:
+  private slots:
     void updateClock();
 };
 
-}
+} // namespace LibGUI
 #endif // STATUSBARWIDGET_H

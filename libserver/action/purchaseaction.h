@@ -24,13 +24,12 @@
 
 namespace LibServer {
 
-class PurchaseAction: public ServerAction
-{
-public:
+class PurchaseAction : public ServerAction {
+  public:
     PurchaseAction();
     LibG::Message summary(LibG::Message *msg);
 
-protected:
+  protected:
     bool beforeInsert(const QVariantMap &data, LibG::Message *retMsg) override;
     void afterInsert(const QVariantMap &data) override;
     void afterUpdate(const QVariantMap &oldData, const QVariantMap &data) override;
@@ -41,5 +40,5 @@ protected:
     void updateTransaction(const QVariantMap &data);
 };
 
-}
+} // namespace LibServer
 #endif // PURCHASEACTION_H

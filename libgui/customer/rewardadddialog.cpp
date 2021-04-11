@@ -18,31 +18,25 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "rewardadddialog.h"
-#include "ui_rewardadddialog.h"
-#include "message.h"
-#include "global_constant.h"
 #include "flashmessagemanager.h"
+#include "global_constant.h"
+#include "message.h"
+#include "ui_rewardadddialog.h"
 #include <QMessageBox>
 
 using namespace LibGUI;
 using namespace LibG;
 
-RewardAddDialog::RewardAddDialog(LibG::MessageBus *bus, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::RewardAddDialog)
-{
+RewardAddDialog::RewardAddDialog(LibG::MessageBus *bus, QWidget *parent)
+    : QDialog(parent), ui(new Ui::RewardAddDialog) {
     setMessageBus(bus);
     ui->setupUi(this);
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
 }
 
-RewardAddDialog::~RewardAddDialog()
-{
-    delete ui;
-}
+RewardAddDialog::~RewardAddDialog() { delete ui; }
 
-void RewardAddDialog::reset()
-{
+void RewardAddDialog::reset() {
     ui->spinCount->setValue(0);
     ui->lineDetail->clear();
     ui->spinCount->setFocus(Qt::TabFocusReason);
@@ -50,17 +44,15 @@ void RewardAddDialog::reset()
     mId = -1;
 }
 
-void RewardAddDialog::fill(const QVariantMap &data)
-{
+void RewardAddDialog::fill(const QVariantMap &data) {
     ui->spinCount->setValue(data["count"].toInt());
     ui->lineDetail->setText(data["detail"].toString());
     mId = data["id"].toInt();
 }
 
-void RewardAddDialog::messageReceived(LibG::Message *msg)
-{
-    if(msg->isSuccess()) {
-        if(mId < 0)
+void RewardAddDialog::messageReceived(LibG::Message *msg) {
+    if (msg->isSuccess()) {
+        if (mId < 0)
             FlashMessageManager::showMessage(tr("Reward added successfully"));
         else
             FlashMessageManager::showMessage(tr("Reward updated successfully"));
@@ -70,17 +62,16 @@ void RewardAddDialog::messageReceived(LibG::Message *msg)
     }
 }
 
-void RewardAddDialog::saveClicked()
-{
+void RewardAddDialog::saveClicked() {
     int count = ui->spinCount->value();
     const QString &detail = ui->lineDetail->text();
-    if(count < 0 || detail.isEmpty()) {
+    if (count < 0 || detail.isEmpty()) {
         QMessageBox::critical(this, tr("Error"), tr("count must bigger than 0 and detail can not be empty"));
         return;
     }
     Message msg(MSG_TYPE::REWARD, MSG_COMMAND::INSERT);
     QVariantMap data{{"count", count}, {"detail", detail}};
-    if(mId > 0) {
+    if (mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);
         msg.addData("data", data);

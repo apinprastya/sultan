@@ -21,8 +21,8 @@
 #define CUSTOMERWIDGET_H
 
 #include "messagehandler.h"
-#include <QWidget>
 #include <QModelIndexList>
+#include <QWidget>
 
 namespace Ui {
 class NormalWidget;
@@ -34,22 +34,21 @@ class TableWidget;
 class CustomerAddDialog;
 class TileWidget;
 
-class CustomerWidget : public QWidget, public LibG::MessageHandler
-{
+class CustomerWidget : public QWidget, public LibG::MessageHandler {
     Q_OBJECT
-public:
+  public:
     CustomerWidget(LibG::MessageBus *bus, QWidget *parent = nullptr);
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private:
+  private:
     Ui::NormalWidget *ui;
     TableWidget *mTableWidget;
     CustomerAddDialog *mAddDialog;
     TileWidget *mTileCredit;
 
-private slots:
+  private slots:
     void addClicked();
     void updateClicked(const QModelIndex &index);
     void deleteClicked(const QModelIndexList &index);
@@ -59,10 +58,10 @@ private slots:
     void rewardClicked();
     void refreshSummary();
 
-signals:
+  signals:
     void requestOpenCustomerCredit(int id, const QString &number);
     void requestOpenCustomerReward(int id, const QString &number);
 };
 
-}
+} // namespace LibGUI
 #endif // CUSTOMERWIDGET_H

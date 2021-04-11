@@ -29,27 +29,26 @@ class PurchasePaymentDialog;
 
 namespace LibGUI {
 
-class PurchasePaymentDialog : public QDialog, public LibG::MessageHandler
-{
+class PurchasePaymentDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
-public:
+  public:
     PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
     ~PurchasePaymentDialog();
     void fill(const QVariantMap &data);
 
-private:
+  private:
     Ui::PurchasePaymentDialog *ui;
     int mId = 0;
     int mBankId = 0;
 
-protected:
+  protected:
     void messageReceived(LibG::Message *msg) override;
 
-private slots:
+  private slots:
     void saveClicked();
     void paidChanged();
 };
 
-}
+} // namespace LibGUI
 #endif // PURCHASEPAYMENTDIALOG_H

@@ -27,10 +27,9 @@ class QKeyEvent;
 
 namespace LibGUI {
 
-class GUISHARED_EXPORT KeyEvent : public QObject
-{
+class GUISHARED_EXPORT KeyEvent : public QObject {
     Q_OBJECT
-public:
+  public:
     KeyEvent(QObject *parent = 0);
     void discardKey(Qt::Key key);
     void addConsumeKey(Qt::Key key);
@@ -38,21 +37,21 @@ public:
     inline void setClickEvent(bool value) { mClickEvent = value; }
     inline void setModifier(Qt::KeyboardModifiers modifier) { mModifiers = modifier; }
 
-protected:
+  protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
-private:
+  private:
     bool mFocusEvent = false;
     bool mClickEvent = false;
     Qt::KeyboardModifiers mModifiers;
     QList<Qt::Key> mDiscardKey;
     QList<Qt::Key> mConsumeKey;
 
-signals:
+  signals:
     void keyPressed(QObject *sender, QKeyEvent *keyEvent);
     void focused(QObject *sender);
     void clicked(QObject *sender);
 };
 
-}
+} // namespace LibGUI
 #endif // KEYEVENT_H
