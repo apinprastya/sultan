@@ -93,6 +93,13 @@ const QString PRINTER_CASHIER_PRICE_LINEFEED = QStringLiteral("printer/cashier_p
 
 const QString NUMBER_DATE = QStringLiteral("number/date");
 const QString NUMBER_VALUE = QStringLiteral("number/value");
+
+const QString CUSDISPLAY_DEVICE_PRODUCT_ID = QStringLiteral("customerdisplay/product_id");
+const QString CUSDISPLAY_DEVICE_VENDOR_ID = QStringLiteral("customerdisplay/vendor_id");
+const QString CUSDISPLAY_DEVICE_DESCRIPTION = QStringLiteral("customerdisplay/description");
+const QString CUSDISPLAY_WELCOME1 = QStringLiteral("customerdisplay/welcome1");
+const QString CUSDISPLAY_WELCOME2 = QStringLiteral("customerdisplay/welcome2");
+
 } // namespace SETTING
 
 } // namespace LibG

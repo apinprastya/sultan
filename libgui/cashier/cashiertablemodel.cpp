@@ -147,6 +147,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
                 endInsertRows();
                 emit selectRow(createIndex(row.last() + items.size() - row.size(), 0,
                                            mData[row.last() + items.size() - row.size()]));
+                emit itemInserted(items.last());
             } else if (row.count() > items.count()) {
                 // remove some price
                 for (int i = 0; i < items.count(); i++) {
@@ -160,6 +161,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
                     endRemoveRows();
                 }
                 emit selectRow(createIndex(row[items.size() - 1], 0, mData[items.size() - 1]));
+                emit itemInserted(items.last());
             } else {
                 for (int i = 0; i < items.count(); i++) {
                     mData[row[i]]->fill(items[i]);
@@ -167,6 +169,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
                 qDeleteAll(items);
                 emit dataChanged(createIndex(row.first(), 0), createIndex(row.last(), mHeaders.size() - 1));
                 emit selectRow(createIndex(row.last(), 0, mData[row.last()]));
+                emit itemInserted(items.last());
             }
         } else {
             beginInsertRows(QModelIndex(), mData.size(), mData.size() + items.size() - 1);
@@ -175,6 +178,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
             }
             endInsertRows();
             emit selectRow(createIndex(mData.size() - 1, 0, mData[mData.size() - 1]));
+            emit itemInserted(items.last());
         }
     }
     calculateTotal();

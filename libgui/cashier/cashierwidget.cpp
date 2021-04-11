@@ -20,6 +20,7 @@
 #include "cashierwidget.h"
 #include "additemunavailabledialog.h"
 #include "advancepaymentdialog.h"
+#include "cashiercustomerdisplay.h"
 #include "cashierhelpdialog.h"
 #include "cashieritem.h"
 #include "cashierreportdialog.h"
@@ -143,6 +144,7 @@ void CashierWidget::showEvent(QShowEvent *event) {
         ui->widgetTax->hide();
     else
         ui->widgetTax->show();
+    CashierCustomerDisplay::instance()->setCashierModel(mModel);
     QWidget::showEvent(event);
 }
 
@@ -201,6 +203,7 @@ void CashierWidget::messageReceived(LibG::Message *msg) {
         dialog.exec();
         mModel->reset();
         resetCustomer(true);
+        CashierCustomerDisplay::instance()->showNone();
         emit transactionDone();
     } else if (msg->isTypeCommand(MSG_TYPE::CUSTOMER, MSG_COMMAND::QUERY)) {
         const QList<QVariant> &list = msg->data("data").toList();
@@ -387,6 +390,7 @@ void CashierWidget::payCash() {
         return;
     mPayCashDialog->fill(mModel->getTotal() + getTax());
     mPayCashDialog->show();
+    CashierCustomerDisplay::instance()->showTotal();
 }
 
 void CashierWidget::payCashless() {

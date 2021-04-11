@@ -1,4 +1,4 @@
-QT       += core gui widgets sql websockets printsupport concurrent
+QT       += core gui widgets sql websockets printsupport concurrent serialport
 
 CONFIG(USE_EMBED_BROWSER) {
     DEFINES+=USE_EMBED_BROWSER

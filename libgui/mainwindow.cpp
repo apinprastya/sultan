@@ -22,7 +22,9 @@
 #include "about/autoupdatedialog.h"
 #include "admin/importexportdatabasedialog.h"
 #include "bank/bankwidget.h"
+#include "cashier/cashiercustomerdisplay.h"
 #include "cashier/cashierwidget.h"
+#include "cashier/customercreditpaymentdialog.h"
 #include "category/categorywidget.h"
 #include "checkstock/checkstockwidget.h"
 #include "customer/customercreditwidget.h"
@@ -92,6 +94,7 @@ MainWindow::MainWindow(LibG::MessageBus *bus, QWidget *parent)
     FlashMessageManager::setParent(this);
 #endif
     setAlwaysListen(MSG_TYPE::BROADCAST);
+    CashierCustomerDisplay::createInstance(this);
 }
 
 MainWindow::~MainWindow() {

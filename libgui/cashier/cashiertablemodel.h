@@ -84,6 +84,7 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
     void selectRow(const QModelIndex &index);
     void poinChanged(int poin);
     void requestEdit(const QModelIndex &index, const QVariant &value);
+    void itemInserted(CashierItem *item);
 };
 
 } // namespace LibGUI

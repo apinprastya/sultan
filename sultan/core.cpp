@@ -19,6 +19,7 @@
  */
 
 #include "core.h"
+#include "customerdisplaymanager.h"
 #include "db.h"
 #include "global_constant.h"
 #include "global_setting_const.h"
@@ -156,6 +157,7 @@ void Core::init() {
         return;
 #endif
     qDebug() << TAG << "Initialize application";
+    LibPrint::CustomerDisplayManager::createInstance(this);
     if (!LibG::Preference::getBool(SETTING::SETTING_OK, false)) {
         // the setting is not OK, so open the setting
         mMainWindow->hideSplashScreen();

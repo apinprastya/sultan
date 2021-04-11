@@ -1187,14 +1187,14 @@
                <item row="1" column="1">
                 <widget class="QLineEdit" name="lineWelcome1">
                  <property name="placeholderText">
-                  <string>Selamat Datang</string>
+                  <string>Welcome</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="1">
                 <widget class="QLineEdit" name="lineWelcome2">
                  <property name="placeholderText">
-                  <string>Sultan POS</string>
+                  <string>to Sultan POS</string>
                  </property>
                 </widget>
                </item>
@@ -1224,7 +1224,7 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="pushTestCustomerDisplay">
                    <property name="text">
                     <string>Test</string>
                    </property>

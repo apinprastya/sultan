@@ -8,7 +8,7 @@ TARGET = gui
 target.path = $${LIBDIR}
 INSTALLS += target
 
-QT += core gui widgets network sql concurrent
+QT += core gui widgets network sql concurrent serialport
 
 CONFIG(USE_EMBED_BROWSER) {
     DEFINES+=USE_EMBED_BROWSER
@@ -64,6 +64,7 @@ macx {
 TRANSLATIONS = ../translation/libgui_id.ts
 
 SOURCES += \
+    cashier/cashiercustomerdisplay.cpp \
     item/importitemdialog.cpp \
     mainwindow.cpp \
     paginationwidget.cpp \
@@ -168,6 +169,7 @@ SOURCES += \
     doublespinboxdelegate.cpp
 
 HEADERS += \
+    cashier/cashiercustomerdisplay.h \
     gui_global.h \
     item/importitemdialog.h \
     mainwindow.h \

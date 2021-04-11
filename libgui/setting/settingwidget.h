@@ -64,6 +64,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler {
     void printTestClicked();
     void localeLanguageChanged();
     void checkWidget();
+    void onCustomerDisplayClicked();
 
   protected:
     void messageReceived(LibG::Message *msg) override;

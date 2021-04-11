@@ -18,6 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "paymentcashsuccessdialog.h"
+#include "cashiercustomerdisplay.h"
 #include "global_constant.h"
 #include "preference.h"
 #include "ui_paymentcashsuccessdialog.h"
@@ -39,6 +40,7 @@ PaymentCashSuccessDialog::PaymentCashSuccessDialog(const QVariantMap &data, QWid
         if (total > payment) {
             ui->labelChange_2->setText(tr("Credit"));
         }
+        CashierCustomerDisplay::instance()->showTotalAndChange(total, qAbs(total - payment));
     } else {
         ui->labelTotal_2->setText(tr("Sub Total"));
         ui->labelTotal->setText(Preference::formatMoney(data["subtotal"].toDouble()));

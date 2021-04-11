@@ -18,6 +18,8 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "settingwidget.h"
+#include "customerdisplay.h"
+#include "customerdisplaymanager.h"
 #include "escp.h"
 #include "global_constant.h"
 #include "global_setting_const.h"
@@ -29,6 +31,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QMetaEnum>
+#include <QSerialPortInfo>
 
 #define TAB_APPLICATION 0
 #define TAB_LOCALE 1
@@ -47,10 +50,12 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent)
     setupLocale();
     setupPrinter();
     setupCashier();
+    setupCustomerDisplay();
     ui->pushPrintTest->hide();
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged()));
     connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
     connect(ui->comboLocale, SIGNAL(currentIndexChanged(int)), SLOT(localeLanguageChanged()));
+    connect(ui->pushTestCustomerDisplay, SIGNAL(clicked(bool)), SLOT(onCustomerDisplayClicked()));
     ui->tabWidget->setCurrentIndex(0);
     Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
     sendMessage(&msg);
@@ -202,6 +207,28 @@ void SettingWidget::saveToDbConfig() {
     sendMessage(&msg);
 }
 
+void SettingWidget::setupCustomerDisplay() {
+    auto allPort = QSerialPortInfo::availablePorts();
+    ui->comboCustomerDisplay->clear();
+    auto desc = Preference::getString(SETTING::CUSDISPLAY_DEVICE_DESCRIPTION);
+    int prodId = Preference::getInt(SETTING::CUSDISPLAY_DEVICE_PRODUCT_ID);
+    int vendorId = Preference::getInt(SETTING::CUSDISPLAY_DEVICE_VENDOR_ID);
+    int selected = -1;
+    int curIndex = 0;
+    foreach (const auto &info, allPort) {
+        ui->comboCustomerDisplay->addItem(info.description(), QVariantMap{{"product", info.productIdentifier()},
+                                                                          {"vendor", info.vendorIdentifier()}});
+        if (prodId == info.productIdentifier() && vendorId == info.vendorIdentifier()) {
+            selected = curIndex;
+        }
+        curIndex++;
+    }
+    if (selected >= 0)
+        ui->comboCustomerDisplay->setCurrentIndex(selected);
+    ui->lineWelcome1->setText(Preference::getString(SETTING::CUSDISPLAY_WELCOME1, tr("Welcome")));
+    ui->lineWelcome2->setText(Preference::getString(SETTING::CUSDISPLAY_WELCOME2, tr("to Sultan POS")));
+}
+
 void SettingWidget::signChanged() { ui->lineSign->setEnabled(ui->checkSign->isChecked()); }
 
 void SettingWidget::cashierPrintTypeChanged() {
@@ -265,6 +292,14 @@ void SettingWidget::saveClicked() {
     Preference::setValue(SETTING::CAI_DEFAULT_CATEGORY, ui->comboCAICategory->currentData());
     Preference::setValue(SETTING::CAI_DEFAULT_UNIT, ui->comboCAIUnit->currentData());
     Preference::setValue(SETTING::CAI_DEFAULT_MARGIN, ui->doubleCAIBuyPrice->value());
+
+    Preference::setValue(SETTING::CUSDISPLAY_WELCOME1, ui->lineWelcome1->text());
+    Preference::setValue(SETTING::CUSDISPLAY_WELCOME2, ui->lineWelcome2->text());
+    Preference::setValue(SETTING::CUSDISPLAY_DEVICE_DESCRIPTION, ui->comboCustomerDisplay->currentText());
+    const auto &dataCustomerDisplay = ui->comboCustomerDisplay->currentData().toMap();
+    Preference::setValue(SETTING::CUSDISPLAY_DEVICE_PRODUCT_ID, dataCustomerDisplay["product"].toInt());
+    Preference::setValue(SETTING::CUSDISPLAY_DEVICE_VENDOR_ID, dataCustomerDisplay["vendor"].toInt());
+
     Preference::sync();
     Preference::applyApplicationSetting();
 }
@@ -369,5 +404,18 @@ void SettingWidget::messageReceived(Message *msg) {
     } else if (msg->isTypeCommand(MSG_TYPE::CONFIG, MSG_COMMAND::CONFIG_INSERT_UPDATE)) {
         Message msg2(MSG_TYPE::BROADCAST, MSG_BROADCAST::SETTING_CHANGES);
         sendMessage(&msg2);
+    }
+}
+
+void SettingWidget::onCustomerDisplayClicked() {
+    CustomerDisplay disp;
+    disp.clear().writeString(ui->lineWelcome1->text());
+    disp.bottom().left().writeString(ui->lineWelcome2->text());
+    auto cdm = CustomerDisplayManager::instance();
+    const auto &dataCustomerDisplay = ui->comboCustomerDisplay->currentData().toMap();
+    if (cdm->openPort(dataCustomerDisplay["vendor"].toInt(), dataCustomerDisplay["product"].toInt())) {
+        cdm->write(disp.data());
+    } else {
+        QMessageBox::critical(this, tr("Error"), tr("Unable to open customer display manager"));
     }
 }
