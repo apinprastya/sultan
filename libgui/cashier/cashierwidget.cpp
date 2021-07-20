@@ -319,8 +319,10 @@ void CashierWidget::barcodeWithCtrlPressed() { barcodeEntered(true); }
 
 void CashierWidget::barcodeEntered(bool isControlPressed) {
     QString barcode = ui->lineBarcode->text();
-    if (barcode.isEmpty())
+    if (barcode.isEmpty()) {
+        payCash();
         return;
+    }
     if (barcode.contains("*")) {
         const QStringList ls = barcode.split("*");
         if (ls.size() > 1) {
