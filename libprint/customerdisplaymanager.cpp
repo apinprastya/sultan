@@ -29,7 +29,7 @@ using namespace LibG;
 static CustomerDisplayManager *sInstance = nullptr;
 
 CustomerDisplayManager::CustomerDisplayManager(QObject *parent) : QObject(parent) {
-    connect(&mPort, SIGNAL(bytesWritten(qint64)), SLOT(bytesWrittern()));
+    connect(&mPort, SIGNAL(bytesWritten(qint64)), SLOT(bytesWritten()));
 }
 
 void CustomerDisplayManager::bytesWritten() {}
