@@ -74,4 +74,6 @@ bool CustomerDisplayManager::write(const QByteArray &data) {
     return mPort.write(data) > 0;
 }
 
-void CustomerDisplayManager::wait() { mPort.waitForBytesWritten(); }
+void CustomerDisplayManager::wait() {
+    mPort.waitForBytesWritten(10);
+}

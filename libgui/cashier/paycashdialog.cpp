@@ -48,22 +48,25 @@ void PayCashDialog::fill(double total) {
     ui->lineEdit->selectAll();
 }
 
-void PayCashDialog::saveTransaction() {
+bool PayCashDialog::saveTransaction() {
     double payment = ui->lineEdit->value();
     if (Util::roundDouble(payment) < Util::roundDouble(mTotal)) {
         QMessageBox::critical(this, tr("Error Payment"), tr("Payment must bigger or equal to total"));
-        return;
+        return false;
     }
     ui->pushPay->setEnabled(false);
     ui->pushSave->setEnabled(false);
+    return true;
 }
 
 void PayCashDialog::payClicked() {
-    saveTransaction();
-    emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 0);
+    if(saveTransaction()) {
+        emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 0);
+    }
 }
 
 void PayCashDialog::saveClicked() {
-    saveTransaction();
-    emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 1);
+    if(saveTransaction()) {
+        emit requestPay(PAYMENT::CASH, ui->lineEdit->value(), 1);
+    }
 }

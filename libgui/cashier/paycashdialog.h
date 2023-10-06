@@ -41,7 +41,7 @@ class PayCashDialog : public QDialog {
     Ui::PayCashDialog *ui;
     double mTotal = 0;
     std::function<bool(double)> mPayCallback;
-    void saveTransaction();
+    bool saveTransaction();
 
   private slots:
     void payClicked();
