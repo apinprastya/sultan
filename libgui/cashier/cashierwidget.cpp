@@ -154,6 +154,7 @@ bool CashierWidget::requestClose() {
             QMessageBox::question(this, tr("Close confirmation"), tr("Your cart is not empty. Are you sure to close?"));
         return ret == QMessageBox::Yes;
     }
+    CashierCustomerDisplay::instance()->setCashierModel(nullptr);
     return true;
 }
 
