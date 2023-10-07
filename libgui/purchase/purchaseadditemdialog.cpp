@@ -259,7 +259,7 @@ void PurchaseAddItemDialog::calculateDiscount() {
 void PurchaseAddItemDialog::calculateBuyPriceSuggestion() {
     double single = ui->doublePrice->value() - mDiscount;
     if (mId <= 0) {
-        if (mCurrentStock == 0) {
+        if (mCurrentStock <= 0) {
             ui->doubleBuyPrice->setValue(single);
         } else {
             double val = ((mCurrentStock * mBuyPrice) + (single * ui->doubleCount->value())) /
