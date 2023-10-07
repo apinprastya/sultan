@@ -109,14 +109,14 @@ void AddTransactionDialog::saveClicked() {
                      {"number", ui->lineNumber->text()},
                      {"date", ui->dateEdit->dateTime()},
                      {"machine_id", Preference::getInt(SETTING::MACHINE_ID)},
-                     {"user_id", UserSession::id()},
                      {"bank_id", ui->comboBank->currentData()}};
     if (mId > 0) {
         msg.setCommand(MSG_COMMAND::UPDATE);
         msg.addData("id", mId);
         msg.addData("data", data);
-    } else {
+    } else {        
         msg.setData(data);
+        msg.addData("user_id", UserSession::id());
     }
     ui->pushSave->setEnabled(false);
     sendMessage(&msg);

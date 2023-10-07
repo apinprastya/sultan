@@ -47,7 +47,7 @@
       <widget class="QComboBox" name="comboType"/>
      </item>
      <item row="4" column="1">
-      <widget class="QDoubleSpinBox" name="doubleTotal">
+      <widget class="LibGUI::DoubleSpinBox" name="doubleTotal">
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
@@ -150,6 +150,9 @@
        <property name="text">
         <string>Cancel</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -163,6 +166,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LibGUI::DoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">doublespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>dateEdit</tabstop>
   <tabstop>lineNumber</tabstop>
