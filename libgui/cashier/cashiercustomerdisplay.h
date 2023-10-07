@@ -51,6 +51,7 @@ class CashierCustomerDisplay : public QObject {
     QTimer mTimer;
     CustomerDisplayState mCurrentState = None;
     CashierTableModel *mCashierModel = nullptr;
+    bool mIsEnabled = false;
 
     void checkState();
     void writeData(const QByteArray &data);

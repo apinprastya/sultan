@@ -39,6 +39,8 @@ void CashierCustomerDisplay::createInstance(QObject *parent) {
 CashierCustomerDisplay *CashierCustomerDisplay::instance() { return sInstance; }
 
 void CashierCustomerDisplay::setCashierModel(CashierTableModel *model) {
+    if (!mIsEnabled)
+        return;
     if (mCashierModel != nullptr) {
         mCashierModel->disconnect(this);
     }
@@ -55,6 +57,8 @@ CashierCustomerDisplay::CashierCustomerDisplay(QObject *parent) : QObject(parent
 }
 
 void CashierCustomerDisplay::checkState() {
+    if (!mIsEnabled)
+        return;
     if (mCurrentState == Item) {
         showTotal();
     } else if (mCurrentState == Payment || mCurrentState == None) {
@@ -63,6 +67,8 @@ void CashierCustomerDisplay::checkState() {
 }
 
 void CashierCustomerDisplay::showTotal() {
+    if (!mIsEnabled)
+        return;
     LibPrint::CustomerDisplay disp;
     disp.clear().writeString(tr("Total"), Preference::formatMoney(mCashierModel->getTotal()));
     writeData(disp.data());
@@ -70,6 +76,8 @@ void CashierCustomerDisplay::showTotal() {
 }
 
 void CashierCustomerDisplay::showNone() {
+    if (!mIsEnabled)
+        return;
     auto welcome1 = Preference::getString(SETTING::CUSDISPLAY_WELCOME1);
     auto welcome2 = Preference::getString(SETTING::CUSDISPLAY_WELCOME2);
     LibPrint::CustomerDisplay disp;
@@ -80,6 +88,8 @@ void CashierCustomerDisplay::showNone() {
 }
 
 void CashierCustomerDisplay::showTotalAndChange(double total, double change) {
+    if (!mIsEnabled)
+        return;
     mCurrentState = Payment;
     LibPrint::CustomerDisplay disp;
     disp.clear().writeString(tr("Total"), Preference::formatMoney(total));
@@ -89,6 +99,8 @@ void CashierCustomerDisplay::showTotalAndChange(double total, double change) {
 }
 
 void CashierCustomerDisplay::writeData(const QByteArray &data) {
+    if (!mIsEnabled)
+        return;
     auto cdm = LibPrint::CustomerDisplayManager::instance();
     if (cdm->open()) {
         cdm->write(data);
@@ -102,9 +114,15 @@ QString CashierCustomerDisplay::getCount(const QString &count) {
     return count;
 }
 
-void CashierCustomerDisplay::timeout() { checkState(); }
+void CashierCustomerDisplay::timeout() {
+    if (!mIsEnabled)
+        return;
+    checkState();
+}
 
 void CashierCustomerDisplay::itemInserted(CashierItem *item) {
+    if (!mIsEnabled)
+        return;
     LibPrint::CustomerDisplay disp;
     disp.clear().writeString(item->name);
     disp.bottom().writeString(
