@@ -76,7 +76,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../sultan/sultan.qrc">
+            <iconset>
              <normaloff>:/images/16x16/blue-document-search-result.png</normaloff>:/images/16x16/blue-document-search-result.png</iconset>
            </property>
            <property name="autoDefault">
@@ -87,7 +87,7 @@
         </layout>
        </item>
        <item row="3" column="1">
-        <widget class="QDoubleSpinBox" name="doubleCount">
+        <widget class="LibGUI::DoubleSpinBox" name="doubleCount">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
@@ -107,7 +107,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QDoubleSpinBox" name="doublePrice">
+        <widget class="LibGUI::DoubleSpinBox" name="doublePrice">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
@@ -202,7 +202,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QDoubleSpinBox" name="doubleTotal">
+        <widget class="LibGUI::DoubleSpinBox" name="doubleTotal">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
@@ -249,7 +249,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="doubleBuyPrice">
+         <widget class="LibGUI::DoubleSpinBox" name="doubleBuyPrice">
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -269,7 +269,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="doubleSellPrice">
+         <widget class="LibGUI::DoubleSpinBox" name="doubleSellPrice">
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -405,6 +405,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LibGUI::DoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">doublespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineBarcode</tabstop>
   <tabstop>pushSearch</tabstop>
@@ -420,9 +427,7 @@
   <tabstop>pushSaveAgain</tabstop>
   <tabstop>pushCancel</tabstop>
  </tabstops>
- <resources>
-  <include location="../../sultan/sultan.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pushCancel</sender>

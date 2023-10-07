@@ -227,7 +227,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="price">
         <attribute name="title">
@@ -247,7 +247,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="doubleBuyPrice">
+            <widget class="LibGUI::DoubleSpinBox" name="doubleBuyPrice">
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
@@ -264,7 +264,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="doubleStock">
+            <widget class="LibGUI::DoubleSpinBox" name="doubleStock">
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
@@ -285,8 +285,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>440</width>
-              <height>336</height>
+              <width>442</width>
+              <height>328</height>
              </rect>
             </property>
             <attribute name="label">
@@ -347,7 +347,7 @@
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleSellPrice">
+                 <widget class="LibGUI::DoubleSpinBox" name="doubleSellPrice">
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
@@ -405,8 +405,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>104</width>
-              <height>61</height>
+              <width>442</width>
+              <height>328</height>
              </rect>
             </property>
             <attribute name="label">
@@ -479,7 +479,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../../sultan/sultan.qrc">
+                <iconset>
                  <normaloff>:/images/16x16/blue-document-search-result.png</normaloff>:/images/16x16/blue-document-search-result.png</iconset>
                </property>
                <property name="autoDefault">
@@ -698,6 +698,11 @@
    <header location="global">tablewidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>LibGUI::DoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">doublespinbox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineBarcode</tabstop>
@@ -726,9 +731,7 @@
   <tabstop>doublePackageQty</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
- <resources>
-  <include location="../../sultan/sultan.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pushCancel</sender>

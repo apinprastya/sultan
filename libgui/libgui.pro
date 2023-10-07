@@ -65,6 +65,7 @@ TRANSLATIONS = ../translation/libgui_id.ts
 
 SOURCES += \
     cashier/cashiercustomerdisplay.cpp \
+    doublespinbox.cpp \
     item/importitemdialog.cpp \
     mainwindow.cpp \
     paginationwidget.cpp \
@@ -170,6 +171,7 @@ SOURCES += \
 
 HEADERS += \
     cashier/cashiercustomerdisplay.h \
+    doublespinbox.h \
     gui_global.h \
     item/importitemdialog.h \
     mainwindow.h \
