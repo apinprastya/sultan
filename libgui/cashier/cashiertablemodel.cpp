@@ -118,9 +118,14 @@ QModelIndex CashierTableModel::index(int row, int column, const QModelIndex & /*
     return createIndex(row, column, item);
 }
 
-void CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QString &unit,
-                                const QVariantList &prices, int itemflag, const QString &note) {
+bool CashierTableModel::addItem(float count, const QString &name, const QString &barcode, const QString &unit,
+                                const QVariantList &prices, int itemflag, const QString &note, float stock, bool allowZeroStock) {
     float totCount = getTotalCount(barcode) + count;
+    const bool calculateStock = (itemflag & ITEM_FLAG::CALCULATE_STOCK) != 0;
+    float curStock = getCurrentStock(barcode, stock);
+    if(!allowZeroStock && calculateStock && totCount > curStock) {
+        return false;
+    }
     const QList<int> &row = rowOfBarcode(barcode);
     if (!prices.isEmpty())
         mPrices[barcode] = prices;
@@ -182,6 +187,7 @@ void CashierTableModel::addItem(float count, const QString &name, const QString 
         }
     }
     calculateTotal();
+    return true;
 }
 
 CashierItem *CashierTableModel::addReturnItem(float count, const QString &name, const QString &barcode, double price,
@@ -202,6 +208,7 @@ void CashierTableModel::reset() {
     mPrices.clear();
     endResetModel();
     calculateTotal();
+    mCachedStocks.clear();
     emit totalChanged(0);
 }
 
@@ -247,6 +254,53 @@ void CashierTableModel::removeReturn(CashierItem *item) {
     mData.removeOne(item);
     endRemoveRows();
     calculateTotal();
+}
+
+QStringList CashierTableModel::getBarcodes() {
+    QStringList data;
+    for (auto item : mData) {
+        if (!data.contains(item->barcode))
+            data << item->barcode;
+    }
+    return data;
+}
+
+void CashierTableModel::refreshCachedStock(const QVariantList &list) {
+    for (auto l : list) {
+        auto m = l.toMap();
+        const QString &barcode = m["barcode"].toString();
+        float stock = m["stock"].toFloat();
+        if (mCachedStocks.contains(barcode))
+            mCachedStocks[barcode] = stock;
+    }
+}
+
+QVariantMap CashierTableModel::anyOutdatedStock() {
+    QMap<QString, float> totalCounts;
+    for (auto item : mData) {
+        if (totalCounts.contains(item->barcode))
+            totalCounts[item->barcode] = totalCounts[item->barcode] + item->count;
+        else
+            totalCounts[item->barcode] = item->count;
+    }
+    for (auto c : totalCounts.keys()) {
+        if (mCachedStocks.contains(c) && mCachedStocks[c] < totalCounts[c]) {
+            QVariantMap ret;
+            ret["barcode"] = c;
+            for (auto item : mData) {
+                if (item->barcode == c) {
+                    ret["name"] = item->name;
+                    ret["count"] = item->count;
+                    ret["flag"] = item->flag;
+                    ret["unit"] = item->unit;
+                    break;
+                }
+            }
+            ret["stock"] = mCachedStocks[c];
+            return ret;
+        }
+    }
+    return QVariantMap();
 }
 
 void CashierTableModel::messageReceived(Message *msg) {
@@ -365,4 +419,13 @@ void CashierTableModel::calculatePoin() {
         }
     }
     emit poinChanged(mPoin);
+}
+
+float CashierTableModel::getCurrentStock(const QString &barcode, float stock) {
+    float curStock = stock;
+    if(!mCachedStocks.contains(barcode))
+        mCachedStocks.insert(barcode, stock);
+    else
+        curStock = mCachedStocks.value(barcode);
+    return curStock;
 }

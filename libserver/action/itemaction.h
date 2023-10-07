@@ -34,6 +34,7 @@ class ItemAction : public ServerAction {
     LibG::Message exportData(LibG::Message *msg);
     LibG::Message importData(LibG::Message *msg);
     LibG::Message summary(LibG::Message *msg);
+    LibG::Message stock(LibG::Message *msg);
 
   protected:
     void selectAndJoin() override;

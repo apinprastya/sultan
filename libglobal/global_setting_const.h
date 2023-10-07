@@ -56,6 +56,7 @@ const QString LOCALE_COUNTRY = QStringLiteral("application/locale_country");
 const QString LOCALE_USE_SIGN = QStringLiteral("application/locale_use_sign");
 const QString LOCALE_SIGN = QStringLiteral("application/locale_sign");
 const QString LOCALE_DECIMAL = QStringLiteral("application/locale_decimal");
+const QString ZERO_STOCK_SALE = QStringLiteral("application/zero_stock_sale");
 
 const QString USE_TAX = QStringLiteral("application/use_tax");
 const QString TAX_VALUE = QStringLiteral("application/tax_value");

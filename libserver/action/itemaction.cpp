@@ -39,6 +39,7 @@ ItemAction::ItemAction() : ServerAction("items", "barcode") {
     mFunctionMap.insert(MSG_COMMAND::EXPORT, std::bind(&ItemAction::exportData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::IMPORT, std::bind(&ItemAction::importData, this, std::placeholders::_1));
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&ItemAction::summary, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::STOCK, std::bind(&ItemAction::stock, this, std::placeholders::_1));
 }
 
 Message ItemAction::insert(Message *msg) {
@@ -469,6 +470,21 @@ Message ItemAction::summary(Message *msg) {
         message.addData("total", res.first()["total"]);
     else
         message.addData("total", 0);
+    return message;
+}
+
+Message ItemAction::stock(LibG::Message *msg) {
+    Message message(msg);
+    auto barcodeVariants = msg->data("barcodes").toList();
+    QStringList barcodes;
+    for (auto v : barcodeVariants)
+        barcodes << v.toString();
+    DbResult res = mDb->table(mTableName)
+                       ->select("barcode")
+                       ->select("stock")
+                       ->where(QString("barcode in (%1)").arg(barcodes.join(",")))
+                       ->exec();
+    message.addData("data", res.data());
     return message;
 }
 

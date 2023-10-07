@@ -50,9 +50,35 @@ Message SoldAction::insertSold(Message *msg) {
     int cust_id = msg->data("customer_id").toInt();
     int user_id = msg->data("user_id").toInt();
     int poin = msg->data("reward").toInt();
+    const bool allowZeroStock = msg->data("allow_zero_stock").toBool();
     msg->removeData("cart");
+    msg->removeData("allow_zero_stock");
     if (mDb->isSupportTransaction())
         mDb->beginTransaction();
+    if (!allowZeroStock) {
+        // check all stock before insert the transaction
+        QStringList barcodes;
+        QMap<QString, float> counts;
+        for (auto v : l) {
+            const QVariantMap &m = v.toMap();
+            const QString &barcode = m["barcode"].toString();
+            if (!barcodes.contains(barcode))
+                barcodes << barcode;
+            if (counts.contains(barcode))
+                counts[barcode] = counts[barcode] + m["count"].toFloat();
+            else
+                counts[barcode] = m["count"].toFloat();
+        }
+        auto resultItem = mDb->table("items")->where(QString("barcode in (%1)").arg(barcodes.join(",")))->exec();
+        for (int i = 0; i < resultItem.size(); i++) {
+            const QVariantMap &m = resultItem.data(i);
+            const float curStock = m["stock"].toDouble();
+            if (counts[m["barcode"].toString()] > curStock) {
+                message.setError("stock not valid");
+                return message;
+            }
+        }
+    }
     if (mDb->insert(mTableName, msg->data())) {
         QVariant id = mDb->lastInsertedId();
         for (auto v : l) {

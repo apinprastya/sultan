@@ -39,6 +39,7 @@ class CashierItem {
     int linkId = 0;
     double buyPrice;
     int itemFlag = 0;
+    double stock = 0;
     QString barcode;
     QString name;
     QString discount_formula;

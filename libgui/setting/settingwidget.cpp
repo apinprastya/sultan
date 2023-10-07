@@ -82,6 +82,7 @@ void SettingWidget::setupAppliaction() {
     ui->groupNameBased->setChecked(Preference::getBool(SETTING::CASHIER_NAMEBASED));
     ui->groupCapitalize->setChecked(Preference::getBool(SETTING::CAPITALIZE));
     ui->groupUseMinimumOrder->setChecked(Preference::getBool(SETTING::MULTIPLE_MINIMUM));
+    ui->groupZeroStock->setChecked(Preference::getBool(SETTING::ZERO_STOCK_SALE));
 }
 
 void SettingWidget::setupLocale() {
@@ -251,6 +252,7 @@ void SettingWidget::saveClicked() {
     Preference::setValue(SETTING::CASHIER_NAMEBASED, ui->groupNameBased->isChecked());
     Preference::setValue(SETTING::CAPITALIZE, ui->groupCapitalize->isChecked());
     Preference::setValue(SETTING::MULTIPLE_MINIMUM, ui->groupUseMinimumOrder->isChecked());
+    Preference::setValue(SETTING::ZERO_STOCK_SALE, ui->groupZeroStock->isChecked());
     // locale
     Preference::setValue(SETTING::APPLICATION_LANGUAGE, ui->comboApplicationLanguage->currentData());
     Preference::setValue(SETTING::LOCALE_COUNTRY, ui->comboLocaleCounty->currentData().toInt());

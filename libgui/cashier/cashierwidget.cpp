@@ -122,6 +122,8 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent)
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Up), this, SLOT(focusTable()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down), this, SLOT(focusBarcode()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), this, SLOT(addNewItemNoBarcode()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(refreshStock()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this, SLOT(checkFixStock()));
     ui->labelTitle->setText(Preference::getString(SETTING::MARKET_NAME, "Sultan Minimarket"));
     ui->labelSubtitle->setText(
         GuiUtil::toHtml(Preference::getString(SETTING::MARKET_SUBNAME, "Jln. Bantul\nYogyakarta")));
@@ -168,17 +170,27 @@ void CashierWidget::messageReceived(LibG::Message *msg) {
             } else {
                 QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
             }
+        } else if (msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
+            refreshStock();
+            QMessageBox::critical(
+                this, tr("Error"),
+                tr("Some of the item stock is insufficient. Press Ctrl+E to check it out after closing this dialog."));
+            mPayCashDialog->hide();
+            mAdvancePaymentDialog->hide();
+            mPayCashlessDialog->hide();
         } else {
             QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
         }
         return;
     }
     if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::CASHIER_PRICE)) {
+        const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
+        const QMap<QString, QVariant> &item = msg->data("item").toMap();
         ui->lineBarcode->clear();
         ui->lineBarcode->setEnabled(true);
-        const QString &name = msg->data("item").toMap()["name"].toString();
-        const QString &barcode = msg->data("item").toMap()["barcode"].toString();
-        const QString &unit = msg->data("item").toMap()["unit"].toString();
+        const QString &name = item["name"].toString();
+        const QString &barcode = item["barcode"].toString();
+        const QString &unit = item["unit"].toString();
         ui->labelName->setText(name);
         const QVariantList &list = msg->data("prices").toList();
         double price = list.first().toMap()["price"].toDouble();
@@ -188,8 +200,15 @@ void CashierWidget::messageReceived(LibG::Message *msg) {
                 break;
             }
         }
+        const float currentStock = item["stock"].toDouble();
         ui->labelPrice->setText(Preference::formatMoney(price));
-        mModel->addItem(mCount, name, barcode, unit, list, msg->data("item").toMap()["flag"].toInt(), QString());
+        mModel->refreshCachedStock(QVariantList() << item);
+        const bool addResult = mModel->addItem(mCount, name, barcode, unit, list, item["flag"].toInt(), QString(),
+                                               currentStock, allowZeroStock);
+        if(!allowZeroStock && !addResult) {
+            QMessageBox::critical(this, tr("Error"), tr("Insufficient stock. Current stock is: %1").arg(currentStock));
+            return;
+        }
         ui->tableView->resizeRowsToContents();
     } else if (msg->isTypeCommand(MSG_TYPE::SOLD, MSG_COMMAND::NEW_SOLD)) {
         const QVariantMap &data = msg->data();
@@ -220,6 +239,9 @@ void CashierWidget::messageReceived(LibG::Message *msg) {
             ui->lineBarcode->setText(msg->data("barcode").toString());
         mAddItemDialog->hide();
         barcodeEntered();
+    } else if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::STOCK)) {
+        auto stocks = msg->data("data").toList();
+        mModel->refreshCachedStock(stocks);
     }
 }
 
@@ -305,13 +327,20 @@ void CashierWidget::updateItem(CashierItem *item) {
     dialog.setup(item->barcode, item->count, item->price, item->discount_formula, item->note, item->itemFlag);
     dialog.exec();
     if (dialog.isOk()) {
+        const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
         QVariantList &prices = mModel->getPrices(item->barcode);
         QVariantMap price = prices[0].toMap();
         price["price"] = dialog.getPrice();
         price["discount_formula"] = dialog.getDiscountFormula();
         prices[0] = price;
-        mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag,
-                        dialog.getNote());
+        const bool addResult = mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit,
+                                               prices, item->itemFlag, dialog.getNote(), 1000, allowZeroStock);
+        if (!allowZeroStock && !addResult) {
+            QMessageBox::critical(
+                this, tr("Error"),
+                tr("Insufficient stock. Current stock is: %1").arg(mModel->getCachedStock(item->barcode)));
+            return;
+        }
         ui->tableView->resizeRowsToContents();
     }
 }
@@ -383,7 +412,7 @@ void CashierWidget::tableKeyPressed(QObject * /*sender*/, QKeyEvent *event) {
             mModel->removeReturn(item);
         } else {
             mModel->addItem(-item->count, item->name, item->barcode, item->unit, QVariantList(), item->itemFlag,
-                            QString());
+                            QString(), 0, true);
         }
     }
 }
@@ -431,6 +460,7 @@ void CashierWidget::updateCurrentItem() {
 void CashierWidget::payRequested(int type, double value, int flag) {
     QVariantMap data;
     mPayFlag = flag;
+    const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
     double tax = getTax();
     data.insert("number", Util::genSoldNumber());
     data.insert("cart", mModel->getCart());
@@ -438,6 +468,7 @@ void CashierWidget::payRequested(int type, double value, int flag) {
     data.insert("machine_id", Preference::getInt(SETTING::MACHINE_ID));
     data.insert("subtotal", mModel->getTotal());
     data.insert("tax", tax);
+    data.insert("allow_zero_stock", allowZeroStock);
     if (type == PAYMENT::CASH) {
         data.insert("payment", value);
         data.insert("total", mModel->getTotal() + tax);
@@ -715,7 +746,49 @@ void CashierWidget::editRequest(const QModelIndex &index, const QVariant &value)
     price["price"] = item->price;
     price["discount_formula"] = item->discount_formula;
     prices[0] = price;
-    mModel->addItem(value.toFloat() - item->count, item->name, item->barcode, item->unit, prices, item->itemFlag,
-                    item->note);
+    const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
+    const bool addResult = mModel->addItem(value.toFloat() - item->count, item->name, item->barcode, item->unit, prices,
+                                           item->itemFlag, item->note, 0, allowZeroStock);
+    if (!allowZeroStock && !addResult) {
+        QMessageBox::critical(
+            this, tr("Error"),
+            tr("Insufficient stock. Current stock is: %1").arg(mModel->getCachedStock(item->barcode)));
+        return;
+    }
     ui->tableView->resizeRowsToContents();
+}
+
+void CashierWidget::refreshStock() {
+    LibG::Message msg(MSG_TYPE::ITEM, MSG_COMMAND::STOCK);
+    auto barcodes = mModel->getBarcodes();
+    if (barcodes.isEmpty())
+        return;
+    msg.addData("barcodes", barcodes);
+    sendMessage(&msg);
+}
+
+void CashierWidget::checkFixStock() {
+    auto outdatedStock = mModel->anyOutdatedStock();
+    if (outdatedStock.size() > 0) {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(tr("Insufficient stock"));
+        msgBox.setText(tr("Barcode: %1<br>Name: %2<br>Current stock: %3")
+                           .arg(outdatedStock["barcode"].toString())
+                           .arg(outdatedStock["name"].toString())
+                           .arg(Preference::formatFloat(outdatedStock["stock"].toFloat())));
+        auto buttonRemove = msgBox.addButton(QMessageBox::Ignore);
+        buttonRemove->setText(tr("Remove item"));
+        auto buttonSetToMax = msgBox.addButton(QMessageBox::Yes);
+        buttonSetToMax->setText(tr("Set to max stock"));
+        auto result = msgBox.exec();
+        if (result == QMessageBox::Ignore) {
+            mModel->addItem(-outdatedStock["count"].toFloat(), outdatedStock["name"].toString(),
+                            outdatedStock["barcode"].toString(), "", QVariantList(), outdatedStock["flag"].toInt(),
+                            QString(), 0, true);
+        } else if (result == QMessageBox::Yes) {
+            mModel->addItem(outdatedStock["stock"].toFloat() - outdatedStock["count"].toFloat(),
+                            outdatedStock["name"].toString(), outdatedStock["barcode"].toString(), "", QVariantList(),
+                            outdatedStock["flag"].toInt(), QString(), 0, true);
+        }
+    }
 }

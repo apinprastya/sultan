@@ -42,8 +42,8 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    void addItem(float count, const QString &name, const QString &barcode, const QString &unit,
-                 const QVariantList &prices, int itemflag, const QString &note);
+    bool addItem(float count, const QString &name, const QString &barcode, const QString &unit,
+                 const QVariantList &prices, int itemflag, const QString &note, float stock, bool allowZeroStock = true);
     CashierItem *addReturnItem(float count, const QString &name, const QString &barcode, double price, double discount,
                                const QString &unit, int flag);
     void reset();
@@ -58,6 +58,10 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
     void removeReturn(CashierItem *item);
     inline QVariantList &getPrices(const QString &barcode) { return mPrices[barcode]; }
     void setEnableInlineEdit(bool val) { mEnableInlineEdit = val; }
+    float getCachedStock(const QString &barcode) { return mCachedStocks.value(barcode); }
+    QStringList getBarcodes();
+    void refreshCachedStock(const QVariantList &list);
+    QVariantMap anyOutdatedStock();
 
   protected:
     void messageReceived(LibG::Message *msg) override;
@@ -70,6 +74,7 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
     bool mEnableInlineEdit = false;
     Customer mCurrentCustomer;
     QMap<double, int> mRewardPoins;
+    QMap<QString, double> mCachedStocks;
     int mPoin = 0;
 
     float getTotalCount(const QString &barcode);
@@ -78,6 +83,7 @@ class CashierTableModel : public QAbstractTableModel, public LibG::MessageHandle
     QList<CashierItem *> calculatePrices(const QString &barcode, const QString &name, float count, const QString &unit,
                                          int itemFlag, const QString &note);
     void calculatePoin();
+    float getCurrentStock(const QString &barcode, float stock);
 
   signals:
     void totalChanged(double total);
