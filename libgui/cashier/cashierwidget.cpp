@@ -329,10 +329,14 @@ void CashierWidget::updateItem(CashierItem *item) {
     if (dialog.isOk()) {
         const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
         QVariantList &prices = mModel->getPrices(item->barcode);
-        QVariantMap price = prices[0].toMap();
-        price["price"] = dialog.getPrice();
-        price["discount_formula"] = dialog.getDiscountFormula();
-        prices[0] = price;
+        if ((item->itemFlag & ITEM_FLAG::EDITABLE_PRICE) != 0) {
+            for (int i = 0; i < prices.size(); i++) {
+                QVariantMap price = prices[i].toMap();
+                price["price"] = dialog.getPrice();
+                price["discount_formula"] = dialog.getDiscountFormula();
+                prices[i] = price;
+            }
+        }
         const bool addResult = mModel->addItem(dialog.getCount() - item->count, item->name, item->barcode, item->unit,
                                                prices, item->itemFlag, dialog.getNote(), 1000, allowZeroStock);
         if (!allowZeroStock && !addResult) {
@@ -742,10 +746,14 @@ void CashierWidget::tableClicked(const QModelIndex &index) {
 void CashierWidget::editRequest(const QModelIndex &index, const QVariant &value) {
     auto item = static_cast<CashierItem *>(index.internalPointer());
     QVariantList &prices = mModel->getPrices(item->barcode);
-    QVariantMap price = prices[0].toMap();
-    price["price"] = item->price;
-    price["discount_formula"] = item->discount_formula;
-    prices[0] = price;
+    if ((item->itemFlag & ITEM_FLAG::EDITABLE_PRICE) != 0) {
+        for (int i = 0; i < prices.size(); i++) {
+            QVariantMap price = prices[i].toMap();
+            price["price"] = item->price;
+            price["discount_formula"] = item->discount_formula;
+            prices[i] = price;
+        }
+    }
     const bool allowZeroStock = Preference::getBool(SETTING::ZERO_STOCK_SALE);
     const bool addResult = mModel->addItem(value.toFloat() - item->count, item->name, item->barcode, item->unit, prices,
                                            item->itemFlag, item->note, 0, allowZeroStock);
