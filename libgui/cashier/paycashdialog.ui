@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>368</width>
-    <height>125</height>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,6 +47,27 @@
       <widget class="LibGUI::MoneyLineEdit" name="lineEdit"/>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>F4: Save</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Enter: Save and Print</string>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QLocale>
 #include <QMessageBox>
+#include <QShortcut>
 
 using namespace LibGUI;
 using namespace LibG;
@@ -34,6 +35,7 @@ PayCashDialog::PayCashDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PayC
     ui->setupUi(this);
     connect(ui->pushPay, SIGNAL(clicked(bool)), SLOT(payClicked()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
+    new QShortcut(QKeySequence(Qt::Key_F4), this, SLOT(saveClicked()));
 }
 
 PayCashDialog::~PayCashDialog() { delete ui; }
