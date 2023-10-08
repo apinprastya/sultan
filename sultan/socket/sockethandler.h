@@ -20,21 +20,22 @@
 #ifndef SOCKETHANDLER_H
 #define SOCKETHANDLER_H
 
+#include "wraptcpsocket.h"
 #include <QObject>
 
 namespace LibG {
 class Message;
 }
 
-class QWebSocket;
+class QTcpSocket;
 
 class SocketHandler : public QObject {
     Q_OBJECT
   public:
-    SocketHandler(int id, QWebSocket *socket, QObject *parent = nullptr);
+    SocketHandler(int id, WrapTcpSocket *socket, QObject *parent = nullptr);
     void sendMessage(LibG::Message *msg);
     inline int getId() { return mId; }
-    inline QWebSocket *getSocket() { return mSocket; }
+    inline WrapTcpSocket *getSocket() { return mSocket; }
 
   signals:
     void newMessage(LibG::Message *msg);
@@ -42,7 +43,7 @@ class SocketHandler : public QObject {
 
   private:
     int mId;
-    QWebSocket *mSocket;
+    WrapTcpSocket *mSocket;
 
   private slots:
     void binaryMessageRecieved(const QByteArray &data);

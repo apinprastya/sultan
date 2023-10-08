@@ -21,10 +21,9 @@
 #define SOCKETCLIENT_H
 
 #include "message.h"
+#include "wraptcpsocket.h"
 #include <QAbstractSocket>
 #include <QObject>
-
-class QWebSocket;
 
 class SocketClient : public QObject {
     Q_OBJECT
@@ -39,7 +38,7 @@ class SocketClient : public QObject {
     void sendMessage(LibG::Message *msg);
 
   private:
-    QWebSocket *mSocket;
+    WrapTcpSocket *mSocket;
 
   signals:
     void socketConnected();

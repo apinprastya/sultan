@@ -32,9 +32,9 @@ class DatabaseAction : public ServerAction {
     LibG::Message resetDatabase(LibG::Message *msg);
 
   private:
-    QString exportData();
-    void importData(const QString &fileName, const QString &version, LibG::Message *msg);
+    void importData(const QByteArray &ba, LibG::Message *msg);
     void migrateUntil(const QString &version);
+    QString getVersionMigration(const QString &fullpath);
 };
 
 } // namespace LibServer

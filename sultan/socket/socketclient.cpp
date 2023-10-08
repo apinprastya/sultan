@@ -19,19 +19,16 @@
  */
 #include "socketclient.h"
 #include <QDebug>
+#include <QTcpSocket>
 #include <QTimer>
-#include <QWebSocket>
 
 #define TIMEOUT 30000  // in mili second
 #define PING_TIME 5000 // in mili second
 static QString TAG{"[SOCKETCLIENT]"};
 
-SocketClient::SocketClient(QObject *parent)
-    : QObject(parent),
-      mSocket(new QWebSocket(QStringLiteral("Sultan Client"), QWebSocketProtocol::VersionLatest, this)) {
+SocketClient::SocketClient(QObject *parent) : QObject(parent), mSocket(new WrapTcpSocket(new QTcpSocket(this))) {
     connect(mSocket, SIGNAL(connected()), SIGNAL(socketConnected()));
     connect(mSocket, SIGNAL(connected()), SLOT(pong()));
-    connect(mSocket, SIGNAL(pong(quint64, QByteArray)), SLOT(pong()));
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(socketDisconnected()));
     connect(mSocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(errorOccure()));
     connect(mSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
@@ -40,7 +37,7 @@ SocketClient::SocketClient(QObject *parent)
 }
 
 void SocketClient::connectToServer(const QString &address, int port) {
-    mSocket->open(QUrl(QString("ws://%1:%2/").arg(address).arg(port)));
+    mSocket->connectToHost(address, port);
     QTimer::singleShot(TIMEOUT, this, SLOT(checkConnection()));
 }
 

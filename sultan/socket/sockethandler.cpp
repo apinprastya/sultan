@@ -19,9 +19,10 @@
  */
 #include "sockethandler.h"
 #include "message.h"
-#include <QWebSocket>
+#include <QTcpSocket>
 
-SocketHandler::SocketHandler(int id, QWebSocket *socket, QObject *parent) : QObject(parent), mId(id), mSocket(socket) {
+SocketHandler::SocketHandler(int id, WrapTcpSocket *socket, QObject *parent)
+    : QObject(parent), mId(id), mSocket(socket) {
     connect(mSocket, SIGNAL(disconnected()), SIGNAL(disconnect()));
     connect(mSocket, SIGNAL(binaryMessageReceived(QByteArray)), SLOT(binaryMessageRecieved(QByteArray)));
 }

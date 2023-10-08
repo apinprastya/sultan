@@ -22,14 +22,11 @@
 #include "message.h"
 #include "sockethandler.h"
 #include <QDebug>
-#include <QWebSocket>
-#include <QWebSocketServer>
+#include <QTcpServer>
 
 static QString TAG{"[SOCKETMANAGER]"};
 
-SocketManager::SocketManager(QObject *parent)
-    : QObject(parent), mLastId(0),
-      mServer(new QWebSocketServer(QStringLiteral("Sultan"), QWebSocketServer::NonSecureMode, this)) {
+SocketManager::SocketManager(QObject *parent) : QObject(parent), mLastId(0), mServer(new QTcpServer(this)) {
     connect(mServer, SIGNAL(newConnection()), SLOT(newConnection()));
 }
 
@@ -45,7 +42,7 @@ bool SocketManager::listen(int port) {
 void SocketManager::newConnection() {
     while (mServer->hasPendingConnections()) {
         auto socket = mServer->nextPendingConnection();
-        auto handler = new SocketHandler(mLastId++, socket, this);
+        auto handler = new SocketHandler(mLastId++, new WrapTcpSocket(socket), this);
         qDebug() << TAG << "New socket connection" << socket->peerAddress().toString() << socket->peerPort();
         mHandlers.insert(handler->getId(), handler);
         connect(handler, SIGNAL(disconnect()), SLOT(clientDisconnect()));

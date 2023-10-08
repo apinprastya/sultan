@@ -61,6 +61,8 @@ ImportExportDatabaseDialog::ImportExportDatabaseDialog(LibG::MessageBus *bus, QW
     connect(mGDrive, SIGNAL(fileQueryAnswered(QJsonArray)), SLOT(onFileListed(QJsonArray)));
     connect(mGDrive, SIGNAL(fileDownloaded(QByteArray)), SLOT(onFileDownloaded(QByteArray)));
     connect(&mNetworkManager, SIGNAL(finished(QNetworkReply *)), SLOT(requestFinished(QNetworkReply *)));
+    ui->pushExportToGDrive->hide();
+    ui->pushImportGDrive->hide();
 }
 
 ImportExportDatabaseDialog::~ImportExportDatabaseDialog() { delete ui; }
@@ -68,17 +70,21 @@ ImportExportDatabaseDialog::~ImportExportDatabaseDialog() { delete ui; }
 void ImportExportDatabaseDialog::messageReceived(Message *msg) {
     if (msg->isTypeCommand(MSG_TYPE::DATABASE, MSG_COMMAND::EXPORT)) {
         if (msg->isSuccess()) {
-            QString url;
-            if (Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
-                url = "http://localhost:" + QString::number(Preference::getInt(SETTING::APP_PORT) + 1);
-            } else {
-                url = "http://" + Preference::getString(SETTING::SERVER_ADDRESS) + ":" +
-                      QString::number(Preference::getInt(SETTING::SERVER_PORT) + 1);
+            const QString b64 = msg->data("data").toString();
+            const QByteArray &ba = QByteArray::fromBase64(b64.toUtf8());
+            auto filename =
+                QFileDialog::getSaveFileName(this, tr("Save exported database"), QDir::homePath(), "*.sltn");
+            if (!filename.isEmpty()) {
+                if (!filename.endsWith(".sltn"))
+                    filename += ".sltn";
+                QFile file(filename);
+                if (file.open(QFile::WriteOnly)) {
+                    file.write(ba);
+                    file.close();
+                }
             }
-            url += "/sultan.export";
-            QUrl qurl(url);
-            QNetworkRequest req(qurl);
-            mNetworkManager.get(req);
+            GuiUtil::enableWidget(true, QList<QWidget *>{ui->pushExportToFile, ui->pushExportToGDrive,
+                                                         ui->pushImportFile, ui->pushImportGDrive});
         }
     } else if (msg->isTypeCommand(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT)) {
         if (msg->isSuccess()) {
@@ -111,23 +117,15 @@ bool ImportExportDatabaseDialog::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void ImportExportDatabaseDialog::uploadFile(const QByteArray &data) {
-    QString url;
-    if (Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER) {
-        url = "http://localhost:" + QString::number(Preference::getInt(SETTING::APP_PORT) + 1);
-    } else {
-        url = "http://" + Preference::getString(SETTING::SERVER_ADDRESS) + ":" +
-              QString::number(Preference::getInt(SETTING::SERVER_PORT) + 1);
-    }
-    QUrl qurl(url);
-    QNetworkRequest req(qurl);
-    auto rep = mNetworkManager.post(req, data);
-    rep->setObjectName("UPLOAD");
+    Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT);
+    const QByteArray &ba = data.toBase64();
+    msg.addData("data", QString(ba));
+    sendMessage(&msg);
 }
 
 void ImportExportDatabaseDialog::exportFile() {
     mIsGDrive = false;
     Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::EXPORT);
-    msg.addData("version", qApp->applicationVersion());
     sendMessage(&msg);
     GuiUtil::enableWidget(false, QList<QWidget *>{ui->pushExportToFile, ui->pushExportToGDrive, ui->pushImportFile,
                                                   ui->pushImportGDrive});
@@ -223,10 +221,10 @@ void ImportExportDatabaseDialog::requestFinished(QNetworkReply *reply) {
     const QByteArray &data = reply->readAll();
     if (!mIsGDrive) {
         if (reply->objectName() == "UPLOAD") {
-            Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT);
+            /*Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::IMPORT);
             msg.addData("version", qApp->applicationVersion());
             msg.addData("name", QString::fromUtf8(data));
-            sendMessage(&msg);
+            sendMessage(&msg);*/
         } else {
             auto filename =
                 QFileDialog::getSaveFileName(this, tr("Save exported database"), QDir::homePath(), "*.sltn");
