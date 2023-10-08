@@ -1,4 +1,3 @@
-include(../external_library/o2/src/src.pri)
 include(../libglobal/libglobal.pri)
 include(../libprint/libprint.pri)
 include(../libdb/libdb.pri)
@@ -143,7 +142,6 @@ SOURCES += \
     cashier/checkpricedialog.cpp \
     admin/importexportdatabasedialog.cpp \
     admin/browserdialog.cpp \
-    googledrive.cpp \
     admin/listdialog.cpp \
     checkstock/checkstockwidget.cpp \
     checkstock/checkstockadddialog.cpp \
@@ -250,7 +248,6 @@ HEADERS += \
     cashier/checkpricedialog.h \
     admin/importexportdatabasedialog.h \
     admin/browserdialog.h \
-    googledrive.h \
     admin/listdialog.h \
     checkstock/checkstockwidget.h \
     checkstock/checkstockadddialog.h \

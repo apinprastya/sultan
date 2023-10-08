@@ -16,7 +16,6 @@ TEMPLATE = app
 CONFIG += c++11
 
 contains(CONFIG, SINGLEBIN) {
-    include(../external_library/o2/src/src.pri)
     include(../external_library/pillow/pillowcore/pillowcore_src.pri)
     include(../libglobal/libglobal_src.pri)
     include(../libprint/libprint_src.pri)
