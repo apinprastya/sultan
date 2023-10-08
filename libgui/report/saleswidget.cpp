@@ -87,11 +87,12 @@ void SalesWidget::messageReceived(LibG::Message *msg) {
         ui->labelSales->setText(Preference::formatMoney(msg->data("total").toDouble()));
         ui->labelMargin->setText(Preference::formatMoney(msg->data("margin").toDouble()));
     } else if (msg->isTypeCommand(MSG_TYPE::SOLD_ITEM, MSG_COMMAND::EXPORT) && msg->isSuccess()) {
-        const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.csv");
+        const QString &fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.xlsx");
         if (!fileName.isEmpty()) {
             QFile file(fileName);
             if (file.open(QFile::WriteOnly)) {
-                file.write(msg->data("data").toString().toUtf8());
+                const QByteArray &arr = QByteArray::fromBase64(msg->data("data").toString().toUtf8());
+                file.write(arr);
                 file.close();
             } else {
                 QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
