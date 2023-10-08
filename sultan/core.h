@@ -25,7 +25,6 @@
 
 class SocketManager;
 class SocketClient;
-class HttpServer;
 
 namespace LibG {
 class MessageBus;
@@ -50,7 +49,6 @@ class Core : public QObject {
   private:
     SocketManager *mSocketManager;
     SocketClient *mSocketClient;
-    HttpServer *mHttpServer;
     LibServer::MainServer *mMainServer;
     LibG::MessageBus *mMessageBus;
     LibG::AbstractSultanGUI *mMainWindow;
