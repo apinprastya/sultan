@@ -21,7 +21,6 @@
 #define IMPORTEXPORTDATABASEDIALOG_H
 
 #include "messagehandler.h"
-#include "o2google.h"
 #include <QDialog>
 #include <QNetworkAccessManager>
 
@@ -34,7 +33,6 @@ class QProgressDialog;
 namespace LibGUI {
 
 class BrowserDialog;
-class GoogleDrive;
 
 class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
@@ -51,8 +49,6 @@ class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler {
     Ui::ImportExportDatabaseDialog *ui;
     bool mIsGDrive = false;
     BrowserDialog *mBrowser;
-    O2Google *mO2Google;
-    GoogleDrive *mGDrive;
     QProgressDialog *mProgressDialog = nullptr;
     QNetworkAccessManager mNetworkManager;
     bool mIsExport = false;
@@ -62,17 +58,7 @@ class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler {
 
   private slots:
     void exportFile();
-    void exportGDrive();
     void importFile();
-    void importGDrive();
-    void onLinkingFailed();
-    void onLinkingSuccess();
-    void onOpenBrowser(const QUrl &url);
-    void onCloseBrowser();
-    void uploadGDriveDone();
-    void onFileListed(const QJsonArray &arr);
-    void onFileDownloaded(const QByteArray &data);
-    void requestFinished(QNetworkReply *reply);
 };
 
 } // namespace LibGUI
