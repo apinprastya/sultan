@@ -36,7 +36,7 @@ class GLOBALSHARED_EXPORT Message {
      * */
     int mFlag;
     /*
-     * Store the websocketclient id if it message is for websocket
+     * Store the socket id if it message is for socket
      * */
     int mSocketId;
 

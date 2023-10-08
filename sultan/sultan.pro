@@ -1,4 +1,4 @@
-QT       += core gui widgets sql websockets printsupport concurrent serialport
+QT       += core gui widgets sql printsupport concurrent serialport network
 
 CONFIG(USE_EMBED_BROWSER) {
     DEFINES+=USE_EMBED_BROWSER
@@ -90,13 +90,15 @@ SOURCES += main.cpp \
     http/httpserver.cpp \
     socket/socketmanager.cpp \
     socket/socketclient.cpp \
-    socket/sockethandler.cpp
+    socket/sockethandler.cpp \
+    socket/wraptcpsocket.cpp
 
 HEADERS  += \
     core.h \
     http/httpserver.h \
     socket/socketmanager.h \
     socket/socketclient.h \
-    socket/sockethandler.h
+    socket/sockethandler.h \
+    socket/wraptcpsocket.h
 
 FORMS +=

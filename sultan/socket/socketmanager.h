@@ -27,7 +27,7 @@ namespace LibG {
 class Message;
 }
 
-class QWebSocketServer;
+class QTcpServer;
 class SocketHandler;
 
 class SocketManager : public QObject {
@@ -38,7 +38,7 @@ class SocketManager : public QObject {
 
   private:
     int mLastId;
-    QWebSocketServer *mServer;
+    QTcpServer *mServer;
     QMap<int, SocketHandler *> mHandlers;
 
   private slots:
