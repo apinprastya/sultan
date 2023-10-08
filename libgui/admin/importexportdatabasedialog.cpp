@@ -28,20 +28,17 @@
 #include "ui_importexportdatabasedialog.h"
 #include <QApplication>
 #include <QDebug>
-#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QProcess>
-#include <QProgressDialog>
 
 using namespace LibGUI;
 using namespace LibG;
 
 ImportExportDatabaseDialog::ImportExportDatabaseDialog(LibG::MessageBus *bus, QWidget *parent)
-    : QDialog(parent), ui(new Ui::ImportExportDatabaseDialog), mBrowser(new BrowserDialog(this)) {
+    : QDialog(parent), ui(new Ui::ImportExportDatabaseDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
-    mBrowser->installEventFilter(this);
     adjustSize();
     connect(ui->pushExportToFile, SIGNAL(clicked(bool)), SLOT(exportFile()));
     connect(ui->pushImportFile, SIGNAL(clicked(bool)), SLOT(importFile()));
@@ -93,7 +90,7 @@ void ImportExportDatabaseDialog::messageReceived(Message *msg) {
 bool ImportExportDatabaseDialog::eventFilter(QObject *obj, QEvent *event) {
     auto webview = qobject_cast<BrowserDialog *>(obj);
     if (webview != nullptr) {
-        if (event->type() == QEvent::Close && !mGDriveInProcess)
+        if (event->type() == QEvent::Close)
             GuiUtil::enableWidget(true, QList<QWidget *>{ui->pushExportToFile, ui->pushExportToGDrive,
                                                          ui->pushImportFile, ui->pushImportGDrive});
     }
@@ -108,7 +105,6 @@ void ImportExportDatabaseDialog::uploadFile(const QByteArray &data) {
 }
 
 void ImportExportDatabaseDialog::exportFile() {
-    mIsGDrive = false;
     Message msg(MSG_TYPE::DATABASE, MSG_COMMAND::EXPORT);
     sendMessage(&msg);
     GuiUtil::enableWidget(false, QList<QWidget *>{ui->pushExportToFile, ui->pushExportToGDrive, ui->pushImportFile,

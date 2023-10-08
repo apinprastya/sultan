@@ -22,7 +22,6 @@
 
 #include "messagehandler.h"
 #include <QDialog>
-#include <QNetworkAccessManager>
 
 namespace Ui {
 class ImportExportDatabaseDialog;
@@ -47,13 +46,7 @@ class ImportExportDatabaseDialog : public QDialog, public LibG::MessageHandler {
 
   private:
     Ui::ImportExportDatabaseDialog *ui;
-    bool mIsGDrive = false;
-    BrowserDialog *mBrowser;
-    QProgressDialog *mProgressDialog = nullptr;
-    QNetworkAccessManager mNetworkManager;
     bool mIsExport = false;
-    bool mGDriveInProcess = false;
-
     void uploadFile(const QByteArray &data);
 
   private slots:
