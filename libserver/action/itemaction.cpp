@@ -24,10 +24,13 @@
 #include "util.h"
 #include "util/configutil.h"
 #include "util/itemutil.h"
+#include <QBuffer>
 #include <QDataStream>
 #include <QDebug>
 #include <QStringBuilder>
 #include <QStringRef>
+
+#include "header/xlsxdocument.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -218,34 +221,59 @@ LibG::Message ItemAction::prices(LibG::Message *msg) {
 
 Message ItemAction::exportData(Message *msg) {
     LibG::Message message(msg);
-    QString arr;
-    arr.append("VERSION ").append(msg->data("version").toString()).append("\n");
+
+    QXlsx::Document xlsx;
+    int row = 1;
+    int col = 1;
+    xlsx.write(row, 1, msg->data("version").toString());
+
     DbResult cats = mDb->table("categories")->where("deleted_at IS NULL")->exec();
-    arr.append("###CATEGORY\n");
-    arr.append("id;name;code;parent_id;hierarchy;\n");
+    xlsx.write(row++, 1, "###CATEGORY");
+    xlsx.write(row, 1, "id");
+    xlsx.write(row, 2, "name");
+    xlsx.write(row, 3, "code");
+    xlsx.write(row, 4, "parent_id");
+    xlsx.write(row, 5, "hierarchy");
+    row++;
     for (int i = 0; i < cats.size(); i++) {
         const QVariantMap &d = cats.data(i);
-        arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(QString::number(d["parent_id"].toInt()) % ";");
-        arr.append(d["hierarchy"].toString().trimmed() % "\n");
+        xlsx.write(row, 1, d["id"]);
+        xlsx.write(row, 2, d["name"]);
+        xlsx.write(row, 3, d["code"]);
+        xlsx.write(row, 4, d["parent_id"]);
+        xlsx.write(row, 5, d["hierarchy"]);
+        row++;
     }
+
     DbResult sups = mDb->table("supliers")->where("deleted_at IS NULL")->exec();
-    arr.append("###SUPPLIER\n");
-    arr.append("id;name;code;address;phone;email;\n");
+    xlsx.write(row++, 1, "###SUPPLIER");
+    xlsx.write(row, 1, "id");
+    xlsx.write(row, 2, "name");
+    xlsx.write(row, 3, "code");
+    xlsx.write(row, 4, "address");
+    xlsx.write(row, 5, "phone");
+    xlsx.write(row, 6, "email");
+    row++;
     for (int i = 0; i < sups.size(); i++) {
         const QVariantMap &d = sups.data(i);
-        arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["address"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["phone"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["email"].toString().trimmed() % ";\n");
+        xlsx.write(row, 1, d["id"]);
+        xlsx.write(row, 2, d["name"]);
+        xlsx.write(row, 3, d["code"]);
+        xlsx.write(row, 4, d["address"]);
+        xlsx.write(row, 5, d["phone"]);
+        xlsx.write(row, 6, d["email"]);
+        row++;
     }
-    arr.append("###ITEM\n");
-    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;"
-               "count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit;\n");
+
+    xlsx.write(row++, 1, "###ITEM");
+    auto headers =
+        QString("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;"
+                "count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit")
+            .split(";");
+    for (auto header : headers) {
+        xlsx.write(row, col++, header);
+    }
+    row++;
     mDb->table(mTableName);
     mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
                 (select count from sellprices where barcode = items.barcode limit 1) as count1, \
@@ -268,45 +296,53 @@ Message ItemAction::exportData(Message *msg) {
         for (int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
             int flag = d["flag"].toInt();
-            arr.append(d["barcode"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["category"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["suplier"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["stock"].toString() % ";");
-            arr.append(d["buy_price"].toString() % ";");
-            arr.append(d["count1"].toString() % ";");
-            arr.append(d["price1"].toString() % ";");
-            arr.append(d["discform1"].toString() % ";");
-            arr.append(d["count2"].toString() % ";");
-            arr.append(d["price2"].toString() % ";");
-            arr.append(d["discform2"].toString() % ";");
-            arr.append(d["count3"].toString() % ";");
-            arr.append(d["price3"].toString() % ";");
-            arr.append(d["discform3"].toString() % ";");
-            arr.append((flag & ITEM_FLAG::CALCULATE_STOCK) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::SELLABLE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::PURCHASE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::PACKAGE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;" : "1;");
-            arr.append(d["unit"].toString().trimmed());
-            arr.append("\n");
-            qDebug() << d;
+            xlsx.write(row, 1, d["barcode"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 2, d["name"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 3, d["category"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 4, d["suplier"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 5, d["stock"]);
+            xlsx.write(row, 6, d["buy_price"]);
+            xlsx.write(row, 7, d["count1"]);
+            xlsx.write(row, 8, d["price1"]);
+            xlsx.write(row, 9, d["discform1"]);
+            xlsx.write(row, 10, d["count2"]);
+            xlsx.write(row, 11, d["price2"]);
+            xlsx.write(row, 12, d["discform2"]);
+            xlsx.write(row, 13, d["count3"]);
+            xlsx.write(row, 14, d["price3"]);
+            xlsx.write(row, 15, d["discform3"]);
+            xlsx.write(row, 16, (flag & ITEM_FLAG::CALCULATE_STOCK) == 0 ? "0" : "1");
+            xlsx.write(row, 17, (flag & ITEM_FLAG::SELLABLE) == 0 ? "0" : "1");
+            xlsx.write(row, 18, (flag & ITEM_FLAG::PURCHASE) == 0 ? "0" : "1");
+            xlsx.write(row, 19, (flag & ITEM_FLAG::PACKAGE) == 0 ? "0" : "1");
+            xlsx.write(row, 20, (flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0" : "1");
+            xlsx.write(row, 21, (flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0" : "1");
+            xlsx.write(row, 22, d["unit"].toString().trimmed());
+            row++;
         }
         start += limit;
     }
-    // handle the link box here
-    arr.append("###LINK\n");
-    arr.append("barcode;type;barcode_link;count_link;\n");
+
+    xlsx.write(row++, 1, "###LINK");
+    xlsx.write(row, 1, "barcode");
+    xlsx.write(row, 2, "type");
+    xlsx.write(row, 3, "barcode_link");
+    xlsx.write(row, 4, "count_link");
+    row++;
     DbResult linkres = mDb->reset()->get("itemlinks");
     for (int i = 0; i < linkres.size(); i++) {
         const QVariantMap &d = linkres.data(i);
-        arr.append(d["barcode"].toString().trimmed() % ";");
-        arr.append(d["type"].toString() % ";");
-        arr.append(d["barcode_link"].toString().trimmed() % ";");
-        arr.append(d["count_link"].toString() % ";\n");
+        xlsx.write(row, 1, d["barcode"].toString().trimmed());
+        xlsx.write(row, 2, d["type"]);
+        xlsx.write(row, 3, d["barcode_link"].toString().trimmed());
+        xlsx.write(row, 4, d["count_link"]);
+        row++;
     }
-    message.addData("data", arr);
+
+    QBuffer arr;
+    xlsx.saveAs(&arr);
+    message.addData("data", QString(arr.data().toBase64()));
+
     return message;
 }
 

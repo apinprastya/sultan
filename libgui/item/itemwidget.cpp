@@ -128,13 +128,14 @@ void ItemWidget::messageReceived(LibG::Message *msg) {
         FlashMessageManager::showMessage(tr("Item deleted successfully"));
         mMainTable->getModel()->refresh();
     } else if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT)) {
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.xlsx");
         if (!fileName.isEmpty()) {
-            if (!fileName.endsWith(".csv"))
+            if (!fileName.endsWith(".xlsx"))
                 fileName += ".csv";
             QFile file(fileName);
             if (file.open(QFile::WriteOnly)) {
-                file.write(msg->data("data").toString().toUtf8());
+                const QByteArray &arr = QByteArray::fromBase64(msg->data("data").toString().toUtf8());
+                file.write(arr);
                 file.close();
             } else {
                 QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
