@@ -21,8 +21,12 @@
 #include "db.h"
 #include "global_constant.h"
 #include "queryhelper.h"
+#include <QBuffer>
+#include <QByteArray>
 #include <QDebug>
 #include <QStringBuilder>
+
+#include "header/xlsxdocument.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -69,8 +73,25 @@ Message SoldItemAction::report(Message *msg) {
 
 Message SoldItemAction::exportData(Message *msg) {
     LibG::Message message(msg);
-    QString arr;
-    arr.append("date;barcode;name;count;price;discount;total;buy_price;margin;\n");
+
+    QXlsx::Document xlsx;
+    int row = 1;
+    int col = 1;
+    QStringList headers;
+    headers << "date"
+            << "barcode"
+            << "name"
+            << "count"
+            << "price"
+            << "discount"
+            << "total"
+            << "buy_price"
+            << "margin";
+    for (auto header : headers) {
+        xlsx.write(row, col++, header);
+    }
+    row++;
+
     mDb->table(mTableName);
     selectAndJoin();
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
@@ -84,18 +105,22 @@ Message SoldItemAction::exportData(Message *msg) {
         for (int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
             double margin = d["total"].toDouble() - d["buy_price"].toDouble();
-            arr.append(d["created_at"].toString() % ";");
-            arr.append(d["barcode"].toString() % ";");
-            arr.append(d["name"].toString() % ";");
-            arr.append(d["count"].toString() % ";");
-            arr.append(d["price"].toString() % ";");
-            arr.append(d["discount"].toString() % ";");
-            arr.append(d["final"].toString() % ";");
-            arr.append(d["buy_price"].toString() % ";");
-            arr.append(QString::number(margin) % ";\n");
+            xlsx.write(row, 1, d["created_at"]);
+            xlsx.write(row, 2, d["barcode"]);
+            xlsx.write(row, 3, d["name"]);
+            xlsx.write(row, 4, d["count"]);
+            xlsx.write(row, 5, d["price"]);
+            xlsx.write(row, 6, d["discount"]);
+            xlsx.write(row, 7, d["final"]);
+            xlsx.write(row, 8, d["buy_price"]);
+            xlsx.write(row, 9, margin);
+            row++;
         }
         start += limit;
     }
-    message.addData("data", arr);
+
+    QBuffer arr;
+    xlsx.saveAs(&arr);
+    message.addData("data", QString(arr.data().toBase64()));
     return message;
 }

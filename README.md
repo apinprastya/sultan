@@ -34,6 +34,9 @@ Any question/support please contact me apin.klas@gmail.com
 ## Note
 Please consider to give a star when clone this repository
 
+## Third party library
+* Reading and writing Xlsx file using [QXlsx](https://github.com/QtExcel/QXlsx)
+
 ## License
 GPL. See [LICENSE](https://github.com/apinprastya/sultan/blob/master/LICENSE)
 

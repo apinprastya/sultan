@@ -24,8 +24,11 @@
 #include "message.h"
 #include "preference.h"
 #include "queryhelper.h"
+#include <QBuffer>
 #include <QDebug>
 #include <QStringBuilder>
+
+#include "header/xlsxdocument.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -84,8 +87,21 @@ LibG::Message TransactionAction::summaryMoney(LibG::Message *msg) {
 
 Message TransactionAction::exportData(Message *msg) {
     LibG::Message message(msg);
-    QString arr;
-    arr.append("date;number;type;detail;total\n");
+
+    QXlsx::Document xlsx;
+    int row = 1;
+    int col = 1;
+    QStringList headers;
+    headers << "date"
+            << "number"
+            << "type"
+            << "detail"
+            << "total";
+    for (auto header : headers) {
+        xlsx.write(row, col++, header);
+    }
+    row++;
+
     mDb->table(mTableName);
     selectAndJoin();
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
@@ -98,16 +114,19 @@ Message TransactionAction::exportData(Message *msg) {
             break;
         for (int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
-            arr.append(d["date"].toString() % ";");
-            arr.append(d["number"].toString() % ";");
-            arr.append(
-                (d["type"].toInt() == TRANSACTION_TYPE::INCOME ? QObject::tr("Income") : QObject::tr("Expense")) % ";");
-            arr.append(d["detail"].toString() % ";");
-            arr.append(Preference::formatMoney(d["transaction_total"].toDouble()) % ";\n");
+            xlsx.write(row, 1, d["date"]);
+            xlsx.write(row, 2, d["number"]);
+            xlsx.write(row, 3, d["type"].toInt() == TRANSACTION_TYPE::INCOME ? "income" : "expense");
+            xlsx.write(row, 4, d["detail"]);
+            xlsx.write(row, 5, d["transaction_total"]);
+            row++;
         }
         start += limit;
     }
-    message.addData("data", arr);
+
+    QBuffer arr;
+    xlsx.saveAs(&arr);
+    message.addData("data", QString(arr.data().toBase64()));
     return message;
 }
 

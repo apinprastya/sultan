@@ -1,5 +1,10 @@
 include(../libglobal/libglobal.pri)
 include(../libdb/libdb.pri)
+QXLSX_PARENTPATH=../external_library/QXlsx/         # current QXlsx path is . (. means curret directory)
+QXLSX_HEADERPATH=../external_library/QXlsx/header/  # current QXlsx header path is ./header/
+QXLSX_SOURCEPATH=../external_library/QXlsx/source/  # current QXlsx source path is ./source/
+include(./QXlsx.pri)
+include(../external_library/QXlsx/QXlsx.pri)
 
 TEMPLATE = lib
 TARGET = server
