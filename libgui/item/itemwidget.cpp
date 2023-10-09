@@ -128,13 +128,14 @@ void ItemWidget::messageReceived(LibG::Message *msg) {
         FlashMessageManager::showMessage(tr("Item deleted successfully"));
         mMainTable->getModel()->refresh();
     } else if (msg->isTypeCommand(MSG_TYPE::ITEM, MSG_COMMAND::EXPORT)) {
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save as CSV"), QDir::homePath(), "*.csv");
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.xlsx");
         if (!fileName.isEmpty()) {
-            if (!fileName.endsWith(".csv"))
+            if (!fileName.endsWith(".xlsx"))
                 fileName += ".csv";
             QFile file(fileName);
             if (file.open(QFile::WriteOnly)) {
-                file.write(msg->data("data").toString().toUtf8());
+                const QByteArray &arr = QByteArray::fromBase64(msg->data("data").toString().toUtf8());
+                file.write(arr);
                 file.close();
             } else {
                 QMessageBox::critical(this, tr("Error"), tr("Unable to save to file"));
@@ -194,14 +195,14 @@ void ItemWidget::importClicked() {
         this, tr("Confirmation"),
         tr("Your current item, category and supplier will be wipe out. Sure to continue import?"));
     if (res == QMessageBox::Yes) {
-        const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.csv");
+        const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.xlsx");
         if (fileName.isEmpty())
             return;
         QFile file(fileName);
         if (!file.open(QFile::ReadOnly))
             return;
         Message msg(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT);
-        msg.addData("data", QString::fromUtf8(file.readAll()));
+        msg.addData("data", QString::fromUtf8(file.readAll().toBase64()));
         sendMessage(&msg);
     }
 }

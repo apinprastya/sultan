@@ -24,10 +24,13 @@
 #include "util.h"
 #include "util/configutil.h"
 #include "util/itemutil.h"
+#include <QBuffer>
 #include <QDataStream>
 #include <QDebug>
 #include <QStringBuilder>
 #include <QStringRef>
+
+#include "header/xlsxdocument.h"
 
 using namespace LibServer;
 using namespace LibG;
@@ -218,36 +221,74 @@ LibG::Message ItemAction::prices(LibG::Message *msg) {
 
 Message ItemAction::exportData(Message *msg) {
     LibG::Message message(msg);
-    QString arr;
-    arr.append("VERSION ").append(msg->data("version").toString()).append("\n");
+
+    QXlsx::Document xlsx;
+    int row = 1;
+    int col = 1;
+    xlsx.write(row, 1, "###VERSION");
+    xlsx.write(row, 2, msg->data("version").toString());
+    row++;
+
+    DbResult units = mDb->table("units")->where("deleted_at IS NULL")->exec();
+    xlsx.write(row++, 1, "###UNIT");
+    xlsx.write(row, 1, "name");
+    row++;
+    for (int i = 0; i < units.size(); i++) {
+        const QVariantMap &d = units.data(i);
+        xlsx.write(row, 1, d["name"]);
+        row++;
+    }
+
     DbResult cats = mDb->table("categories")->where("deleted_at IS NULL")->exec();
-    arr.append("###CATEGORY\n");
-    arr.append("id;name;code;parent_id;hierarchy;\n");
+    xlsx.write(row++, 1, "###CATEGORY");
+    xlsx.write(row, 1, "id");
+    xlsx.write(row, 2, "name");
+    xlsx.write(row, 3, "code");
+    xlsx.write(row, 4, "parent_id");
+    xlsx.write(row, 5, "hierarchy");
+    row++;
     for (int i = 0; i < cats.size(); i++) {
         const QVariantMap &d = cats.data(i);
-        arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(QString::number(d["parent_id"].toInt()) % ";");
-        arr.append(d["hierarchy"].toString().trimmed() % "\n");
+        xlsx.write(row, 1, d["id"]);
+        xlsx.write(row, 2, d["name"]);
+        xlsx.write(row, 3, d["code"]);
+        xlsx.write(row, 4, d["parent_id"]);
+        xlsx.write(row, 5, d["hierarchy"]);
+        row++;
     }
+
     DbResult sups = mDb->table("supliers")->where("deleted_at IS NULL")->exec();
-    arr.append("###SUPPLIER\n");
-    arr.append("id;name;code;address;phone;email;\n");
+    xlsx.write(row++, 1, "###SUPPLIER");
+    xlsx.write(row, 1, "id");
+    xlsx.write(row, 2, "name");
+    xlsx.write(row, 3, "code");
+    xlsx.write(row, 4, "address");
+    xlsx.write(row, 5, "phone");
+    xlsx.write(row, 6, "email");
+    row++;
     for (int i = 0; i < sups.size(); i++) {
         const QVariantMap &d = sups.data(i);
-        arr.append(d["id"].toString() % ";");
-        arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["code"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["address"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["phone"].toString().trimmed().replace("\n", "") % ";");
-        arr.append(d["email"].toString().trimmed() % ";\n");
+        xlsx.write(row, 1, d["id"]);
+        xlsx.write(row, 2, d["name"]);
+        xlsx.write(row, 3, d["code"]);
+        xlsx.write(row, 4, d["address"]);
+        xlsx.write(row, 5, d["phone"]);
+        xlsx.write(row, 6, d["email"]);
+        row++;
     }
-    arr.append("###ITEM\n");
-    arr.append("barcode;name;category;suplier;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;discform2;"
-               "count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit;\n");
+
+    xlsx.write(row++, 1, "###ITEM");
+    auto headers =
+        QString("barcode;name;category_id;suplier_id;stock;buy_price;count1;sellprice1;discform1;count2;sellprice2;"
+                "discform2;"
+                "count3;sellprice3;discform3;calculatestock;sellable;purchaseable;box;multiprice;priceeditable;unit")
+            .split(";");
+    for (auto header : headers) {
+        xlsx.write(row, col++, header);
+    }
+    row++;
     mDb->table(mTableName);
-    mDb->select(mTableName % ".*, supliers.name as suplier, categories.name as category, \
+    mDb->select(mTableName % ".*, \
                 (select count from sellprices where barcode = items.barcode limit 1) as count1, \
                 (select price from sellprices where barcode = items.barcode limit 1) as price1, \
                 (select discount_formula from sellprices where barcode = items.barcode limit 1) as discform1, \
@@ -268,194 +309,196 @@ Message ItemAction::exportData(Message *msg) {
         for (int i = 0; i < res.size(); i++) {
             const QVariantMap &d = res.data(i);
             int flag = d["flag"].toInt();
-            arr.append(d["barcode"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["name"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["category"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["suplier"].toString().trimmed().replace("\n", "") % ";");
-            arr.append(d["stock"].toString() % ";");
-            arr.append(d["buy_price"].toString() % ";");
-            arr.append(d["count1"].toString() % ";");
-            arr.append(d["price1"].toString() % ";");
-            arr.append(d["discform1"].toString() % ";");
-            arr.append(d["count2"].toString() % ";");
-            arr.append(d["price2"].toString() % ";");
-            arr.append(d["discform2"].toString() % ";");
-            arr.append(d["count3"].toString() % ";");
-            arr.append(d["price3"].toString() % ";");
-            arr.append(d["discform3"].toString() % ";");
-            arr.append((flag & ITEM_FLAG::CALCULATE_STOCK) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::SELLABLE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::PURCHASE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::PACKAGE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::MULTIPRICE) == 0 ? "0;" : "1;");
-            arr.append((flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? "0;" : "1;");
-            arr.append(d["unit"].toString().trimmed());
-            arr.append("\n");
-            qDebug() << d;
+            xlsx.write(row, 1, d["barcode"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 2, d["name"].toString().trimmed().replace("\n", ""));
+            xlsx.write(row, 3, d["category_id"]);
+            xlsx.write(row, 4, d["suplier_id"]);
+            xlsx.write(row, 5, d["stock"]);
+            xlsx.write(row, 6, d["buy_price"]);
+            xlsx.write(row, 7, d["count1"]);
+            xlsx.write(row, 8, d["price1"]);
+            xlsx.write(row, 9, d["discform1"]);
+            xlsx.write(row, 10, d["count2"]);
+            xlsx.write(row, 11, d["price2"]);
+            xlsx.write(row, 12, d["discform2"]);
+            xlsx.write(row, 13, d["count3"]);
+            xlsx.write(row, 14, d["price3"]);
+            xlsx.write(row, 15, d["discform3"]);
+            xlsx.write(row, 16, (flag & ITEM_FLAG::CALCULATE_STOCK) == 0 ? 0 : 1);
+            xlsx.write(row, 17, (flag & ITEM_FLAG::SELLABLE) == 0 ? 0 : 1);
+            xlsx.write(row, 18, (flag & ITEM_FLAG::PURCHASE) == 0 ? 0 : 1);
+            xlsx.write(row, 19, (flag & ITEM_FLAG::PACKAGE) == 0 ? 0 : 1);
+            xlsx.write(row, 20, (flag & ITEM_FLAG::MULTIPRICE) == 0 ? 0 : 1);
+            xlsx.write(row, 21, (flag & ITEM_FLAG::EDITABLE_PRICE) == 0 ? 0 : 1);
+            xlsx.write(row, 22, d["unit"].toString().trimmed());
+            row++;
         }
         start += limit;
     }
-    // handle the link box here
-    arr.append("###LINK\n");
-    arr.append("barcode;type;barcode_link;count_link;\n");
+
+    xlsx.write(row++, 1, "###LINK");
+    xlsx.write(row, 1, "barcode");
+    xlsx.write(row, 2, "type");
+    xlsx.write(row, 3, "barcode_link");
+    xlsx.write(row, 4, "count_link");
+    row++;
     DbResult linkres = mDb->reset()->get("itemlinks");
     for (int i = 0; i < linkres.size(); i++) {
         const QVariantMap &d = linkres.data(i);
-        arr.append(d["barcode"].toString().trimmed() % ";");
-        arr.append(d["type"].toString() % ";");
-        arr.append(d["barcode_link"].toString().trimmed() % ";");
-        arr.append(d["count_link"].toString() % ";\n");
+        xlsx.write(row, 1, d["barcode"].toString().trimmed());
+        xlsx.write(row, 2, d["type"]);
+        xlsx.write(row, 3, d["barcode_link"].toString().trimmed());
+        xlsx.write(row, 4, d["count_link"]);
+        row++;
     }
-    message.addData("data", arr);
+
+    QBuffer arr;
+    xlsx.saveAs(&arr);
+    message.addData("data", QString(arr.data().toBase64()));
+
     return message;
 }
 
 Message ItemAction::importData(Message *msg) {
     LibG::Message message(msg);
-    const QString &d = msg->data("data").toString();
-    const QVector<QStringRef> &vec = d.splitRef("\n", QString::SkipEmptyParts);
-    int state = 0; // 0: category, 1: item, 2: link
+
+    QByteArray ba = QByteArray::fromBase64(msg->data("data").toString().toUtf8());
+    QBuffer buff(&ba);
+    buff.open(QBuffer::ReadOnly);
+    QXlsx::Document xlsx(&buff);
+    if (!xlsx.load()) {
+        message.setError("unable to load xlsx file");
+        qDebug() << "unable to load";
+        return message;
+    }
+    int row = 1;
+    int state = -1;
     int version = 0;
-    if (mDb->isSupportTransaction())
-        mDb->beginTransaction();
-    for (int i = 0; i < vec.size(); i++) {
-        QString str = vec[i].toString().replace("\"", "");
-        QStringRef sRef(&str);
-        if (i == 0) {
-            if (sRef.startsWith("VERSION")) {
-                const QVector<QStringRef> sp = sRef.split(" ");
-                if (sp.size() > 1)
-                    version = sp[1].toString().replace(".", "").replace(";", "").toInt();
-                mDb->truncateTable("categories");
-                mDb->truncateTable("supliers");
-                mDb->truncateTable("items");
-                mDb->truncateTable("sellprices");
-                mDb->truncateTable("itemlinks");
-                continue;
-            } else {
-                state = 1;
-            }
+    while (true) {
+        auto *cell = xlsx.cellAt(row, 1);
+        if (cell == nullptr) {
+            break;
         }
-        if (sRef.startsWith(QStringLiteral("###CATEGORY"))) {
-            state = 0;
-            i++;
-            continue;
-        } else if (sRef.startsWith(QStringLiteral("###ITEM"))) {
+        if (!cell->value().isValid())
+            break;
+        const QString &value = cell->value().toString();
+        if (value == "###VERSION") {
+            version = xlsx.cellAt(row, 2)->value().toString().replace(".", "").toInt();
+            mDb->truncateTable("categories");
+            mDb->truncateTable("supliers");
+            mDb->truncateTable("items");
+            mDb->truncateTable("units");
+            mDb->truncateTable("sellprices");
+            mDb->truncateTable("itemlinks");
+        } else if (value == "###CATEGORY") {
             state = 1;
-            i++;
+            row += 2;
             continue;
-        } else if (sRef.startsWith(QStringLiteral("###LINK"))) {
+        } else if (value == "###SUPPLIER") {
             state = 2;
-            i++;
+            row += 2;
             continue;
-        } else if (sRef.startsWith(QStringLiteral("###SUPPLIER"))) {
+        } else if (value == "###ITEM") {
             state = 3;
-            i++;
+            row += 2;
+            continue;
+        } else if (value == "###LINK") {
+            state = 4;
+            row += 2;
+            continue;
+        } else if (value == "###UNIT") {
+            state = 5;
+            row += 2;
             continue;
         }
-        const QVector<QStringRef> &row = sRef.split(";");
-        if (state == 0) {
-            const QString &name = row[1].toString();
-            const QString &code = row[2].toString();
-            const QString &hierarcy = row[4].toString();
-            const int parentId = row[3].toInt();
-            mDb->insert("categories",
-                        QVariantMap{{"name", name}, {"code", code}, {"hierarchy", hierarcy}, {"parent_id", parentId}});
-        } else if (state == 1) {
-            int cat = 0;
-            int sup = 0;
+        if (state == 1) {
+            const int id = xlsx.cellAt(row, 1)->value().toInt();
+            const QString &name = xlsx.cellAt(row, 2)->value().toString();
+            const QString &code = xlsx.cellAt(row, 3)->value().toString();
+            const QString &hierarcy = xlsx.cellAt(row, 5)->value().toString();
+            const int parentId = xlsx.cellAt(row, 4)->value().toInt();
+            mDb->insert(
+                "categories",
+                QVariantMap{
+                    {"id", id}, {"name", name}, {"code", code}, {"hierarchy", hierarcy}, {"parent_id", parentId}});
+        } else if (state == 2) {
+            const int id = xlsx.cellAt(row, 1)->value().toInt();
+            const QString &name = xlsx.cellAt(row, 2)->value().toString();
+            const QString &code = xlsx.cellAt(row, 3)->value().toString();
+            const QString &address = xlsx.cellAt(row, 4)->value().toString();
+            const QString &phone = xlsx.cellAt(row, 4)->value().toString();
+            const QString &email = xlsx.cellAt(row, 4)->value().toString();
+            mDb->insert("supliers", QVariantMap{{"id", id},
+                                                {"name", name},
+                                                {"code", code},
+                                                {"address", address},
+                                                {"phone", phone},
+                                                {"email", email}});
+        } else if (state == 3) {
+            const QString &barcode = xlsx.cellAt(row, 1)->value().toString();
+            int cat = xlsx.cellAt(row, 3)->value().toInt();
+            int sup = xlsx.cellAt(row, 4)->value().toInt();
             int flag = 0;
-            if ((row[15].toInt() != 0))
+            if (xlsx.cellAt(row, 16)->value().toInt() != 0)
                 flag |= ITEM_FLAG::CALCULATE_STOCK;
-            if ((row[16].toInt() != 0))
+            if (xlsx.cellAt(row, 17)->value().toInt() != 0)
                 flag |= ITEM_FLAG::SELLABLE;
-            if ((row[17].toInt() != 0))
+            if (xlsx.cellAt(row, 18)->value().toInt() != 0)
                 flag |= ITEM_FLAG::PURCHASE;
-            if ((row[18].toInt() != 0))
+            if (xlsx.cellAt(row, 19)->value().toInt() != 0)
                 flag |= ITEM_FLAG::PACKAGE;
-            if ((row[19].toInt() != 0))
+            if (xlsx.cellAt(row, 20)->value().toInt() != 0)
                 flag |= ITEM_FLAG::MULTIPRICE;
-            if ((row[20].toInt() != 0))
+            if (xlsx.cellAt(row, 21)->value().toInt() != 0)
                 flag |= ITEM_FLAG::EDITABLE_PRICE;
-            DbResult res = mDb->where("name = ", row[2].toString())->get("categories");
-            if (!res.isEmpty()) {
-                cat = res.first()["id"].toInt();
-            } else {
-                QVariantMap catData{{"name", row[2].toString()}, {"code", row[2].toString()}};
-                mDb->insert("categories", catData);
-                cat = mDb->lastInsertedId().toInt();
-            }
-            res = mDb->where("name = ", row[3].toString())->get("supliers");
-            if (!res.isEmpty()) {
-                sup = res.first()["id"].toInt();
-            } else {
-                QVariantMap supData{{"name", row[3].toString()}, {"code", row[3].toString()}};
-                mDb->insert("supliers", supData);
-                sup = mDb->lastInsertedId().toInt();
-            }
             const QVariantMap ins{{"suplier_id", sup},
                                   {"category_id", cat},
-                                  {"barcode", row[0].toString()},
-                                  {"name", row[1].toString()},
-                                  {"stock", row[4].toFloat()},
-                                  {"buy_price", row[5].toDouble()},
+                                  {"barcode", barcode},
+                                  {"name", xlsx.cellAt(row, 2)->value().toString()},
+                                  {"stock", xlsx.cellAt(row, 5)->value().toDouble()},
+                                  {"buy_price", xlsx.cellAt(row, 6)->value().toDouble()},
                                   {"flag", flag},
-                                  {"unit", row[21].toString()}};
+                                  {"unit", xlsx.cellAt(row, 22)->value().toString()}};
             if (mDb->insert(mTableName, ins)) {
+                int startCol = 7;
                 for (int i = 0; i < 3; i++) {
-                    if (row.size() <= (8 + (3 * i)))
+                    if (xlsx.cellAt(row, startCol + (i * 3)) == nullptr)
                         continue;
-                    if (row[6 + (3 * i)].isEmpty())
+                    double count = xlsx.cellAt(row, startCol + (i * 3))->value().toDouble();
+                    if (count <= 0)
                         continue;
-                    bool ok = false;
-                    float count = row[6 + (3 * i)].toFloat(&ok);
-                    if (!ok)
+                    if (xlsx.cellAt(row, startCol + (i * 3) + 1) == nullptr)
                         continue;
-                    ok = false;
-                    double price = row[7 + (3 * i)].toDouble(&ok);
-                    if (!ok)
+                    double price = xlsx.cellAt(row, startCol + (i * 3) + 1)->value().toDouble();
+                    if (price <= 0)
                         continue;
-                    const QString &discForm = row[8 + (3 * i)].trimmed().toString();
+                    const QString &discForm =
+                        xlsx.cellAt(row, startCol + (i * 3) + 2) != nullptr
+                            ? xlsx.cellAt(row, startCol + (i * 3) + 2)->value().toString().trimmed()
+                            : "";
                     double disc = Util::calculateDiscount(discForm, price);
-                    QVariantMap sellprice{{"barcode", row[0].toString()},
-                                          {"count", count},
-                                          {"discount_formula", discForm},
-                                          {"discount", disc},
-                                          {"price", price},
-                                          {"final", price - disc}};
+                    QVariantMap sellprice{{"barcode", barcode}, {"count", count}, {"discount_formula", discForm},
+                                          {"discount", disc},   {"price", price}, {"final", price - disc}};
                     mDb->insert("sellprices", sellprice);
                 }
             }
-        } else if (state == 2) {
-            const QString &barcode = row[0].toString();
-            const QString &barcode_link = row[2].toString();
-            const QString &count_link = row[3].toString();
-            const int type = row[1].toString().toInt();
-            DbResult res = mDb->where("barcode =", barcode)
-                               ->where("barcode_link =", barcode_link)
-                               ->where("type =", type)
-                               ->get("itemlinks");
-            if (res.isEmpty()) {
-                mDb->insert("itemlinks", QVariantMap{{"barcode", barcode},
-                                                     {"barcode_link", barcode_link},
-                                                     {"type", type},
-                                                     {"count_link", count_link}});
-            }
-        } else if (state == 3) {
-            const QString &name = row[1].toString();
-            const QString &code = row[2].toString();
-            const QString &address = row[3].toString();
-            const QString &phone = row[4].toString();
-            const QString &email = row[5].toString();
-            mDb->insert(
-                "supliers",
-                QVariantMap{{"name", name}, {"code", code}, {"address", address}, {"phone", phone}, {"email", email}});
+        } else if (state == 4) {
+            const QString &barcode = xlsx.cellAt(row, 1)->value().toString();
+            const int type = xlsx.cellAt(row, 2)->value().toInt();
+            const QString &barcode_link = xlsx.cellAt(row, 3)->value().toString();
+            double count_link = xlsx.cellAt(row, 4)->value().toDouble();
+            mDb->insert("itemlinks", QVariantMap{{"barcode", barcode},
+                                                 {"barcode_link", barcode_link},
+                                                 {"type", type},
+                                                 {"count_link", count_link}});
+        } else if (state == 5) {
+            const QString &name = xlsx.cellAt(row, 1)->value().toString();
+            mDb->insert("units", QVariantMap{{"name", name}});
         }
+
+        row++;
     }
-    if (mDb->isSupportTransaction()) {
-        if (!mDb->commit())
-            mDb->roolback();
-    }
+
     return message;
 }
 
