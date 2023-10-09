@@ -171,7 +171,7 @@
                    <item>
                     <layout class="QHBoxLayout" name="horizontalLayout_9">
                      <property name="bottomMargin">
-                      <number>10</number>
+                      <number>0</number>
                      </property>
                      <item>
                       <widget class="QPushButton" name="pushLogo">
