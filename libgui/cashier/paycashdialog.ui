@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>368</width>
-    <height>160</height>
+    <width>335</width>
+    <height>197</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,16 +35,26 @@
      </item>
      <item row="0" column="1">
       <widget class="QLabel" name="labelTotal">
+       <property name="styleSheet">
+        <string notr="true">background: white; font-size: 20px;</string>
+       </property>
        <property name="text">
         <string>TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
+       <property name="margin">
+        <number>6</number>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="LibGUI::MoneyLineEdit" name="lineEdit"/>
+      <widget class="LibGUI::MoneyLineEdit" name="lineEdit">
+       <property name="styleSheet">
+        <string notr="true">font-size: 20px;</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
