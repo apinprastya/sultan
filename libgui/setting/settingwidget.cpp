@@ -60,6 +60,7 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent)
     connect(ui->comboLocale, SIGNAL(currentIndexChanged(int)), SLOT(localeLanguageChanged()));
     connect(ui->pushTestCustomerDisplay, SIGNAL(clicked(bool)), SLOT(onCustomerDisplayClicked()));
     connect(ui->pushLogo, SIGNAL(clicked()), SLOT(pushLogoClicked()));
+    connect(ui->pushResetLogo, SIGNAL(clicked()), SLOT(pushResetLogoClicked()));
     ui->tabWidget->setCurrentIndex(0);
     Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
     sendMessage(&msg);
@@ -449,7 +450,10 @@ void SettingWidget::pushLogoClicked() {
         }
         logo = filename;
         ui->labelLogo->setPixmap(px.scaled(128, 128));
-        qDebug() << filename;
-        qDebug() << qApp->applicationDirPath();
     }
+}
+
+void SettingWidget::pushResetLogoClicked() {
+    logo = "";
+    ui->labelLogo->setPixmap(QPixmap(QLatin1String(":/images/icon_128.png")));
 }

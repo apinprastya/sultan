@@ -68,6 +68,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler {
     void checkWidget();
     void onCustomerDisplayClicked();
     void pushLogoClicked();
+    void pushResetLogoClicked();
 
   protected:
     void messageReceived(LibG::Message *msg) override;
