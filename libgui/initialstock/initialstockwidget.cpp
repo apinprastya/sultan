@@ -26,6 +26,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "initialstockadddialog.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "tableitem.h"
@@ -43,6 +44,7 @@ InitialStockWidget::InitialStockWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
       mAddDialog(new InitialStockAddDialog(bus, this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Initial Stock"));
     ui->verticalLayout->addWidget(mTableWidget);

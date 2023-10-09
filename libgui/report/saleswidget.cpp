@@ -23,6 +23,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "querydb.h"
@@ -43,6 +44,7 @@ using namespace LibG;
 SalesWidget::SalesWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::SalesWidget), mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Sales Report"));
     ui->verticalLayout->addWidget(mTableWidget);

@@ -37,6 +37,7 @@
 #include "global_setting_const.h"
 #include "guiutil.h"
 #include "keyevent.h"
+#include "logocached.h"
 #include "message.h"
 #include "paycashdialog.h"
 #include "paycashlessdialog.h"
@@ -72,6 +73,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent)
       mPayCashDialog(new PayCashDialog(this)), mAdvancePaymentDialog(new AdvancePaymentDialog(bus, this)),
       mPayCashlessDialog(new PayCashlessDialog(bus, this)), mAddItemDialog(new AddItemUnavailableDialog(bus, this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo64());
     setMessageBus(bus);
     ui->verticalLayout->setAlignment(Qt::AlignTop);
     ui->tableView->setModel(mModel);
@@ -82,6 +84,7 @@ CashierWidget::CashierWidget(LibG::MessageBus *bus, QWidget *parent)
     GuiUtil::setColumnWidth(ui->tableView, QList<int>() << 50 << 160 << 150 << 60 << 75 << 90 << 80 << 100);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     ui->labelVersion->setText(CONSTANT::ABOUT_APP_NAME.arg(qApp->applicationVersion()));
+    ui->labelVersion->hide();
     auto keyevent = new KeyEvent(ui->tableView);
     keyevent->addConsumeKey(Qt::Key_Return);
     keyevent->addConsumeKey(Qt::Key_Delete);

@@ -18,6 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tabwidget.h"
+#include "logocached.h"
 #include "tabcloseablewidget.h"
 #include <QApplication>
 #include <QDebug>
@@ -34,8 +35,7 @@ TabWidget::TabWidget(int type, QWidget *parent) : QTabWidget(parent), mType(type
     if (mType == Root) {
         auto lay = new QVBoxLayout(this);
         mLabel = new QLabel();
-        QPixmap px(QLatin1String(":/images/icon_512.png"));
-        mLabel->setPixmap(px);
+        mLabel->setPixmap(LogoCached::logo512());
         mLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         lay->addWidget(mLabel);
         setLayout(lay);

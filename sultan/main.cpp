@@ -1,5 +1,6 @@
 #include "core.h"
 #include "global_setting_const.h"
+#include "logocached.h"
 #include "preference.h"
 #include <QApplication>
 #include <QDateTime>
@@ -62,6 +63,7 @@ int main(int argc, char *argv[]) {
                 a.installTranslator(&tr[i]);
         }
     }
+    LibGUI::LogoCached::createInstance(&a);
 
     Core core;
     core.setup();

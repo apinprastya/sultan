@@ -136,7 +136,10 @@ void MainWindow::setup() {
     ui->actionInitial_Stock->setVisible(false);
 }
 
-void MainWindow::showSplashScreen() { mSplashUi->show(); }
+void MainWindow::showSplashScreen() {
+    mSplashUi->refreshLogo();
+    mSplashUi->show();
+}
 
 void MainWindow::hideSplashScreen() {
     mSplashUi->hide();

@@ -25,6 +25,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "tableitem.h"
@@ -42,6 +43,7 @@ using namespace LibG;
 SoldItemReturnWidget::SoldItemReturnWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)), mTotalDebt(new TileWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Sold return"));
     mTotalDebt->setTitleValue(tr("Total Debt"), tr("loading..."));

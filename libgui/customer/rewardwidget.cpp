@@ -24,6 +24,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "rewardadddialog.h"
 #include "settingpoinadddialog.h"
@@ -41,6 +42,7 @@ using namespace LibG;
 RewardWidget::RewardWidget(LibG::MessageBus *bus, QWidget *parent) : QWidget(parent), ui(new Ui::RewardSetting) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->tableExchange->initCrudButton();
     ui->tableExchange->getTableView()->setUseStandardHeader(true);
     auto model = ui->tableExchange->getModel();

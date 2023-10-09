@@ -47,6 +47,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler {
     QMap<QString, QLocale::Country> mLocaleCountry;
     QList<QLocale> mAllLocales;
     QList<UsbDevice> mUsbDevices;
+    QString logo;
     void setupAppliaction();
     void setupLocale();
     void setupPrinter();
@@ -55,6 +56,7 @@ class SettingWidget : public QWidget, public LibG::MessageHandler {
     void updateFromDBConfig(const QVariantList &data);
     void saveToDbConfig();
     void setupCustomerDisplay();
+    QPixmap getLogo();
 
   private slots:
     void signChanged();
@@ -65,6 +67,8 @@ class SettingWidget : public QWidget, public LibG::MessageHandler {
     void localeLanguageChanged();
     void checkWidget();
     void onCustomerDisplayClicked();
+    void pushLogoClicked();
+    void pushResetLogoClicked();
 
   protected:
     void messageReceived(LibG::Message *msg) override;

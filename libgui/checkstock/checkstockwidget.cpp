@@ -26,6 +26,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "tableitem.h"
@@ -46,6 +47,7 @@ CheckStockWidget::CheckStockWidget(LibG::MessageBus *bus, QWidget *parent)
       mAddDialog(new CheckStockAddDialog(bus, this)) {
     ui->setupUi(this);
     setMessageBus(bus);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("Check Stock"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh << TableWidget::Add);

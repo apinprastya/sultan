@@ -28,6 +28,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "keyevent.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "printer.h"
@@ -52,6 +53,7 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent)
       mAddDialog(new AddItemDialog(bus, this)), mPriceDialog(new AddPriceDialog(bus, this)),
       mStockValue(new TileWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     mStockValue->setTitleValue(tr("Stock Value"), tr("loading..."));
     mMainTable->initCrudButton();

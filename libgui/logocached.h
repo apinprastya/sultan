@@ -1,6 +1,6 @@
 /*
- * splash.h
- * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
+ * logocached.h
+ * Copyright 2023, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
  *
@@ -17,29 +17,40 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SPLASH_H
-#define SPLASH_H
 
-#include <QDialog>
+#ifndef LOGOCACHED_H
+#define LOGOCACHED_H
 
-namespace Ui {
-class Splash;
-}
+#include "gui_global.h"
+
+#include <QObject>
+#include <QPixmap>
 
 namespace LibGUI {
 
-class Splash : public QDialog {
+class GUISHARED_EXPORT LogoCached : public QObject {
     Q_OBJECT
-
   public:
-    Splash(QWidget *parent = nullptr);
-    ~Splash();
-    void setMessage(const QString &msg);
-    void refreshLogo();
+    static void createInstance(QObject *parent = nullptr);
+    static QPixmap logo32();
+    static QPixmap logo64();
+    static QPixmap logo128();
+    static QPixmap logo256();
+    static QPixmap logo512();
 
   private:
-    Ui::Splash *ui;
+    static LogoCached *instance;
+    QPixmap mLogo32;
+    QPixmap mLogo64;
+    QPixmap mLogo128;
+    QPixmap mLogo256;
+    QPixmap mLogo512;
+
+    LogoCached(QObject *parent = nullptr);
+    void load();
+    QPixmap getMainPixmap();
 };
 
 } // namespace LibGUI
-#endif // SPLASH_H
+
+#endif // LOGOCACHED_H

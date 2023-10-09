@@ -21,6 +21,7 @@
 #include "global_constant.h"
 #include "global_setting_const.h"
 #include "keyevent.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "settingdialog.h"
@@ -55,6 +56,7 @@ void LoginDialog::reset() {
 }
 
 void LoginDialog::showDialog() {
+    ui->label->setPixmap(LogoCached::logo128());
     reset();
 #ifdef QT_DEBUG
     ui->lineUsername->setText("sultan");

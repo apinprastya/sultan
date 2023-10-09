@@ -23,6 +23,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "tableitem.h"
 #include "tablemodel.h"
@@ -39,6 +40,7 @@ MachineWidget::MachineWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("Machines"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();

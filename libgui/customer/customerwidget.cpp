@@ -25,6 +25,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "tableitem.h"
@@ -46,6 +47,7 @@ CustomerWidget::CustomerWidget(LibG::MessageBus *bus, QWidget *parent)
       mAddDialog(new CustomerAddDialog(bus, this)), mTileCredit(new TileWidget(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     auto hbox = new QHBoxLayout;
     mTileCredit->setTitleValue(tr("Total Credit"), "loading...");
     hbox->addWidget(mTileCredit);

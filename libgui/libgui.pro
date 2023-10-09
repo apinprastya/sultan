@@ -66,6 +66,7 @@ SOURCES += \
     cashier/cashiercustomerdisplay.cpp \
     doublespinbox.cpp \
     item/importitemdialog.cpp \
+    logocached.cpp \
     mainwindow.cpp \
     paginationwidget.cpp \
     tabwidget.cpp \
@@ -172,6 +173,7 @@ HEADERS += \
     doublespinbox.h \
     gui_global.h \
     item/importitemdialog.h \
+    logocached.h \
     mainwindow.h \
     paginationwidget.h \
     tabwidget.h \
