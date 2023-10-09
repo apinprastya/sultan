@@ -195,14 +195,14 @@ void ItemWidget::importClicked() {
         this, tr("Confirmation"),
         tr("Your current item, category and supplier will be wipe out. Sure to continue import?"));
     if (res == QMessageBox::Yes) {
-        const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.csv");
+        const QString &fileName = QFileDialog::getOpenFileName(this, tr("Import items"), QDir::homePath(), "*.xlsx");
         if (fileName.isEmpty())
             return;
         QFile file(fileName);
         if (!file.open(QFile::ReadOnly))
             return;
         Message msg(MSG_TYPE::ITEM, MSG_COMMAND::IMPORT);
-        msg.addData("data", QString::fromUtf8(file.readAll()));
+        msg.addData("data", QString::fromUtf8(file.readAll().toBase64()));
         sendMessage(&msg);
     }
 }
