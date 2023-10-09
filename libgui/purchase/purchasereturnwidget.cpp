@@ -24,6 +24,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "returnadddialog.h"
@@ -44,6 +45,7 @@ PurchaseReturnWidget::PurchaseReturnWidget(MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
       mTotalCredit(new TileWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Purchase return"));
     mTotalCredit->setTitleValue(tr("Total Credit"), tr("loading..."));

@@ -25,6 +25,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "tableitem.h"
@@ -49,6 +50,7 @@ TransactionWidget::TransactionWidget(LibG::MessageBus *bus, QWidget *parent)
       mTileProfit(new TileWidget(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("Transactions"));
 
     auto hor = new QHBoxLayout;

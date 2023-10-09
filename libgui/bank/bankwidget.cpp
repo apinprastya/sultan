@@ -25,6 +25,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "tableitem.h"
 #include "tablemodel.h"
@@ -41,6 +42,7 @@ BankWidget::BankWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("Banks"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();

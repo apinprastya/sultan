@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "tableitem.h"
 #include "tablemodel.h"
@@ -39,6 +40,7 @@ using namespace LibG;
 UnitWidget::UnitWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Unit"));
     ui->verticalLayout->addWidget(mTableWidget);

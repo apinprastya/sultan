@@ -18,6 +18,7 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "splash.h"
+#include "logocached.h"
 #include "ui_splash.h"
 
 using namespace LibGUI;
@@ -31,3 +32,5 @@ Splash::Splash(QWidget *parent) : QDialog(parent), ui(new Ui::Splash) {
 Splash::~Splash() { delete ui; }
 
 void Splash::setMessage(const QString &msg) { ui->labelLoading->setText(msg); }
+
+void Splash::refreshLogo() { ui->label->setPixmap(LogoCached::logo256()); }

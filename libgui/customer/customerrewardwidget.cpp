@@ -29,6 +29,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "printer.h"
@@ -51,6 +52,7 @@ CustomerRewardWidget::CustomerRewardWidget(int id, const QString &number, LibG::
       mTableWidget(new TableWidget(this)), mId(id), mNumber(number) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     auto sumWidget = new QWidget(this);
     uiSummary->setupUi(sumWidget);
     ui->labelTitle->setText(tr("Customer Reward : %1").arg(number));

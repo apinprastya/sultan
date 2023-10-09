@@ -28,6 +28,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "printer.h"
@@ -50,6 +51,7 @@ CustomerCreditWidget::CustomerCreditWidget(int id, const QString &number, LibG::
       mTableWidget(new TableWidget(this)), mId(id), mAddDialog(new AddCreditPaymentDialog(bus, this)) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     auto sumWidget = new QWidget(this);
     uiSummary->setupUi(sumWidget);
     ui->labelTitle->setText(tr("Customer Credit : %1").arg(number));

@@ -23,6 +23,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "tableitem.h"
 #include "tablemodel.h"
 #include "tableview.h"
@@ -35,6 +36,7 @@ using namespace LibG;
 StockCardWidget::StockCardWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initButton(QList<TableWidget::ButtonType>() << TableWidget::Refresh);

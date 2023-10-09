@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "purchaseadditemdialog.h"
@@ -44,6 +45,7 @@ PurchaseItemWidget::PurchaseItemWidget(const QVariantMap &data, LibG::MessageBus
       mTileDiscount(new TileWidget(this)), mTileFinal(new TileWidget(this)) {
     mId = data["id"].toInt();
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(
         tr("Purchase Item : %1 / %2").arg(data["number"].toString()).arg(data["suplier"].toString()));

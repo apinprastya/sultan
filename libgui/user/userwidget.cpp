@@ -24,6 +24,7 @@
 #include "guiutil.h"
 #include "headerwidget.h"
 #include "horizontalheader.h"
+#include "logocached.h"
 #include "message.h"
 #include "tableitem.h"
 #include "tablemodel.h"
@@ -47,6 +48,7 @@ UserWidget::UserWidget(LibG::MessageBus *bus, QWidget *parent)
       mAddDialog(new UserAddDialog(this)) {
     setMessageBus(bus);
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("User"));
     ui->verticalLayout->addWidget(mTableWidget);
     mTableWidget->initCrudButton();

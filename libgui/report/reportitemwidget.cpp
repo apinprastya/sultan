@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "tablemodel.h"
 #include "tableview.h"
 #include "tablewidget.h"
@@ -36,6 +37,7 @@ ReportItemWidget::ReportItemWidget(LibG::MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mDateWidget(new Ui::DateStartEndWidget),
       mTableWidget(new TableWidget(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     auto widget = new QWidget(this);
     mDateWidget->setupUi(widget);

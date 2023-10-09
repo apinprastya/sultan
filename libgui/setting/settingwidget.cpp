@@ -24,11 +24,13 @@
 #include "global_constant.h"
 #include "global_setting_const.h"
 #include "guiutil.h"
+#include "logocached.h"
 #include "message.h"
 #include "preference.h"
 #include "printer.h"
 #include "ui_settingwidget.h"
 #include <QDebug>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QMetaEnum>
 #include <QSerialPortInfo>
@@ -43,6 +45,7 @@ using namespace LibPrint;
 
 SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent), ui(new Ui::SettingWidget) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     connect(ui->checkSign, SIGNAL(toggled(bool)), SLOT(signChanged()));
     connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
@@ -56,6 +59,7 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent)
     connect(ui->pushPrintTest, SIGNAL(clicked(bool)), SLOT(printTestClicked()));
     connect(ui->comboLocale, SIGNAL(currentIndexChanged(int)), SLOT(localeLanguageChanged()));
     connect(ui->pushTestCustomerDisplay, SIGNAL(clicked(bool)), SLOT(onCustomerDisplayClicked()));
+    connect(ui->pushLogo, SIGNAL(clicked()), SLOT(pushLogoClicked()));
     ui->tabWidget->setCurrentIndex(0);
     Message msg(MSG_TYPE::MACHINE, MSG_COMMAND::QUERY);
     sendMessage(&msg);
@@ -68,6 +72,7 @@ SettingWidget::SettingWidget(MessageBus *bus, QWidget *parent) : QWidget(parent)
     Message msg5(MSG_TYPE::CONFIG, MSG_COMMAND::QUERY);
     sendMessage(&msg5);
     checkWidget();
+    ui->labelLogo->setPixmap(getLogo().scaled(128, 128));
 }
 
 SettingWidget::~SettingWidget() { delete ui; }
@@ -230,6 +235,16 @@ void SettingWidget::setupCustomerDisplay() {
     ui->lineWelcome2->setText(Preference::getString(SETTING::CUSDISPLAY_WELCOME2, tr("to Sultan POS")));
 }
 
+QPixmap SettingWidget::getLogo() {
+    const QString &logoPath = Preference::getString(SETTING::LOGO);
+    if (!logoPath.isEmpty() && QFile::exists(logoPath)) {
+        QPixmap px;
+        if (px.load(logoPath))
+            return px;
+    }
+    return QPixmap(QLatin1String(":/images/icon_128.png"));
+}
+
 void SettingWidget::signChanged() { ui->lineSign->setEnabled(ui->checkSign->isChecked()); }
 
 void SettingWidget::cashierPrintTypeChanged() {
@@ -240,6 +255,8 @@ void SettingWidget::cashierPrintTypeChanged() {
 
 void SettingWidget::saveClicked() {
     saveToDbConfig();
+
+    Preference::setValue(SETTING::LOGO, logo);
     // market name
     Preference::setValue(SETTING::MARKET_NAME, ui->lineAppName->text());
     Preference::setValue(SETTING::MARKET_SUBNAME, ui->plainSubName->toPlainText());
@@ -419,5 +436,20 @@ void SettingWidget::onCustomerDisplayClicked() {
         cdm->write(disp.data());
     } else {
         QMessageBox::critical(this, tr("Error"), tr("Unable to open customer display manager"));
+    }
+}
+
+void SettingWidget::pushLogoClicked() {
+    const QString &filename = QFileDialog::getOpenFileName(this, tr("Select image"), QDir::homePath(), "*.png");
+    if (!filename.isEmpty()) {
+        QPixmap px;
+        if (!px.load(filename)) {
+            QMessageBox::critical(this, tr("Error"), tr("Unable to load the image!"));
+            return;
+        }
+        logo = filename;
+        ui->labelLogo->setPixmap(px.scaled(128, 128));
+        qDebug() << filename;
+        qDebug() << qApp->applicationDirPath();
     }
 }

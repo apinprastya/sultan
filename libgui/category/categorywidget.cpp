@@ -22,6 +22,7 @@
 #include "categotyadddialog.h"
 #include "flashmessagemanager.h"
 #include "global_constant.h"
+#include "logocached.h"
 #include "message.h"
 #include "ui_normalwidget.h"
 #include <QComboBox>
@@ -39,6 +40,7 @@ CategoryWidget::CategoryWidget(LibG::MessageBus *bus, QWidget *parent)
       mAddDialog(new CategoryAddDialog(this)) {
     ui->setupUi(this);
     setMessageBus(bus);
+    ui->label->setPixmap(LogoCached::logo32());
     ui->labelTitle->setText(tr("Category"));
     auto buttonLayout = new QHBoxLayout();
     buttonLayout->addStretch();

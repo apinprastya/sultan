@@ -22,6 +22,7 @@
 #include "global_constant.h"
 #include "guiutil.h"
 #include "headerwidget.h"
+#include "logocached.h"
 #include "message.h"
 #include "suplieradddialog.h"
 #include "tableitem.h"
@@ -39,6 +40,7 @@ SuplierWidget::SuplierWidget(MessageBus *bus, QWidget *parent)
     : QWidget(parent), ui(new Ui::NormalWidget), mTableWidget(new TableWidget(this)),
       mAddDialog(new SuplierAddDialog(this)) {
     ui->setupUi(this);
+    ui->label->setPixmap(LogoCached::logo32());
     setMessageBus(bus);
     ui->labelTitle->setText(tr("Suplier"));
     ui->verticalLayout->addWidget(mTableWidget);
