@@ -4,7 +4,7 @@ QT += printsupport serialport
 
 TEMPLATE = lib
 TARGET = print
-target.path = $${LIBDIR}
+target.path = /usr/bin
 INSTALLS += target
 
 CONFIG(static) {
@@ -45,7 +45,7 @@ macx {
         DEFINES+=USE_LIBUSB
         LIBS += -lusb-1.0
     }
-    QMAKE_LIBDIR = $$OUT_PWD/../bin/ $$QMAKE_LIBDIR
+    # QMAKE_LIBDIR = $$OUT_PWD/../bin/ $$QMAKE_LIBDIR
 }
 
 SOURCES += \

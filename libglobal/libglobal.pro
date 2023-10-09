@@ -1,6 +1,6 @@
 TEMPLATE = lib
 TARGET = global
-target.path = $${LIBDIR}
+target.path = /usr/bin
 INSTALLS += target
 
 QT += concurrent core
@@ -33,7 +33,7 @@ macx {
 } else:win32 {
     LIBS += -L$$OUT_PWD/../bin
 } else {
-    QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    # QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
 }
 
 SOURCES += \

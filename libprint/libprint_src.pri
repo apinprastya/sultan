@@ -4,7 +4,9 @@ SOURCES += \
     $$PWD/printer.cpp \
     $$PWD/escptable.cpp \
     $$PWD/barcode.cpp \
-    $$PWD/usb.cpp
+    $$PWD/usb.cpp \
+    $$PWD/customerdisplay.cpp \
+    $$PWD/customerdisplaymanager.cpp
 
 HEADERS += \
     $$PWD/print_constant.h \
@@ -13,4 +15,6 @@ HEADERS += \
     $$PWD/printer.h \
     $$PWD/escptable.h \
     $$PWD/barcode.h \
-    $$PWD/usb.h
+    $$PWD/usb.h \
+    $$PWD/customerdisplay.h \
+    $$PWD/customerdisplaymanager.h

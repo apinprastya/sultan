@@ -75,7 +75,6 @@ SOURCES += \
     $$PWD/cashier/checkpricedialog.cpp \
     $$PWD/admin/importexportdatabasedialog.cpp \
     $$PWD/admin/browserdialog.cpp \
-    $$PWD/googledrive.cpp \
     $$PWD/admin/listdialog.cpp \
     $$PWD/checkstock/checkstockwidget.cpp \
     $$PWD/checkstock/checkstockadddialog.cpp \
@@ -100,7 +99,9 @@ SOURCES += \
     $$PWD/item/addingridientdialog.cpp \
     $$PWD/cashier/additemunavailabledialog.cpp \
     $$PWD/doublespinboxdelegate.cpp \
-    $$PWD/paginationwidget.cpp
+    $$PWD/paginationwidget.cpp \
+    $$PWD/doublespinbox.cpp \
+    $$PWD/cashier/cashiercustomerdisplay.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -179,7 +180,6 @@ HEADERS += \
     $$PWD/cashier/checkpricedialog.h \
     $$PWD/admin/importexportdatabasedialog.h \
     $$PWD/admin/browserdialog.h \
-    $$PWD/googledrive.h \
     $$PWD/admin/listdialog.h \
     $$PWD/checkstock/checkstockwidget.h \
     $$PWD/checkstock/checkstockadddialog.h \
@@ -205,7 +205,9 @@ HEADERS += \
     $$PWD/item/addingridientdialog.h \
     $$PWD/cashier/additemunavailabledialog.h \
     $$PWD/doublespinboxdelegate.h \
-    $$PWD/paginationwidget.h
+    $$PWD/paginationwidget.h \
+    $$PWD/doublespinbox.h \
+    $$PWD/cashier/cashiercustomerdisplay.h
 
 FORMS += \
     $$PWD/mainwindow.ui \

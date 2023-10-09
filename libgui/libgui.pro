@@ -4,7 +4,7 @@ include(../libdb/libdb.pri)
 
 TEMPLATE = lib
 TARGET = gui
-target.path = $${LIBDIR}
+target.path = /usr/bin
 INSTALLS += target
 
 QT += core gui widgets network sql concurrent serialport
@@ -53,7 +53,7 @@ macx {
     LIBS += -L$$OUT_PWD/../bin
 } else {
     DESTDIR = ../bin
-    QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    # QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     contains(CONFIG, USE_LIBUSB) {
         DEFINES+=USE_LIBUSB
         LIBS += -lusb-1.0
