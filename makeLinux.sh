@@ -18,6 +18,9 @@ if [ $? -ne 0 ]; then
     exit 255
 fi
 
+mkdir -p ${PWD}/AppDir/usr/share/applications/
+mkdir -p ${PWD}/AppDir/usr/share/icons/
+
 cp ../linux/sultan.desktop ${PWD}/AppDir/usr/share/applications/
 cp ../linux/sultan.png ${PWD}/AppDir/usr/share/icons/
 
@@ -31,5 +34,7 @@ fi
 echo "success setting up linux deploy"
 
 rm ${PWD}/AppDir/sultan.png
+
+cp -R ${PWD}/AppDir/usr/plugins/* ${PWD}/AppDir/usr/bin/
 
 $APPIMAGE_BUILDER --appdir ${PWD}/AppDir --recipe ../linux/AppImageBuilder_x86_64.yml 

@@ -14,10 +14,17 @@ AppDir:
     - amd64
     allow_unauthenticated: true
     sources:
-    - sourceline: deb https://deb.debian.org/debian/ bookworm main contrib non-free-firmware
-        non-free
-    - sourceline: deb [arch=amd64,arm64,armhf] http://packages.microsoft.com/repos/code
-        stable main
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal main restricted
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal-updates main restricted
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal universe
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal-updates universe
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal multiverse
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal-updates multiverse
+    - sourceline: deb http://id.archive.ubuntu.com/ubuntu/ focal-backports main restricted
+        universe multiverse
+    - sourceline: deb http://security.ubuntu.com/ubuntu focal-security main restricted
+    - sourceline: deb http://security.ubuntu.com/ubuntu focal-security universe
+    - sourceline: deb http://security.ubuntu.com/ubuntu focal-security multiverse
     include:
     - libc6:amd64
   files:
