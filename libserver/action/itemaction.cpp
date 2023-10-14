@@ -202,13 +202,13 @@ LibG::Message ItemAction::prices(LibG::Message *msg) {
     if (hasFlag(SOFT_DELETE) && !msg->hasData("withdeleted"))
         mDb->where("deleted_at IS NULL");
     mDb = QueryHelper::filter(mDb, msg->data(), fieldMap());
-    mDb->table(mTableName)->where("barcode = ", barcode);
+    mDb->table(mTableName)->where(QString("UPPER(barcode) = UPPER('%1')").arg(barcode));
     DbResult res = mDb->exec();
     if (res.isEmpty()) {
         message.setError(QObject::tr("Item not found"));
     } else {
         message.addData("item", res.first());
-        mDb->table("sellprices")->where("barcode = ", barcode);
+        mDb->table("sellprices")->where(QString("UPPER(barcode) = UPPER('%1')").arg(barcode));
         res = mDb->exec();
         if (res.isEmpty()) {
             message.setError(QObject::tr("Item has no price"), false);
