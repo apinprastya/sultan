@@ -46,6 +46,7 @@ class SearchCustomerDialog : public QDialog {
     Ui::SearchCustomerDialog *ui;
     QVariantMap mSelectedData;
     bool mIsOk = false;
+    bool mSearching = false;
 
   private slots:
     void nameDone();

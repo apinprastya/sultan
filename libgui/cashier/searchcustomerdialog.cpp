@@ -66,6 +66,7 @@ void SearchCustomerDialog::nameDone() {
     const QString &name = ui->lineName->text();
     if (name.isEmpty())
         return;
+    mSearching = true;
     ui->table->getModel()->setFilter("name", COMPARE::LIKE, name);
     ui->table->getModel()->refresh();
 }
@@ -73,7 +74,8 @@ void SearchCustomerDialog::nameDone() {
 void SearchCustomerDialog::dataLoaded() {
     if (ui->table->getModel()->rowCount(QModelIndex()) > 0) {
         ui->table->getTableView()->selectRow(0);
-        ui->table->getTableView()->setFocus(Qt::TabFocusReason);
+        if (mSearching)
+            ui->table->getTableView()->setFocus(Qt::TabFocusReason);
     }
 }
 
