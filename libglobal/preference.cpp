@@ -19,6 +19,7 @@
  */
 #include "preference.h"
 #include "global_setting_const.h"
+#include <QDir>
 #include <QLocale>
 
 //#define WIN_PORTABLE
@@ -91,3 +92,23 @@ QString Preference::formatMoney(float val) {
 }
 
 QString Preference::formatFloat(float val) { return QLocale().toString(val, 'f', 2); }
+
+QString Preference::defaultSqlitePath() {
+    const QString &fullpath = getString(SETTING::SQLITE_FULLPATH);
+    if (!fullpath.isEmpty())
+        return fullpath;
+    const QString &dirpath = getString(SETTING::SQLITE_DBPATH);
+    QString dbname = getString(SETTING::SQLITE_DBNAME);
+    QDir dir = QDir::home();
+    if (dirpath.isEmpty()) {
+        dir.mkdir(".sultan");
+        dir.cd(".sultan");
+    } else {
+        dir.setPath(dirpath);
+    }
+    if (dbname.isEmpty())
+        dbname = "sultan.db";
+    if (!dbname.endsWith(".db"))
+        dbname += ".db";
+    return dir.absoluteFilePath(dbname);
+}

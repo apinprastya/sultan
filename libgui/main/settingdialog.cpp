@@ -63,7 +63,7 @@ SettingDialog::SettingDialog(QWidget *parent)
     auto ke = new KeyEvent(this);
     ke->setClickEvent(true);
     ui->lineSqlitePath->installEventFilter(ke);
-    connect(ke, SIGNAL(clicked(QObject *)), SLOT(openDirectorySelector()));
+    connect(ke, SIGNAL(clicked(QObject *)), SLOT(openSqliteDBPath()));
     ui->lineSqlitePath->setReadOnly(true);
 }
 
@@ -77,8 +77,7 @@ SettingDialog::~SettingDialog() {
 void SettingDialog::showDialog() {
     ui->comboType->setCurrentIndex(Preference::getInt(SETTING::APP_TYPE) == APPLICATION_TYPE::SERVER ? 0 : 1);
     ui->comboDatabase->setCurrentIndex(Preference::getString(SETTING::DATABASE) == "MYSQL" ? 1 : 0);
-    ui->lineSqlitePath->setText(Preference::getString(SETTING::SQLITE_DBPATH));
-    ui->lineSqliteName->setText(Preference::getString(SETTING::SQLITE_DBNAME));
+    ui->lineSqlitePath->setText(Preference::defaultSqlitePath());
     ui->lineEditHost->setText(Preference::getString(SETTING::MYSQL_HOST));
     ui->spinBoxPort->setValue(Preference::getInt(SETTING::MYSQL_PORT, 3306));
     ui->lineEditUsername->setText(Preference::getString(SETTING::MYSQL_USERNAME));
@@ -181,8 +180,7 @@ void SettingDialog::save() {
     Preference::setValue(SETTING::SERVER_PORT, ui->spinBoxClientPort->value());
     Preference::setValue(SETTING::SERVER_ADDRESS, ui->lineEditClientAddress->text());
     Preference::setValue(SETTING::DATABASE, ui->comboDatabase->currentText());
-    Preference::setValue(SETTING::SQLITE_DBPATH, ui->lineSqlitePath->text());
-    Preference::setValue(SETTING::SQLITE_DBNAME, ui->lineSqliteName->text());
+    Preference::setValue(SETTING::SQLITE_FULLPATH, ui->lineSqlitePath->text());
     Preference::setValue(SETTING::SETTING_OK, true);
     Preference::sync();
     // restart the app for easier :D
@@ -199,11 +197,17 @@ void SettingDialog::save() {
         sCloseCon();
 }
 
-void SettingDialog::openDirectorySelector() {
-    auto str = QFileDialog::getExistingDirectory(this, tr("Select directory"), QDir::homePath());
-    if (!str.isEmpty()) {
+void SettingDialog::openSqliteDBPath() {
+    QString currentPath = ui->lineSqlitePath->text();
+    QString dir = qApp->applicationDirPath();
+    if (!currentPath.isEmpty())
+        dir = QFileInfo(currentPath).absolutePath();
+    else
+        dir = QFileInfo(Preference::defaultSqlitePath()).absolutePath();
+    auto str = QFileDialog::getSaveFileName(this, tr("Select SQLITE database path"), dir, "*.db", Q_NULLPTR,
+                                            QFileDialog::DontConfirmOverwrite);
+    if (!str.isEmpty())
         ui->lineSqlitePath->setText(str);
-    }
 }
 
 void SettingDialog::clientConnected() {

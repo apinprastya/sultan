@@ -45,6 +45,8 @@ class GLOBALSHARED_EXPORT Preference {
     static QString formatMoney(float val);
     static QString formatFloat(float val);
 
+    static QString defaultSqlitePath();
+
   private:
     static Preference *instance();
     QSettings *mSetting;

@@ -23,6 +23,7 @@
 #include "preference.h"
 #include <QDebug>
 #include <QDir>
+#include <QFileInfo>
 #include <QSqlDriver>
 #include <QSqlRecord>
 #include <QStringBuilder>
@@ -441,26 +442,14 @@ bool Db::init(const QString &host, int port, const QString &username, const QStr
         database.setDatabaseName(dbname);
         ret = database.open();
     } else if (DBTYPE == "SQLITE") {
-        QString dirpath = Preference::getString(SETTING::SQLITE_DBPATH);
-        QString dbname = Preference::getString(SETTING::SQLITE_DBNAME);
-        QDir dir = QDir::home();
-        if (dbname.isEmpty())
-            dbname = "sultan.db";
-        if (!dbname.endsWith(".db"))
-            dbname += ".db";
-        if (dirpath.isEmpty()) {
-            dir.mkdir(".sultan");
-            dir.cd(".sultan");
-        } else {
-            dir.setPath(dirpath);
-        }
+        const QString &fullpath = Preference::defaultSqlitePath();
         bool reset = Preference::getBool(SETTING::RESETDB, false);
         if (reset) {
-            QFile::remove(dir.absoluteFilePath(dbname));
+            QFile::remove(fullpath);
             Preference::setValue(SETTING::RESETDB, false);
         }
-        database.setDatabaseName(dir.absoluteFilePath(dbname));
-        qDebug() << TAG << "SQLite database path :" << dir.absoluteFilePath(dbname);
+        database.setDatabaseName(fullpath);
+        qDebug() << TAG << "SQLite database path :" << fullpath;
         ret = database.open();
     }
     mSupportTransaction = database.driver()->hasFeature(QSqlDriver::Transactions);

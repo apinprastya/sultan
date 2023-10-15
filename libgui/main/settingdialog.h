@@ -58,7 +58,7 @@ class SettingDialog : public QDialog {
     void checkConnection();
     void cancel();
     void save();
-    void openDirectorySelector();
+    void openSqliteDBPath();
 
   public:
     void clientConnected();

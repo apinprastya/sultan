@@ -39,6 +39,7 @@ const QString SERVER_ADDRESS = QStringLiteral("global/server_address");
 const QString SERVER_PORT = QStringLiteral("global/server_port");
 const QString SQLITE_DBPATH = QStringLiteral("global/sqlite_db_path");
 const QString SQLITE_DBNAME = QStringLiteral("global/sqlite_db_name");
+const QString SQLITE_FULLPATH = QStringLiteral("global/sqlite_db_fullpath");
 const QString RESETDB = QStringLiteral("global/dontchangeme");
 
 const QString LOGO = QStringLiteral("application/logo");
