@@ -63,6 +63,7 @@
 #include <QStringBuilder>
 #include <QTimer>
 #include <functional>
+#include <cmath>
 
 using namespace LibG;
 using namespace LibGUI;
@@ -352,6 +353,13 @@ void CashierWidget::updateItem(CashierItem *item) {
     }
 }
 
+QString CashierWidget::totalLabel(bool useTotalItem, double total) {
+    if(useTotalItem) {
+        return tr("Total (%1 items)").arg(floor(total));
+    }
+    return tr("Total");
+}
+
 void CashierWidget::barcodeWithCtrlPressed() { barcodeEntered(true); }
 
 void CashierWidget::barcodeEntered(bool isControlPressed) {
@@ -511,6 +519,7 @@ void CashierWidget::printBill(const QVariantMap &data) {
     int barcodelen = Preference::getInt(SETTING::PRINTER_CASHIER_BARCODE_LEN, 15);
     int cpi10 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI10, 32);
     int cpi12 = Preference::getInt(SETTING::PRINTER_CASHIER_CPI12, 40);
+    bool showTotalItem = Preference::getBool(SETTING::PRINTER_CASHIER_SHOW_ITEM_TOTAL, false);
 
     auto escp = new Escp(Escp::SIMPLE, cpi10, cpi12);
     escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
@@ -528,6 +537,7 @@ void CashierWidget::printBill(const QVariantMap &data) {
     escp->fullText(QStringList{data["number"].toString(), UserSession::username()});
     escp->newLine()->column(QList<int>())->line(QChar('='));
     const QVariantList &l = data["cart"].toList();
+    double totalItem = 0;
     for (auto v : l) {
         QVariantMap m = v.toMap();
         int flag = m["flag"].toInt();
@@ -535,6 +545,7 @@ void CashierWidget::printBill(const QVariantMap &data) {
             continue;
         QString name;
         float count = m["count"].toFloat();
+        totalItem += count;
         double discount = m["discount"].toDouble();
         const QString &total = Preference::formatMoney(m["final"].toDouble());
         if (useBarcode)
@@ -568,7 +579,9 @@ void CashierWidget::printBill(const QVariantMap &data) {
             escp->fullText(
                     QStringList{tr("Card Charge"), Preference::formatMoney(data["additional_charge"].toDouble())})
                 ->newLine();
-        escp->fullText(QStringList{tr("Total"), Preference::formatMoney(data["total"].toDouble())})->newLine();
+        escp->fullText(
+                QStringList{totalLabel(showTotalItem, totalItem), Preference::formatMoney(data["total"].toDouble())})
+            ->newLine();
     } else {
         if (paymentType == PAYMENT::NON_CASH) {
             escp->fullText(QStringList{tr("Sub-total"), Preference::formatMoney(data["subtotal"].toDouble())})
@@ -577,7 +590,9 @@ void CashierWidget::printBill(const QVariantMap &data) {
                     QStringList{tr("Card Charge"), Preference::formatMoney(data["additional_charge"].toDouble())})
                 ->newLine();
         }
-        escp->fullText(QStringList{tr("Total"), Preference::formatMoney(data["total"].toDouble())})->newLine();
+        escp->fullText(
+                QStringList{totalLabel(showTotalItem, totalItem), Preference::formatMoney(data["total"].toDouble())})
+            ->newLine();
     }
     if (paymentType == PAYMENT::CASH) {
         escp->fullText(QStringList{tr("Payment"), Preference::formatMoney(data["payment"].toDouble())})
