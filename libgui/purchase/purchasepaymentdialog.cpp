@@ -43,7 +43,7 @@ PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *par
     ui->tableWidget->getTableView()->setUseStandardHeader(true);
     auto model = ui->tableWidget->getModel();
     model->setMessageBus(bus);
-    model->addColumn("created_at", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+    model->addColumn("date", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
         return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy");
     });
     model->addColumn("number", tr("Number"));
