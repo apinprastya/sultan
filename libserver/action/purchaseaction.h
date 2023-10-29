@@ -28,6 +28,9 @@ class PurchaseAction : public ServerAction {
   public:
     PurchaseAction();
     LibG::Message summary(LibG::Message *msg);
+    LibG::Message addPayment(LibG::Message *msg);
+    LibG::Message deletePayment(LibG::Message *msg);
+    LibG::Message updatePayment(LibG::Message *msg);
 
   protected:
     bool beforeInsert(const QVariantMap &data, LibG::Message *retMsg) override;
@@ -38,6 +41,7 @@ class PurchaseAction : public ServerAction {
     QMap<QString, QString> fieldMap() const override;
     void insertTransaction(const QVariantMap &data);
     void updateTransaction(const QVariantMap &data);
+    double totalPayment(int id);
 };
 
 } // namespace LibServer

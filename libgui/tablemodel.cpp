@@ -108,9 +108,9 @@ void TableModel::addColumn(const QString &key, const QString &title, const int &
         mFormater.insert(key, formater);
 }
 
-void TableModel::addColumnMoney(const QString &key, const QString &title) {
-    addColumn(key, title, Qt::AlignRight, [](TableItem *item, const QString &key) -> QVariant {
-        return Preference::formatMoney(item->data(key).toDouble());
+void TableModel::addColumnMoney(const QString &key, const QString &title, bool reverseSign) {
+    addColumn(key, title, Qt::AlignRight, [reverseSign](TableItem *item, const QString &key) -> QVariant {
+        return Preference::formatMoney(reverseSign ? -item->data(key).toDouble() : item->data(key).toDouble());
     });
 }
 

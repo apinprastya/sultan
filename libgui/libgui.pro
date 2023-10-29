@@ -53,7 +53,7 @@ macx {
     LIBS += -L$$OUT_PWD/../bin
 } else {
     DESTDIR = ../bin
-    # QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
+    QMAKE_LIBDIR = $$OUT_PWD/../bin $$QMAKE_LIBDIR
     contains(CONFIG, USE_LIBUSB) {
         DEFINES+=USE_LIBUSB
         LIBS += -lusb-1.0
@@ -69,6 +69,7 @@ SOURCES += \
     logocached.cpp \
     mainwindow.cpp \
     paginationwidget.cpp \
+    purchase/purchaseaddpaymentdialog.cpp \
     tabwidget.cpp \
     setting/settingwidget.cpp \
     user/userwidget.cpp \
@@ -176,6 +177,7 @@ HEADERS += \
     logocached.h \
     mainwindow.h \
     paginationwidget.h \
+    purchase/purchaseaddpaymentdialog.h \
     tabwidget.h \
     setting/settingwidget.h \
     user/userwidget.h \
@@ -280,6 +282,7 @@ FORMS += \
     item/importitemdialog.ui \
     mainwindow.ui \
     paginationwidget.ui \
+    purchase/purchaseaddpaymentdialog.ui \
     setting/settingwidget.ui \
     normalwidget.ui \
     suplier/suplieradddialog.ui \
