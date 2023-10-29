@@ -1,6 +1,6 @@
 /*
- * purchasepaymentdialog.h
- * Copyright 2017 - ~, Apin <apin.klas@gmail.com>
+ * purchaseaddpaymentdialog.h
+ * Copyright 2023, Apin <apin.klas@gmail.com>
  *
  * This file is part of Sultan.
  *
@@ -17,44 +17,45 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef PURCHASEPAYMENTDIALOG_H
-#define PURCHASEPAYMENTDIALOG_H
+
+#ifndef PURCHASEADDPAYMENTDIALOG_H
+#define PURCHASEADDPAYMENTDIALOG_H
 
 #include "messagehandler.h"
 #include <QDialog>
-#include <QModelIndex>
 #include <QVariantMap>
 
 namespace Ui {
-class PurchasePaymentDialog;
+class PurchaseAddPaymentDialog;
 }
 
 namespace LibGUI {
 
-class PurchasePaymentDialog : public QDialog, public LibG::MessageHandler {
+class PurchaseAddPaymentDialog : public QDialog, public LibG::MessageHandler {
     Q_OBJECT
 
   public:
-    PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *parent = nullptr);
-    ~PurchasePaymentDialog();
-    void fill(const QVariantMap &data);
+    PurchaseAddPaymentDialog(LibG::MessageBus *bus, int purchaseId, float residual, const QVariantMap &data,
+                             const QVariantMap &oldData, QWidget *parent = nullptr);
+    ~PurchaseAddPaymentDialog();
 
   private:
-    Ui::PurchasePaymentDialog *ui;
-    int mId = 0;
-    int mBankId = 0;
-    double mTotal = 0;
-    QVariantMap mData;
+    Ui::PurchaseAddPaymentDialog *ui;
+    int mPurchaseId = 0;
+    float mResidual = 0;
+    QString mNumber;
+    QString mSupplier;
+    QVariantMap mOldData;
 
   protected:
     void messageReceived(LibG::Message *msg) override;
 
   private slots:
-    void addClicked();
-    void calculateReceived();
-    void updateClicked(const QModelIndex &index);
-    void deleteClicked(const QModelIndexList &index);
+    void cancelClicked();
+    void saveClicked();
+    void showError(const QString &error);
 };
 
 } // namespace LibGUI
-#endif // PURCHASEPAYMENTDIALOG_H
+
+#endif // PURCHASEADDPAYMENTDIALOG_H

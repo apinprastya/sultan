@@ -29,6 +29,11 @@ using namespace LibG;
 PurchaseAction::PurchaseAction() : ServerAction("purchases", "id") {
     mFlag = HAS_UPDATE_FIELD | AFTER_INSERT | AFTER_UPDATE | USE_TRANSACTION | BEFORE_DELETE | BEFORE_INSERT;
     mFunctionMap.insert(MSG_COMMAND::SUMMARY, std::bind(&PurchaseAction::summary, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::ADD_PAYMENT, std::bind(&PurchaseAction::addPayment, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::UPDATE_PAYMENT,
+                        std::bind(&PurchaseAction::updatePayment, this, std::placeholders::_1));
+    mFunctionMap.insert(MSG_COMMAND::DELETE_PAYMENT,
+                        std::bind(&PurchaseAction::deletePayment, this, std::placeholders::_1));
 }
 
 Message PurchaseAction::summary(Message *msg) {
@@ -123,4 +128,72 @@ void PurchaseAction::updateTransaction(const QVariantMap &data) {
     if (data["payment_type"].toInt() == PURCHASEPAYMENT::TEMPO)
         d["date"] = data["payment_date"];
     mDb->update("transactions", d);
+}
+
+double PurchaseAction::totalPayment(int id) {
+    DbResult paymentDbResult = mDb->select("COALESCE(sum(money_total), 0) as payment")
+                                   ->where("link_id = ", id)
+                                   ->where("link_type = ", TRANSACTION_LINK_TYPE::PURCHASE)
+                                   ->get("transactions");
+    return paymentDbResult.first()["payment"].toDouble();
+}
+
+Message PurchaseAction::addPayment(Message *msg) {
+    LibG::Message message(msg);
+
+    const auto &data = msg->data();
+    auto linkId = data["link_id"].toInt();
+
+    DbResult res = mDb->where("id = ", linkId)->get("purchases");
+    bool paymentDone = false;
+    if (!res.isEmpty()) {
+        double total = res.first()["final"].toDouble();
+        double received = totalPayment(linkId);
+        double residual = total + received;
+        double moneyTotal = -msg->data("money_total").toDouble();
+        paymentDone = qFuzzyCompare(residual, moneyTotal);
+        if (moneyTotal > residual) {
+            message.setError("payment_too_big");
+            return message;
+        }
+        mDb->insert("transactions", data);
+    }
+
+    mDb->where("id = ", linkId)
+        ->update("purchases", QVariantMap{{"status", paymentDone ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID}});
+
+    return message;
+}
+
+Message PurchaseAction::deletePayment(LibG::Message *msg) {
+    LibG::Message message(msg);
+    int id = msg->data("id").toInt();
+    int purchaseId = msg->data("purchaseId").toInt();
+    mDb->where("id = ", id)->del("transactions");
+    double received = totalPayment(purchaseId);
+    DbResult purchaseResult = mDb->where("id = ", purchaseId)->get("purchases");
+    if (!purchaseResult.isEmpty()) {
+        double total = purchaseResult.first()["final"].toDouble();
+        bool paymentDone = qFuzzyCompare(received, total) || received > total;
+        mDb->where("id = ", purchaseId)
+            ->update("purchases", QVariantMap{{"status", paymentDone ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID}});
+    }
+
+    return message;
+}
+
+Message PurchaseAction::updatePayment(LibG::Message *msg) {
+    LibG::Message message(msg);
+    int id = msg->data("id").toInt();
+    int purchaseId = msg->data("purchaseId").toInt();
+    mDb->where("id = ", id)->update("transactions", msg->data("data").toMap());
+    double received = totalPayment(purchaseId);
+    DbResult purchaseResult = mDb->where("id = ", purchaseId)->get("purchases");
+    if (!purchaseResult.isEmpty()) {
+        double total = purchaseResult.first()["final"].toDouble();
+        bool paymentDone = qFuzzyCompare(received, total) || received > total;
+        mDb->where("id = ", purchaseId)
+            ->update("purchases", QVariantMap{{"status", paymentDone ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID}});
+    }
+    return message;
 }

@@ -18,11 +18,17 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchasepaymentdialog.h"
-#include "flashmessagemanager.h"
+#include "db_constant.h"
+#include "dbutil.h"
 #include "global_constant.h"
 #include "guiutil.h"
 #include "message.h"
 #include "preference.h"
+#include "purchaseaddpaymentdialog.h"
+#include "rowdata.h"
+#include "tableitem.h"
+#include "tablemodel.h"
+#include "tableview.h"
 #include "ui_purchasepaymentdialog.h"
 #include <QMessageBox>
 
@@ -33,11 +39,36 @@ PurchasePaymentDialog::PurchasePaymentDialog(LibG::MessageBus *bus, QWidget *par
     : QDialog(parent), ui(new Ui::PurchasePaymentDialog) {
     ui->setupUi(this);
     setMessageBus(bus);
-    connect(ui->pushSave, SIGNAL(clicked(bool)), SLOT(saveClicked()));
-    connect(ui->checkPaid, SIGNAL(toggled(bool)), SLOT(paidChanged()));
-    paidChanged();
-    Message msg(MSG_TYPE::BANK, MSG_COMMAND::QUERY);
-    sendMessage(&msg);
+    ui->tableWidget->initCrudButton();
+    ui->tableWidget->getTableView()->setUseStandardHeader(true);
+    auto model = ui->tableWidget->getModel();
+    model->setMessageBus(bus);
+    model->addColumn("date", tr("Date"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        return LibDB::DBUtil::sqlDateToDateTime(item->data(key).toString()).toString("dd-MM-yyyy");
+    });
+    model->addColumn("number", tr("Number"));
+    model->addColumn("bank", tr("Bank"), Qt::AlignLeft, [](TableItem *item, const QString &key) {
+        const QString &str = item->data(key).toString();
+        if (str.isEmpty())
+            return tr("Cash");
+        else
+            return str;
+    });
+    model->addColumnMoney("money_total", tr("Total"), true);
+
+    model->setFilter("link_type", COMPARE::EQUAL, TRANSACTION_LINK_TYPE::PURCHASE);
+    model->setTypeCommand(MSG_TYPE::TRANSACTION, MSG_COMMAND::QUERY);
+    model->setTypeCommandOne(MSG_TYPE::TRANSACTION, MSG_COMMAND::GET);
+    ui->tableWidget->setupTable();
+    GuiUtil::setColumnWidth(ui->tableWidget->getTableView(), QList<int>() << 100 << 150 << 150 << 100);
+    ui->tableWidget->getTableView()->horizontalHeader()->setStretchLastSection(true);
+
+    connect(ui->tableWidget, SIGNAL(addClicked()), SLOT(addClicked()));
+    connect(ui->tableWidget, SIGNAL(deleteClicked(QModelIndexList)), SLOT(deleteClicked(QModelIndexList)));
+    connect(ui->tableWidget, SIGNAL(updateClicked(QModelIndex)), SLOT(updateClicked(QModelIndex)));
+    connect(model, SIGNAL(firstDataLoaded()), SLOT(calculateReceived()));
+
+    model->setSort("created_at ASC");
 }
 
 PurchasePaymentDialog::~PurchasePaymentDialog() { delete ui; }
@@ -45,54 +76,66 @@ PurchasePaymentDialog::~PurchasePaymentDialog() { delete ui; }
 void PurchasePaymentDialog::fill(const QVariantMap &data) {
     ui->labelSuplier->setText(data["suplier"].toString());
     ui->labelTotal->setText(Preference::formatMoney(data["final"].toDouble()));
+    mTotal = data["final"].toDouble();
     mId = data["id"].toInt();
-    mBankId = data["bank_id"].toInt();
-    QDate date = data["payment_date"].toDate();
-    ui->linePayment->setText(data["payment_number"].toString());
-    ui->checkPaid->setChecked(data["status"].toInt() != PAYMENT_STATUS::UNPAID);
-    if (date.isValid())
-        ui->datePayment->setDate(data["payment_date"].toDate());
-    else
-        ui->datePayment->setDate(QDate::currentDate());
+    mData = data;
+
+    auto model = ui->tableWidget->getModel();
+    model->setFilter("link_id", COMPARE::EQUAL, mId);
+    model->refresh();
 }
 
 void PurchasePaymentDialog::messageReceived(LibG::Message *msg) {
-    if (msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::UPDATE)) {
+    if (msg->isTypeCommand(MSG_TYPE::PURCHASE, MSG_COMMAND::DELETE_PAYMENT)) {
         if (msg->isSuccess()) {
-            FlashMessageManager::showMessage(tr("Purchase payment edited successfully"));
-            close();
-        } else {
-            QMessageBox::critical(this, tr("Error"), msg->data("error").toString());
-            ui->pushSave->setEnabled(true);
-        }
-    } else if (msg->isTypeCommand(MSG_TYPE::BANK, MSG_COMMAND::QUERY)) {
-        if (msg->isSuccess()) {
-            const QVariantList &l = msg->data("data").toList();
-            ui->comboBank->addItem(tr("Cash"), 0);
-            for (int i = 0; i < l.size(); i++) {
-                const QVariantMap &data = l[i].toMap();
-                int id = data["id"].toInt();
-                ui->comboBank->addItem(data["name"].toString(), id);
-            }
-            GuiUtil::selectCombo(ui->comboBank, mBankId);
+            auto model = ui->tableWidget->getModel();
+            model->refresh();
         }
     }
 }
 
-void PurchasePaymentDialog::saveClicked() {
-    Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::UPDATE);
-    QVariantMap data;
-    data.insert("payment_number", ui->linePayment->text());
-    data.insert("payment_date", ui->datePayment->date());
-    data.insert("status", ui->checkPaid->isChecked() ? PAYMENT_STATUS::PAID : PAYMENT_STATUS::UNPAID);
-    data.insert("bank_id", ui->comboBank->currentData());
-    msg.addData("id", mId);
-    msg.addData("data", data);
-    sendMessage(&msg);
-    ui->pushSave->setEnabled(false);
+void PurchasePaymentDialog::addClicked() {
+    auto model = ui->tableWidget->getModel();
+    auto rowData = model->getRowData();
+    double paymentTotal = 0;
+    for (int i = 0; i < rowData->size(); i++) {
+        paymentTotal += rowData->at(i)->data("money_total").toDouble();
+    }
+    PurchaseAddPaymentDialog addPaymentDialog(mMessageBus, mId, mTotal + paymentTotal, mData, QVariantMap(), this);
+    addPaymentDialog.exec();
+    model->refresh();
 }
 
-void PurchasePaymentDialog::paidChanged() {
-    ui->linePayment->setEnabled(ui->checkPaid->isChecked());
-    ui->datePayment->setEnabled(ui->checkPaid->isChecked());
+void PurchasePaymentDialog::calculateReceived() {
+    auto model = ui->tableWidget->getModel();
+    auto rowData = model->getRowData();
+    double paymentTotal = 0;
+    for (int i = 0; i < rowData->size(); i++) {
+        paymentTotal += rowData->at(i)->data("money_total").toDouble();
+    }
+    ui->labelReceived->setText(Preference::formatMoney(-paymentTotal));
+    ui->labelResidual->setText(Preference::formatMoney(mTotal + paymentTotal));
+}
+
+void PurchasePaymentDialog::updateClicked(const QModelIndex &index) {
+    if (index.isValid()) {
+        auto item = static_cast<TableItem *>(index.internalPointer());
+        PurchaseAddPaymentDialog addPaymentDialog(mMessageBus, mId, 0, mData, item->data(), this);
+        addPaymentDialog.exec();
+        auto model = ui->tableWidget->getModel();
+        model->refresh();
+    }
+}
+
+void PurchasePaymentDialog::deleteClicked(const QModelIndexList &index) {
+    if (index.empty())
+        return;
+    int ret = QMessageBox::question(this, tr("Delete Confirmation"), tr("Are you sure to delete the payment?"));
+    if (ret == QMessageBox::Yes) {
+        auto item = static_cast<TableItem *>(index.first().internalPointer());
+        Message msg(MSG_TYPE::PURCHASE, MSG_COMMAND::DELETE_PAYMENT);
+        msg.addData("id", item->id);
+        msg.addData("purchaseId", mId);
+        sendMessage(&msg);
+    }
 }

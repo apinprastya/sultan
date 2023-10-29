@@ -50,7 +50,7 @@ class GUISHARED_EXPORT TableModel : public QAbstractTableModel, public LibG::Mes
     void reset();
     void addColumn(const QString &key, const QString &title, const int &align = Qt::AlignLeft,
                    std::function<QVariant(TableItem *, const QString &)> formater = nullptr);
-    void addColumnMoney(const QString &key, const QString &title);
+    void addColumnMoney(const QString &key, const QString &title, bool reverseSign = false);
     void addHeaderFilter(const QString &key, HeaderFilter filter);
     inline void setTypeCommand(const int &type, const int &command) { mTypeCommand = std::make_tuple(type, command); }
     inline void setTypeCommandOne(const int &type, const int &command) {

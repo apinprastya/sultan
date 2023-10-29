@@ -18,7 +18,6 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "purchasewidget.h"
-#include "db_constant.h"
 #include "dbutil.h"
 #include "flashmessagemanager.h"
 #include "global_constant.h"
