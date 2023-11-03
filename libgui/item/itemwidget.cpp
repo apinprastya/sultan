@@ -20,7 +20,6 @@
 #include "itemwidget.h"
 #include "additemdialog.h"
 #include "addpricedialog.h"
-#include "db_constant.h"
 #include "escp.h"
 #include "flashmessagemanager.h"
 #include "global_constant.h"
@@ -31,7 +30,6 @@
 #include "logocached.h"
 #include "message.h"
 #include "preference.h"
-#include "printer.h"
 #include "stockcarddialog.h"
 #include "tableitem.h"
 #include "tablemodel.h"
@@ -92,9 +90,15 @@ ItemWidget::ItemWidget(LibG::MessageBus *bus, QWidget *parent)
     connect(button, SIGNAL(clicked(bool)), SLOT(importClicked()));
     mMainTable->addActionButton(button);
     model->refresh();
+
+    auto labelPrintHelp = new QLabel(this);
+    labelPrintHelp->setText(tr("Press button \"p\" to print price tag"));
+    labelPrintHelp->setWordWrap(true);
+    labelPrintHelp->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
     auto hor = new QHBoxLayout();
     hor->addWidget(mStockValue);
-    hor->addStretch();
+    hor->addWidget(labelPrintHelp);
     ui->verticalLayoutTop->addLayout(hor);
     ui->verticalLayoutTop->addWidget(mMainTable);
 
@@ -251,13 +255,14 @@ void ItemWidget::printPrice(TableItem *item) {
     auto escp = new LibPrint::Escp(LibPrint::Escp::SIMPLE, cpi10, cpi12);
     escp->setCpi10Only(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
     escp->cpi10()
-        ->line(QChar('='))
-        ->newLine()
+        ->line(QChar('-'))
+        ->doubleHeight(Preference::getBool(SETTING::PRINTER_CASHIER_PRICE_DOUBLE_FONT, true))
         ->centerText(item->data("name").toString())
         ->newLine()
         ->centerText(Preference::formatMoney(item->data("sell_price").toDouble()))
         ->newLine()
-        ->line(QChar('='))
+        ->doubleHeight(false)
+        ->line(QChar('-'))
         ->newLine(Preference::getInt(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, 2));
     GuiUtil::print(escp->data());
     delete escp;

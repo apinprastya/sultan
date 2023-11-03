@@ -162,6 +162,7 @@ void SettingWidget::setupPrinter() {
     ui->checkPrintCashierDrawer->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_KICK));
     ui->spinCashierLinefeed->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_LINEFEED, 3));
     ui->spinCashierPriceLinefeed->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_PRICE_LINEFEED, 2));
+    ui->checkDoubleFont->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_PRICE_DOUBLE_FONT, true));
     ui->spinBarcodeLength->setValue(Preference::getInt(SETTING::PRINTER_CASHIER_BARCODE_LEN, 15));
     ui->checkShowBarcode->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_SHOW_BARCODE));
     ui->checkOnly10->setChecked(Preference::getBool(SETTING::PRINTER_CASHIER_ONLY_CPI10));
@@ -297,6 +298,7 @@ void SettingWidget::saveClicked() {
     Preference::setValue(SETTING::PRINTER_CASHIER_ONLY_CPI10, ui->checkOnly10->isChecked());
     Preference::setValue(SETTING::INLINE_EDIT_QTY, ui->checkInlineEdit->isChecked());
     Preference::setValue(SETTING::PRINTER_CASHIER_SHOW_ITEM_TOTAL, ui->checkShowTotalItem->isChecked());
+    Preference::setValue(SETTING::PRINTER_CASHIER_PRICE_DOUBLE_FONT, ui->checkDoubleFont->isChecked());
 #ifdef USE_LIBUSB
     int cur = ui->comboUsb->currentIndex();
     if (ui->comboUsb->isEnabled() && mUsbDevices.size() > 0) {

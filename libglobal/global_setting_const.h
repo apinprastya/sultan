@@ -94,6 +94,7 @@ const QString CAI_MARGIN = QStringLiteral("cashier/cai_margin");
 const QString INLINE_EDIT_QTY = QStringLiteral("cashier/inline_edit_qty");
 
 const QString PRINTER_CASHIER_PRICE_LINEFEED = QStringLiteral("printer/cashier_price_linefeed");
+const QString PRINTER_CASHIER_PRICE_DOUBLE_FONT = QStringLiteral("printer/cashier_price_double_font");
 
 const QString NUMBER_DATE = QStringLiteral("number/date");
 const QString NUMBER_VALUE = QStringLiteral("number/value");
