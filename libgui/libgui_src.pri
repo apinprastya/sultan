@@ -101,7 +101,9 @@ SOURCES += \
     $$PWD/doublespinboxdelegate.cpp \
     $$PWD/paginationwidget.cpp \
     $$PWD/doublespinbox.cpp \
-    $$PWD/cashier/cashiercustomerdisplay.cpp
+    $$PWD/cashier/cashiercustomerdisplay.cpp \
+    $$PWD/logocached.cpp \
+    $$PWD/purchase/purchaseaddpaymentdialog.cpp
 
 HEADERS += \ 
     $$PWD/gui_global.h \
@@ -207,7 +209,9 @@ HEADERS += \
     $$PWD/doublespinboxdelegate.h \
     $$PWD/paginationwidget.h \
     $$PWD/doublespinbox.h \
-    $$PWD/cashier/cashiercustomerdisplay.h
+    $$PWD/cashier/cashiercustomerdisplay.h \
+    $$PWD/logocached.h \
+    $$PWD/purchase/purchaseaddpaymentdialog.h
 
 FORMS += \
     $$PWD/mainwindow.ui \
@@ -274,4 +278,5 @@ FORMS += \
     $$PWD/item/addingridientdialog.ui \
     $$PWD/report/datefromtowidget.ui \
     $$PWD/cashier/additemunavailabledialog.ui \
-    $$PWD/paginationwidget.ui
+    $$PWD/paginationwidget.ui \
+    $$PWD/purchase/purchaseaddpaymentdialog.ui
