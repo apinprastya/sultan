@@ -5,7 +5,8 @@ CONFIG   += ordered
     SUBDIRS += \
         libglobal \
         libdb \
-        libserver
+        libserver \
+        unittest
     !contains(CONFIG, SERVER_BUILD) {
         SUBDIRS += \
             libprint \
