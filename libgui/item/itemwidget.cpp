@@ -137,7 +137,7 @@ void ItemWidget::messageReceived(LibG::Message *msg) {
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save as"), QDir::homePath(), "*.xlsx");
         if (!fileName.isEmpty()) {
             if (!fileName.endsWith(".xlsx"))
-                fileName += ".csv";
+                fileName += ".xlsx";
             QFile file(fileName);
             if (file.open(QFile::WriteOnly)) {
                 const QByteArray &arr = QByteArray::fromBase64(msg->data("data").toString().toUtf8());
