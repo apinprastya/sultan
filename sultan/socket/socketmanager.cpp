@@ -63,8 +63,11 @@ void SocketManager::sendToClient(LibG::Message *msg) {
 
 void SocketManager::processMessageFromClient(LibG::Message *msg) {
     if (msg->isType(LibG::MSG_TYPE::BROADCAST)) {
-        for (int i = 0; i < mHandlers.size(); i++)
-            mHandlers[i]->sendMessage(msg);
+        QMap<int, SocketHandler *>::const_iterator i = mHandlers.constBegin();
+        while (i != mHandlers.constEnd()) {
+            i.value()->sendMessage(msg);
+            ++i;
+        }
     } else {
         emit receivedMessage(msg);
     }
