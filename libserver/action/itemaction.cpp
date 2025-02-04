@@ -425,9 +425,9 @@ Message ItemAction::importData(Message *msg) {
             const int id = xlsx.cellAt(row, 1)->value().toInt();
             const QString &name = xlsx.cellAt(row, 2)->value().toString();
             const QString &code = xlsx.cellAt(row, 3)->value().toString();
-            const QString &address = xlsx.cellAt(row, 4)->value().toString();
-            const QString &phone = xlsx.cellAt(row, 4)->value().toString();
-            const QString &email = xlsx.cellAt(row, 4)->value().toString();
+            const QString &address = xlsx.cellAt(row, 4) ? xlsx.cellAt(row, 4)->value().toString() : "";
+            const QString &phone = xlsx.cellAt(row, 5) ? xlsx.cellAt(row, 5)->value().toString() : "";
+            const QString &email = xlsx.cellAt(row, 6) ? xlsx.cellAt(row, 6)->value().toString() : "";
             mDb->insert("supliers", QVariantMap{{"id", id},
                                                 {"name", name},
                                                 {"code", code},
