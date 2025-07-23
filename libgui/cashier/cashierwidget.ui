@@ -150,7 +150,7 @@ border: 1px solid #ababab;</string>
           <item>
            <widget class="QLabel" name="label_12">
             <property name="styleSheet">
-             <string notr="true">border: none;</string>
+             <string notr="true">color: black; border: none;</string>
             </property>
             <property name="text">
              <string>Total</string>
@@ -169,7 +169,7 @@ border: 1px solid #ababab;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">font-size: 50px; border: none;</string>
+             <string notr="true">font: bold; color: black; font-size: 50px; border: none;</string>
             </property>
             <property name="text">
              <string>0</string>
@@ -479,7 +479,7 @@ border: 1px solid #ababab;</string>
           <item>
            <widget class="QLabel" name="labelName">
             <property name="styleSheet">
-             <string notr="true">font-size: 16px; border: none;</string>
+             <string notr="true">font-size: 16px; color: black; border: none;</string>
             </property>
             <property name="text">
              <string/>
@@ -489,7 +489,7 @@ border: 1px solid #ababab;</string>
           <item>
            <widget class="QLabel" name="labelPrice">
             <property name="styleSheet">
-             <string notr="true">font-size: 16px; border: none;</string>
+             <string notr="true">font-size: 16px; color: black; border: none;</string>
             </property>
             <property name="text">
              <string/>
