@@ -43,7 +43,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="labelTotal">
        <property name="styleSheet">
-        <string notr="true">background: white; font-size: 20px;</string>
+        <string notr="true">font-size: 20px;</string>
        </property>
        <property name="text">
         <string>TextLabel</string>
@@ -59,7 +59,7 @@
      <item row="1" column="1">
       <widget class="QLabel" name="labelPayment">
        <property name="styleSheet">
-        <string notr="true">background: white; font-size: 20px;</string>
+        <string notr="true">font-size: 20px;</string>
        </property>
        <property name="text">
         <string>TextLabel</string>
@@ -75,7 +75,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="labelChange">
        <property name="styleSheet">
-        <string notr="true">background: white; font-size: 20px;</string>
+        <string notr="true">font-size: 20px;</string>
        </property>
        <property name="text">
         <string>TextLabel</string>
